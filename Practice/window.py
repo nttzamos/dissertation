@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QGridLayout, QWidget
+from PyQt6.QtWidgets import QGridLayout, QMainWindow, QWidget
 from button import Button
 from word import Word
 

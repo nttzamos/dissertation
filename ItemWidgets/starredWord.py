@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QWidget
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
 
-from Classes.databaseHandler import DBHandler
+from databaseHandler import DBHandler
 
 class StarredWord(QWidget):
   def __init__(self, word):

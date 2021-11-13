@@ -3,23 +3,22 @@ from PyQt6.QtCore import Qt
 # from PyQt6.QtGui import QFont
 
 from databaseHandler import DBHandler
-
 from MainWidget.mainWidget import MainWidget
-
 from SideWidgets.recentActionsWidget import RecentActionsWidget
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
 from SideWidgets.starredWordsWidget import StarredWordsWidget
 from SideWidgets.subjectsWidget import SubjectsWidget
 
 class MainWindow(QMainWindow):
+  print("Hello")
   recentSearchesWidget = RecentSearchesWidget()
   starredWordsWidget = StarredWordsWidget()
   recentActionsWidget = RecentActionsWidget()
   subjectsWidget = SubjectsWidget()
-
   mainWidget = MainWidget()
 
   def __init__(self):
+    print("Hello")
     super().__init__()
     # self.database = DBHandler()
     DBHandler.init_db()

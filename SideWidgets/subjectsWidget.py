@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidg
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from Classes.ItemWidgets.subject import Subject
+from ItemWidgets.subject import Subject
 
 class SubjectsWidget(QWidget):
   title = "Subjects"

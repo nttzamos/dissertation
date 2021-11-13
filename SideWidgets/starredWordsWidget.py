@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidg
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from Classes.ItemWidgets.starredWord import StarredWord
-from Classes.databaseHandler import DBHandler
+from ItemWidgets.starredWord import StarredWord
+from databaseHandler import DBHandler
 
 class StarredWordsWidget(QWidget):
   title = "Starred Words"

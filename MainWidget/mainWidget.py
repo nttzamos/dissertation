@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QCompleter, QLineEdit, QVBoxLayout, QWidget
 from PyQt6.QtCore import QTimer, Qt
-from Classes.SideWidgets.recentSearchesWidget import RecentSearchesWidget
+from SideWidgets.recentSearchesWidget import RecentSearchesWidget
 # from PyQt6.QtGui import QFont
-from Classes.databaseHandler import DBHandler
-from Classes.mainWindow import MainWindow
+from databaseHandler import DBHandler
+from mainWindow import MainWindow
 from searchingWidget import SearchingWidget
 from resultsWidget import ResultsWidget
 
@@ -55,8 +55,7 @@ class MainWidget(QWidget):
     QTimer.singleShot(0, self.searchbar.clear)
 
   def addRecentSearch(self, word):
-    # self.parent.addRecentSearch(word)
-    self.addWord(word)
+    MainWidget.addWord(word)
 
     addedNow = DBHandler.addRecentSearch(word, 0)
     if addedNow:
@@ -65,5 +64,5 @@ class MainWidget(QWidget):
       RecentSearchesWidget.removeAndAddWidget(word)
 
   @staticmethod
-  def addWord(self, word):
+  def addWord(word):
     MainWidget.middleMiddleWidget.word.setText(word)

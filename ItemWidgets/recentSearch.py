@@ -1,9 +1,8 @@
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QWidget
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
-from Classes.SideWidgets.recentSearchesWidget import RecentSearchesWidget
 
-from Classes.databaseHandler import DBHandler
+from databaseHandler import DBHandler
 
 class RecentSearch(QWidget):
   def __init__(self, word, condition):
@@ -41,7 +40,7 @@ class RecentSearch(QWidget):
     MainWidget.addWord(self.label.text())
 
   def notifyStarred(self):
-    from Classes.SideWidgets.starredWordsWidget import StarredWordsWidget
+    from SideWidgets.starredWordsWidget import StarredWordsWidget
     word = self.label.text
     addedNow = DBHandler.addStarredWord(0, word)
     if addedNow:
@@ -62,6 +61,7 @@ class RecentSearch(QWidget):
       self.button2.setIcon(QIcon("Resources/starred.svg"))
 
   def removeWord(self):
+    from SideWidgets.recentSearchesWidget import RecentSearchesWidget
     DBHandler.deleteRecentSearch(self.label.text())
     self.hide()
     RecentSearchesWidget.removeWidget(self)

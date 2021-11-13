@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidg
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
 
-
 class SearchingWidget(QWidget):
   def __init__(self):
     super().__init__()

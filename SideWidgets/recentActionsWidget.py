@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidg
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from Classes.ItemWidgets.recentAction import RecentAction
+from ItemWidgets.recentAction import RecentAction
 
 class RecentActionsWidget(QWidget):
   title = "Recent Actions"
