@@ -2,27 +2,30 @@ from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QWidget
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
 
+from Classes.databaseHandler import DBHandler
+
 class StarredWord(QWidget):
   def __init__(self, word):
     super().__init__()
 
-    # self.parent = parent
     self.setMinimumSize(QSize(200, 100))
     self.layout = QHBoxLayout(self)
-
     self.label = QLabel(word)
-
-    # Old Version
-    # self.button1 = QtWidgets.QPushButton()
-    # self.button1.clicked.connect(self.unstarWord)
-    # self.button1.setText("Unstar")
-
-    # New Version
     self.button = QPushButton()
-    # self.button2.setText("Star")
-    self.button.setIcon(QIcon("resources/starred.svg"))
+    self.button.setIcon(QIcon("Resources/starred.svg"))
     self.button.clicked.connect(self.toggleStarred)
 
     self.layout.addWidget(self.label)
     self.layout.addWidget(self.button)
     
+  def toggleStarred(self):
+    from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+    word = self.label.text()
+    DBHandler.deleteStarredWord(word)
+    RecentSearchesWidget.toggleStarredUpper(word)
+    self.removeWord()
+
+  def removeWord(self):
+    self.hide()
+    self.parent.removeWidget(self)
+    self.deleteLater()

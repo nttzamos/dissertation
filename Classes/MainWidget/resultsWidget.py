@@ -42,18 +42,6 @@ class ResultsWidget(QWidget):
     self.word19 = Result(self.scrollAreaWidgetContents)
     # self.word20 = Result(self.scrollAreaWidgetContents)
 
-    # self.word1 = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
-    # self.word2 = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
-    # self.word3 = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
-    # self.word4 = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
-    # self.word5 = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
-    # self.word1.setText("hello")
-    # self.word2.setText("hello")
-    # self.word3.setText("hello")
-    # self.word4.setText("hello")
-    # self.word5.setText("hello")
-
-
     self.gridLayout.addWidget(self.word1, 0, 0)
     self.gridLayout.addWidget(self.word2, 0, 1)
     self.gridLayout.addWidget(self.word3, 0, 2)

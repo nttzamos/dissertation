@@ -54,14 +54,6 @@ class RecentActionsWidget(QWidget):
     length = len(self.widgetList)
     self.gridLayout.addWidget(self.widgetList[length-1])
 
-  def removeAndAddWidget(self, word):
-    for obj in self.widgetList:
-      if obj.label.text()==word:
-        self.gridLayout.removeWidget(obj)
-        self.gridLayout.addWidget(obj, self.counter, 0)
-        self.counter -=1
-        return
-
   def removeWidget(self, obj):
     self.widgetList.remove(obj)
     if len(self.widgetList)==0:

@@ -7,6 +7,11 @@ from Classes.databaseHandler import DBHandler
 
 class StarredWordsWidget(QWidget):
   title = "Starred Words"
+  placeholderLabelShow = False
+  placeholderLabel = QLabel("You do not have any " + title)
+  widgetList = []
+  scrollAreaWidgetContents = QWidget()
+  gridLayout = QGridLayout(scrollAreaWidgetContents)
 
   def __init__(self):
     super().__init__()
@@ -24,72 +29,57 @@ class StarredWordsWidget(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
 
     self.counter = 1000000
-    self.placeholderLabel = QLabel("You do not have any " + self.title)
-    self.placeholderLabelShow = False
-    self.placeholderLabel.setFont(font)
+    StarredWordsWidget.placeholderLabel.setFont(font)
 
     self.type = type
-    self.widgetList = []
 
+    StarredWordsWidget.gridLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)
 
-    self.scrollAreaWidgetContents = QWidget()
-    self.gridLayout = QGridLayout(self.scrollAreaWidgetContents)
-    self.gridLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+    self.scrollArea.setWidget(StarredWordsWidget.scrollAreaWidgetContents)
     self.layout.addWidget(self.scrollArea)
     
   def onClick(self, obj):
     print("It works again!")
     print(obj.label.text())
-    self.gridLayout.removeWidget(obj)
-
+    StarredWordsWidget.gridLayout.removeWidget(obj)
 
   def initialStarredWordsAdding(self, starredWordsList):
     for word in starredWordsList:
       widget = StarredWord(word, self)
-      self.widgetList.append(widget)
-      # self.database = DBHandler()
-      # self.gridLayout.addWidget(widget, self.database.getStarredWordPosition(word), 0)
-      self.gridLayout.addWidget(widget, DBHandler.getStarredWordPosition(word), 0)
+      StarredWordsWidget.widgetList.append(widget)
+      StarredWordsWidget.gridLayout.addWidget(widget, DBHandler.getStarredWordPosition(word), 0)
 
+  @staticmethod
   def addStarredWord(self, word):
-    if self.placeholderLabelShow == True:
-      self.placeholderLabel.hide()
+    if StarredWordsWidget.placeholderLabelShow == True:
+      StarredWordsWidget.placeholderLabel.hide()
       
     widget = StarredWord(word, self)
-    self.widgetList.append(widget)
-    length = len(self.widgetList)
-    # self.database = DBHandler()
-    self.gridLayout.addWidget(self.widgetList[length-1], DBHandler.getStarredWordPosition(word), 0)
-
-  def removeAndAddWidget(self, word):
-    for obj in self.widgetList:
-      if obj.label.text()==word:
-        self.gridLayout.removeWidget(obj)
-        self.gridLayout.addWidget(obj, self.counter, 0)
-        self.counter -=1
-        return
+    StarredWordsWidget.widgetList.append(widget)
+    length = len(StarredWordsWidget.widgetList)
+    StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.widgetList[length-1], DBHandler.getStarredWordPosition(word), 0)
 
   def removeWidget(self, obj):
-    self.widgetList.remove(obj)
-    if len(self.widgetList)==0:
+    StarredWordsWidget.widgetList.remove(obj)
+    if len(StarredWordsWidget.widgetList)==0:
       self.addPlaceholder()
 
   def toggleStarredUpper(self, word):
-    for obj in self.widgetList:
+    for obj in StarredWordsWidget.widgetList:
       if word==obj.label.text():
         obj.toggleStarredIcon()
         return
 
+  @staticmethod
   def toggleStarredBottom(self, word):
-    for obj in self.widgetList:
+    for obj in StarredWordsWidget.widgetList:
       if word==obj.label.text():
         obj.removeWord()
         return
 
+  @staticmethod
   def notifyStarredBottom(self, obj):
     self.parent.toggleStarredBottom(obj)
 
@@ -97,6 +87,6 @@ class StarredWordsWidget(QWidget):
     self.parent.toggleStarredUpper(obj)
 
   def addPlaceholder(self):
-    self.placeholderLabelShow = True
-    self.gridLayout.addWidget(self.placeholderLabel)
-    self.placeholderLabel.show()
+    StarredWordsWidget.placeholderLabelShow = True
+    StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.placeholderLabel)
+    StarredWordsWidget.placeholderLabel.show()

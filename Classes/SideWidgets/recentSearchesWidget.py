@@ -7,7 +7,14 @@ from Classes.databaseHandler import DBHandler
 
 class RecentSearchesWidget(QWidget):
   title = "Recent Searches"
-  
+
+  scrollAreaWidgetContents = QWidget()
+  gridLayout = QGridLayout(scrollAreaWidgetContents)
+  counter = 1000000
+  widgetList = []
+  placeholderLabel = QLabel("You do not have any " + title)
+  placeholderLabelShow = False
+
   def __init__(self):
     super().__init__()
 
@@ -23,28 +30,18 @@ class RecentSearchesWidget(QWidget):
     self.layout.addWidget(self.title)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    self.counter = 1000000
-    self.placeholderLabel = QLabel("You do not have any " + self.title)
-    self.placeholderLabelShow = False
-    self.placeholderLabel.setFont(font)
-
+    RecentSearchesWidget.placeholderLabel.setFont(font)
     self.type = type
-    self.widgetList = []
-
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)
-
-    self.scrollAreaWidgetContents = QWidget()
-    self.gridLayout = QGridLayout(self.scrollAreaWidgetContents)
-    self.gridLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+    RecentSearchesWidget.gridLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    self.scrollArea.setWidget(RecentSearchesWidget.scrollAreaWidgetContents)
     self.layout.addWidget(self.scrollArea)
   
   def onClick(self, obj):
     print("It works again!")
     print(obj.label.text())
-    self.gridLayout.removeWidget(obj)
+    RecentSearchesWidget.gridLayout.removeWidget(obj)
 
   def initialRecentSearchesAdding(self, wordsList, starredWordsList):
     for word in wordsList:
@@ -53,51 +50,52 @@ class RecentSearchesWidget(QWidget):
       else:
         condition=False
       widget = RecentSearch(word, condition, self)
-      self.widgetList.append(widget)
-      self.gridLayout.addWidget(widget, self.counter, 0)
-      self.counter -= 1
+      RecentSearchesWidget.widgetList.append(widget)
+      RecentSearchesWidget.gridLayout.addWidget(widget, self.counter, 0)
+      RecentSearchesWidget.counter -= 1
 
+  @staticmethod
   def addRecentSearch(self, word, condition):
-    if self.placeholderLabelShow == True:
-      self.placeholderLabel.hide()
-    # self.database = DBHandler()
+    if RecentSearchesWidget.placeholderLabelShow == True:
+      RecentSearchesWidget.placeholderLabel.hide()
     condition = DBHandler.isStarredWord(word)
-    # condition = self.database.isStarredWord(word)
     widget = RecentSearch(word, condition, self)
-    self.widgetList.append(widget)
-    self.gridLayout.addWidget(widget, self.counter, 0)
-    self.counter -= 1
-    # length = len(self.widgetList)
-    # self.gridLayout.addWidget(self.widgetList[length-1])
+    RecentSearchesWidget.widgetList.append(widget)
+    RecentSearchesWidget.gridLayout.addWidget(widget, self.counter, 0)
+    RecentSearchesWidget.counter -= 1
 
   def addWidget(self, word):
-    if self.placeholderLabelShow == True:
-      self.placeholderLabel.hide()
+    if RecentSearchesWidget.placeholderLabelShow == True:
+      RecentSearchesWidget.placeholderLabel.hide()
     widget = RecentSearch(word, True, self)
-    self.widgetList.append(widget)
-    self.gridLayout.addWidget(widget, self.counter, 0)
-    self.counter -= 1
-    # length = len(self.widgetList)
-    # self.gridLayout.addWidget(self.widgetList[length-1])
+    RecentSearchesWidget.widgetList.append(widget)
+    RecentSearchesWidget.gridLayout.addWidget(widget, self.counter, 0)
+    RecentSearchesWidget.counter -= 1
 
+  @staticmethod
   def removeAndAddWidget(self, word):
     for obj in self.widgetList:
       if obj.label.text()==word:
-        self.gridLayout.removeWidget(obj)
-        self.gridLayout.addWidget(obj, self.counter, 0)
-        self.counter -=1
+        RecentSearchesWidget.gridLayout.removeWidget(obj)
+        RecentSearchesWidget.gridLayout.addWidget(obj, RecentSearchesWidget.counter, 0)
+        RecentSearchesWidget.counter -=1
         return
 
-  def removeWidget(self, obj):
-    self.widgetList.remove(obj)
-    if len(self.widgetList)==0:
-      self.addPlaceholder()
+  @staticmethod
+  def toggleStarredUpper(word):
+    for obj in RecentSearchesWidget.widgetList:
+      if word==obj.label.text():
+        obj.toggleStarredIcon()
+        return
+
+  @staticmethod
+  def removeWidget(obj):
+    RecentSearchesWidget.widgetList.remove(obj)
+    if len(RecentSearchesWidget.widgetList)==0:
+      RecentSearchesWidget.addPlaceholder()
 
   def addPlaceholder(self):
-    self.placeholderLabelShow = True
-    self.gridLayout.addWidget(self.placeholderLabel)
-    self.placeholderLabel.show()
-
-  def reloadWord(self, word):
-    self.parent.reloadWord(word)
+    RecentSearchesWidget.placeholderLabelShow = True
+    RecentSearchesWidget.gridLayout.addWidget(RecentSearchesWidget.placeholderLabel)
+    RecentSearchesWidget.placeholderLabel.show()
     

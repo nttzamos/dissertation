@@ -13,8 +13,10 @@ class RecentAction(QWidget):
     self.button1.setText("Revert")
     self.button2 = QPushButton()
     self.button2.setText("Remove")
+    
+    # TO-DO
     # self.button2.clicked.connect(self.onClick)
-    self.button2.clicked.connect(parent.onClick)
+    
     self.layout.addWidget(self.label)
     self.layout.addWidget(self.button1)
     self.layout.addWidget(self.button2)

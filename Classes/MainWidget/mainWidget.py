@@ -1,11 +1,15 @@
 from PyQt6.QtWidgets import QCompleter, QLineEdit, QVBoxLayout, QWidget
 from PyQt6.QtCore import QTimer, Qt
+from Classes.SideWidgets.recentSearchesWidget import RecentSearchesWidget
 # from PyQt6.QtGui import QFont
 from Classes.databaseHandler import DBHandler
+from Classes.mainWindow import MainWindow
 from searchingWidget import SearchingWidget
 from resultsWidget import ResultsWidget
 
 class MainWidget(QWidget):
+  middleMiddleWidget = SearchingWidget()
+  
   def __init__(self):
     super().__init__()
     # self.parent = parent
@@ -38,25 +42,28 @@ class MainWidget(QWidget):
     self.searchbar.setPlaceholderText("Please enter a word.")
     self.layout.addWidget(self.searchbar)
 
-    self.middleMiddleWidget = SearchingWidget()
-    self.layout.addWidget(self.middleMiddleWidget)
+    self.layout.addWidget(MainWidget.middleMiddleWidget)
 
     self.middleBottomWidget = ResultsWidget()
     self.layout.addWidget(self.middleBottomWidget)
 
   def updateSearches(self):
-    # addWidget(self.searchbar.text())
     self.addRecentSearch(self.searchbar.text())
     self.searchbar.clear()
-    # print("Hello1")
 
   def updateSearches1(self):
-    # print("Hello2")
     QTimer.singleShot(0, self.searchbar.clear)
 
   def addRecentSearch(self, word):
-    self.parent.addRecentSearch(word)
+    # self.parent.addRecentSearch(word)
     self.addWord(word)
 
+    addedNow = DBHandler.addRecentSearch(word, 0)
+    if addedNow:
+      RecentSearchesWidget.addRecentSearch(word, False)
+    else:
+      RecentSearchesWidget.removeAndAddWidget(word)
+
+  @staticmethod
   def addWord(self, word):
-    self.middleMiddleWidget.word.setText(word)
+    MainWidget.middleMiddleWidget.word.setText(word)

@@ -17,6 +17,8 @@ class MainWindow(QMainWindow):
   recentActionsWidget = RecentActionsWidget()
   subjectsWidget = SubjectsWidget()
 
+  mainWidget = MainWidget()
+
   def __init__(self):
     super().__init__()
     # self.database = DBHandler()
@@ -30,52 +32,43 @@ class MainWindow(QMainWindow):
 
     # Left Horizontal Splitter
     self.splitterLeftHorizontal = QSplitter(self.centralWidget)
-    self.splitterLeftHorizontal.setOrientation(Qt.Horizontal)
+    self.splitterLeftHorizontal.setOrientation(Qt.Orientation.Horizontal)
     self.splitterLeftHorizontal.setChildrenCollapsible(False)
 
     # Left Vertical Splitter - Left Horizontal Splitter (Left Part)
     self.splitterLeftVertical = QSplitter(self.splitterLeftHorizontal)
-    self.splitterLeftVertical.setOrientation(Qt.Vertical)
+    self.splitterLeftVertical.setOrientation(Qt.Orientation.Vertical)
     self.splitterLeftVertical.setChildrenCollapsible(False)
 
     # Left Upper Scroll Area
-    # self.recentSearches = SideWidget("Searched Words", "searchedWord", self.splitterLeftVertical)
-    # self.recentSearches = RecentSearchesWidget("Recent Searches", "searchedWord", self)
     self.splitterLeftVertical.addWidget(MainWindow.recentSearchesWidget)
-    # self.recentSearches = self.database.getAllRecentSearches()
     self.recentSearches = DBHandler.getAllRecentSearches()
-    # self.starredWords = set(self.database.getAllStarredWords())
-    self.starredWords = set(DBHandler.getAllStarredWords())
+    self.starredWords = DBHandler.getAllStarredWords()
     MainWindow.recentSearchesWidget.initialRecentSearchesAdding(self.recentSearches, self.starredWords)
     if len(self.recentSearches)==0:
       MainWindow.recentSearchesWidget.addPlaceholder()
 
     # Left Bottom Scroll Area
-    # self.starredWordsWidget = StarredWordsWidget("Starred Words", "starredWord", self)
-    # self.starredWords.addWidget("Φωτεινός")
     self.splitterLeftVertical.addWidget(MainWindow.starredWordsWidget)
-    # self.starredWords = self.database.getAllStarredWords()
-    MainWindow.starredWordsWidget = DBHandler.getAllStarredWords()
+    self.starredWords = DBHandler.getAllStarredWords()
     MainWindow.starredWordsWidget.initialStarredWordsAdding(self.starredWords)
     if len(self.starredWords)==0:
-      self.starredWords.addPlaceholder()
+      MainWindow.starredWordsWidget.addPlaceholder()
 
     # Right Horizontal Splitter - Left Horizontal Splitter (Right Part)
     self.splitterRightHorizontal = QSplitter(self.splitterLeftHorizontal)
-    self.splitterRightHorizontal.setOrientation(Qt.Horizontal)
+    self.splitterRightHorizontal.setOrientation(Qt.Orientation.Horizontal)
     self.splitterRightHorizontal.setChildrenCollapsible(False)
 
     # Middle Widget - Right Horizontal Splitter (Left Part)
-    self.middleWidget = MainWidget(self)
-    self.splitterRightHorizontal.addWidget(self.middleWidget)
+    self.splitterRightHorizontal.addWidget(MainWindow.mainWidget)
 
     # Right Vertical Splitter - Right Horizontal Splitter (Right Part)
     self.splitterRightVertical = QSplitter(self.splitterRightHorizontal)
-    self.splitterRightVertical.setOrientation(Qt.Vertical)
+    self.splitterRightVertical.setOrientation(Qt.Orientation.Vertical)
     self.splitterRightVertical.setChildrenCollapsible(False)
 
     # Right Vertical Splitter - Upper Scroll Area
-    # self.recentActions = RecentActionsWidget("Recent Actions", "recentAction", self)
     self.splitterRightVertical.addWidget(MainWindow.recentActionsWidget)
     MainWindow.recentActionsWidget.addWidget("RecentAction1")
     MainWindow.recentActionsWidget.addWidget("RecentAction2")
@@ -84,7 +77,6 @@ class MainWindow(QMainWindow):
     MainWindow.recentActionsWidget.addWidget("RecentAction5")
 
     # Right Vertical Splitter - Bottom Scroll Area
-    # self.subjects = SubjectsWidget("Subjects", "subject", self)
     self.splitterRightVertical.addWidget(MainWindow.subjectsWidget)
     MainWindow.subjectsWidget.addSubject("Φυσική")
     MainWindow.subjectsWidget.addSubject("Μαθηματικά")
@@ -97,7 +89,6 @@ class MainWindow(QMainWindow):
 
   @staticmethod
   def closeEvent(self, event):
-    # self.database.closeConnection()
     DBHandler.closeConnection()
 
   @staticmethod
@@ -105,35 +96,10 @@ class MainWindow(QMainWindow):
     word = obj.label.text()
     newCondition=1
     if newCondition==1:
-      self.starredWords.addWidget(word)
+      MainWindow.starredWordsWidget.addStarredWord(word)
 
   @staticmethod
   def toggleStarredUpper(self, obj):
     word = obj.label.text()
-    self.recentSearches.toggleStarredUpper(word)
-
-  @staticmethod
-  def toggleStarredBottom(self, obj):
-    word = obj.label.text()
-    # addedNow = self.database.addStarredWord(0, word)
-    addedNow = DBHandler.addStarredWord(0, word)
-    if addedNow:
-      self.starredWords.addWidget(word)
-    else:
-      self.starredWords.toggleStarredBottom(word)
-      # self.database.deleteStarredWord(word)
-      DBHandler.deleteStarredWord(word)
-
-  @staticmethod
-  def addRecentSearch(self, word):
-    # addedNow = self.database.addRecentSearch(word, 0)
-    addedNow = DBHandler.addRecentSearch(word, 0)
-    if addedNow:
-      self.recentSearches.add(word, False)
-    else:
-      self.recentSearches.removeAndAddWidget(word)
-
-  @staticmethod
-  def reloadWord(self, word):
-    self.middleWidget.addWord(word)
+    MainWindow.recentSearchesWidget.toggleStarredUpper(word)
     
