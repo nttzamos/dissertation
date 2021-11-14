@@ -41,8 +41,6 @@ class RecentActionsWidget(QWidget):
     self.layout.addWidget(self.scrollArea)
 
   def onClick(self, obj):
-    print("It works again!")
-    print(obj.label.text())
     self.gridLayout.removeWidget(obj)
 
   def addRecentAction(self, word):

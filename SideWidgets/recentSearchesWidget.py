@@ -39,8 +39,6 @@ class RecentSearchesWidget(QWidget):
     self.layout.addWidget(self.scrollArea)
   
   def onClick(self, obj):
-    print("It works again!")
-    print(obj.label.text())
     RecentSearchesWidget.gridLayout.removeWidget(obj)
 
   def initialRecentSearchesAdding(self, wordsList, starredWordsList):

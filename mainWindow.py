@@ -9,7 +9,6 @@ from SideWidgets.starredWordsWidget import StarredWordsWidget
 from SideWidgets.subjectsWidget import SubjectsWidget
 
 class MainWindow(QMainWindow):
-  print("Hello1212")
   DBHandler.init_db()
   recentSearchesWidget = RecentSearchesWidget()
   starredWordsWidget = StarredWordsWidget()
@@ -18,7 +17,6 @@ class MainWindow(QMainWindow):
   mainWidget = MainWidget()
 
   def __init__(self):
-    print("Hello")
     super().__init__()
     self.init_gui()
 

@@ -41,8 +41,6 @@ class StarredWordsWidget(QWidget):
     self.layout.addWidget(self.scrollArea)
     
   def onClick(self, obj):
-    print("It works again!")
-    print(obj.label.text())
     StarredWordsWidget.gridLayout.removeWidget(obj)
 
   def initialStarredWordsAdding(self, starredWordsList):

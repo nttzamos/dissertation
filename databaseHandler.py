@@ -152,7 +152,7 @@ class DBHandler():
     # Έχω δυο επιλογές:
     # 1. να μην αφαιρέσω τα duplicates και να αφήσω την addMultipleWords να το χειριστεί
     # 2. να αφαιρέσω τα duplicates και να μην χρειαστεί να το χειριστεί η addMultipleWords
-    print("Initializing Database")
+    print("Initializing Database...")
     raw = parser.from_file("Subjects/Φυσική.pdf")
     pdf = raw["content"]
     words = pdf.split()
