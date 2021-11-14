@@ -34,15 +34,12 @@ class RecentSearch(QWidget):
     self.layout.addWidget(self.button3)
     
   def reloadWord(self):
-    # from mainWindow import MainWindow
-    # MainWindow.reloadWord(self.label.text())
     from MainWidget.mainWidget import MainWidget
     MainWidget.addWord(self.label.text())
 
   def notifyStarred(self):
     from SideWidgets.starredWordsWidget import StarredWordsWidget
     word = self.label.text()
-    print("Starred word to be added is: " + word)
     addedNow = DBHandler.addStarredWord(0, word)
     if addedNow:
       StarredWordsWidget.addStarredWord(word)
@@ -50,7 +47,6 @@ class RecentSearch(QWidget):
       StarredWordsWidget.toggleStarredBottom(word)
       DBHandler.deleteStarredWord(word)
 
-    # StarredWordsWidget.notifyStarredBottom(self)
     self.toggleStarredIcon()
 
   def toggleStarredIcon(self):

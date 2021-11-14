@@ -15,7 +15,6 @@ class SearchingWidget(QWidget):
     self.word.setFixedSize(QSize(300, 200))
     self.word.setGeometry(50, 50, 300, 200)
     self.word.setStyleSheet("QLabel {border : 2px solid black}")
-    # self.layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
     font = QFont()
     font.setPointSize(20)

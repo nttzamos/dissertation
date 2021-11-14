@@ -22,9 +22,6 @@ class DBHandler():
       DBHandler.cur.execute('''CREATE TABLE starredWords (id INTEGER, word TEXT)''')
       DBHandler.cur.execute('''CREATE TABLE recentActions (type TEXT, word1 TEXT, word2 TEXT, time TIMESTAMP)''')
       DBHandler.cur.execute('''CREATE TABLE subjects (subjectName TEXT, state INTEGER)''')
-      # for word in words:
-      #   self.addSingleWord(word)
-      # self.addMultipleWords(words)
       DBHandler.addSubjectPDF()
 
   @staticmethod
@@ -169,8 +166,6 @@ class DBHandler():
         del words[i]
       else:
         i += 1
-    # for word in words:
-    #   self.addSingleWord(word)
     DBHandler.addMultipleWords(words)
 
   @staticmethod

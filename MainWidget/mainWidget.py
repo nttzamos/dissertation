@@ -12,16 +12,10 @@ class MainWidget(QWidget):
   def __init__(self):
     super().__init__()
     self.setFixedWidth(1200)
-    # self.setStyleSheet("QFrame {border-right : 2px solid black}")
     self.layout = QVBoxLayout(self)
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    # widget_names = [
-    #   "Balcony", "Balloon", "Barcelona", "Balcony Light",
-    #   "Fan", "Room Light", "Brioche", "Basketball",
-    #   "Bedroom Heater", "Wall Switch"
-    # ]
     widget_names = DBHandler.getAllWords()
 
     # Search bar.

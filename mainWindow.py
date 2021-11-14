@@ -20,8 +20,6 @@ class MainWindow(QMainWindow):
   def __init__(self):
     print("Hello")
     super().__init__()
-    # self.database = DBHandler()
-    # self.database.init_db()    
     self.init_gui()
 
   def init_gui(self):
