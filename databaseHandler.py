@@ -10,12 +10,13 @@ class DBHandler():
   cur = con.cursor()
 
   @staticmethod
-  def init_db(self):
+  def init_db():
     DBHandler.cur.execute(''' SELECT count(name) FROM sqlite_master WHERE type=='table' AND name='words' ''')
     if DBHandler.cur.fetchone()[0]==1:
       print("Database exists.")
       return
     else:
+      print("Database will be created.")
       DBHandler.cur.execute('''CREATE TABLE words (word TEXT PRIMARY KEY, stem TEXT, lemma TEXT)''')
       DBHandler.cur.execute('''CREATE TABLE recentSearches (word TEXT PRIMARY KEY, time TIMESTAMP, starred INTEGER)''')
       DBHandler.cur.execute('''CREATE TABLE starredWords (id INTEGER, word TEXT)''')
@@ -24,10 +25,10 @@ class DBHandler():
       # for word in words:
       #   self.addSingleWord(word)
       # self.addMultipleWords(words)
-      self.addSubjectPDF()
+      DBHandler.addSubjectPDF()
 
   @staticmethod
-  def dropTables(self):
+  def dropTables():
     DBHandler.cur.execute(''' SELECT count(name) FROM sqlite_master WHERE type=='table' AND name='words' ''')
     if DBHandler.cur.fetchone()[0]==0:
       print("Database does not exist.")
@@ -40,14 +41,14 @@ class DBHandler():
       DBHandler.cur.execute('''DROP TABLE subjects''')
 
   @staticmethod
-  def addSingleWord(self, word):
+  def addSingleWord(word):
     lemma = "lemma"
     stem = "stem"
     DBHandler.cur.execute("INSERT INTO words VALUES (?,?,?) ON CONFLICT(word) DO NOTHING", (word, stem, lemma))
     DBHandler.con.commit()
 
   @staticmethod
-  def addMultipleWords(self, words):
+  def addMultipleWords(words):
     newList = []
     for i in range(len(words)):
       newList.append((words[i], "lemma", "stem"))
@@ -55,14 +56,14 @@ class DBHandler():
     DBHandler.con.commit()
 
   @staticmethod
-  def getAllWords(self):
+  def getAllWords():
     DBHandler.cur.execute('SELECT word FROM words ORDER BY word')
     rows = DBHandler.cur.fetchall()
     words = [row[0] for row in rows]
     return words
 
   @staticmethod
-  def addRecentSearch(self, word, starred):
+  def addRecentSearch(word, starred):
     DBHandler.cur.execute("SELECT * FROM recentSearches WHERE word=?", (word, ))
     data = DBHandler.cur.fetchall()
     if len(data)==0:
@@ -78,19 +79,19 @@ class DBHandler():
       return False
 
   @staticmethod
-  def deleteRecentSearch(self, word):
+  def deleteRecentSearch(word):
     DBHandler.cur.execute("DELETE FROM recentSearches WHERE word=?", (word,))
     DBHandler.con.commit()
 
   @staticmethod
-  def getAllRecentSearches(self):
+  def getAllRecentSearches():
     DBHandler.cur.execute('SELECT word FROM recentSearches ORDER BY time')
     rows = DBHandler.cur.fetchall()
     words = [row[0] for row in rows]
     return words
 
   @staticmethod
-  def addStarredWord(self, id, word):
+  def addStarredWord(id, word):
     DBHandler.cur.execute("SELECT * FROM starredWords WHERE word=?", (word, ))
     data = DBHandler.cur.fetchall()
     if len(data)==0:
@@ -102,7 +103,7 @@ class DBHandler():
       return False
 
   @staticmethod
-  def isStarredWord(self, word):
+  def isStarredWord(word):
     DBHandler.cur.execute("SELECT * FROM starredWords WHERE word=?", (word, ))
     data = DBHandler.cur.fetchall()
     if len(data)==0:
@@ -111,45 +112,45 @@ class DBHandler():
       return True
 
   @staticmethod
-  def deleteStarredWord(self, word):
+  def deleteStarredWord(word):
     DBHandler.cur.execute("DELETE FROM starredWords WHERE word=?", (word,))
     DBHandler.con.commit()
 
   @staticmethod
-  def getStarredWordPosition(self, word):
+  def getStarredWordPosition(word):
     DBHandler.cur.execute("SELECT COUNT(*) FROM words WHERE word<?", (word,))
     position = DBHandler.cur.fetchone()[0]
     return position
 
   @staticmethod
-  def getAllStarredWords(self):
+  def getAllStarredWords():
     DBHandler.cur.execute('SELECT word FROM starredWords ORDER BY word')
     rows = DBHandler.cur.fetchall()
     words = [row[0] for row in rows]
     return words
 
   @staticmethod
-  def addRecentAction(self, word):
+  def addRecentAction(word):
     pass
 
   @staticmethod
-  def deleteRecentAction(self, word):
+  def deleteRecentAction(word):
     pass
 
   @staticmethod
-  def addSubject(self, word):
+  def addSubject(word):
     pass
 
   @staticmethod
-  def deleteSubject(self, word):
+  def deleteSubject(word):
     pass
 
   @staticmethod
-  def isRemovable(self, inputString):
+  def isRemovable(inputString):
     return any(c.isdigit() for c in inputString) or re.search('[a-zA-Z]', inputString) or not(any(c.isalpha() for c in inputString))
 
   @staticmethod
-  def addSubjectPDF(self):
+  def addSubjectPDF():
     tika.initVM()
     # Έχω δυο επιλογές:
     # 1. να μην αφαιρέσω τα duplicates και να αφήσω την addMultipleWords να το χειριστεί
@@ -164,15 +165,15 @@ class DBHandler():
 
     i = 0
     while i < len(words):
-      if self.isRemovable(words[i]) or len(words[i])<3:
+      if DBHandler.isRemovable(words[i]) or len(words[i])<3:
         del words[i]
       else:
         i += 1
     # for word in words:
     #   self.addSingleWord(word)
-    self.addMultipleWords(words)
+    DBHandler.addMultipleWords(words)
 
   @staticmethod
-  def closeConnection(self):
+  def closeConnection():
     DBHandler.con.close()
     print("Connection closed successfully!")

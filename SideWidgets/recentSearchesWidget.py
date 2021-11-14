@@ -49,19 +49,19 @@ class RecentSearchesWidget(QWidget):
         condition=True
       else:
         condition=False
-      widget = RecentSearch(word, condition, self)
+      widget = RecentSearch(word, condition)
       RecentSearchesWidget.widgetList.append(widget)
       RecentSearchesWidget.gridLayout.addWidget(widget, self.counter, 0)
       RecentSearchesWidget.counter -= 1
 
   @staticmethod
-  def addRecentSearch(self, word, condition):
+  def addRecentSearch(word, condition):
     if RecentSearchesWidget.placeholderLabelShow == True:
       RecentSearchesWidget.placeholderLabel.hide()
     condition = DBHandler.isStarredWord(word)
-    widget = RecentSearch(word, condition, self)
+    widget = RecentSearch(word, condition)
     RecentSearchesWidget.widgetList.append(widget)
-    RecentSearchesWidget.gridLayout.addWidget(widget, self.counter, 0)
+    RecentSearchesWidget.gridLayout.addWidget(widget, RecentSearchesWidget.counter, 0)
     RecentSearchesWidget.counter -= 1
 
   def addWidget(self, word):
@@ -73,8 +73,8 @@ class RecentSearchesWidget(QWidget):
     RecentSearchesWidget.counter -= 1
 
   @staticmethod
-  def removeAndAddWidget(self, word):
-    for obj in self.widgetList:
+  def removeAndAddWidget(word):
+    for obj in RecentSearchesWidget.widgetList:
       if obj.label.text()==word:
         RecentSearchesWidget.gridLayout.removeWidget(obj)
         RecentSearchesWidget.gridLayout.addWidget(obj, RecentSearchesWidget.counter, 0)

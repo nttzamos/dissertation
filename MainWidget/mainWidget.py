@@ -1,19 +1,17 @@
 from PyQt6.QtWidgets import QCompleter, QLineEdit, QVBoxLayout, QWidget
 from PyQt6.QtCore import QTimer, Qt
-from SideWidgets.recentSearchesWidget import RecentSearchesWidget
 # from PyQt6.QtGui import QFont
+
 from databaseHandler import DBHandler
-from mainWindow import MainWindow
-from searchingWidget import SearchingWidget
-from resultsWidget import ResultsWidget
+from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+from MainWidget.searchingWidget import SearchingWidget
+from MainWidget.resultsWidget import ResultsWidget
 
 class MainWidget(QWidget):
   middleMiddleWidget = SearchingWidget()
   
   def __init__(self):
     super().__init__()
-    # self.parent = parent
-    # self.database = DBHandler()
     self.setFixedWidth(1200)
     # self.setStyleSheet("QFrame {border-right : 2px solid black}")
     self.layout = QVBoxLayout(self)
@@ -35,7 +33,7 @@ class MainWidget(QWidget):
 
     # Adding Completer.
     self.completer = QCompleter(widget_names)
-    self.completer.setCaseSensitivity(Qt.CaseInsensitive)
+    self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
     self.completer.activated.connect(self.updateSearches1)
     self.searchbar.setCompleter(self.completer)
 

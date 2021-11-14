@@ -47,46 +47,35 @@ class StarredWordsWidget(QWidget):
 
   def initialStarredWordsAdding(self, starredWordsList):
     for word in starredWordsList:
-      widget = StarredWord(word, self)
+      widget = StarredWord(word)
       StarredWordsWidget.widgetList.append(widget)
       StarredWordsWidget.gridLayout.addWidget(widget, DBHandler.getStarredWordPosition(word), 0)
 
   @staticmethod
-  def addStarredWord(self, word):
+  def addStarredWord(word):
     if StarredWordsWidget.placeholderLabelShow == True:
       StarredWordsWidget.placeholderLabel.hide()
       
-    widget = StarredWord(word, self)
+    widget = StarredWord(word)
     StarredWordsWidget.widgetList.append(widget)
     length = len(StarredWordsWidget.widgetList)
     StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.widgetList[length-1], DBHandler.getStarredWordPosition(word), 0)
 
-  def removeWidget(self, obj):
+  @staticmethod
+  def removeWidget(obj):
     StarredWordsWidget.widgetList.remove(obj)
     if len(StarredWordsWidget.widgetList)==0:
-      self.addPlaceholder()
-
-  def toggleStarredUpper(self, word):
-    for obj in StarredWordsWidget.widgetList:
-      if word==obj.label.text():
-        obj.toggleStarredIcon()
-        return
+      StarredWordsWidget.addPlaceholder()
 
   @staticmethod
-  def toggleStarredBottom(self, word):
+  def toggleStarredBottom(word):
     for obj in StarredWordsWidget.widgetList:
       if word==obj.label.text():
         obj.removeWord()
         return
 
   @staticmethod
-  def notifyStarredBottom(self, obj):
-    self.parent.toggleStarredBottom(obj)
-
-  def notifyStarredUpper(self, obj):
-    self.parent.toggleStarredUpper(obj)
-
-  def addPlaceholder(self):
+  def addPlaceholder():
     StarredWordsWidget.placeholderLabelShow = True
     StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.placeholderLabel)
     StarredWordsWidget.placeholderLabel.show()

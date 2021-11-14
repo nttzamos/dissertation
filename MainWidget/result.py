@@ -22,5 +22,7 @@ class Result(QWidget):
       "QPushButton:hover { background-color: black; }\n"
       "QPushButton {border-radius : 20; border : 2px solid black}")
     self.deleteButton.setIcon(QIcon("Resources/delete2.svg"))
-    self.deleteButton.pressed.connect(self.testing)
+    
+    # TO-DO
+    # self.deleteButton.pressed.connect(self.testing)
     

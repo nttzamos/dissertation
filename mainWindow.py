@@ -10,7 +10,8 @@ from SideWidgets.starredWordsWidget import StarredWordsWidget
 from SideWidgets.subjectsWidget import SubjectsWidget
 
 class MainWindow(QMainWindow):
-  print("Hello")
+  print("Hello1212")
+  DBHandler.init_db()
   recentSearchesWidget = RecentSearchesWidget()
   starredWordsWidget = StarredWordsWidget()
   recentActionsWidget = RecentActionsWidget()
@@ -21,7 +22,6 @@ class MainWindow(QMainWindow):
     print("Hello")
     super().__init__()
     # self.database = DBHandler()
-    DBHandler.init_db()
     # self.database.init_db()    
     self.init_gui()
 
@@ -69,11 +69,11 @@ class MainWindow(QMainWindow):
 
     # Right Vertical Splitter - Upper Scroll Area
     self.splitterRightVertical.addWidget(MainWindow.recentActionsWidget)
-    MainWindow.recentActionsWidget.addWidget("RecentAction1")
-    MainWindow.recentActionsWidget.addWidget("RecentAction2")
-    MainWindow.recentActionsWidget.addWidget("RecentAction3")
-    MainWindow.recentActionsWidget.addWidget("RecentAction4")
-    MainWindow.recentActionsWidget.addWidget("RecentAction5")
+    MainWindow.recentActionsWidget.addRecentAction("RecentAction1")
+    MainWindow.recentActionsWidget.addRecentAction("RecentAction2")
+    MainWindow.recentActionsWidget.addRecentAction("RecentAction3")
+    MainWindow.recentActionsWidget.addRecentAction("RecentAction4")
+    MainWindow.recentActionsWidget.addRecentAction("RecentAction5")
 
     # Right Vertical Splitter - Bottom Scroll Area
     self.splitterRightVertical.addWidget(MainWindow.subjectsWidget)
@@ -87,18 +87,6 @@ class MainWindow(QMainWindow):
     self.setCentralWidget(self.centralWidget)
 
   @staticmethod
-  def closeEvent(self, event):
+  def closeEvent(event):
     DBHandler.closeConnection()
-
-  @staticmethod
-  def toggleStarred(self, obj):
-    word = obj.label.text()
-    newCondition=1
-    if newCondition==1:
-      MainWindow.starredWordsWidget.addStarredWord(word)
-
-  @staticmethod
-  def toggleStarredUpper(self, obj):
-    word = obj.label.text()
-    MainWindow.recentSearchesWidget.toggleStarredUpper(word)
     

@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QApplication
-from mainWindow import MainWindow
 
 import sys
 
 app = QApplication(sys.argv)
+from mainWindow import MainWindow
 window = MainWindow()
-window.show()
+window.showMaximized()
 sys.exit(app.exec())

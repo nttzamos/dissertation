@@ -1,10 +1,10 @@
-from PyQt6.QtWidgets import QGridLayout, QWidget
+from PyQt6.QtWidgets import QGridLayout, QScrollArea, QWidget
 # from PyQt6.QtCore import Qt
 # from PyQt6.QtGui import QFont
 
-from result import Result
+from MainWidget.result import Result
 
-class ResultsWidget(QWidget):
+class ResultsWidget(QScrollArea):
   def __init__(self):
     super().__init__()
     # self.layout = QtWidgets.QHBoxLayout(self)
@@ -21,26 +21,26 @@ class ResultsWidget(QWidget):
     # self.gridLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
     self.gridLayout = QGridLayout(self.scrollAreaWidgetContents)
 
-    self.word1 = Result(self.scrollAreaWidgetContents)
-    self.word2 = Result(self.scrollAreaWidgetContents)
-    self.word3 = Result(self.scrollAreaWidgetContents)
-    # self.word4 = Result(self.scrollAreaWidgetContents)
-    self.word5 = Result(self.scrollAreaWidgetContents)
-    self.word6 = Result(self.scrollAreaWidgetContents)
-    self.word7 = Result(self.scrollAreaWidgetContents)
-    # self.word8 = Result(self.scrollAreaWidgetContents)
-    self.word9 = Result(self.scrollAreaWidgetContents)
-    self.word10 = Result(self.scrollAreaWidgetContents)
-    self.word11 = Result(self.scrollAreaWidgetContents)
-    # self.word12 = Result(self.scrollAreaWidgetContents)
-    self.word13 = Result(self.scrollAreaWidgetContents)
-    self.word14 = Result(self.scrollAreaWidgetContents)
-    self.word15 = Result(self.scrollAreaWidgetContents)
-    # self.word16 = Result(self.scrollAreaWidgetContents)
-    self.word17 = Result(self.scrollAreaWidgetContents)
-    self.word18 = Result(self.scrollAreaWidgetContents)
-    self.word19 = Result(self.scrollAreaWidgetContents)
-    # self.word20 = Result(self.scrollAreaWidgetContents)
+    self.word1 = Result()
+    self.word2 = Result()
+    self.word3 = Result()
+    # self.word4 = Result()
+    self.word5 = Result()
+    self.word6 = Result()
+    self.word7 = Result()
+    # self.word8 = Result()
+    self.word9 = Result()
+    self.word10 = Result()
+    self.word11 = Result()
+    # self.word12 = Result()
+    self.word13 = Result()
+    self.word14 = Result()
+    self.word15 = Result()
+    # self.word16 = Result()
+    self.word17 = Result()
+    self.word18 = Result()
+    self.word19 = Result()
+    # self.word20 = Result()
 
     self.gridLayout.addWidget(self.word1, 0, 0)
     self.gridLayout.addWidget(self.word2, 0, 1)

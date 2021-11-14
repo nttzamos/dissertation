@@ -26,6 +26,7 @@ class StarredWord(QWidget):
     self.removeWord()
 
   def removeWord(self):
+    from SideWidgets.starredWordsWidget import StarredWordsWidget
     self.hide()
-    self.parent.removeWidget(self)
+    StarredWordsWidget.removeWidget(self)
     self.deleteLater()
