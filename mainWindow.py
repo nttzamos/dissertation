@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QHBoxLayout, QMainWindow, QSplitter, QWidget
 from PyQt6.QtCore import Qt
-# from PyQt6.QtGui import QFont
 
 from databaseHandler import DBHandler
 from MainWidget.mainWidget import MainWidget

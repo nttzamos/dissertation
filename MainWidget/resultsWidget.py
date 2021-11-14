@@ -1,6 +1,4 @@
 from PyQt6.QtWidgets import QGridLayout, QScrollArea, QWidget
-# from PyQt6.QtCore import Qt
-# from PyQt6.QtGui import QFont
 
 from MainWidget.result import Result
 
@@ -57,4 +55,6 @@ class ResultsWidget(QScrollArea):
     self.gridLayout.addWidget(self.word17, 4, 0)
     self.gridLayout.addWidget(self.word18, 4, 1)
     self.gridLayout.addWidget(self.word19, 4, 2)
+
+    self.setWidget(self.scrollAreaWidgetContents)
     

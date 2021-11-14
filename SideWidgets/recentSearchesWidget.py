@@ -94,7 +94,8 @@ class RecentSearchesWidget(QWidget):
     if len(RecentSearchesWidget.widgetList)==0:
       RecentSearchesWidget.addPlaceholder()
 
-  def addPlaceholder(self):
+  @staticmethod
+  def addPlaceholder():
     RecentSearchesWidget.placeholderLabelShow = True
     RecentSearchesWidget.gridLayout.addWidget(RecentSearchesWidget.placeholderLabel)
     RecentSearchesWidget.placeholderLabel.show()

@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QCompleter, QLineEdit, QVBoxLayout, QWidget
 from PyQt6.QtCore import QTimer, Qt
-# from PyQt6.QtGui import QFont
 
 from databaseHandler import DBHandler
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
