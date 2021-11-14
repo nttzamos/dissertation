@@ -18,14 +18,14 @@ class StarredWordsWidget(QWidget):
 
     self.layout = QVBoxLayout(self)
     self.layout.setSpacing(0)
-    self.title = QLabel(StarredWordsWidget.title)
-    self.title.setStyleSheet("QLabel {border : 2px solid black}")
-    self.title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    self.title_label = QLabel(StarredWordsWidget.title)
+    self.title_label.setStyleSheet("QLabel {border : 2px solid black}")
+    self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     font = QFont()
     font.setPointSize(14)
-    self.title.setFont(font)
-    self.title.setContentsMargins(25, 0, 25, 0)
-    self.layout.addWidget(self.title)
+    self.title_label.setFont(font)
+    self.title_label.setContentsMargins(25, 0, 25, 0)
+    self.layout.addWidget(self.title_label)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
     self.counter = 1000000

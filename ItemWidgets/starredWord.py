@@ -10,17 +10,17 @@ class StarredWord(QWidget):
 
     self.setMinimumSize(QSize(200, 100))
     self.layout = QHBoxLayout(self)
-    self.label = QLabel(word)
-    self.button = QPushButton()
-    self.button.setIcon(QIcon("Resources/starred.svg"))
-    self.button.clicked.connect(self.toggleStarred)
+    self.word = QLabel(word)
+    self.starButton = QPushButton()
+    self.starButton.setIcon(QIcon("Resources/starred.svg"))
+    self.starButton.clicked.connect(self.toggleStarred)
 
-    self.layout.addWidget(self.label)
-    self.layout.addWidget(self.button)
+    self.layout.addWidget(self.word)
+    self.layout.addWidget(self.starButton)
     
   def toggleStarred(self):
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget
-    word = self.label.text()
+    word = self.word.text()
     DBHandler.deleteStarredWord(word)
     RecentSearchesWidget.toggleStarredUpper(word)
     self.removeWord()

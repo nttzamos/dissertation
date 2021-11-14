@@ -7,7 +7,8 @@ from MainWidget.searchingWidget import SearchingWidget
 from MainWidget.resultsWidget import ResultsWidget
 
 class MainWidget(QWidget):
-  middleMiddleWidget = SearchingWidget()
+  searchingWidget = SearchingWidget()
+  resultsWidget = ResultsWidget()
   
   def __init__(self):
     super().__init__()
@@ -33,10 +34,8 @@ class MainWidget(QWidget):
     self.searchbar.setPlaceholderText("Please enter a word.")
     self.layout.addWidget(self.searchbar)
 
-    self.layout.addWidget(MainWidget.middleMiddleWidget)
-
-    self.middleBottomWidget = ResultsWidget()
-    self.layout.addWidget(self.middleBottomWidget)
+    self.layout.addWidget(MainWidget.searchingWidget)
+    self.layout.addWidget(MainWidget.resultsWidget)
 
   def updateSearches(self):
     self.addRecentSearch(self.searchbar.text())
@@ -56,4 +55,4 @@ class MainWidget(QWidget):
 
   @staticmethod
   def addWord(word):
-    MainWidget.middleMiddleWidget.word.setText(word)
+    MainWidget.searchingWidget.word.setText(word)

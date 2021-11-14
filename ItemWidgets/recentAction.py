@@ -8,15 +8,15 @@ class RecentAction(QWidget):
     self.layout = QHBoxLayout(self)
 
     self.label = QLabel(word)
-    self.button1 = QPushButton()
-    self.button1.setText("Revert")
-    self.button2 = QPushButton()
-    self.button2.setText("Remove")
+    self.revertButton = QPushButton()
+    self.revertButton.setText("Revert")
+    self.removeButton = QPushButton()
+    self.removeButton.setText("Remove")
     
     # TO-DO
-    # self.button2.clicked.connect(self.onClick)
+    # self.removeButton.clicked.connect(self.onClick)
     
     self.layout.addWidget(self.label)
-    self.layout.addWidget(self.button1)
-    self.layout.addWidget(self.button2)
+    self.layout.addWidget(self.revertButton)
+    self.layout.addWidget(self.removeButton)
     

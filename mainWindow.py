@@ -2,7 +2,9 @@ from PyQt6.QtWidgets import QHBoxLayout, QMainWindow, QSplitter, QWidget
 from PyQt6.QtCore import Qt
 
 from databaseHandler import DBHandler
+
 from MainWidget.mainWidget import MainWidget
+
 from SideWidgets.recentActionsWidget import RecentActionsWidget
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
 from SideWidgets.starredWordsWidget import StarredWordsWidget
@@ -29,12 +31,12 @@ class MainWindow(QMainWindow):
     self.splitterLeftHorizontal.setOrientation(Qt.Orientation.Horizontal)
     self.splitterLeftHorizontal.setChildrenCollapsible(False)
 
-    # Left Vertical Splitter - Left Horizontal Splitter (Left Part)
+    # Splitter between "Recent Searches" and "Starred Words" widgets
     self.splitterLeftVertical = QSplitter(self.splitterLeftHorizontal)
     self.splitterLeftVertical.setOrientation(Qt.Orientation.Vertical)
     self.splitterLeftVertical.setChildrenCollapsible(False)
 
-    # Left Upper Scroll Area
+    # Recent Searches Scroll Area
     self.splitterLeftVertical.addWidget(MainWindow.recentSearchesWidget)
     self.recentSearches = DBHandler.getAllRecentSearches()
     self.starredWords = DBHandler.getAllStarredWords()
@@ -42,7 +44,7 @@ class MainWindow(QMainWindow):
     if len(self.recentSearches)==0:
       MainWindow.recentSearchesWidget.addPlaceholder()
 
-    # Left Bottom Scroll Area
+    # Starred Words Scroll Area
     self.splitterLeftVertical.addWidget(MainWindow.starredWordsWidget)
     self.starredWords = DBHandler.getAllStarredWords()
     MainWindow.starredWordsWidget.initialStarredWordsAdding(self.starredWords)
@@ -54,15 +56,15 @@ class MainWindow(QMainWindow):
     self.splitterRightHorizontal.setOrientation(Qt.Orientation.Horizontal)
     self.splitterRightHorizontal.setChildrenCollapsible(False)
 
-    # Middle Widget - Right Horizontal Splitter (Left Part)
+    # Main Widget
     self.splitterRightHorizontal.addWidget(MainWindow.mainWidget)
 
-    # Right Vertical Splitter - Right Horizontal Splitter (Right Part)
+    # Splitter between "Recent Actions" and "Subjects" widgets
     self.splitterRightVertical = QSplitter(self.splitterRightHorizontal)
     self.splitterRightVertical.setOrientation(Qt.Orientation.Vertical)
     self.splitterRightVertical.setChildrenCollapsible(False)
 
-    # Right Vertical Splitter - Upper Scroll Area
+    # Recent Actions Scroll Area
     self.splitterRightVertical.addWidget(MainWindow.recentActionsWidget)
     MainWindow.recentActionsWidget.addRecentAction("RecentAction1")
     MainWindow.recentActionsWidget.addRecentAction("RecentAction2")
@@ -70,7 +72,7 @@ class MainWindow(QMainWindow):
     MainWindow.recentActionsWidget.addRecentAction("RecentAction4")
     MainWindow.recentActionsWidget.addRecentAction("RecentAction5")
 
-    # Right Vertical Splitter - Bottom Scroll Area
+    # Subjects Scroll Area
     self.splitterRightVertical.addWidget(MainWindow.subjectsWidget)
     MainWindow.subjectsWidget.addSubject("Φυσική")
     MainWindow.subjectsWidget.addSubject("Μαθηματικά")
