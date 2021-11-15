@@ -38,10 +38,7 @@ class RecentSearchesWidget(QWidget):
     self.scrollArea.setWidget(RecentSearchesWidget.scrollAreaWidgetContents)
     self.layout.addWidget(self.scrollArea)
   
-  def onClick(self, obj):
-    RecentSearchesWidget.gridLayout.removeWidget(obj)
-
-  def initialRecentSearchesAdding(self, wordsList, starredWordsList):
+  def initialize(self, wordsList, starredWordsList):
     for word in wordsList:
       if word in starredWordsList:
         condition=True
@@ -60,14 +57,6 @@ class RecentSearchesWidget(QWidget):
     widget = RecentSearch(word, condition)
     RecentSearchesWidget.widgetList.append(widget)
     RecentSearchesWidget.gridLayout.addWidget(widget, RecentSearchesWidget.counter, 0)
-    RecentSearchesWidget.counter -= 1
-
-  def addWidget(self, word):
-    if RecentSearchesWidget.placeholderLabelShow == True:
-      RecentSearchesWidget.placeholderLabel.hide()
-    widget = RecentSearch(word, True, self)
-    RecentSearchesWidget.widgetList.append(widget)
-    RecentSearchesWidget.gridLayout.addWidget(widget, self.counter, 0)
     RecentSearchesWidget.counter -= 1
 
   @staticmethod

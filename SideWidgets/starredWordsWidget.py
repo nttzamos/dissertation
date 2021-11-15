@@ -12,6 +12,7 @@ class StarredWordsWidget(QWidget):
   widgetList = []
   scrollAreaWidgetContents = QWidget()
   gridLayout = QGridLayout(scrollAreaWidgetContents)
+  counter = 1000000
 
   def __init__(self):
     super().__init__()
@@ -40,14 +41,12 @@ class StarredWordsWidget(QWidget):
     self.scrollArea.setWidget(StarredWordsWidget.scrollAreaWidgetContents)
     self.layout.addWidget(self.scrollArea)
     
-  def onClick(self, obj):
-    StarredWordsWidget.gridLayout.removeWidget(obj)
-
-  def initialStarredWordsAdding(self, starredWordsList):
+  def initialize(self, starredWordsList):
     for word in starredWordsList:
       widget = StarredWord(word)
       StarredWordsWidget.widgetList.append(widget)
       StarredWordsWidget.gridLayout.addWidget(widget, DBHandler.getStarredWordPosition(word), 0)
+      StarredWordsWidget.counter -= 1
 
   @staticmethod
   def addStarredWord(word):
@@ -57,9 +56,8 @@ class StarredWordsWidget(QWidget):
     widget = StarredWord(word)
     StarredWordsWidget.widgetList.append(widget)
     length = len(StarredWordsWidget.widgetList)
-    position = DBHandler.getStarredWordPosition(word)
-    print("Position is: " + str(position))
-    StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.widgetList[length-1], position, 0)
+    StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.widgetList[length-1], StarredWordsWidget.counter, 0)
+    StarredWordsWidget.counter -= 1
 
   @staticmethod
   def removeWidget(obj):

@@ -40,14 +40,14 @@ class MainWindow(QMainWindow):
     self.splitterLeftVertical.addWidget(MainWindow.recentSearchesWidget)
     self.recentSearches = DBHandler.getAllRecentSearches()
     self.starredWords = DBHandler.getAllStarredWords()
-    MainWindow.recentSearchesWidget.initialRecentSearchesAdding(self.recentSearches, self.starredWords)
+    MainWindow.recentSearchesWidget.initialize(self.recentSearches, self.starredWords)
     if len(self.recentSearches)==0:
       MainWindow.recentSearchesWidget.addPlaceholder()
 
     # Starred Words Scroll Area
     self.splitterLeftVertical.addWidget(MainWindow.starredWordsWidget)
     self.starredWords = DBHandler.getAllStarredWords()
-    MainWindow.starredWordsWidget.initialStarredWordsAdding(self.starredWords)
+    MainWindow.starredWordsWidget.initialize(self.starredWords)
     if len(self.starredWords)==0:
       MainWindow.starredWordsWidget.addPlaceholder()
 

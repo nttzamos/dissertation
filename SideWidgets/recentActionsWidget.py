@@ -40,9 +40,6 @@ class RecentActionsWidget(QWidget):
     self.scrollArea.setWidget(self.scrollAreaWidgetContents)
     self.layout.addWidget(self.scrollArea)
 
-  def onClick(self, obj):
-    self.gridLayout.removeWidget(obj)
-
   def addRecentAction(self, word):
     if self.placeholderLabelShow == True:
       self.placeholderLabel.hide()
