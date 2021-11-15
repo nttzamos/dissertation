@@ -12,7 +12,7 @@ class MainWidget(QWidget):
   
   def __init__(self):
     super().__init__()
-    self.setFixedWidth(1200)
+    # self.setFixedWidth(1200)
     self.layout = QVBoxLayout(self)
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)

@@ -73,7 +73,7 @@ class RecentSearchesWidget(QWidget):
   @staticmethod
   def removeAndAddWidget(word):
     for obj in RecentSearchesWidget.widgetList:
-      if obj.label.text()==word:
+      if obj.word.text()==word:
         RecentSearchesWidget.gridLayout.removeWidget(obj)
         RecentSearchesWidget.gridLayout.addWidget(obj, RecentSearchesWidget.counter, 0)
         RecentSearchesWidget.counter -=1
@@ -82,7 +82,7 @@ class RecentSearchesWidget(QWidget):
   @staticmethod
   def toggleStarredUpper(word):
     for obj in RecentSearchesWidget.widgetList:
-      if word==obj.label.text():
+      if word==obj.word.text():
         obj.toggleStarredIcon()
         return
 
