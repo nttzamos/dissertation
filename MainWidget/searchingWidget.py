@@ -1,49 +1,64 @@
-from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
-from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtWidgets import QCompleter, QLineEdit, QVBoxLayout, QWidget
+from PyQt6.QtCore import QTimer, Qt
+
+from databaseHandler import DBHandler
+from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+from MainWidget.currentSearch import CurrentSearch
+from MainWidget.resultsWidget import ResultsWidget
 
 class SearchingWidget(QWidget):
+  currentSearch = CurrentSearch()
+  # Uncomment and change when complete
+  # dictionary_words = DBHandler.getAllWords()
+  dictionary_words = [
+    "Balcony", "Balloon", "Barcelona", "Balcony Light",
+    "Fan", "Room Light", "Brioche", "Basketball",
+    "Bedroom Heater", "Wall Switch"]
+  
   def __init__(self):
     super().__init__()
-    self.setContentsMargins(10, 10, 10, 10)
-    self.setFixedHeight(300)
-    self.layout = QHBoxLayout(self)
+    self.layout = QVBoxLayout(self)
+    self.layout.setSpacing(0)
+    self.layout.setContentsMargins(0, 0, 0, 0)
 
-    self.word = QLabel(self)
-    self.word.setText("Enter a word.")
-    self.word.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    self.word.setFixedSize(QSize(300, 200))
-    self.word.setGeometry(50, 50, 300, 200)
-    self.word.setStyleSheet("QLabel {border : 2px solid black}")
+    # Search bar.
+    self.searchbar = QLineEdit()
+    self.searchbar.setContentsMargins(0, 0, 0, 0)
+    # self.searchbar.textChanged.connect(self.update_display)
+    self.searchbar.returnPressed.connect(self.searchWithEnter)
 
-    font = QFont()
-    font.setPointSize(20)
-    self.word.setFont(font)
+    # Adding Completer.
+    self.completer = QCompleter(SearchingWidget.dictionary_words)
+    self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+    self.completer.activated.connect(self.searchWithClick)
+    self.searchbar.setCompleter(self.completer)
+    self.searchbar.setPlaceholderText("Please enter a word.")
 
-    self.layout.addWidget(self.word)
+    self.layout.addWidget(self.searchbar)
+    self.layout.addWidget(SearchingWidget.currentSearch)
 
-    self.subLayout = QVBoxLayout()
-    self.pauseButton = QPushButton()
-    self.pauseButton.setText("Pause")
+  def searchWithEnter(self):
+    if self.searchbar.text() in SearchingWidget.dictionary_words:
+      self.addRecentSearch(self.searchbar.text())
+      self.searchbar.clear()
+    else:
+      # Implement showing necessary message
+      pass
 
-    self.pauseButton.setFixedHeight(50)
-    self.pauseButton.setFixedWidth(100)
-    self.pauseButton.setContentsMargins(0, 50, 50, 0)
-    self.pauseButton.setStyleSheet(
-      "QPushButton:hover { background-color: grey; }\n"
-      "QPushButton {border : 2px solid black}")
+  def searchWithClick(self, text):
+    self.addRecentSearch(text)
+    QTimer.singleShot(0, self.searchbar.clear)
 
-    self.disableButton = QPushButton()
-    self.disableButton.setText("Disable")
+  def addRecentSearch(self, word):
+    SearchingWidget.addWord(word)
 
-    self.disableButton.setFixedHeight(50)
-    self.disableButton.setFixedWidth(100)
-    self.disableButton.setContentsMargins(50, 0, 0, 0)
-    self.disableButton.setStyleSheet(
-      "QPushButton:hover { background-color: red; }\n"
-      "QPushButton {border : 2px solid black}")
+    addedNow = DBHandler.addRecentSearch(word, 0)
+    if addedNow:
+      RecentSearchesWidget.addRecentSearch(word, False)
+    else:
+      RecentSearchesWidget.removeAndAddWidget(word)
 
-    self.subLayout.addWidget(self.pauseButton)
-    self.subLayout.addWidget(self.disableButton)
-
-    self.layout.addLayout(self.subLayout)
+  @staticmethod
+  def addWord(word):
+    SearchingWidget.currentSearch.word.setText(word)
+    ResultsWidget.showResults(word)

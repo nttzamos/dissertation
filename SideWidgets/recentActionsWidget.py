@@ -49,7 +49,7 @@ class RecentActionsWidget(QWidget):
     length = len(self.widgetList)
     self.gridLayout.addWidget(self.widgetList[length-1])
 
-  def removeWidget(self, obj):
+  def removeRecentAction(self, obj):
     self.widgetList.remove(obj)
     if len(self.widgetList)==0:
       self.addPlaceholder()

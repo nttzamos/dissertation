@@ -60,10 +60,10 @@ class RecentSearchesWidget(QWidget):
     RecentSearchesWidget.counter -= 1
 
   @staticmethod
-  def removeAndAddWidget(word):
+  def removeAndAddRecentSearch(word):
     for obj in RecentSearchesWidget.widgetList:
       if obj.word.text()==word:
-        RecentSearchesWidget.gridLayout.removeWidget(obj)
+        RecentSearchesWidget.gridLayout.removeRecentSearch(obj)
         RecentSearchesWidget.gridLayout.addWidget(obj, RecentSearchesWidget.counter, 0)
         RecentSearchesWidget.counter -=1
         return
@@ -76,7 +76,7 @@ class RecentSearchesWidget(QWidget):
         return
 
   @staticmethod
-  def removeWidget(obj):
+  def removeRecentSearch(obj):
     RecentSearchesWidget.widgetList.remove(obj)
     if len(RecentSearchesWidget.widgetList)==0:
       RecentSearchesWidget.addPlaceholder()

@@ -60,7 +60,7 @@ class StarredWordsWidget(QWidget):
     StarredWordsWidget.counter -= 1
 
   @staticmethod
-  def removeWidget(obj):
+  def removeStarredWord(obj):
     StarredWordsWidget.widgetList.remove(obj)
     if len(StarredWordsWidget.widgetList)==0:
       StarredWordsWidget.addPlaceholder()
