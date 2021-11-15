@@ -115,7 +115,7 @@ class DBHandler():
 
   @staticmethod
   def getStarredWordPosition(word):
-    DBHandler.cur.execute("SELECT COUNT(*) FROM words WHERE word<?", (word,))
+    DBHandler.cur.execute("SELECT COUNT(*) FROM starredWords WHERE word < ?", (word,))
     position = DBHandler.cur.fetchone()[0]
     return position
 

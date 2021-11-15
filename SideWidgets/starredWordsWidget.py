@@ -57,7 +57,9 @@ class StarredWordsWidget(QWidget):
     widget = StarredWord(word)
     StarredWordsWidget.widgetList.append(widget)
     length = len(StarredWordsWidget.widgetList)
-    StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.widgetList[length-1], DBHandler.getStarredWordPosition(word), 0)
+    position = DBHandler.getStarredWordPosition(word)
+    print("Position is: " + str(position))
+    StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.widgetList[length-1], position, 0)
 
   @staticmethod
   def removeWidget(obj):
@@ -68,7 +70,7 @@ class StarredWordsWidget(QWidget):
   @staticmethod
   def toggleStarredBottom(word):
     for obj in StarredWordsWidget.widgetList:
-      if word==obj.label.text():
+      if word==obj.word.text():
         obj.removeWord()
         return
 
