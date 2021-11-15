@@ -30,7 +30,8 @@ class ResultsWidget(QWidget):
   def showResults(word):
     resultsWords = []
     for obj in ResultsWidget.widgetList:
-      ResultsWidget.widgetList.remove(obj)  
+      obj.hide()
+      obj.deleteLater()
     ResultsWidget.widgetList = []
     print(ResultsWidget.widgetList)
     for i in range(15):

@@ -27,7 +27,6 @@ class SubjectsWidget(QWidget):
     self.placeholderLabelShow = False
     self.placeholderLabel.setFont(font)
 
-    self.type = type
     self.widgetList = []
 
     self.scrollArea = QScrollArea()

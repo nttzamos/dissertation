@@ -32,8 +32,6 @@ class StarredWordsWidget(QWidget):
     self.counter = 1000000
     StarredWordsWidget.placeholderLabel.setFont(font)
 
-    self.type = type
-
     StarredWordsWidget.gridLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)

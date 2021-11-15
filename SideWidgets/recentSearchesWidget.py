@@ -31,7 +31,6 @@ class RecentSearchesWidget(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
 
     RecentSearchesWidget.placeholderLabel.setFont(font)
-    self.type = type
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)
     RecentSearchesWidget.gridLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
