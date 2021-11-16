@@ -33,12 +33,10 @@ class ResultsWidget(QWidget):
       obj.hide()
       obj.deleteLater()
     ResultsWidget.widgetList = []
-    print(ResultsWidget.widgetList)
     for i in range(15):
       resultsWords.append(word + str(i))
     
     for i in range(len(resultsWords)):
-      print(resultsWords[i])
       row = i // 3
       column = i % 3
       result = Result(resultsWords[i])

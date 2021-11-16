@@ -60,7 +60,6 @@ class StarredWordsWidget(QWidget):
       
     widget = StarredWord(word)
     StarredWordsWidget.widgetList.append(widget)
-    length = len(StarredWordsWidget.widgetList)
     position = DBHandler.getStarredWordPosition(word)
     print("Position is: " + str(position))
     # StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.widgetList[length-1], position, 0)

@@ -34,8 +34,8 @@ class RecentSearch(QWidget):
     self.layout.addWidget(self.deleteButton)
     
   def reloadWord(self):
-    from MainWidget.searchingWidget import SearchingWidget
-    SearchingWidget.addWord(self.word.text())
+    from MainWidget.mainWidget import MainWidget
+    MainWidget.addWord(self.word.text())
 
   def notifyStarred(self):
     from SideWidgets.starredWordsWidget import StarredWordsWidget

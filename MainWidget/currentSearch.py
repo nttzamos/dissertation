@@ -47,3 +47,6 @@ class CurrentSearch(QWidget):
     self.subLayout.addWidget(self.disableButton)
 
     self.layout.addLayout(self.subLayout)
+
+  def getCurrentWord(self):
+    return self.word.text()
