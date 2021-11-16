@@ -1,33 +1,39 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QGridLayout, QScrollArea, QVBoxLayout, QWidget
+from PyQt6.QtGui import QFont
+from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
 
 from MainWidget.result import Result
 
 class ResultsWidget(QWidget):
   scrollAreaWidgetContents = QWidget()
-  # self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(1200, 700))
-  # self.gridLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
   gridLayout = QGridLayout(scrollAreaWidgetContents)
   widgetList = []
   counter = 1000000
+  placeholderLabelShow = True
+  placeholderLabel = QLabel("The results of your search will be displayed here.")
 
   def __init__(self):
     super().__init__()
 
     self.layout = QVBoxLayout(self)
     self.layout.setSpacing(0)
-
     self.layout.setContentsMargins(0, 0, 0, 0)
+
+    font = QFont()
+    font.setPointSize(14)
+    ResultsWidget.placeholderLabel.setFont(font)
+    ResultsWidget.gridLayout.addWidget(ResultsWidget.placeholderLabel)
 
     ResultsWidget.gridLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)
-
     self.scrollArea.setWidget(ResultsWidget.scrollAreaWidgetContents)
     self.layout.addWidget(self.scrollArea)
 
   @staticmethod
   def showResults(word):
+    if ResultsWidget.placeholderLabelShow:
+      ResultsWidget.placeholderLabel.hide()
     resultsWords = []
     for obj in ResultsWidget.widgetList:
       obj.hide()
