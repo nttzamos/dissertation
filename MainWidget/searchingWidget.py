@@ -56,7 +56,7 @@ class SearchingWidget(QWidget):
     if addedNow:
       RecentSearchesWidget.addRecentSearch(word, False)
     else:
-      RecentSearchesWidget.removeAndAddWidget(word)
+      RecentSearchesWidget.removeAndAddRecentSearch(word)
 
   @staticmethod
   def addWord(word):

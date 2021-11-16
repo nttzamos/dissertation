@@ -62,7 +62,7 @@ class RecentSearchesWidget(QWidget):
   def removeAndAddRecentSearch(word):
     for obj in RecentSearchesWidget.widgetList:
       if obj.word.text()==word:
-        RecentSearchesWidget.gridLayout.removeRecentSearch(obj)
+        RecentSearchesWidget.gridLayout.removeWidget(obj)
         RecentSearchesWidget.gridLayout.addWidget(obj, RecentSearchesWidget.counter, 0)
         RecentSearchesWidget.counter -=1
         return
