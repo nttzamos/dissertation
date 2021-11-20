@@ -30,7 +30,7 @@ class CurrentSearch(QWidget):
     self.pauseButton.setFixedWidth(100)
     self.pauseButton.setContentsMargins(0, 50, 50, 0)
     self.pauseButton.setStyleSheet(
-      "QPushButton:hover { background-color: grey; }\n"
+      "QPushButton:hover { background-color: grey }\n"
       "QPushButton {border : 2px solid black}")
 
     self.disableButton = QPushButton()
@@ -40,7 +40,7 @@ class CurrentSearch(QWidget):
     self.disableButton.setFixedWidth(100)
     self.disableButton.setContentsMargins(50, 0, 0, 0)
     self.disableButton.setStyleSheet(
-      "QPushButton:hover { background-color: red; }\n"
+      "QPushButton:hover { background-color: red }\n"
       "QPushButton {border : 2px solid black}")
 
     self.subLayout.addWidget(self.pauseButton)

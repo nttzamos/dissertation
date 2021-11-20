@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 from MainWidget.currentSearch import CurrentSearch
 
 from databaseHandler import DBHandler
@@ -17,7 +17,14 @@ class MainWidget(QWidget):
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    self.layout.addWidget(MainWidget.searchingWidget)
+    self.searchContainerWidget = QWidget()
+    self.widgetLayout = QHBoxLayout(self.searchContainerWidget)
+    self.searchContainerWidget.layout = self.widgetLayout
+    self.searchContainerWidget.layout.addSpacing(10)
+    self.searchContainerWidget.layout.addWidget(MainWidget.searchingWidget)
+    self.searchContainerWidget.layout.addSpacing(10)
+
+    self.layout.addWidget(self.searchContainerWidget)
     self.layout.addWidget(MainWidget.currentSearch)
     self.layout.addWidget(MainWidget.resultsWidget)
 

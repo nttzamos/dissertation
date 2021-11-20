@@ -13,7 +13,7 @@ class StarredWordsWidget(QWidget):
   scrollAreaWidgetContents = QWidget()
   # gridLayout = QGridLayout(scrollAreaWidgetContents)
   listWidget = QListWidget(scrollAreaWidgetContents)
-  listWidget.setStyleSheet("QListWidget::item:hover { background: transparent; }")
+  listWidget.setStyleSheet("QListWidget::item:hover { background: transparent }")
 
 
   def __init__(self):

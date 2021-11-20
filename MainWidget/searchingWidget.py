@@ -1,3 +1,4 @@
+from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QCompleter, QLineEdit, QVBoxLayout, QWidget
 from PyQt6.QtCore import QTimer, Qt
 
@@ -14,6 +15,14 @@ class SearchingWidget(QLineEdit):
   
   def __init__(self):
     super().__init__()
+    self.setStyleSheet(
+      "QLineEdit { border-radius: 5px }\n"
+      "QCompleter { border-radius: 5px }"
+    )
+    
+    large_font = QFont()
+    large_font.setPointSize(14)
+    self.setFont(large_font)
 
     # Search bar.
     # self.searchbar.textChanged.connect(self.update_display)
@@ -23,6 +32,9 @@ class SearchingWidget(QLineEdit):
     self.completer = QCompleter(SearchingWidget.dictionary_words)
     self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
     self.completer.activated.connect(self.searchWithClick)
+    smallFont = QFont()
+    smallFont.setPointSize(10)
+    self.completer.popup().setFont(smallFont)
     self.setCompleter(self.completer)
     self.setPlaceholderText("Please enter a word.")
 

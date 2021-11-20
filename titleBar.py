@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtGui import QFont, QIcon
+from PyQt6.QtGui import QFont, QIcon, QPixmap
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QWidget
 
 class TitleBar(QWidget):
@@ -15,17 +15,23 @@ class TitleBar(QWidget):
     self.setFixedHeight(30)
 
     self.setStyleSheet(
-      "QPushButton:hover { background-color: grey; }\n"
-      "QPushButton { border: none; }\n"
-      "QPushButton { padding-bottom: 5; }\n"
+      "QPushButton:hover { background-color: grey }\n"
+      "QPushButton { border: none }\n"
+      "QPushButton { padding-bottom: 5 }\n"
       "QPushButton { padding-top: 5}")
+
+    self.windowIcon = QPushButton()
+    self.windowIcon.setIcon(QIcon("Resources/windowIcon.svg"))
+    self.windowIcon.setFixedWidth(30)
+    self.windowIcon.setStyleSheet(
+      "QPushButton:hover { background-color: none }\n"
+      "QPushButton { border: none }"
+    )
 
     self.title = QLabel(TitleBar.title)
     font = QFont()
     font.setPointSize(14)
     self.title.setFont(font)
-
-    # self.windowIcon = QIcon("Resources/windowIcon.svg")
 
     self.settingsButton = QPushButton()
     self.settingsButton.setIcon(QIcon("Resources/settings.png"))
@@ -47,10 +53,11 @@ class TitleBar(QWidget):
     self.closeWindowButton.setFixedWidth(30)
     self.closeWindowButton.clicked.connect(self.closeWindow)
     self.closeWindowButton.setStyleSheet(
-      "QPushButton:hover { background-color: #D11A2A ; }")
+      "QPushButton:hover { background-color: #D11A2A }")
 
+    self.layout.addWidget(self.windowIcon)
+    self.layout.addSpacing(5)
     self.layout.addWidget(self.title)
-    # self.layout.addWidget(self.windowIcon)
     self.layout.addWidget(self.settingsButton, alignment=Qt.AlignmentFlag.AlignTop)
     self.layout.addWidget(self.minimizeWindowButton, alignment=Qt.AlignmentFlag.AlignTop)
     self.layout.addWidget(self.restoreDownWindowButton, alignment=Qt.AlignmentFlag.AlignTop)

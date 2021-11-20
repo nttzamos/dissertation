@@ -24,6 +24,10 @@ class MainWindow(QWidget):
     self.init_gui()
 
   def init_gui(self):
+    # self.setStyleSheet(
+    #   "QWidget{ background-color: #FFFFFF }"
+    # )
+    
     self.layout = QGridLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)

@@ -5,7 +5,7 @@ class BoxLayout(QListWidget):
   def __init__(self):
     super().__init__()
 
-    self.setStyleSheet("QListWidget::item:hover { background: transparent; }")
+    self.setStyleSheet("QListWidget::item:hover { background: transparent }")
 
     self.itemN1 = QListWidgetItem()
     self.itemN2 = QListWidgetItem()
