@@ -10,7 +10,7 @@ from SideWidgets.recentSearchesWidget import RecentSearchesWidget
 from SideWidgets.starredWordsWidget import StarredWordsWidget
 from SideWidgets.subjectsWidget import SubjectsWidget
 
-class MainWindow(QMainWindow):
+class MainWindow(QWidget):
   DBHandler.init_db()
   recentSearchesWidget = RecentSearchesWidget()
   starredWordsWidget = StarredWordsWidget()
@@ -23,11 +23,11 @@ class MainWindow(QMainWindow):
     self.init_gui()
 
   def init_gui(self):
-    self.centralWidget = QWidget(self)
-    self.windowLayout = QHBoxLayout(self.centralWidget)
+    self.layout = QHBoxLayout(self)
+    self.setLayout(self.layout)
 
     # Left Horizontal Splitter
-    self.splitterLeftHorizontal = QSplitter(self.centralWidget)
+    self.splitterLeftHorizontal = QSplitter(self)
     self.splitterLeftHorizontal.setOrientation(Qt.Orientation.Horizontal)
     self.splitterLeftHorizontal.setChildrenCollapsible(False)
 
@@ -80,8 +80,7 @@ class MainWindow(QMainWindow):
     MainWindow.subjectsWidget.addSubject("Ιστορία")
     MainWindow.subjectsWidget.addSubject("Αρχαία")
 
-    self.windowLayout.addWidget(self.splitterLeftHorizontal)
-    self.setCentralWidget(self.centralWidget)
+    self.layout.addWidget(self.splitterLeftHorizontal)
 
   @staticmethod
   def closeEvent(event):
