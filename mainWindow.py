@@ -29,7 +29,7 @@ class MainWindow(QWidget):
     self.layout.setSpacing(0)
     
     self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
-    self.titleBar = TitleBar()
+    self.titleBar = TitleBar(self)
 
     self.centralWidget = QWidget(self)
     self.windowLayout = QHBoxLayout(self.centralWidget)
