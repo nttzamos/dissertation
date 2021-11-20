@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QHBoxLayout, QMainWindow, QSplitter, QWidget
+from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QMainWindow, QSplitter, QVBoxLayout, QWidget
 from PyQt6.QtCore import Qt
 
 from databaseHandler import DBHandler
@@ -9,6 +9,7 @@ from SideWidgets.recentActionsWidget import RecentActionsWidget
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
 from SideWidgets.starredWordsWidget import StarredWordsWidget
 from SideWidgets.subjectsWidget import SubjectsWidget
+from titleBar import TitleBar
 
 class MainWindow(QWidget):
   DBHandler.init_db()
@@ -23,8 +24,15 @@ class MainWindow(QWidget):
     self.init_gui()
 
   def init_gui(self):
-    self.layout = QHBoxLayout(self)
-    self.setLayout(self.layout)
+    self.layout = QGridLayout(self)
+    self.layout.setContentsMargins(0, 0, 0, 0)
+    self.layout.setSpacing(0)
+    
+    self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+    self.titleBar = TitleBar()
+
+    self.centralWidget = QWidget(self)
+    self.windowLayout = QHBoxLayout(self.centralWidget)
 
     # Left Horizontal Splitter
     self.splitterLeftHorizontal = QSplitter(self)
@@ -80,7 +88,8 @@ class MainWindow(QWidget):
     MainWindow.subjectsWidget.addSubject("Ιστορία")
     MainWindow.subjectsWidget.addSubject("Αρχαία")
 
-    self.layout.addWidget(self.splitterLeftHorizontal)
+    self.layout.addWidget(self.titleBar, 0, 0)
+    self.layout.addWidget(self.splitterLeftHorizontal, 1, 0)
 
   @staticmethod
   def closeEvent(event):
