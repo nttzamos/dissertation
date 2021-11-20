@@ -18,7 +18,7 @@ class TitleBar(QWidget):
       "QPushButton:hover { background-color: grey }\n"
       "QPushButton { border: none }\n"
       "QPushButton { padding-bottom: 5 }\n"
-      "QPushButton { padding-top: 5}")
+      "QPushButton { padding-top: 5 }")
 
     self.windowIcon = QPushButton()
     self.windowIcon.setIcon(QIcon("Resources/windowIcon.svg"))
