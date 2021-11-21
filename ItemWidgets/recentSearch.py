@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QWidget
+from PyQt6.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QVBoxLayout, QWidget
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QFont, QIcon, QPalette
 
@@ -11,8 +11,9 @@ class RecentSearch(QWidget):
     self.setFixedHeight(50)
 
     self.setContentsMargins(0, 0, 0, 0)
-    self.layout = QGridLayout(self)
+    self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)
+    self.layout.setSpacing(0)
 
     self.setStyleSheet(
       "QPushButton:hover { background-color: grey }\n"
@@ -21,6 +22,10 @@ class RecentSearch(QWidget):
       "QPushButton { padding-bottom: 5px }\n"
       "QPushButton { padding-top: 5px }"
     )
+
+    self.dataWidget = QWidget()
+    self.dataWidget.layout = QHBoxLayout(self.dataWidget)
+    self.dataWidget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.word = QLabel(word)
     font = QFont()
@@ -52,11 +57,15 @@ class RecentSearch(QWidget):
     self.line.setFrameShadow(QFrame.Shadow.Plain)
     self.line.setLineWidth(5)
 
-    self.layout.addWidget(self.word, 0, 0)
-    self.layout.addWidget(self.reloadButton, 0, 1)
-    self.layout.addWidget(self.starButton, 0, 2)
-    self.layout.addWidget(self.deleteButton, 0, 3)
-    self.layout.addWidget(self.line, 1, 0, 1, 4)
+    self.dataWidget.layout.addSpacing(5)
+    self.dataWidget.layout.addWidget(self.word)
+    self.dataWidget.layout.addWidget(self.reloadButton)
+    self.dataWidget.layout.addWidget(self.starButton)
+    self.dataWidget.layout.addWidget(self.deleteButton)
+    self.dataWidget.layout.addSpacing(5)
+    
+    self.layout.addWidget(self.dataWidget)
+    self.layout.addWidget(self.line)
     
   def reloadWord(self):
     from MainWidget.mainWidget import MainWidget

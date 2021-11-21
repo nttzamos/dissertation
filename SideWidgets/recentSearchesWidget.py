@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QSizePolicy, QSpacerItem, QVBoxLayout, QWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
@@ -11,6 +11,7 @@ class RecentSearchesWidget(QWidget):
   scrollAreaWidgetContents = QWidget()
   gridLayout = QGridLayout(scrollAreaWidgetContents)
   gridLayout.setSpacing(0)
+  gridLayout.setContentsMargins(0, 0, 0, 0)
   counter = 1000000
   widgetList = []
   placeholderLabel = QLabel("You do not have any " + title)
@@ -51,6 +52,9 @@ class RecentSearchesWidget(QWidget):
     self.scrollArea.setWidget(RecentSearchesWidget.scrollAreaWidgetContents)
     self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
     self.layout.addWidget(self.scrollArea)
+
+    self.vspacer = QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+    RecentSearchesWidget.gridLayout.addItem(self.vspacer, 2000000, 0, 1, -1)
   
   def initialize(self, wordsList, starredWordsList):
     for word in wordsList:

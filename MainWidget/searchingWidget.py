@@ -1,5 +1,5 @@
 from PyQt6.QtGui import QFont, QIcon
-from PyQt6.QtWidgets import QCompleter, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QCompleter, QFrame, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout, QWidget
 from PyQt6.QtCore import QEvent, QTimer, Qt
 
 from databaseHandler import DBHandler
@@ -17,7 +17,6 @@ class SearchingWidget(QWidget):
   
   def __init__(self):
     super().__init__()
-
 
     large_font = QFont()
     large_font.setPointSize(14)
@@ -43,7 +42,6 @@ class SearchingWidget(QWidget):
     self.searchBarWidget.layout = QHBoxLayout(self.searchBarWidget)
     self.searchBarWidget.layout.setContentsMargins(10, 0, 0, 0)
 
-    
     self.clearSearchButton = QPushButton()
     self.clearSearchButton.setIcon(QIcon("Resources/restoreDownWindow.png"))
     self.clearSearchButton.setFixedWidth(30)
@@ -73,8 +71,8 @@ class SearchingWidget(QWidget):
       "QWidget { background-color: white; border-radius: 10px; border: 1px solid blue }\n"
       "QLineEdit { border: none }"
       "QPushButton { border: none }\n"
-      "QPushButton { padding-bottom: 5 }\n"
-      "QPushButton { padding-top: 5 }"
+      "QPushButton { padding-bottom: 5px }\n"
+      "QPushButton { padding-top: 5px }"
     )
 
   def setUnfocusedStyleSheet(self):
