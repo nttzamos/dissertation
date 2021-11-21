@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QWidget
+from PyQt6.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QWidget
 from PyQt6.QtCore import QSize
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QFont, QIcon, QPalette
 
 from databaseHandler import DBHandler
 
@@ -8,16 +8,34 @@ class RecentSearch(QWidget):
   def __init__(self, word, condition):
     super().__init__()
 
-    self.setMinimumSize(QSize(200, 100))
-    self.layout = QHBoxLayout(self)
+    self.setFixedHeight(50)
+
+    self.setContentsMargins(0, 0, 0, 0)
+    self.layout = QGridLayout(self)
+    self.layout.setContentsMargins(0, 0, 0, 0)
+
+    self.setStyleSheet(
+      "QPushButton:hover { background-color: grey }\n"
+      "QPushButton { border-radius: 30px }\n"
+      "QPushButton { border: 1px solid black }\n"
+      "QPushButton { padding-bottom: 5px }\n"
+      "QPushButton { padding-top: 5px }"
+    )
 
     self.word = QLabel(word)
+    font = QFont()
+    font.setPointSize(14)
+    self.word.setFont(font)
+
     self.reloadButton = QPushButton()
     self.reloadButton.setIcon(QIcon("Resources/reload.svg"))
     self.reloadButton.clicked.connect(self.reloadWord)
+    self.reloadButton.setFixedWidth(30)
 
     self.starButton = QPushButton()
     self.starButton.clicked.connect(self.notifyStarred)
+    self.starButton.setFixedWidth(30)
+    
     self.isStarred = condition
     if condition:
       self.starButton.setIcon(QIcon("Resources/starred.svg"))
@@ -27,11 +45,18 @@ class RecentSearch(QWidget):
     self.deleteButton = QPushButton()
     self.deleteButton.setIcon(QIcon("Resources/delete2.svg"))
     self.deleteButton.clicked.connect(self.removeWord)
+    self.deleteButton.setFixedWidth(30)
 
-    self.layout.addWidget(self.word)
-    self.layout.addWidget(self.reloadButton)
-    self.layout.addWidget(self.starButton)
-    self.layout.addWidget(self.deleteButton)
+    self.line = QFrame()
+    self.line.setFrameShape(QFrame.Shape.HLine)
+    self.line.setFrameShadow(QFrame.Shadow.Plain)
+    self.line.setLineWidth(5)
+
+    self.layout.addWidget(self.word, 0, 0)
+    self.layout.addWidget(self.reloadButton, 0, 1)
+    self.layout.addWidget(self.starButton, 0, 2)
+    self.layout.addWidget(self.deleteButton, 0, 3)
+    self.layout.addWidget(self.line, 1, 0, 1, 4)
     
   def reloadWord(self):
     from MainWidget.mainWidget import MainWidget
