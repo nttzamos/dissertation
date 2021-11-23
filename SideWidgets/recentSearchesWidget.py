@@ -12,8 +12,10 @@ class RecentSearchesWidget(QWidget):
   gridLayout = QGridLayout(scrollAreaWidgetContents)
   gridLayout.setSpacing(0)
   gridLayout.setContentsMargins(0, 0, 0, 0)
+  
   counter = 1000000
   widgetList = []
+  
   placeholderLabel = QLabel("You do not have any " + title)
   placeholderLabelShow = False
 
@@ -37,10 +39,10 @@ class RecentSearchesWidget(QWidget):
 
     self.layout = QVBoxLayout(self)
     self.title_label = QLabel(RecentSearchesWidget.title)
-    self.title_label.setStyleSheet("QLabel {border : 2px solid black}")
+    self.title_label.setStyleSheet("QLabel {border : 1px solid black; padding: 10px 0px}")
     self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     font = QFont()
-    font.setPointSize(14)
+    font.setPointSize(18)
     self.title_label.setFont(font)
     self.layout.addWidget(self.title_label)
     self.layout.setContentsMargins(0, 0, 0, 0)
