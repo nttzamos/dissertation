@@ -1,52 +1,71 @@
-from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QComboBox, QGridLayout, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
 
 class CurrentSearch(QWidget):
   def __init__(self):
     super().__init__()
-    self.setContentsMargins(10, 10, 10, 10)
+    
     self.setFixedHeight(300)
     self.layout = QHBoxLayout(self)
+    self.layout.setContentsMargins(50, 50, 50, 50)
 
-    self.word = QLabel(self)
-    self.word.setText("Enter a word.")
-    self.word.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    self.word.setFixedSize(QSize(300, 200))
-    self.word.setGeometry(50, 50, 300, 200)
-    self.word.setStyleSheet("QLabel {border : 2px solid black}")
+    self.setStyleSheet("QComboBox { background-color: grey }")
 
+    self.searchedWord = QLabel("Enter a word.")
+    self.searchedWord.setFixedSize(200, 100)
+    self.searchedWord.setAlignment(Qt.AlignmentFlag.AlignRight)
+    self.searchedWord.setStyleSheet("QLabel { border : 1px solid black; border-radius: 10px }")
     font = QFont()
     font.setPointSize(20)
-    self.word.setFont(font)
+    self.searchedWord.setFont(font)
 
-    self.layout.addWidget(self.word)
+    self.searchDetails = QWidget()
+    self.searchDetails.layout = QGridLayout(self.searchDetails)
 
-    self.subLayout = QVBoxLayout()
-    self.pauseButton = QPushButton()
-    self.pauseButton.setText("Pause")
+    self.classLabel = QLabel("Class:")
+    self.classLabel.setStyleSheet("QLabel { margin-right: 10px }")
+    font = QFont()
+    font.setPointSize(14)
+    self.classLabel.setFont(font)
+    self.classLabel.setAlignment(Qt.AlignmentFlag.AlignRight)
+    self.classSelector = QComboBox()
+    self.classSelector.setFont(font)
+    self.classSelector.addItems(self.getAvailableClasses())
 
-    self.pauseButton.setFixedHeight(50)
-    self.pauseButton.setFixedWidth(100)
-    self.pauseButton.setContentsMargins(0, 50, 50, 0)
-    self.pauseButton.setStyleSheet(
-      "QPushButton:hover { background-color: grey }\n"
-      "QPushButton {border : 2px solid black}")
+    self.subjectLabel = QLabel("Subject:")
+    self.subjectSelector = QComboBox()
+    self.subjectSelector.addItems(self.getAvailableSubjects())
 
-    self.disableButton = QPushButton()
-    self.disableButton.setText("Disable")
+    self.studentLabel = QLabel("Student:")
+    self.studentSelector = QComboBox()
+    self.studentSelector.addItems(self.getAvailableStudents())
+    self.studentName = QLabel("Νίκος")
+    self.useStudentSelector = False
 
-    self.disableButton.setFixedHeight(50)
-    self.disableButton.setFixedWidth(100)
-    self.disableButton.setContentsMargins(50, 0, 0, 0)
-    self.disableButton.setStyleSheet(
-      "QPushButton:hover { background-color: red }\n"
-      "QPushButton {border : 2px solid black}")
+    self.searchDetails.layout.addWidget(self.classLabel, 0, 0)
+    self.searchDetails.layout.addWidget(self.classSelector, 0, 1)
+    self.searchDetails.layout.addWidget(self.subjectLabel, 1, 0)
+    self.searchDetails.layout.addWidget(self.subjectSelector, 1, 1)
+    self.searchDetails.layout.addWidget(self.studentLabel, 2, 0)
+    
+    if self.useStudentSelector:
+      self.searchDetails.layout.addWidget(self.studentSelector, 2, 1)
+    else:
+      self.searchDetails.layout.addWidget(self.studentName, 2, 1)
 
-    self.subLayout.addWidget(self.pauseButton)
-    self.subLayout.addWidget(self.disableButton)
-
-    self.layout.addLayout(self.subLayout)
+    self.layout.addWidget(self.searchedWord)
+    self.layout.addSpacing(100)
+    self.layout.addWidget(self.searchDetails)
 
   def getCurrentWord(self):
-    return self.word.text()
+    return self.searchedWord.text()
+
+  def getAvailableClasses(self):
+    return ["Α' Δημοτικού", "Β' Δημοτικού", "Γ' Δημοτικού", "Δ' Δημοτικού", "Ε' Δημοτικού", "ΣΤ' Δημοτικού"]
+
+  def getAvailableSubjects(self):
+    return ["Μαθηματικά", "Φυσική", "Γεωγραφία", "Ιστορία", "Γλώσσα"]
+
+  def getAvailableStudents(self):
+    return ["Νίκος", "Στάθης", "Γιώργος", "Δημήτρης", "Ευριπίδης"]
