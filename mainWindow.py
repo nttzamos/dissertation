@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QMainWindow, QSplitter, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QMainWindow, QSplitter, QSplitterHandle, QVBoxLayout, QWidget
 from PyQt6.QtCore import Qt
 
 from databaseHandler import DBHandler
@@ -30,7 +30,9 @@ class MainWindow(QWidget):
     
     self.layout = QGridLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)
-    self.layout.setSpacing(0)
+    
+    # margin between the title bar and the rest of the application
+    self.layout.setSpacing(10)
     
     self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
     self.titleBar = TitleBar(self)
