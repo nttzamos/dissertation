@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QWidget
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
 from PyQt6.QtCore import QSize
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QFont, QIcon
 
 from databaseHandler import DBHandler
 
@@ -8,21 +8,53 @@ class StarredWord(QWidget):
   def __init__(self, word):
     super().__init__()
 
-    self.setMinimumSize(QSize(200, 100))
-    self.layout = QHBoxLayout(self)
+    self.setFixedHeight(50)
+
+    self.setContentsMargins(0, 0, 0, 0)
+    self.layout = QVBoxLayout(self)
+    self.layout.setContentsMargins(0, 0, 0, 0)
+    self.layout.setSpacing(0)
+
+    self.setStyleSheet(
+      "QPushButton:hover { background-color: grey }\n"
+      "QPushButton { border-radius: 30px }\n"
+      "QPushButton { border: 1px solid black }\n"
+      "QPushButton { padding-bottom: 5px }\n"
+      "QPushButton { padding-top: 5px }"
+    )
+
+    self.dataWidget = QWidget()
+    self.dataWidget.layout = QHBoxLayout(self.dataWidget)
+    self.dataWidget.layout.setContentsMargins(0, 0, 0, 0)
+
     self.word = QLabel(word)
-    
-    self.starButton = QPushButton()
-    self.starButton.setIcon(QIcon("Resources/starred.svg"))
-    self.starButton.clicked.connect(self.toggleStarred)
+    font = QFont()
+    font.setPointSize(14)
+    self.word.setFont(font)
 
     self.reloadButton = QPushButton()
     self.reloadButton.setIcon(QIcon("Resources/reload.svg"))
     self.reloadButton.clicked.connect(self.reloadWord)
+    self.reloadButton.setFixedWidth(30)
 
-    self.layout.addWidget(self.word)
-    self.layout.addWidget(self.starButton)
-    self.layout.addWidget(self.reloadButton)
+    self.starButton = QPushButton()
+    self.starButton.clicked.connect(self.toggleStarred)
+    self.starButton.setFixedWidth(30)
+    self.starButton.setIcon(QIcon("Resources/starred.svg"))
+    
+    self.line = QFrame()
+    self.line.setFrameShape(QFrame.Shape.HLine)
+    self.line.setFrameShadow(QFrame.Shadow.Plain)
+    self.line.setLineWidth(5)
+
+    self.dataWidget.layout.addSpacing(5)
+    self.dataWidget.layout.addWidget(self.word)
+    self.dataWidget.layout.addWidget(self.reloadButton)
+    self.dataWidget.layout.addWidget(self.starButton)
+    self.dataWidget.layout.addSpacing(5)
+    
+    self.layout.addWidget(self.dataWidget)
+    self.layout.addWidget(self.line)
     
   def toggleStarred(self):
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget

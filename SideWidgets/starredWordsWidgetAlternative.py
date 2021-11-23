@@ -27,7 +27,7 @@ class StarredWordsWidget(QWidget):
     font = QFont()
     font.setPointSize(14)
     self.title_label.setFont(font)
-    self.title_label.setContentsMargins(25, 0, 25, 0)
+    # self.title_label.setContentsMargins(25, 0, 25, 0)
     self.layout.addWidget(self.title_label)
     self.layout.setContentsMargins(0, 0, 0, 0)
 

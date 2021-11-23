@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QSizePolicy, QSpacerItem, QVBoxLayout, QWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
@@ -7,37 +7,41 @@ from databaseHandler import DBHandler
 
 class StarredWordsWidget(QWidget):
   title = "Starred Words"
-  placeholderLabelShow = False
-  placeholderLabel = QLabel("You do not have any " + title)
-  widgetList = []
+
   scrollAreaWidgetContents = QWidget()
   gridLayout = QGridLayout(scrollAreaWidgetContents)
+  gridLayout.setSpacing(0)
+  gridLayout.setContentsMargins(0, 0, 0, 0)
+  
   counter = 1000000
+  widgetList = []
+  
+  placeholderLabel = QLabel("You do not have any " + title)
+  placeholderLabelShow = False
 
   def __init__(self):
     super().__init__()
 
     self.layout = QVBoxLayout(self)
-    self.layout.setSpacing(0)
     self.title_label = QLabel(StarredWordsWidget.title)
-    self.title_label.setStyleSheet("QLabel {border : 2px solid black}")
+    self.title_label.setStyleSheet("QLabel {border : 1px solid black; padding: 10px 0px}")
     self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     font = QFont()
-    font.setPointSize(14)
+    font.setPointSize(18)
     self.title_label.setFont(font)
-    self.title_label.setContentsMargins(25, 0, 25, 0)
     self.layout.addWidget(self.title_label)
     self.layout.setContentsMargins(0, 0, 0, 0)
+    self.layout.setSpacing(0)
 
-    self.counter = 1000000
     StarredWordsWidget.placeholderLabel.setFont(font)
-
-    StarredWordsWidget.gridLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)
-
     self.scrollArea.setWidget(StarredWordsWidget.scrollAreaWidgetContents)
+    self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
     self.layout.addWidget(self.scrollArea)
+
+    self.vspacer = QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+    StarredWordsWidget.gridLayout.addItem(self.vspacer, 2000000, 0, 1, -1)
     
   def initialize(self, starredWordsList):
     for word in starredWordsList:
