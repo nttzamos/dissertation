@@ -10,8 +10,6 @@ class CurrentSearch(QWidget):
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(50, 50, 50, 50)
 
-    self.setStyleSheet("QComboBox { background-color: grey }")
-
     self.searchedWord = QLabel("Enter a word.")
     self.searchedWord.setFixedSize(200, 100)
     self.searchedWord.setAlignment(Qt.AlignmentFlag.AlignRight)
@@ -21,51 +19,82 @@ class CurrentSearch(QWidget):
     self.searchedWord.setFont(font)
 
     self.searchDetails = QWidget()
-    self.searchDetails.layout = QGridLayout(self.searchDetails)
+    self.searchDetails.layout = QVBoxLayout(self.searchDetails)
 
-    self.classLabel = QLabel("Class:")
-    self.classLabel.setStyleSheet("QLabel { margin-right: 10px }")
-    font = QFont()
     font.setPointSize(14)
-    self.classLabel.setFont(font)
-    self.classLabel.setAlignment(Qt.AlignmentFlag.AlignRight)
+
+    self.studentSelector = QComboBox()
+    self.studentSelector.setFont(font)
+    self.studentSelector.addItems(self.getAvailableStudents())
+    self.useStudentSelector = True
+
     self.classSelector = QComboBox()
     self.classSelector.setFont(font)
     self.classSelector.addItems(self.getAvailableClasses())
 
-    self.subjectLabel = QLabel("Subject:")
     self.subjectSelector = QComboBox()
+    self.subjectSelector.setFont(font)
     self.subjectSelector.addItems(self.getAvailableSubjects())
 
-    self.studentLabel = QLabel("Student:")
-    self.studentSelector = QComboBox()
-    self.studentSelector.addItems(self.getAvailableStudents())
-    self.studentName = QLabel("Νίκος")
-    self.useStudentSelector = False
+    self.classSelector.setEnabled(False)
+    self.subjectSelector.setEnabled(False)
 
-    self.searchDetails.layout.addWidget(self.classLabel, 0, 0)
-    self.searchDetails.layout.addWidget(self.classSelector, 0, 1)
-    self.searchDetails.layout.addWidget(self.subjectLabel, 1, 0)
-    self.searchDetails.layout.addWidget(self.subjectSelector, 1, 1)
-    self.searchDetails.layout.addWidget(self.studentLabel, 2, 0)
+    maximumWidth = 300
+    # self.studentSelector.setMaximumWidth(maximumWidth)
+    # self.classSelector.setMaximumWidth(maximumWidth)
+    # self.subjectSelector.setMaximumWidth(maximumWidth)
+    self.searchDetails.setFixedWidth(maximumWidth)
+
+    self.searchDetails.layout.addWidget(self.studentSelector)
+    self.searchDetails.layout.addWidget(self.classSelector)
+    self.searchDetails.layout.addWidget(self.subjectSelector)
     
-    if self.useStudentSelector:
-      self.searchDetails.layout.addWidget(self.studentSelector, 2, 1)
-    else:
-      self.searchDetails.layout.addWidget(self.studentName, 2, 1)
 
     self.layout.addWidget(self.searchedWord)
     self.layout.addSpacing(100)
     self.layout.addWidget(self.searchDetails)
 
+    self.studentSelector.activated.connect(self.studentSelectorActivated)
+
+    # https://stackoverflow.com/questions/3151798/how-do-i-set-the-qcombobox-width-to-fit-the-largest-item
+    # Maybe use this ^
+
   def getCurrentWord(self):
     return self.searchedWord.text()
 
+  def getAvailableStudents(self):
+    return [
+      "Please select a student...",
+      "Νίκος", "Στάθης", "Γιώργος", "Δημήτρης", "Ευριπίδης"]
+  
   def getAvailableClasses(self):
-    return ["Α' Δημοτικού", "Β' Δημοτικού", "Γ' Δημοτικού", "Δ' Δημοτικού", "Ε' Δημοτικού", "ΣΤ' Δημοτικού"]
+    return [
+      "You have to select a student.", "Please select a class...",
+      "Α' Δημοτικού", "Β' Δημοτικού", "Γ' Δημοτικού", "Δ' Δημοτικού", "Ε' Δημοτικού", "ΣΤ' Δημοτικού"]
 
   def getAvailableSubjects(self):
-    return ["Μαθηματικά", "Φυσική", "Γεωγραφία", "Ιστορία", "Γλώσσα"]
+    return [
+      "You have to select a student and a class.", "You have to select a class.", "Please select a subject...",
+      "Μαθηματικά", "Φυσική", "Γεωγραφία", "Ιστορία", "Γλώσσα"]
 
-  def getAvailableStudents(self):
-    return ["Νίκος", "Στάθης", "Γιώργος", "Δημήτρης", "Ευριπίδης"]
+  def studentSelectorActivated(self, index):
+    if index != 0:
+      self.studentSelector.removeItem(0)
+      self.studentSelector.activated.disconnect()
+      self.classSelector.removeItem(0)
+      self.subjectSelector.removeItem(0)
+      self.classSelector.activated.connect(self.classSelectorActivated)
+      self.classSelector.setEnabled(True)
+  
+  def classSelectorActivated(self, index):
+    if index != 0:
+      self.classSelector.removeItem(0)
+      self.classSelector.activated.disconnect()
+      self.subjectSelector.removeItem(0)
+      self.subjectSelector.activated.connect(self.subjectSelectorActivated)
+      self.subjectSelector.setEnabled(True)
+
+  def subjectSelectorActivated(self, index):
+    if index != 0:
+      self.subjectSelector.removeItem(0)
+      self.subjectSelector.activated.disconnect()
