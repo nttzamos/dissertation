@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QComboBox, QGridLayout, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QComboBox, QGridLayout, QHBoxLayout, QLabel, QPushButton, QSizePolicy, QVBoxLayout, QWidget
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
 
@@ -11,9 +11,9 @@ class CurrentSearch(QWidget):
     self.layout.setContentsMargins(50, 50, 50, 50)
 
     self.searchedWord = QLabel("Enter a word.")
-    self.searchedWord.setFixedSize(200, 100)
-    self.searchedWord.setAlignment(Qt.AlignmentFlag.AlignRight)
-    self.searchedWord.setStyleSheet("QLabel { border : 1px solid black; border-radius: 10px }")
+    self.searchedWord.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    self.searchedWord.setMaximumHeight(100)
+    self.searchedWord.setStyleSheet("QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px }")
     font = QFont()
     font.setPointSize(20)
     self.searchedWord.setFont(font)
@@ -26,7 +26,6 @@ class CurrentSearch(QWidget):
     self.studentSelector = QComboBox()
     self.studentSelector.setFont(font)
     self.studentSelector.addItems(self.getAvailableStudents())
-    self.useStudentSelector = True
 
     self.classSelector = QComboBox()
     self.classSelector.setFont(font)
@@ -39,20 +38,16 @@ class CurrentSearch(QWidget):
     self.classSelector.setEnabled(False)
     self.subjectSelector.setEnabled(False)
 
-    maximumWidth = 300
-    # self.studentSelector.setMaximumWidth(maximumWidth)
-    # self.classSelector.setMaximumWidth(maximumWidth)
-    # self.subjectSelector.setMaximumWidth(maximumWidth)
-    self.searchDetails.setFixedWidth(maximumWidth)
-
     self.searchDetails.layout.addWidget(self.studentSelector)
     self.searchDetails.layout.addWidget(self.classSelector)
     self.searchDetails.layout.addWidget(self.subjectSelector)
-    
 
     self.layout.addWidget(self.searchedWord)
     self.layout.addSpacing(100)
     self.layout.addWidget(self.searchDetails)
+    
+    self.searchDetails.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+    self.searchedWord.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
     self.studentSelector.activated.connect(self.studentSelectorActivated)
 
