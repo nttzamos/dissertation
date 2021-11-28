@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
 from ItemWidgets.recentAction import RecentAction
+from settings import Settings
 
 class RecentActionsWidget(QWidget):
   title = "Recent Actions"
@@ -15,8 +16,7 @@ class RecentActionsWidget(QWidget):
     self.title_label = QLabel(RecentActionsWidget.title)
     self.title_label.setStyleSheet("QLabel {border : 2px solid black}")
     self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    font = QFont()
-    font.setPointSize(14)
+    font = QFont(Settings.font, 14)
     self.title_label.setFont(font)
     self.title_label.setContentsMargins(25, 0, 25, 0)
     self.layout.addWidget(self.title_label)

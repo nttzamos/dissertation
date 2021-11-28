@@ -4,6 +4,7 @@ from PyQt6.QtCore import QEvent, QTimer, Qt
 
 from databaseHandler import DBHandler
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+from settings import Settings
 
 class SearchingWidget(QWidget):
   # Uncomment and change when complete
@@ -18,9 +19,10 @@ class SearchingWidget(QWidget):
   def __init__(self):
     super().__init__()
 
-    large_font = QFont()
-    large_font.setPointSize(14)
-    SearchingWidget.lineEdit.setFont(large_font)    
+    lineEditFont = QFont(Settings.font, 14)
+    completerFont = QFont(Settings.font, 10)
+
+    SearchingWidget.lineEdit.setFont(lineEditFont)
     SearchingWidget.lineEdit.setContentsMargins(0, 1, 0, 1)
     SearchingWidget.lineEdit.returnPressed.connect(self.searchWithEnter)
     SearchingWidget.lineEdit.textChanged.connect(self.searchTextChanged)
@@ -29,9 +31,7 @@ class SearchingWidget(QWidget):
     self.completer = QCompleter(SearchingWidget.dictionary_words)
     self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
     self.completer.activated.connect(self.searchWithClick)
-    smallFont = QFont()
-    smallFont.setPointSize(10)
-    self.completer.popup().setFont(smallFont)
+    self.completer.popup().setFont(completerFont)
     SearchingWidget.lineEdit.setCompleter(self.completer)
     SearchingWidget.lineEdit.setPlaceholderText("Please enter a word.")
 

@@ -3,6 +3,7 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
 
 from MainWidget.result import Result
+from settings import Settings
 
 class ResultsWidget(QWidget):
   scrollAreaWidgetContents = QWidget()
@@ -19,8 +20,7 @@ class ResultsWidget(QWidget):
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    font = QFont()
-    font.setPointSize(14)
+    font = QFont(Settings.font, 14)
     ResultsWidget.placeholderLabel.setFont(font)
     ResultsWidget.gridLayout.addWidget(ResultsWidget.placeholderLabel)
 

@@ -2,6 +2,8 @@ from PyQt6.QtWidgets import QComboBox, QGridLayout, QHBoxLayout, QLabel, QPushBu
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
 
+from settings import Settings
+
 class CurrentSearch(QWidget):
   def __init__(self):
     super().__init__()
@@ -10,29 +12,28 @@ class CurrentSearch(QWidget):
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(50, 50, 50, 50)
 
+    searchedWordFont = QFont(Settings.font, 20)
+    comboBoxFont = QFont(Settings.font, 14)
+
     self.searchedWord = QLabel("Enter a word.")
     self.searchedWord.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.searchedWord.setMaximumHeight(100)
     self.searchedWord.setStyleSheet("QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px }")
-    font = QFont()
-    font.setPointSize(20)
-    self.searchedWord.setFont(font)
+    self.searchedWord.setFont(searchedWordFont)
 
     self.searchDetails = QWidget()
     self.searchDetails.layout = QVBoxLayout(self.searchDetails)
 
-    font.setPointSize(14)
-
     self.studentSelector = QComboBox()
-    self.studentSelector.setFont(font)
+    self.studentSelector.setFont(comboBoxFont)
     self.studentSelector.addItems(self.getAvailableStudents())
 
     self.classSelector = QComboBox()
-    self.classSelector.setFont(font)
+    self.classSelector.setFont(comboBoxFont)
     self.classSelector.addItems(self.getAvailableClasses())
 
     self.subjectSelector = QComboBox()
-    self.subjectSelector.setFont(font)
+    self.subjectSelector.setFont(comboBoxFont)
     self.subjectSelector.addItems(self.getAvailableSubjects())
 
     self.classSelector.setEnabled(False)

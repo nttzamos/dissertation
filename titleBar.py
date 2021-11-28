@@ -2,6 +2,8 @@ from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont, QIcon, QPixmap
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QWidget
 
+from settings import Settings
+
 class TitleBar(QWidget):
   title = "My Dissertation Title"
 
@@ -29,8 +31,7 @@ class TitleBar(QWidget):
     )
 
     self.title = QLabel(TitleBar.title)
-    font = QFont()
-    font.setPointSize(14)
+    font = QFont(Settings.font, 14)
     self.title.setFont(font)
 
     self.settingsButton = QPushButton()

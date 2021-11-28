@@ -2,6 +2,8 @@ from PyQt6.QtWidgets import QLabel, QPushButton, QWidget
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont, QIcon
 
+from settings import Settings
+
 class Result(QWidget):
   def __init__(self, word):
     super().__init__()
@@ -12,8 +14,7 @@ class Result(QWidget):
     self.word_label.setStyleSheet("QLabel {border-radius: 100px \ 50px; border : 2px solid black}")
     # self.word_label.setText("Test")
     self.word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    font = QFont()
-    font.setPointSize(20)
+    font = QFont(Settings.font, 20)
     self.word_label.setFont(font)
 
     self.deleteButton = QPushButton(self)

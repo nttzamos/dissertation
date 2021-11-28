@@ -4,6 +4,7 @@ from PyQt6.QtGui import QFont
 
 from ItemWidgets.starredWord import StarredWord
 from databaseHandler import DBHandler
+from settings import Settings
 
 class StarredWordsWidget(QWidget):
   title = "Starred Words"
@@ -26,8 +27,7 @@ class StarredWordsWidget(QWidget):
     self.title_label = QLabel(StarredWordsWidget.title)
     self.title_label.setStyleSheet("QLabel {border : 1px solid black; padding: 10px 0px}")
     self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    font = QFont()
-    font.setPointSize(18)
+    font = QFont(Settings.font, 18)
     self.title_label.setFont(font)
     self.layout.addWidget(self.title_label)
     self.layout.setContentsMargins(0, 0, 0, 0)
