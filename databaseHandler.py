@@ -121,7 +121,7 @@ class DBHandler():
 
   @staticmethod
   def getAllStarredWords():
-    DBHandler.cur.execute('SELECT word FROM starredWords ORDER BY word')
+    DBHandler.cur.execute('SELECT word FROM starredWords ORDER BY word DESC')
     rows = DBHandler.cur.fetchall()
     words = [row[0] for row in rows]
     return words

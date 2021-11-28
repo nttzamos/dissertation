@@ -47,7 +47,7 @@ class StarredWordsWidget(QWidget):
     for word in starredWordsList:
       widget = StarredWord(word)
       StarredWordsWidget.widgetList.append(widget)
-      StarredWordsWidget.gridLayout.addWidget(widget, DBHandler.getStarredWordPosition(word), 0)
+      StarredWordsWidget.gridLayout.addWidget(widget, StarredWordsWidget.counter, 0)
       StarredWordsWidget.counter -= 1
 
   @staticmethod
