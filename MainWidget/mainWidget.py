@@ -1,5 +1,5 @@
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QSizePolicy, QVBoxLayout, QWidget
 from MainWidget.currentSearch import CurrentSearch
 
 from databaseHandler import DBHandler
@@ -21,6 +21,7 @@ class MainWidget(QWidget):
     self.layout.addWidget(MainWidget.searchingWidget)
     self.layout.addWidget(MainWidget.currentSearch)
     self.layout.addWidget(MainWidget.resultsWidget)
+    self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
 
   @staticmethod
   def addWord(word):

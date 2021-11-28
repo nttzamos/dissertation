@@ -13,13 +13,13 @@ class SubjectsWidget(QWidget):
 
     self.layout = QVBoxLayout(self)
     self.layout.setSpacing(0)
-    self.title_label = QLabel(SubjectsWidget.title)
-    self.title_label.setStyleSheet("QLabel {border : 2px solid black}")
-    self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    self.titleLabel = QLabel(SubjectsWidget.title)
+    self.titleLabel.setStyleSheet("QLabel {border : 2px solid black}")
+    self.titleLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
     font = QFont(Settings.font, 14)
-    self.title_label.setFont(font)
-    self.title_label.setContentsMargins(25, 0, 25, 0)
-    self.layout.addWidget(self.title_label)
+    self.titleLabel.setFont(font)
+    self.titleLabel.setContentsMargins(25, 0, 25, 0)
+    self.layout.addWidget(self.titleLabel)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
     self.counter = 1000000

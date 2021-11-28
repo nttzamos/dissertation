@@ -39,12 +39,12 @@ class RecentSearchesWidget(QWidget):
     # )
 
     self.layout = QVBoxLayout(self)
-    self.title_label = QLabel(RecentSearchesWidget.title)
-    self.title_label.setStyleSheet("QLabel {border : 1px solid black; padding: 10px 0px}")
-    self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    self.titleLabel = QLabel(RecentSearchesWidget.title)
+    self.titleLabel.setStyleSheet("QLabel {border : 1px solid black; padding: 10px 0px}")
+    self.titleLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
     font = QFont(Settings.font, 18)
-    self.title_label.setFont(font)
-    self.layout.addWidget(self.title_label)
+    self.titleLabel.setFont(font)
+    self.layout.addWidget(self.titleLabel)
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 

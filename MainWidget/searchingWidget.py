@@ -8,8 +8,8 @@ from settings import Settings
 
 class SearchingWidget(QWidget):
   # Uncomment and change when complete
-  # dictionary_words = DBHandler.getAllWords()
-  dictionary_words = [
+  # dictionaryWords = DBHandler.getAllWords()
+  dictionaryWords = [
     "Balcony", "Balloon", "Barcelona", "Balcony Light",
     "Fan", "Room Light", "Brioche", "Basketball",
     "Bedroom Heater", "Wall Switch"]
@@ -28,7 +28,7 @@ class SearchingWidget(QWidget):
     SearchingWidget.lineEdit.textChanged.connect(self.searchTextChanged)
     self.showErrorMessage = False
 
-    self.completer = QCompleter(SearchingWidget.dictionary_words)
+    self.completer = QCompleter(SearchingWidget.dictionaryWords)
     self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
     self.completer.activated.connect(self.searchWithClick)
     self.completer.popup().setFont(completerFont)
@@ -106,7 +106,7 @@ class SearchingWidget(QWidget):
       self.setFocusedStyleSheet()
 
   def searchWithEnter(self):
-    if SearchingWidget.lineEdit.text() in SearchingWidget.dictionary_words:
+    if SearchingWidget.lineEdit.text() in SearchingWidget.dictionaryWords:
       self.addRecentSearch(SearchingWidget.lineEdit.text())
       SearchingWidget.lineEdit.clear()
     else:

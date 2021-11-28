@@ -24,12 +24,12 @@ class StarredWordsWidget(QWidget):
     super().__init__()
 
     self.layout = QVBoxLayout(self)
-    self.title_label = QLabel(StarredWordsWidget.title)
-    self.title_label.setStyleSheet("QLabel {border : 1px solid black; padding: 10px 0px}")
-    self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    self.titleLabel = QLabel(StarredWordsWidget.title)
+    self.titleLabel.setStyleSheet("QLabel {border : 1px solid black; padding: 10px 0px}")
+    self.titleLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
     font = QFont(Settings.font, 18)
-    self.title_label.setFont(font)
-    self.layout.addWidget(self.title_label)
+    self.titleLabel.setFont(font)
+    self.layout.addWidget(self.titleLabel)
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
@@ -42,6 +42,8 @@ class StarredWordsWidget(QWidget):
 
     self.vspacer = QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
     StarredWordsWidget.gridLayout.addItem(self.vspacer, 2000000, 0, 1, -1)
+
+    self.setFixedWidth(self.getMaximumWidth())
     
   def initialize(self, starredWordsList):
     for word in starredWordsList:
@@ -49,6 +51,10 @@ class StarredWordsWidget(QWidget):
       StarredWordsWidget.widgetList.append(widget)
       StarredWordsWidget.gridLayout.addWidget(widget, StarredWordsWidget.counter, 0)
       StarredWordsWidget.counter -= 1
+
+  def getMaximumWidth(self):
+    longStarredWord = StarredWord("0123456789012345678901234")
+    return longStarredWord.sizeHint().width()
 
   @staticmethod
   def addStarredWord(word):
