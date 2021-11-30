@@ -18,7 +18,9 @@ class StarredWordsWidget(QWidget):
   widgetList = []
   
   placeholderLabel = QLabel("You do not have any " + title)
-  placeholderLabelShow = False
+  showPlaceholderLabel = False
+
+  vspacer = QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
   def __init__(self):
     super().__init__()
@@ -40,25 +42,26 @@ class StarredWordsWidget(QWidget):
     self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
     self.layout.addWidget(self.scrollArea)
 
-    self.vspacer = QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
     StarredWordsWidget.gridLayout.addItem(self.vspacer, 2000000, 0, 1, -1)
 
-    self.setFixedWidth(self.getMaximumWidth())
+    self.setMinimumWidth(Settings.leftWidgetWidth)
     
   def initialize(self, starredWordsList):
+    if len(starredWordsList) == 0:
+      StarredWordsWidget.showPlaceholder()
+      return
+    else:
+      StarredWordsWidget.hidePlaceholder()
+
     for word in starredWordsList:
       widget = StarredWord(word)
       StarredWordsWidget.widgetList.append(widget)
       StarredWordsWidget.gridLayout.addWidget(widget, StarredWordsWidget.counter, 0)
       StarredWordsWidget.counter -= 1
 
-  def getMaximumWidth(self):
-    longStarredWord = StarredWord("0123456789012345678901234")
-    return longStarredWord.sizeHint().width()
-
   @staticmethod
   def addStarredWord(word):
-    if StarredWordsWidget.placeholderLabelShow == True:
+    if StarredWordsWidget.showPlaceholderLabel == True:
       StarredWordsWidget.placeholderLabel.hide()
       
     widget = StarredWord(word)
@@ -71,7 +74,7 @@ class StarredWordsWidget(QWidget):
   def removeStarredWord(obj):
     StarredWordsWidget.widgetList.remove(obj)
     if len(StarredWordsWidget.widgetList)==0:
-      StarredWordsWidget.addPlaceholder()
+      StarredWordsWidget.showPlaceholder()
 
   @staticmethod
   def toggleStarredBottom(word):
@@ -81,7 +84,14 @@ class StarredWordsWidget(QWidget):
         return
 
   @staticmethod
-  def addPlaceholder():
-    StarredWordsWidget.placeholderLabelShow = True
+  def showPlaceholder():
+    StarredWordsWidget.showPlaceholderLabel = True
     StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.placeholderLabel)
+    StarredWordsWidget.gridLayout.removeItem(StarredWordsWidget.vspacer)
     StarredWordsWidget.placeholderLabel.show()
+
+  @staticmethod
+  def hidePlaceholder():
+    StarredWordsWidget.showPlaceholderLabel = False
+    StarredWordsWidget.gridLayout.addItem(StarredWordsWidget.vspacer, 2000000, 0, 1, -1)
+    StarredWordsWidget.placeholderLabel.hide()
