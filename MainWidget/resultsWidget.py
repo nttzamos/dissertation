@@ -1,3 +1,4 @@
+from typing import Set
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
@@ -12,6 +13,7 @@ class ResultsWidget(QWidget):
   counter = 1000000
   placeholderLabelShow = True
   placeholderLabel = QLabel("The results of your search will be displayed here.")
+  gridColumns = Settings.resultsWidgetColumns
 
   def __init__(self):
     super().__init__()
@@ -43,8 +45,8 @@ class ResultsWidget(QWidget):
       resultsWords.append(word + str(i))
     
     for i in range(len(resultsWords)):
-      row = i // 3
-      column = i % 3
+      row = i // ResultsWidget.gridColumns
+      column = i % ResultsWidget.gridColumns
       result = Result(resultsWords[i])
       ResultsWidget.widgetList.append(result)
       ResultsWidget.gridLayout.addWidget(result, row, column)

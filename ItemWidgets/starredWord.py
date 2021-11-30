@@ -3,7 +3,6 @@ from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QFont, QIcon
 
 from databaseHandler import DBHandler
-from settings import Settings
 
 class StarredWord(QWidget):
   def __init__(self, word):
@@ -29,6 +28,7 @@ class StarredWord(QWidget):
     self.dataWidget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.word = QLabel(word)
+    from settings import Settings
     font = QFont(Settings.font, 14)
     self.word.setFont(font)
 

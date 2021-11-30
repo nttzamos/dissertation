@@ -3,7 +3,6 @@ from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QFont, QIcon, QPalette
 
 from databaseHandler import DBHandler
-from settings import Settings
 
 class RecentSearch(QWidget):
   def __init__(self, word, condition):
@@ -29,6 +28,7 @@ class RecentSearch(QWidget):
     self.dataWidget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.word = QLabel(word)
+    from settings import Settings
     font = font = QFont(Settings.font, 14)
     self.word.setFont(font)
 

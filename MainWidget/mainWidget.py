@@ -24,19 +24,10 @@ class MainWidget(QWidget):
     self.layout.addWidget(MainWidget.searchingWidget)
     self.layout.addWidget(MainWidget.currentSearch)
     self.layout.addWidget(MainWidget.resultsWidget)
-    # self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
 
-    self.calculateSingleResultWidth()
-
-  def calculateSingleResultWidth(self):
-    longResult = Result("123456789012345678901234")
-    Settings.singleResultWidth = longResult.sizeHint().width()
-
-  def calculateResultsWidgetWidth(self):
-    pass
+    self.setMinimumWidth(Settings.rightWidgetWidth)
 
   def findMinimumSize(self):
-    leftWidgetWidth = Settings.leftWidgetWidth
     longResult = Result("123456789012345678901234")
     return longResult.sizeHint().width()
 

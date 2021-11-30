@@ -57,9 +57,7 @@ class RecentSearchesWidget(QWidget):
     self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
     self.layout.addWidget(self.scrollArea)
 
-    maximumWidth = self.getMaximumWidth()
-    Settings.leftWidgetWidth = maximumWidth
-    self.setMinimumWidth(maximumWidth)
+    self.setMinimumWidth(Settings.leftWidgetWidth)
 
   def initialize(self, wordsList, starredWordsList):
     if len(wordsList) == 0:
