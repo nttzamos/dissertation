@@ -10,7 +10,6 @@ class StarredWord(QWidget):
 
     self.setFixedHeight(50)
 
-    self.setContentsMargins(0, 0, 0, 0)
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)

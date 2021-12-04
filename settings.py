@@ -20,7 +20,7 @@ class Settings():
     Settings.leftWidgetWidth = longRecentSearch.sizeHint().width()
 
 
-    longResult = Result("WWWWWWWWWWWWW") # 13
+    longResult = Result("WWWWWWWWWW") # 10
     Settings.singleResultWidth = longResult.sizeHint().width()
     Settings.resultsWidgetColumns = (Settings.screenWidth - Settings.leftWidgetWidth) // Settings.singleResultWidth
     Settings.rightWidgetWidth = Settings.resultsWidgetColumns * Settings.singleResultWidth
