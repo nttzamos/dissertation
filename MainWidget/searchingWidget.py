@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QFont, QIcon
-from PyQt6.QtWidgets import QCompleter, QFrame, QHBoxLayout, QLineEdit, QPushButton, QVBoxLayout, QWidget
-from PyQt6.QtCore import QEvent, QTimer, Qt
+from PyQt6.QtWidgets import QCompleter, QFrame, QHBoxLayout, QLabel, QLineEdit, QPushButton, QSizePolicy, QVBoxLayout, QWidget
+from PyQt6.QtCore import QEvent, QRect, QTimer, Qt
 
 from databaseHandler import DBHandler
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
@@ -21,6 +21,11 @@ class SearchingWidget(QWidget):
 
     lineEditFont = QFont(Settings.font, 14)
     completerFont = QFont(Settings.font, 10)
+    errorMessageFont = completerFont
+
+    self.layout = QVBoxLayout(self)
+    self.layout.setContentsMargins(20, 0, 20, 0)
+    self.layout.setSpacing(5)
 
     SearchingWidget.lineEdit.setFont(lineEditFont)
     SearchingWidget.lineEdit.setContentsMargins(0, 1, 0, 1)
@@ -34,9 +39,6 @@ class SearchingWidget(QWidget):
     self.completer.popup().setFont(completerFont)
     SearchingWidget.lineEdit.setCompleter(self.completer)
     SearchingWidget.lineEdit.setPlaceholderText("Please enter a word.")
-
-    self.layout = QHBoxLayout(self)
-    self.layout.setContentsMargins(0, 0, 0, 0)
 
     self.searchBarWidget = QWidget()
     self.searchBarWidget.layout = QHBoxLayout(self.searchBarWidget)
@@ -59,10 +61,22 @@ class SearchingWidget(QWidget):
     self.searchBarWidget.layout.addWidget(self.clearSearchButton)
     self.searchBarWidget.layout.addWidget(self.searchButton)
     self.searchBarWidget.layout.addSpacing(5)
+
+    self.errorMessage = QLabel("This word is not contained in the dictionary. Please search for another word.", self)
+    self.errorMessage.setFont(errorMessageFont)
+    sizePolicy = self.errorMessage.sizePolicy()
+    sizePolicy.setRetainSizeWhenHidden(True)
+    self.errorMessage.setSizePolicy(sizePolicy)
+    self.errorMessage.hide()
+    self.errorMessage.setStyleSheet(
+      "QLabel { color: red }\n"
+      "QLabel { background-color: none }\n"
+      "QLabel { border: none }\n"
+      "QLabel { margin-left: 2px }"
+    )
     
-    self.layout.addSpacing(20)
     self.layout.addWidget(self.searchBarWidget)
-    self.layout.addSpacing(20)
+    self.layout.addWidget(self.errorMessage)
 
     self.setFocusedStyleSheet()
 
@@ -92,6 +106,7 @@ class SearchingWidget(QWidget):
       "QPushButton { padding-bottom: 5 }\n"
       "QPushButton { padding-top: 5 }"
     )
+    self.errorMessage.show()
 
   def searchTextChanged(self):
     if not self.hideClearSearchButton and not SearchingWidget.lineEdit.text():
@@ -104,6 +119,7 @@ class SearchingWidget(QWidget):
     if self.showErrorMessage:
       self.showErrorMessage = False
       self.setFocusedStyleSheet()
+      self.errorMessage.hide()
 
   def searchWithEnter(self):
     if SearchingWidget.lineEdit.text() in SearchingWidget.dictionaryWords:
