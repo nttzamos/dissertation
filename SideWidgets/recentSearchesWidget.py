@@ -20,7 +20,7 @@ class RecentSearchesWidget(QWidget):
   placeholderLabel = QLabel("You do not have any " + title)
   showPlaceholderLabel = True
 
-  vspacer = QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+  vspacer = QWidget()
 
   def __init__(self):
     super().__init__()
@@ -53,6 +53,11 @@ class RecentSearchesWidget(QWidget):
     RecentSearchesWidget.placeholderLabel.setFont(font)
     RecentSearchesWidget.placeholderLabel.setWordWrap(True)
     RecentSearchesWidget.placeholderLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    sizePolicy = RecentSearchesWidget.vspacer.sizePolicy()
+    sizePolicy.setRetainSizeWhenHidden(True)
+    RecentSearchesWidget.vspacer.setSizePolicy(sizePolicy)
+    RecentSearchesWidget.vspacer.hide()
     
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)
@@ -119,12 +124,12 @@ class RecentSearchesWidget(QWidget):
   def showPlaceholder():
     RecentSearchesWidget.showPlaceholderLabel = True
     RecentSearchesWidget.gridLayout.addWidget(RecentSearchesWidget.placeholderLabel)
-    RecentSearchesWidget.gridLayout.removeItem(RecentSearchesWidget.vspacer)
+    RecentSearchesWidget.gridLayout.removeWidget(RecentSearchesWidget.vspacer)
     RecentSearchesWidget.placeholderLabel.show()
     
   @staticmethod
   def hidePlaceholder():
     RecentSearchesWidget.showPlaceholderLabel = False
-    RecentSearchesWidget.gridLayout.addItem(RecentSearchesWidget.vspacer, 2000000, 0, 1, -1)
+    RecentSearchesWidget.gridLayout.addWidget(RecentSearchesWidget.vspacer, 1000001, 0, 1, -1)
     RecentSearchesWidget.placeholderLabel.hide()
     

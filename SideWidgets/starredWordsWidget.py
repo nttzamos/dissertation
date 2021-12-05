@@ -20,7 +20,7 @@ class StarredWordsWidget(QWidget):
   placeholderLabel = QLabel("You do not have any " + title)
   showPlaceholderLabel = True
 
-  vspacer = QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+  vspacer = QWidget()
 
   def __init__(self):
     super().__init__()
@@ -38,6 +38,11 @@ class StarredWordsWidget(QWidget):
     StarredWordsWidget.placeholderLabel.setFont(font)
     StarredWordsWidget.placeholderLabel.setWordWrap(True)
     StarredWordsWidget.placeholderLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    sizePolicy = StarredWordsWidget.vspacer.sizePolicy()
+    sizePolicy.setRetainSizeWhenHidden(True)
+    StarredWordsWidget.vspacer.setSizePolicy(sizePolicy)
+    StarredWordsWidget.vspacer.hide()
     
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)
@@ -88,11 +93,11 @@ class StarredWordsWidget(QWidget):
   def showPlaceholder():
     StarredWordsWidget.showPlaceholderLabel = True
     StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.placeholderLabel)
-    StarredWordsWidget.gridLayout.removeItem(StarredWordsWidget.vspacer)
+    StarredWordsWidget.gridLayout.removeWidget(StarredWordsWidget.vspacer)
     StarredWordsWidget.placeholderLabel.show()
 
   @staticmethod
   def hidePlaceholder():
     StarredWordsWidget.showPlaceholderLabel = False
-    StarredWordsWidget.gridLayout.addItem(StarredWordsWidget.vspacer, 2000000, 0, 1, -1)
+    StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.vspacer, 1000001, 0, 1, -1)
     StarredWordsWidget.placeholderLabel.hide()
