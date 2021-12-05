@@ -18,7 +18,7 @@ class StarredWordsWidget(QWidget):
   widgetList = []
   
   placeholderLabel = QLabel("You do not have any " + title)
-  showPlaceholderLabel = False
+  showPlaceholderLabel = True
 
   vspacer = QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -36,13 +36,14 @@ class StarredWordsWidget(QWidget):
     self.layout.setSpacing(0)
 
     StarredWordsWidget.placeholderLabel.setFont(font)
+    StarredWordsWidget.placeholderLabel.setWordWrap(True)
+    StarredWordsWidget.placeholderLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)
     self.scrollArea.setWidget(StarredWordsWidget.scrollAreaWidgetContents)
     self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
     self.layout.addWidget(self.scrollArea)
-
-    StarredWordsWidget.gridLayout.addItem(self.vspacer, 2000000, 0, 1, -1)
 
     self.setMinimumWidth(Settings.leftWidgetWidth)
     
@@ -62,7 +63,7 @@ class StarredWordsWidget(QWidget):
   @staticmethod
   def addStarredWord(word):
     if StarredWordsWidget.showPlaceholderLabel == True:
-      StarredWordsWidget.placeholderLabel.hide()
+      StarredWordsWidget.hidePlaceholder()
       
     widget = StarredWord(word)
     StarredWordsWidget.widgetList.append(widget)

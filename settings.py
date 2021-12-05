@@ -19,12 +19,10 @@ class Settings():
     longRecentSearch = RecentSearch("WWWWWWWWWWWWWWW", True) # 15
     Settings.leftWidgetWidth = longRecentSearch.sizeHint().width()
 
-
     longResult = Result("WWWWWWWWWW") # 10
     Settings.singleResultWidth = longResult.sizeHint().width()
     Settings.resultsWidgetColumns = (Settings.screenWidth - Settings.leftWidgetWidth) // Settings.singleResultWidth
     Settings.rightWidgetWidth = Settings.resultsWidgetColumns * Settings.singleResultWidth
-
     
     # Fun Experiment
     # chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']

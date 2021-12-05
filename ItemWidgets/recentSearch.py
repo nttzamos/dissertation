@@ -10,7 +10,6 @@ class RecentSearch(QWidget):
 
     self.setFixedHeight(50)
 
-    self.setContentsMargins(0, 0, 0, 0)
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
@@ -28,7 +27,7 @@ class RecentSearch(QWidget):
 
     self.word = QLabel(word)
     from settings import Settings
-    font = font = QFont(Settings.font, 14)
+    font = QFont(Settings.font, 14)
     self.word.setFont(font)
 
     self.reloadButton = QPushButton()
