@@ -1,4 +1,4 @@
-from PyQt6.QtGui import QFont, QIcon
+from PyQt6.QtGui import QFont, QIcon, QKeySequence, QShortcut
 from PyQt6.QtWidgets import QCompleter, QFrame, QHBoxLayout, QLabel, QLineEdit, QPushButton, QSizePolicy, QVBoxLayout, QWidget
 from PyQt6.QtCore import QEvent, QRect, QTimer, Qt
 
@@ -77,6 +77,9 @@ class SearchingWidget(QWidget):
     
     self.layout.addWidget(self.searchBarWidget)
     self.layout.addWidget(self.errorMessage)
+
+    self.searchBarFocusShortcut = QShortcut(QKeySequence('/'), self)
+    self.searchBarFocusShortcut.activated.connect(SearchingWidget.setFocusToSearchBar)
 
     self.setFocusedStyleSheet()
 
