@@ -20,7 +20,7 @@ class StarredWordsWidget(QWidget):
   placeholderLabel = QLabel("You do not have any " + title)
   showPlaceholderLabel = True
 
-  vspacer = QWidget()
+  vspacer = QLabel("f")
 
   def __init__(self):
     super().__init__()
@@ -39,10 +39,11 @@ class StarredWordsWidget(QWidget):
     StarredWordsWidget.placeholderLabel.setWordWrap(True)
     StarredWordsWidget.placeholderLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+    invisibleFont = QFont(Settings.font, 1)
+    StarredWordsWidget.vspacer.setFont(invisibleFont)
     sizePolicy = StarredWordsWidget.vspacer.sizePolicy()
     sizePolicy.setRetainSizeWhenHidden(True)
     StarredWordsWidget.vspacer.setSizePolicy(sizePolicy)
-    StarredWordsWidget.vspacer.hide()
     
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)

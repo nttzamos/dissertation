@@ -20,7 +20,7 @@ class RecentSearchesWidget(QWidget):
   placeholderLabel = QLabel("You do not have any " + title)
   showPlaceholderLabel = True
 
-  vspacer = QWidget()
+  vspacer = QLabel("f")
 
   def __init__(self):
     super().__init__()
@@ -54,10 +54,11 @@ class RecentSearchesWidget(QWidget):
     RecentSearchesWidget.placeholderLabel.setWordWrap(True)
     RecentSearchesWidget.placeholderLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+    invisibleFont = QFont(Settings.font, 1)
+    RecentSearchesWidget.vspacer.setFont(invisibleFont)
     sizePolicy = RecentSearchesWidget.vspacer.sizePolicy()
     sizePolicy.setRetainSizeWhenHidden(True)
     RecentSearchesWidget.vspacer.setSizePolicy(sizePolicy)
-    RecentSearchesWidget.vspacer.hide()
     
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)
