@@ -43,14 +43,14 @@ class SearchingWidget(QWidget):
     self.searchBarWidget.layout.setContentsMargins(10, 0, 0, 0)
 
     self.clearSearchButton = QPushButton()
-    self.clearSearchButton.setIcon(QIcon("Resources/restoreDownWindow.png"))
+    self.clearSearchButton.setIcon(QIcon("Resources/clearSearch.png"))
     self.clearSearchButton.setFixedWidth(30)
     self.clearSearchButton.clicked.connect(self.clearSearch)
     self.hideClearSearchButton = True
     self.clearSearchButton.hide()
 
     self.searchButton = QPushButton()
-    self.searchButton.setIcon(QIcon("Resources/settings.png"))
+    self.searchButton.setIcon(QIcon("Resources/search.png"))
     self.searchButton.setFixedWidth(30)
     self.searchButton.clicked.connect(self.searchWithEnter)
 

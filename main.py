@@ -8,7 +8,6 @@ app = QApplication(sys.argv)
 from settings import Settings
 Settings.screenWidth = app.primaryScreen().size().width()
 Settings.calculateSizeSettings()
-print("Hello")
 
 from mainWindow import MainWindow
 from MainWidget.searchingWidget import SearchingWidget

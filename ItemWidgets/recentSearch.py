@@ -17,7 +17,6 @@ class RecentSearch(QWidget):
 
     self.setStyleSheet(
       "QPushButton:hover { background-color: grey }\n"
-      "QPushButton { border-radius: 30px }\n"
       "QPushButton { border: 1px solid black }\n"
       "QPushButton { padding-bottom: 5px }\n"
       "QPushButton { padding-top: 5px }"

@@ -16,7 +16,7 @@ class Settings():
 
   @staticmethod
   def calculateSizeSettings():
-    longRecentSearch = RecentSearch("0123456789012345678901234", True)
+    longRecentSearch = RecentSearch("WWWWWWWWWWWWWWW", True) # 15
     Settings.leftWidgetWidth = longRecentSearch.sizeHint().width()
 
 
