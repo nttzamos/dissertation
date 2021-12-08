@@ -14,7 +14,6 @@ class RecentActionsWidget(QWidget):
     self.layout = QVBoxLayout(self)
     self.layout.setSpacing(0)
     self.titleLabel = QLabel(RecentActionsWidget.title)
-    self.titleLabel.setStyleSheet("QLabel {border : 2px solid black}")
     self.titleLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
     font = QFont(Settings.font, 14)
     self.titleLabel.setFont(font)
@@ -39,6 +38,11 @@ class RecentActionsWidget(QWidget):
     self.scrollArea.setWidget(self.scrollAreaWidgetContents)
     self.layout.addWidget(self.scrollArea)
 
+    self.style()
+
+  def style(self):
+    self.titleLabel.setStyleSheet("QLabel {border : 2px solid black}")
+  
   def addRecentAction(self, word):
     if self.placeholderLabelShow == True:
       self.placeholderLabel.hide()

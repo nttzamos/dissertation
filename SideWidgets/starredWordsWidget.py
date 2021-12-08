@@ -27,7 +27,6 @@ class StarredWordsWidget(QWidget):
 
     self.layout = QVBoxLayout(self)
     self.titleLabel = QLabel(StarredWordsWidget.title)
-    self.titleLabel.setStyleSheet("QLabel {border : 1px solid black; padding: 10px 0px}")
     self.titleLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
     font = QFont(Settings.font, 18)
     self.titleLabel.setFont(font)
@@ -52,6 +51,19 @@ class StarredWordsWidget(QWidget):
     self.layout.addWidget(self.scrollArea)
 
     self.setMinimumWidth(Settings.leftWidgetWidth)
+
+    self.style()
+
+  def style(self):
+    self.titleLabel.setStyleSheet(
+      "QLabel { border : 1px solid black; border-bottom: 0px; padding: 10px 0px; background-color: white }"
+    )
+    
+    self.setStyleSheet(
+      "QWidget { background-color: black }\n"
+      "QLabel { background-color: black }\n"
+      "QScrollBar { background-color: none }"
+    )
     
   def initialize(self, starredWordsList):
     if len(starredWordsList) == 0:

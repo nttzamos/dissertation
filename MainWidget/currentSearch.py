@@ -18,7 +18,6 @@ class CurrentSearch(QWidget):
     self.searchedWord = QLabel("Enter a word.")
     self.searchedWord.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.searchedWord.setMaximumHeight(100)
-    self.searchedWord.setStyleSheet("QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px }")
     self.searchedWord.setFont(searchedWordFont)
 
     self.searchDetails = QWidget()
@@ -52,8 +51,16 @@ class CurrentSearch(QWidget):
 
     self.studentSelector.activated.connect(self.studentSelectorActivated)
 
-    # https://stackoverflow.com/questions/3151798/how-do-i-set-the-qcombobox-width-to-fit-the-largest-item
-    # Maybe use this ^
+    self.style()
+
+  def style(self):
+    self.searchedWord.setStyleSheet("QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px }")
+    
+    self.setStyleSheet(
+      "QComboBox { background-color: none }\n"
+      "QWidget { background-color: none }\n"
+      "QLabel { background-color: green }"
+    )
 
   def getCurrentWord(self):
     return self.searchedWord.text()

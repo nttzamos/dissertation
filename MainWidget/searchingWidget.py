@@ -24,7 +24,7 @@ class SearchingWidget(QWidget):
     errorMessageFont = completerFont
 
     self.layout = QVBoxLayout(self)
-    self.layout.setContentsMargins(20, 0, 20, 0)
+    self.layout.setContentsMargins(20, 10, 20, 0)
     self.layout.setSpacing(5)
 
     SearchingWidget.lineEdit.setFont(lineEditFont)

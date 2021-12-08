@@ -24,15 +24,11 @@ class MainWindow(QWidget):
     self.init_gui()
 
   def init_gui(self):
-    # self.setStyleSheet(
-    #   "QWidget{ background-color: #FFFFFF }"
-    # )
-    
     self.layout = QGridLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)
     
     # margin between the title bar and the rest of the application
-    self.layout.setSpacing(10)
+    self.layout.setSpacing(0)
     
     self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
     self.titleBar = TitleBar(self)
@@ -90,8 +86,31 @@ class MainWindow(QWidget):
     # MainWindow.subjectsWidget.addSubject("Ιστορία")
     # MainWindow.subjectsWidget.addSubject("Αρχαία")
 
+    self.line = QFrame()
+    self.line.setFrameShape(QFrame.Shape.HLine)
+    self.line.setFrameShadow(QFrame.Shadow.Plain)
+    self.line.setFixedHeight(2)
+
     self.layout.addWidget(self.titleBar, 0, 0)
-    self.layout.addWidget(self.splitterLeftHorizontal, 1, 0)
+    self.layout.addWidget(self.line, 1, 0)
+    self.layout.addWidget(self.splitterLeftHorizontal, 2, 0)
+
+    self.style()
+
+  def style(self):
+    self.splitterLeftHorizontal.setStyleSheet(
+      "QWidget { background-color: yellow }\n"
+      "QPushButton { background-color: none }"
+    )
+
+    self.line.setStyleSheet(
+      "QWidget { background-color: none }"
+    )
+
+    self.setStyleSheet(
+      "QWidget { background-color: red }\n"
+      "QPushButton { background-color: none }"
+    )
 
   @staticmethod
   def closeEvent(event):

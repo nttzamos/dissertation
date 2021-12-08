@@ -14,21 +14,11 @@ class TitleBar(QWidget):
     self.layout = QHBoxLayout(self)
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
-    self.setFixedHeight(30)
+    self.setMaximumHeight(30)
 
-    self.setStyleSheet(
-      "QPushButton:hover { background-color: grey }\n"
-      "QPushButton { border: none }\n"
-      "QPushButton { padding-bottom: 5 }\n"
-      "QPushButton { padding-top: 5 }")
-
-    self.windowIcon = QPushButton()
-    self.windowIcon.setIcon(QIcon("Resources/windowIcon.svg"))
-    self.windowIcon.setFixedWidth(30)
-    self.windowIcon.setStyleSheet(
-      "QPushButton:hover { background-color: none }\n"
-      "QPushButton { border: none }"
-    )
+    self.applicationIcon = QPushButton()
+    self.applicationIcon.setIcon(QIcon("Resources/windowIcon.svg"))
+    self.applicationIcon.setFixedWidth(30)
 
     self.title = QLabel(TitleBar.title)
     font = QFont(Settings.font, 14)
@@ -53,16 +43,33 @@ class TitleBar(QWidget):
     self.closeWindowButton.setIcon(QIcon("Resources/closeWindow.png"))
     self.closeWindowButton.setFixedWidth(30)
     self.closeWindowButton.clicked.connect(self.closeWindow)
-    self.closeWindowButton.setStyleSheet(
-      "QPushButton:hover { background-color: #D11A2A }")
 
-    self.layout.addWidget(self.windowIcon)
+    self.layout.addWidget(self.applicationIcon)
     self.layout.addSpacing(5)
     self.layout.addWidget(self.title)
     self.layout.addWidget(self.settingsButton, alignment=Qt.AlignmentFlag.AlignTop)
     self.layout.addWidget(self.minimizeWindowButton, alignment=Qt.AlignmentFlag.AlignTop)
     self.layout.addWidget(self.restoreDownWindowButton, alignment=Qt.AlignmentFlag.AlignTop)
     self.layout.addWidget(self.closeWindowButton, alignment=Qt.AlignmentFlag.AlignTop)
+
+    self.style()
+
+  def style(self):
+    self.setStyleSheet(
+      "QPushButton:hover { background-color: grey }\n"
+      "QPushButton { border: none }\n"
+      "QPushButton { padding-bottom: 5px }\n"
+      "QPushButton { padding-top: 5px }\n"
+    )
+    
+    self.applicationIcon.setStyleSheet(
+      "QPushButton:hover { background-color: none }\n"
+    )
+    
+    self.closeWindowButton.setStyleSheet(
+      "QPushButton:hover { background-color: #D11A2A }"
+    )
+
 
   def openSettings(self):
     pass

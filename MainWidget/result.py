@@ -43,6 +43,9 @@ class Result(QWidget):
     
     self.layout.addWidget(dataWidget)
 
+    self.style()
+
+  def style(self):
     self.setStyleSheet(
       "QWidget { background-color: white; border-radius: 10px}\n"
       "QPushButton { background-color: white }\n"

@@ -14,13 +14,6 @@ class StarredWord(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
-    self.setStyleSheet(
-      "QPushButton:hover { background-color: grey }\n"
-      "QPushButton { border: 1px solid black }\n"
-      "QPushButton { padding-bottom: 5px }\n"
-      "QPushButton { padding-top: 5px }"
-    )
-
     self.dataWidget = QWidget()
     self.dataWidget.layout = QHBoxLayout(self.dataWidget)
     self.dataWidget.layout.setContentsMargins(0, 0, 0, 0)
@@ -43,7 +36,6 @@ class StarredWord(QWidget):
     self.line = QFrame()
     self.line.setFrameShape(QFrame.Shape.HLine)
     self.line.setFrameShadow(QFrame.Shadow.Plain)
-    self.line.setLineWidth(5)
 
     self.dataWidget.layout.addSpacing(5)
     self.dataWidget.layout.addWidget(self.word)
@@ -53,6 +45,17 @@ class StarredWord(QWidget):
     
     self.layout.addWidget(self.dataWidget)
     self.layout.addWidget(self.line)
+
+    self.style()
+
+  def style(self):
+    self.setStyleSheet(
+      "QPushButton:hover { background-color: grey }\n"
+      "QPushButton { border: 1px solid black }\n"
+      "QPushButton { padding-bottom: 5px }\n"
+      "QPushButton { padding-top: 5px }\n"
+      "QWidget { background-color: green }"
+    )
     
   def toggleStarred(self):
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget

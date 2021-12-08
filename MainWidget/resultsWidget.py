@@ -32,6 +32,14 @@ class ResultsWidget(QWidget):
     self.scrollArea.setWidget(ResultsWidget.scrollAreaWidgetContents)
     self.layout.addWidget(self.scrollArea)
 
+    self.style()
+    
+  def style(self):
+    self.setStyleSheet(
+      "QWidget { background-color: blue }\n"
+      "QScrollBar { background-color: none }"
+    )
+
   @staticmethod
   def showResults(word):
     if ResultsWidget.placeholderLabelShow:
