@@ -53,7 +53,8 @@ class Result(QWidget):
       "QPushButton { border-radius: 12px }\n"
       "QPushButton { border: 1px solid black }\n"
       "QPushButton { padding-bottom: 5px }\n"
-      "QPushButton { padding-top: 5px }"
+      "QPushButton { padding-top: 5px }\n"
+      "QLabel { color: blue }"
     )
 
   def searchWord(self):

@@ -37,6 +37,7 @@ class ResultsWidget(QWidget):
   def style(self):
     self.setStyleSheet(
       "QWidget { background-color: blue }\n"
+      "QLabel { color: white }\n"
       "QScrollBar { background-color: none }"
     )
 

@@ -81,7 +81,13 @@ class SearchingWidget(QWidget):
     self.searchBarFocusShortcut = QShortcut(QKeySequence('/'), self)
     self.searchBarFocusShortcut.activated.connect(SearchingWidget.setFocusToSearchBar)
 
+    self.style()
     self.setFocusedStyleSheet()
+
+  def style(self):
+    SearchingWidget.lineEdit.setStyleSheet(
+      "QLineEdit { color: blue }"
+    )
 
   def setFocusedStyleSheet(self):
     self.setStyleSheet(

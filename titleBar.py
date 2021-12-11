@@ -60,6 +60,7 @@ class TitleBar(QWidget):
       "QPushButton { border: none }\n"
       "QPushButton { padding-bottom: 5px }\n"
       "QPushButton { padding-top: 5px }\n"
+      "QLabel { color: white }"
     )
     
     self.applicationIcon.setStyleSheet(

@@ -54,6 +54,7 @@ class StarredWord(QWidget):
       "QPushButton { border: 1px solid black }\n"
       "QPushButton { padding-bottom: 5px }\n"
       "QPushButton { padding-top: 5px }\n"
+      "QLabel { color: white }\n"
       "QWidget { background-color: green }"
     )
     

@@ -54,12 +54,14 @@ class CurrentSearch(QWidget):
     self.style()
 
   def style(self):
-    self.searchedWord.setStyleSheet("QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px }")
+    self.searchedWord.setStyleSheet(
+      "QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px; background-color: green; color: white }"
+    )
     
     self.setStyleSheet(
       "QComboBox { background-color: none }\n"
-      "QWidget { background-color: none }\n"
-      "QLabel { background-color: green }"
+      "QComboBox { color: blue }\n"
+      "QWidget { background-color: none }"
     )
 
   def getCurrentWord(self):

@@ -56,12 +56,11 @@ class StarredWordsWidget(QWidget):
 
   def style(self):
     self.titleLabel.setStyleSheet(
-      "QLabel { border : 1px solid black; border-bottom: 0px; padding: 10px 0px; background-color: white }"
+      "QLabel { border : 1px solid black; border-bottom: 0px; padding: 10px 0px; background-color: white; color: blue }"
     )
     
     self.setStyleSheet(
       "QWidget { background-color: black }\n"
-      "QLabel { background-color: black }\n"
       "QScrollBar { background-color: none }"
     )
     
