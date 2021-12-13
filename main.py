@@ -5,6 +5,9 @@ import sys
 app = QApplication(sys.argv)
 
 # Imports must be below here
+from databaseHandler import DBHandler
+DBHandler.initializeDatabases()
+
 from settings import Settings
 Settings.screenWidth = app.primaryScreen().size().width()
 Settings.calculateSizeSettings()
