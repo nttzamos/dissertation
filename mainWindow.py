@@ -110,12 +110,16 @@ class MainWindow(QWidget):
     )
 
   @staticmethod
-  def populateSideWidgets(initial):
+  def updateWidgets(initial):
     from MainWidget.searchingWidget import SearchingWidget
     SearchingWidget.updateDictionaryWords()
 
     if initial:
       SearchingWidget.modifyErrorMessage()
+      
+    from MainWidget.resultsWidget import ResultsWidget
+    ResultsWidget.showPlaceholder()
+    MainWidget.currentSearch.searchedWord.setText("Enter a word.")
 
     RecentSearchesWidget.populate(initial)
     StarredWordsWidget.populate(initial)

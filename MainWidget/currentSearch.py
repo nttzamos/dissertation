@@ -113,7 +113,7 @@ class CurrentSearch(QWidget):
       self.subjectSelector.clear()
       self.subjectSelector.addItems(self.getAvailableSubjects())
       from mainWindow import MainWindow
-      MainWindow.populateSideWidgets(previousGrade == -1)
+      MainWindow.updateWidgets(previousGrade == -1)
 
   def subjectSelectorActivated(self, index):
     if index != 0:
