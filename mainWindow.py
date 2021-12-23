@@ -12,7 +12,7 @@ from SideWidgets.subjectsWidget import SubjectsWidget
 from titleBar import TitleBar
 
 class MainWindow(QWidget):
-  DBHandler.init_db()
+  # DBHandler.init_db()
   recentSearchesWidget = RecentSearchesWidget()
   starredWordsWidget = StarredWordsWidget()
   # recentActionsWidget = RecentActionsWidget()
@@ -26,10 +26,10 @@ class MainWindow(QWidget):
   def init_gui(self):
     self.layout = QGridLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)
-    
+
     # margin between the title bar and the rest of the application
     self.layout.setSpacing(0)
-    
+
     self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
     self.titleBar = TitleBar(self)
 
@@ -48,15 +48,12 @@ class MainWindow(QWidget):
 
     # Recent Searches Scroll Area
     self.splitterLeftVertical.addWidget(MainWindow.recentSearchesWidget)
-    self.recentSearches = DBHandler.getAllRecentSearches()
-    self.starredWords = DBHandler.getAllStarredWords()
-    MainWindow.recentSearchesWidget.initialize(self.recentSearches, self.starredWords)
-    
+    MainWindow.recentSearchesWidget.initialize()
+
     # Starred Words Scroll Area
     self.splitterLeftVertical.addWidget(MainWindow.starredWordsWidget)
-    self.starredWords = DBHandler.getAllStarredWords()
-    MainWindow.starredWordsWidget.initialize(self.starredWords)
-    
+    MainWindow.starredWordsWidget.initialize()
+
     # Right Horizontal Splitter - Left Horizontal Splitter (Right Part)
     # self.splitterRightHorizontal = QSplitter(self.splitterLeftHorizontal)
     # self.splitterRightHorizontal.setOrientation(Qt.Orientation.Horizontal)
@@ -113,6 +110,16 @@ class MainWindow(QWidget):
     )
 
   @staticmethod
+  def populateSideWidgets(initial):
+    from MainWidget.searchingWidget import SearchingWidget
+    SearchingWidget.updateDictionaryWords()
+
+    if initial:
+      SearchingWidget.modifyErrorMessage()
+
+    RecentSearchesWidget.populate(initial)
+    StarredWordsWidget.populate(initial)
+
+  @staticmethod
   def closeEvent(event):
     DBHandler.closeConnection()
-    

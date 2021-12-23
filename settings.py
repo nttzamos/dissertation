@@ -3,7 +3,11 @@ from PyQt6.QtGui import QFont
 from ItemWidgets.recentSearch import RecentSearch
 from MainWidget.result import Result
 
+import pickledb
+
 class Settings():
+  settingsDatabaseFile = "settings.json"
+
   font = QFont().family()
   screenWidth = 0
   leftWidgetWidth = 0
@@ -15,6 +19,19 @@ class Settings():
     pass
 
   @staticmethod
+  def initializeSettingsDatabase():
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+    if not settingsDatabase.get('lastGradePicked'):
+      settingsDatabase.set('lastGradePicked', 1)
+      settingsDatabase.dump()
+
+  @staticmethod
+  def modifyLastGradePicked(grade):
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+    settingsDatabase.set('lastGradePicked', grade)
+    settingsDatabase.dump()
+
+  @staticmethod
   def calculateSizeSettings():
     longRecentSearch = RecentSearch("WWWWWWWWWWWWWWW", True) # 15
     Settings.leftWidgetWidth = longRecentSearch.sizeHint().width()
@@ -23,7 +40,7 @@ class Settings():
     Settings.singleResultWidth = longResult.sizeHint().width()
     Settings.resultsWidgetColumns = (Settings.screenWidth - Settings.leftWidgetWidth) // Settings.singleResultWidth
     Settings.rightWidgetWidth = Settings.resultsWidgetColumns * Settings.singleResultWidth
-    
+
     # Fun Experiment
     # chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     # print(len(chars)); max = 0; maxChar = 'a'; sizes = []

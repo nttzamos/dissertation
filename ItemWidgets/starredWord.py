@@ -61,7 +61,7 @@ class StarredWord(QWidget):
   def toggleStarred(self):
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget
     word = self.word.text()
-    DBHandler.deleteStarredWord(word)
+    DBHandler.removeStarredWord(word)
     RecentSearchesWidget.toggleStarredUpper(word)
     self.removeWord()
 

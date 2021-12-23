@@ -3,7 +3,6 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
 from ItemWidgets.starredWord import StarredWord
-from databaseHandler import DBHandler
 from settings import Settings
 
 class StarredWordsWidget(QWidget):
@@ -17,8 +16,11 @@ class StarredWordsWidget(QWidget):
   counter = 1000000
   widgetList = []
   
-  placeholderLabel = QLabel("You do not have any " + title)
-  showPlaceholderLabel = True
+  uninitializedStateText = "Please select a grade first."
+  emptyStateText = "You do not have any " + title
+
+  placeholderLabel = QLabel()
+  showPlaceholderLabel = False
 
   vspacer = QLabel("f")
 
@@ -61,17 +63,37 @@ class StarredWordsWidget(QWidget):
     
     self.setStyleSheet(
       "QWidget { background-color: black }\n"
+      "QLabel { color: white }\n"
       "QScrollBar { background-color: none }"
     )
-    
-  def initialize(self, starredWordsList):
-    if len(starredWordsList) == 0:
+
+  @staticmethod
+  def initialize():
+    StarredWordsWidget.placeholderLabel.setText(StarredWordsWidget.uninitializedStateText)
+    StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.vspacer, 1000001, 0, 1, -1)
+    StarredWordsWidget.showPlaceholder()
+
+  @staticmethod
+  def populate(initial):
+    if initial:
+      StarredWordsWidget.placeholderLabel.setText(StarredWordsWidget.emptyStateText)
+
+    if not initial:
+      for starredWord in StarredWordsWidget.widgetList:
+        StarredWordsWidget.gridLayout.removeWidget(starredWord)
+      StarredWordsWidget.widgetList = []
+      StarredWordsWidget.counter = 1000000
+
+    from databaseHandler import DBHandler
+    starredWords = DBHandler.getStarredWords()
+
+    if len(starredWords) == 0:
       StarredWordsWidget.showPlaceholder()
       return
     else:
       StarredWordsWidget.hidePlaceholder()
 
-    for word in starredWordsList:
+    for word in starredWords:
       widget = StarredWord(word)
       StarredWordsWidget.widgetList.append(widget)
       StarredWordsWidget.gridLayout.addWidget(widget, StarredWordsWidget.counter, 0)
@@ -103,13 +125,15 @@ class StarredWordsWidget(QWidget):
 
   @staticmethod
   def showPlaceholder():
-    StarredWordsWidget.showPlaceholderLabel = True
-    StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.placeholderLabel)
-    StarredWordsWidget.gridLayout.removeWidget(StarredWordsWidget.vspacer)
-    StarredWordsWidget.placeholderLabel.show()
+    if not StarredWordsWidget.showPlaceholderLabel:
+      StarredWordsWidget.showPlaceholderLabel = True
+      StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.placeholderLabel)
+      StarredWordsWidget.gridLayout.removeWidget(StarredWordsWidget.vspacer)
+      StarredWordsWidget.placeholderLabel.show()
 
   @staticmethod
   def hidePlaceholder():
-    StarredWordsWidget.showPlaceholderLabel = False
-    StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.vspacer, 1000001, 0, 1, -1)
-    StarredWordsWidget.placeholderLabel.hide()
+    if StarredWordsWidget.showPlaceholderLabel:
+      StarredWordsWidget.showPlaceholderLabel = False
+      StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.vspacer, 1000001, 0, 1, -1)
+      StarredWordsWidget.placeholderLabel.hide()

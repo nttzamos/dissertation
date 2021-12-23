@@ -1,21 +1,19 @@
 from PyQt6.QtGui import QFont, QIcon, QKeySequence, QShortcut
 from PyQt6.QtWidgets import QCompleter, QFrame, QHBoxLayout, QLabel, QLineEdit, QPushButton, QSizePolicy, QVBoxLayout, QWidget
-from PyQt6.QtCore import QEvent, QRect, QTimer, Qt
+from PyQt6.QtCore import QEvent, QRect, QStringListModel, QTimer, Qt
 
 from databaseHandler import DBHandler
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
 from settings import Settings
 
 class SearchingWidget(QWidget):
-  # Uncomment and change when complete
-  # dictionaryWords = DBHandler.getAllWords()
-  dictionaryWords = [
-    "Balcony", "Balloon", "Barcelona", "Balcony Light",
-    "Fan", "Room Light", "Brioche", "Basketball",
-    "Bedroom Heater", "Wall Switch"]
+  dictionaryWords = []
 
   lineEdit = QLineEdit()
-  
+
+  uninitializedStateText = "You have to select a grade first."
+  unknownWordText = "This word is not contained in the dictionary. Please search for another word."
+
   def __init__(self):
     super().__init__()
 
@@ -33,11 +31,11 @@ class SearchingWidget(QWidget):
     SearchingWidget.lineEdit.textChanged.connect(self.searchTextChanged)
     self.showErrorMessage = False
 
-    self.completer = QCompleter(SearchingWidget.dictionaryWords)
-    self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
-    self.completer.activated.connect(self.searchWithClick)
-    self.completer.popup().setFont(completerFont)
-    SearchingWidget.lineEdit.setCompleter(self.completer)
+    SearchingWidget.completer = QCompleter(SearchingWidget.dictionaryWords)
+    SearchingWidget.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+    SearchingWidget.completer.activated.connect(self.searchWithClick)
+    SearchingWidget.completer.popup().setFont(completerFont)
+    SearchingWidget.lineEdit.setCompleter(SearchingWidget.completer)
     SearchingWidget.lineEdit.setPlaceholderText("Please enter a word.")
 
     self.searchBarWidget = QWidget()
@@ -62,21 +60,21 @@ class SearchingWidget(QWidget):
     self.searchBarWidget.layout.addWidget(self.searchButton)
     self.searchBarWidget.layout.addSpacing(5)
 
-    self.errorMessage = QLabel("This word is not contained in the dictionary. Please search for another word.", self)
-    self.errorMessage.setFont(errorMessageFont)
-    sizePolicy = self.errorMessage.sizePolicy()
+    SearchingWidget.errorMessage = QLabel(SearchingWidget.uninitializedStateText, self)
+    SearchingWidget.errorMessage.setFont(errorMessageFont)
+    sizePolicy = SearchingWidget.errorMessage.sizePolicy()
     sizePolicy.setRetainSizeWhenHidden(True)
-    self.errorMessage.setSizePolicy(sizePolicy)
-    self.errorMessage.hide()
-    self.errorMessage.setStyleSheet(
+    SearchingWidget.errorMessage.setSizePolicy(sizePolicy)
+    SearchingWidget.errorMessage.hide()
+    SearchingWidget.errorMessage.setStyleSheet(
       "QLabel { color: red }\n"
       "QLabel { background-color: none }\n"
       "QLabel { border: none }\n"
       "QLabel { margin-left: 2px }"
     )
-    
+
     self.layout.addWidget(self.searchBarWidget)
-    self.layout.addWidget(self.errorMessage)
+    self.layout.addWidget(SearchingWidget.errorMessage)
 
     self.searchBarFocusShortcut = QShortcut(QKeySequence('/'), self)
     self.searchBarFocusShortcut.activated.connect(SearchingWidget.setFocusToSearchBar)
@@ -115,7 +113,18 @@ class SearchingWidget(QWidget):
       "QPushButton { padding-bottom: 5 }\n"
       "QPushButton { padding-top: 5 }"
     )
-    self.errorMessage.show()
+    SearchingWidget.errorMessage.show()
+
+  @staticmethod
+  def modifyErrorMessage():
+    SearchingWidget.errorMessage.setText(SearchingWidget.unknownWordText)
+
+  @staticmethod
+  def updateDictionaryWords():
+    from MainWidget.currentSearch import CurrentSearch
+    SearchingWidget.dictionaryWords = DBHandler.getWords(CurrentSearch.currentGrade)
+    model = QStringListModel(SearchingWidget.dictionaryWords, SearchingWidget.completer)
+    SearchingWidget.completer.setModel(model)
 
   def searchTextChanged(self):
     if not self.hideClearSearchButton and not SearchingWidget.lineEdit.text():
@@ -128,10 +137,11 @@ class SearchingWidget(QWidget):
     if self.showErrorMessage:
       self.showErrorMessage = False
       self.setFocusedStyleSheet()
-      self.errorMessage.hide()
+      SearchingWidget.errorMessage.hide()
 
   def searchWithEnter(self):
     if SearchingWidget.lineEdit.text() in SearchingWidget.dictionaryWords:
+      print('a')
       self.addRecentSearch(SearchingWidget.lineEdit.text())
       SearchingWidget.lineEdit.clear()
     else:
@@ -140,7 +150,8 @@ class SearchingWidget(QWidget):
       self.setErrorStyleSheet()
 
   def searchWithClick(self, text):
-    self.addRecentSearch(text)
+    print('b')
+    # self.addRecentSearch(text)
     QTimer.singleShot(0, SearchingWidget.lineEdit.clear)
 
   def clearSearch(self):
@@ -151,11 +162,11 @@ class SearchingWidget(QWidget):
     from MainWidget.mainWidget import MainWidget
     MainWidget.addWord(word)
 
-    addedNow = DBHandler.addRecentSearch(word, 0)
-    if addedNow:
-      RecentSearchesWidget.addRecentSearch(word, False)
-    else:
+    recentSearchExists = DBHandler.addRecentSearch(word)
+    if recentSearchExists:
       RecentSearchesWidget.removeAndAddRecentSearch(word)
+    else:
+      RecentSearchesWidget.addRecentSearch(word, False)
 
   @staticmethod
   def setFocusToSearchBar():

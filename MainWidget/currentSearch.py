@@ -5,9 +5,11 @@ from PyQt6.QtGui import QFont
 from settings import Settings
 
 class CurrentSearch(QWidget):
+  currentGrade = -1
+
   def __init__(self):
     super().__init__()
-    
+
     self.setFixedHeight(300)
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(50, 50, 50, 50)
@@ -27,25 +29,25 @@ class CurrentSearch(QWidget):
     self.studentSelector.setFont(comboBoxFont)
     self.studentSelector.addItems(self.getAvailableStudents())
 
-    self.classSelector = QComboBox()
-    self.classSelector.setFont(comboBoxFont)
-    self.classSelector.addItems(self.getAvailableClasses())
+    self.gradeSelector = QComboBox()
+    self.gradeSelector.setFont(comboBoxFont)
+    self.gradeSelector.addItems(self.getAvailableGrades())
 
     self.subjectSelector = QComboBox()
     self.subjectSelector.setFont(comboBoxFont)
     self.subjectSelector.addItems(self.getAvailableSubjects())
 
-    self.classSelector.setEnabled(False)
+    self.gradeSelector.setEnabled(False)
     self.subjectSelector.setEnabled(False)
 
     self.searchDetails.layout.addWidget(self.studentSelector)
-    self.searchDetails.layout.addWidget(self.classSelector)
+    self.searchDetails.layout.addWidget(self.gradeSelector)
     self.searchDetails.layout.addWidget(self.subjectSelector)
 
     self.layout.addWidget(self.searchedWord)
     self.layout.addSpacing(100)
     self.layout.addWidget(self.searchDetails)
-    
+
     self.searchDetails.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
     self.searchedWord.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
@@ -57,7 +59,7 @@ class CurrentSearch(QWidget):
     self.searchedWord.setStyleSheet(
       "QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px; background-color: green; color: white }"
     )
-    
+
     self.setStyleSheet(
       "QComboBox { background-color: none }\n"
       "QComboBox { color: blue }\n"
@@ -71,33 +73,47 @@ class CurrentSearch(QWidget):
     return [
       "Please select a student...",
       "Νίκος", "Στάθης", "Γιώργος", "Δημήτρης", "Ευριπίδης"]
-  
-  def getAvailableClasses(self):
-    return [
-      "You have to select a student.", "Please select a class...",
-      "Α' Δημοτικού", "Β' Δημοτικού", "Γ' Δημοτικού", "Δ' Δημοτικού", "Ε' Δημοτικού", "ΣΤ' Δημοτικού"]
+
+  def getAvailableGrades(self):
+    from databaseHandler import DBHandler
+    grades = DBHandler.getGrades()
+    grades[0:0] = ["You have to select a student.", "Please select a grade..."]
+    return grades
 
   def getAvailableSubjects(self):
-    return [
-      "You have to select a student and a class.", "You have to select a class.", "Please select a subject...",
-      "Μαθηματικά", "Φυσική", "Γεωγραφία", "Ιστορία", "Γλώσσα"]
+    if CurrentSearch.currentGrade == -1:
+      return ["You have to select a student and a grade.", "You have to select a grade."]
+    else:
+      from databaseHandler import DBHandler
+      currentGradeSubjects = DBHandler.getGradeSubjects(CurrentSearch.currentGrade)
+      currentGradeSubjects.insert(0, "Please select a subject...")
+      return currentGradeSubjects
 
   def studentSelectorActivated(self, index):
     if index != 0:
       self.studentSelector.removeItem(0)
       self.studentSelector.activated.disconnect()
-      self.classSelector.removeItem(0)
+      self.gradeSelector.removeItem(0)
       self.subjectSelector.removeItem(0)
-      self.classSelector.activated.connect(self.classSelectorActivated)
-      self.classSelector.setEnabled(True)
-  
-  def classSelectorActivated(self, index):
-    if index != 0:
-      self.classSelector.removeItem(0)
-      self.classSelector.activated.disconnect()
-      self.subjectSelector.removeItem(0)
-      self.subjectSelector.activated.connect(self.subjectSelectorActivated)
-      self.subjectSelector.setEnabled(True)
+      self.gradeSelector.activated.connect(self.gradeSelectorActivated)
+      self.gradeSelector.setEnabled(True)
+
+  def gradeSelectorActivated(self, index):
+    offset = 1
+    if CurrentSearch.currentGrade == -1 and index != 0:
+      # self.subjectSelector.setEnabled(True)
+      self.gradeSelector.removeItem(0)
+      offset = 0
+
+    grade = index + offset
+    if grade != CurrentSearch.currentGrade:
+      previousGrade = CurrentSearch.currentGrade
+      CurrentSearch.currentGrade = grade
+      Settings.modifyLastGradePicked(grade)
+      self.subjectSelector.clear()
+      self.subjectSelector.addItems(self.getAvailableSubjects())
+      from mainWindow import MainWindow
+      MainWindow.populateSideWidgets(previousGrade == -1)
 
   def subjectSelectorActivated(self, index):
     if index != 0:

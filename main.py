@@ -10,6 +10,7 @@ DBHandler.initializeDatabases()
 
 from settings import Settings
 Settings.screenWidth = app.primaryScreen().size().width()
+Settings.initializeSettingsDatabase()
 Settings.calculateSizeSettings()
 
 from mainWindow import MainWindow

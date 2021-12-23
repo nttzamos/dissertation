@@ -13,12 +13,15 @@ class RecentSearchesWidget(QWidget):
   gridLayout = QGridLayout(scrollAreaWidgetContents)
   gridLayout.setSpacing(0)
   gridLayout.setContentsMargins(0, 0, 0, 0)
-  
+
   counter = 1000000
   widgetList = []
-  
-  placeholderLabel = QLabel("You do not have any " + title)
-  showPlaceholderLabel = True
+
+  uninitializedStateText = "Please select a grade first."
+  emptyStateText = "You do not have any " + title
+
+  placeholderLabel = QLabel()
+  showPlaceholderLabel = False
 
   vspacer = QLabel("f")
 
@@ -58,7 +61,7 @@ class RecentSearchesWidget(QWidget):
     sizePolicy = RecentSearchesWidget.vspacer.sizePolicy()
     sizePolicy.setRetainSizeWhenHidden(True)
     RecentSearchesWidget.vspacer.setSizePolicy(sizePolicy)
-    
+
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)
     self.scrollArea.setWidget(RecentSearchesWidget.scrollAreaWidgetContents)
@@ -76,24 +79,45 @@ class RecentSearchesWidget(QWidget):
 
     self.setStyleSheet(
       "QWidget { background-color: black }\n"
+      "QLabel { color: white }\n"
       "QScrollBar { background-color: none }"
     )
 
-  def initialize(self, wordsList, starredWordsList):
-    if len(wordsList) == 0:
+  @staticmethod
+  def initialize():
+    RecentSearchesWidget.placeholderLabel.setText(RecentSearchesWidget.uninitializedStateText)
+    RecentSearchesWidget.gridLayout.addWidget(RecentSearchesWidget.vspacer, 1000001, 0, 1, -1)
+    RecentSearchesWidget.showPlaceholder()
+
+  @staticmethod
+  def populate(initial):
+    if initial:
+      RecentSearchesWidget.placeholderLabel.setText(RecentSearchesWidget.emptyStateText)
+      RecentSearchesWidget.showPlaceholder()
+
+    if not initial:
+      for recentSearch in RecentSearchesWidget.widgetList:
+        RecentSearchesWidget.gridLayout.removeWidget(recentSearch)
+      RecentSearchesWidget.widgetList = []
+      RecentSearchesWidget.counter = 1000000
+
+    recentSearches = DBHandler.getRecentSearches()
+    starredWords = DBHandler.getStarredWords()
+
+    if len(recentSearches) == 0:
       RecentSearchesWidget.showPlaceholder()
       return
     else:
       RecentSearchesWidget.hidePlaceholder()
-    
-    for word in wordsList:
-      if word in starredWordsList:
+
+    for word in recentSearches:
+      if word in starredWords:
         condition=True
       else:
         condition=False
       widget = RecentSearch(word, condition)
       RecentSearchesWidget.widgetList.append(widget)
-      RecentSearchesWidget.gridLayout.addWidget(widget, self.counter, 0)
+      RecentSearchesWidget.gridLayout.addWidget(widget, RecentSearchesWidget.counter, 0)
       RecentSearchesWidget.counter -= 1
 
   def getMaximumWidth(self):
@@ -104,7 +128,8 @@ class RecentSearchesWidget(QWidget):
   def addRecentSearch(word, condition):
     if RecentSearchesWidget.showPlaceholderLabel == True:
       RecentSearchesWidget.hidePlaceholder()
-    condition = DBHandler.isStarredWord(word)
+
+    condition = DBHandler.starredWordExists(word)
     widget = RecentSearch(word, condition)
     RecentSearchesWidget.widgetList.append(widget)
     RecentSearchesWidget.gridLayout.addWidget(widget, RecentSearchesWidget.counter, 0)
@@ -134,14 +159,15 @@ class RecentSearchesWidget(QWidget):
 
   @staticmethod
   def showPlaceholder():
-    RecentSearchesWidget.showPlaceholderLabel = True
-    RecentSearchesWidget.gridLayout.addWidget(RecentSearchesWidget.placeholderLabel)
-    RecentSearchesWidget.gridLayout.removeWidget(RecentSearchesWidget.vspacer)
-    RecentSearchesWidget.placeholderLabel.show()
-    
+    if not RecentSearchesWidget.showPlaceholderLabel:
+      RecentSearchesWidget.showPlaceholderLabel = True
+      RecentSearchesWidget.gridLayout.addWidget(RecentSearchesWidget.placeholderLabel)
+      RecentSearchesWidget.gridLayout.removeWidget(RecentSearchesWidget.vspacer)
+      RecentSearchesWidget.placeholderLabel.show()
+
   @staticmethod
   def hidePlaceholder():
-    RecentSearchesWidget.showPlaceholderLabel = False
-    RecentSearchesWidget.gridLayout.addWidget(RecentSearchesWidget.vspacer, 1000001, 0, 1, -1)
-    RecentSearchesWidget.placeholderLabel.hide()
-    
+    if RecentSearchesWidget.showPlaceholderLabel:
+      RecentSearchesWidget.showPlaceholderLabel = False
+      RecentSearchesWidget.gridLayout.addWidget(RecentSearchesWidget.vspacer, 1000001, 0, 1, -1)
+      RecentSearchesWidget.placeholderLabel.hide()

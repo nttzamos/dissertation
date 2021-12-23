@@ -31,7 +31,7 @@ class RecentSearch(QWidget):
     self.starButton = QPushButton()
     self.starButton.clicked.connect(self.notifyStarred)
     self.starButton.setFixedWidth(30)
-    
+
     self.isStarred = condition
     if condition:
       self.starButton.setIcon(QIcon("Resources/starred.svg"))
@@ -53,12 +53,12 @@ class RecentSearch(QWidget):
     self.dataWidget.layout.addWidget(self.starButton)
     self.dataWidget.layout.addWidget(self.deleteButton)
     self.dataWidget.layout.addSpacing(5)
-    
+
     self.layout.addWidget(self.dataWidget)
     self.layout.addWidget(self.line)
 
     self.style()
-    
+
   def style(self):
     self.setStyleSheet(
       "QPushButton:hover { background-color: grey }\n"
@@ -76,12 +76,13 @@ class RecentSearch(QWidget):
   def notifyStarred(self):
     from SideWidgets.starredWordsWidget import StarredWordsWidget
     word = self.word.text()
-    addedNow = DBHandler.addStarredWord(0, word)
-    if addedNow:
-      StarredWordsWidget.addStarredWord(word)
-    else:
+
+    if DBHandler.starredWordExists(word):
+      DBHandler.removeStarredWord(word)
       StarredWordsWidget.toggleStarredBottom(word)
-      DBHandler.deleteStarredWord(word)
+    else:
+      DBHandler.addStarredWord(word)
+      StarredWordsWidget.addStarredWord(word)
 
     self.toggleStarredIcon()
 
@@ -95,7 +96,7 @@ class RecentSearch(QWidget):
 
   def removeWord(self):
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget
-    DBHandler.deleteRecentSearch(self.word.text())
+    DBHandler.removeRecentSearch(self.word.text())
     self.hide()
     RecentSearchesWidget.removeRecentSearch(self)
     self.deleteLater()
