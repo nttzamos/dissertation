@@ -10,13 +10,15 @@ import sqlite3
 import datetime
 
 class DBHandler():
-  con = sqlite3.connect('new.db')
-  cur = con.cursor()
+  # con = sqlite3.connect('new.db')
+  # cur = con.cursor()
 
   gradesSubjectsDirectoryPath = "Resources/Grades/"
   databasesDirectoryPath = "Databases/"
   gradeFileName = "grade_"
   commonDatabaseFile = "common.db"
+
+  # --- Initialization code ---
 
   @staticmethod
   def initializeDatabases():
@@ -30,55 +32,65 @@ class DBHandler():
 
   @staticmethod
   def initializeCommonDatabase():
-    if path.isfile(DBHandler.databasesDirectoryPath + DBHandler.commonDatabaseFile):
+    commonDatabaseFilePath = DBHandler.databasesDirectoryPath + DBHandler.commonDatabaseFile
+
+    if path.isfile(commonDatabaseFilePath):
       return
-    
-    con = sqlite3.connect(DBHandler.databasesDirectoryPath + DBHandler.commonDatabaseFile)
+
+    con = sqlite3.connect(commonDatabaseFilePath)
     cur = con.cursor()
     gradesNames = ["Α' Δημοτικού", "Β' Δημοτικού", "Γ' Δημοτικού", "Δ' Δημοτικού", "Ε' Δημοτικού", "ΣΤ' Δημοτικού"]
 
     cur.execute('''CREATE TABLE grades (id INTEGER PRIMARY KEY, name TEXT)''')
-    cur.execute('''CREATE TABLE recentSearches (word TEXT PRIMARY KEY, time TIMESTAMP, starred INTEGER)''')
-    cur.execute('''CREATE TABLE starredWords (id INTEGER, wordId INTEGER)''')
-    
+
     for i in range(6):
       cur.execute("INSERT INTO grades VALUES (?, ?) ON CONFLICT(id) DO NOTHING", (i + 1, gradesNames[i]))
     con.commit()
     con.close()
-  
+
   @staticmethod
-  def databasesExist():
-    base = DBHandler.databasesDirectoryPath + DBHandler.gradeFileName
-    extension = ".db"
-    existingDatabasesCount = 0
-    for grade in range(1, 7):
-      if path.isfile(base + str(grade) + extension):
-        existingDatabasesCount += 1
-    
-    if existingDatabasesCount == 0:
-      return False
-    elif existingDatabasesCount == 6:
-      return True
-    else:
-      print("Databases are more than 0 and less than 6.")
-      quit()
+  def getGrades():
+    con, cur = DBHandler.connectToCommonDatabase()
+    cur.execute("SELECT name FROM grades ORDER BY id")
+    grades = list(map(lambda grade: grade[0], cur.fetchall()))
+
+    con.close()
+    return grades
+
+  @staticmethod
+  def getGradeSubjects(grade):
+    con, cur = DBHandler.connectToGradeDatabase(grade)
+    cur.execute("SELECT name FROM subjects ORDER BY id")
+    subjects = list(map(lambda subject: subject[0], cur.fetchall()))
+
+    con.close()
+    return subjects
 
   @staticmethod
   def initializeGradeDatabase(grade):
-    con = sqlite3.connect(DBHandler.databasesDirectoryPath + DBHandler.gradeFileName + str(grade) + ".db")
+    gradeDatabaseFilePath = DBHandler.databasesDirectoryPath + DBHandler.gradeFileName + str(grade) + ".db"
+
+    # Connecting to the database
+    con = sqlite3.connect(gradeDatabaseFilePath)
     cur = con.cursor()
 
+    # Creating the necessary tables
     cur.execute('''CREATE TABLE words (id INTEGER PRIMARY KEY, word TEXT)''')
     cur.execute('''CREATE TABLE subjectWords (id INTEGER PRIMARY KEY, subjectId INTEGER, wordId INTEGER)''')
+    cur.execute('''CREATE TABLE recentSearches (id INTEGER PRIMARY KEY AUTOINCREMENT, wordId INTEGER, searchedAt TIMESTAMP)''')
+    cur.execute('''CREATE TABLE starredWords (id INTEGER PRIMARY KEY AUTOINCREMENT, wordId INTEGER)''')
 
-    subjectFiles = DBHandler.getGradeSubjectsFiles(grade)
+    # Creating the subjects table
     subjectNames = DBHandler.getGradeSubjectsNames(grade)
-    
     DBHandler.initializeSubjectsTable(cur, subjectNames)
     con.commit()
 
+    # con.close()
+    # return
+
     grade_start = timeit.default_timer()
 
+    subjectFiles = DBHandler.getGradeSubjectsFiles(grade)
     wordsSet = set()
     wordsPerSubject = dict()
     for i in range(len(subjectFiles)):
@@ -130,6 +142,148 @@ class DBHandler():
     con.close()
 
   @staticmethod
+  def initializeSubjectsTable(cur, subjectNames):
+    cur.execute('''CREATE TABLE subjects (id INTEGER PRIMARY KEY, name TEXT)''')
+
+    subjects = list()
+    for i in range(len(subjectNames)):
+      subjects.append([i + 1, subjectNames[i]])
+
+    print(subjects)
+    cur.executemany("INSERT INTO subjects VALUES (?,?) ON CONFLICT(id) DO NOTHING", subjects)
+
+  @staticmethod
+  def getWords(grade):
+    con, cur = DBHandler.connectToGradeDatabase(grade)
+    cur.execute('SELECT word FROM words ORDER BY word')
+    words = list(map(lambda word: word[0], cur.fetchall()))
+
+    con.close()
+    return words
+
+  # --- Recent searches code ---
+
+  @staticmethod
+  def addRecentSearch(word):
+    from MainWidget.currentSearch import CurrentSearch
+    grade = CurrentSearch.currentGrade
+
+    con, cur = DBHandler.connectToGradeDatabase(grade)
+    wordId = DBHandler.getWordId(cur, word)
+    recentSearchExists = DBHandler.recentSearchExists(cur, wordId)
+    dateTimeNow = datetime.datetime.now()
+
+    if recentSearchExists:
+      cur.execute("UPDATE recentSearches SET searchedAt = ? WHERE wordId = ?", (dateTimeNow, wordId))
+    else:
+      cur.execute("INSERT INTO recentSearches VALUES (null, ?, ?)", (wordId, dateTimeNow))
+
+    con.commit()
+    con.close()
+    return recentSearchExists
+
+  @staticmethod
+  def recentSearchExists(cur, wordId):
+    cur.execute("SELECT COUNT(*) FROM recentSearches WHERE wordId = ?", (wordId,))
+    return cur.fetchone()[0] > 0
+
+  @staticmethod
+  def removeRecentSearch(word):
+    from MainWidget.currentSearch import CurrentSearch
+    grade = CurrentSearch.currentGrade
+
+    con, cur = DBHandler.connectToGradeDatabase(grade)
+    wordId = DBHandler.getWordId(cur, word)
+    cur.execute("DELETE FROM recentSearches WHERE wordId = ?", (wordId,))
+    con.commit()
+    con.close()
+
+  @staticmethod
+  def getRecentSearches():
+    from MainWidget.currentSearch import CurrentSearch
+    grade = CurrentSearch.currentGrade
+
+    con, cur = DBHandler.connectToGradeDatabase(grade)
+    sql = '''SELECT word
+        FROM words
+        INNER JOIN recentSearches
+        ON words.id = recentSearches.wordId
+        ORDER BY recentSearches.searchedAt'''
+
+    cur.execute(sql)
+    recentSearches = list(map(lambda recentSearch: recentSearch[0], cur.fetchall()))
+    con.close()
+    return recentSearches
+
+  # --- Starred words code ---
+  @staticmethod
+  def addStarredWord(word):
+    from MainWidget.currentSearch import CurrentSearch
+    grade = CurrentSearch.currentGrade
+
+    con, cur = DBHandler.connectToGradeDatabase(grade)
+    wordId = DBHandler.getWordId(cur, word)
+
+    cur.execute("INSERT INTO starredWords VALUES (null, ?)", (wordId,))
+    con.commit()
+    con.close()
+
+  @staticmethod
+  def starredWordExists(word):
+    from MainWidget.currentSearch import CurrentSearch
+    grade = CurrentSearch.currentGrade
+
+    con, cur = DBHandler.connectToGradeDatabase(grade)
+    wordId = DBHandler.getWordId(cur, word)
+
+    cur.execute("SELECT COUNT(*) FROM starredWords WHERE wordId = ?", (wordId,))
+    return cur.fetchone()[0] > 0
+
+  @staticmethod
+  def removeStarredWord(word):
+    from MainWidget.currentSearch import CurrentSearch
+    grade = CurrentSearch.currentGrade
+
+    con, cur = DBHandler.connectToGradeDatabase(grade)
+    wordId = DBHandler.getWordId(cur, word)
+    cur.execute("DELETE FROM starredWords WHERE wordId = ?", (wordId,))
+    con.commit()
+    con.close()
+
+  @staticmethod
+  def getStarredWords():
+    from MainWidget.currentSearch import CurrentSearch
+    grade = CurrentSearch.currentGrade
+
+    con, cur = DBHandler.connectToGradeDatabase(grade)
+
+    sql = '''SELECT word
+        FROM words
+        INNER JOIN starredWords
+        ON words.id = starredWords.wordId
+        ORDER BY words.word DESC'''
+
+    cur.execute(sql)
+    starredWords = list(map(lambda starredWord: starredWord[0], cur.fetchall()))
+    con.close()
+    return starredWords
+
+  @staticmethod
+  def getWordId(cur, word):
+    cur.execute("SELECT id FROM words WHERE word = ?", (word,))
+    return cur.fetchone()[0]
+
+  @staticmethod
+  def getGradeSubjectsNames(grade):
+    return list(map(
+      lambda subjectFile: subjectFile.replace('.pdf', ''), DBHandler.getGradeSubjectsFiles(grade)
+    ))
+
+  @staticmethod
+  def getGradeSubjectsFiles(grade):
+    return listdir(DBHandler.gradesSubjectsDirectoryPath + str(grade))
+
+  @staticmethod
   def readSubjectWords(grade, subjectFile):
     filePath = DBHandler.gradesSubjectsDirectoryPath + str(grade) + "/" + subjectFile
 
@@ -141,7 +295,7 @@ class DBHandler():
       words[i] = words[i].lower()
       words[i] = re.sub(r'[^\w\s]', '', words[i])
       # words[i] = words[i].translate(str.maketrans('', '', string.punctuation))
-    
+
     i = 0
     while i < len(words):
       if DBHandler.wordIsRemovable(words[i]) or len(words[i])<3:
@@ -156,129 +310,36 @@ class DBHandler():
     return any(c.isdigit() for c in inputString) or re.search('[a-zA-Z]', inputString) or not(any(c.isalpha() for c in inputString))
 
   @staticmethod
-  def initializeSubjectsTable(cur, subjectNames):
-    cur.execute('''CREATE TABLE subjects (id INTEGER PRIMARY KEY, name TEXT)''')
+  def databasesExist():
+    base = DBHandler.databasesDirectoryPath + DBHandler.gradeFileName
+    extension = ".db"
+    existingDatabasesCount = 0
+    for grade in range(1, 7):
+      if path.isfile(base + str(grade) + extension):
+        existingDatabasesCount += 1
 
-    subjects = list()
-    for i in range(len(subjectNames)):
-      subjects.append([i + 1, subjectNames[i]])
-
-    print(subjects)
-    cur.executemany("INSERT INTO subjects VALUES (?,?) ON CONFLICT(id) DO NOTHING", subjects)
-
-  @staticmethod
-  def getGradeSubjectsNames(grade):
-    return list(map(
-      lambda subjectFile: subjectFile.replace('.pdf', ''), DBHandler.getGradeSubjectsFiles(grade)
-    ))
-    
-
-  @staticmethod
-  def getGradeSubjectsFiles(grade):
-    return listdir(DBHandler.gradesSubjectsDirectoryPath + str(grade))
-
-  @staticmethod
-  def init_db():
-    DBHandler.cur.execute(''' SELECT count(name) FROM sqlite_master WHERE type=='table' AND name='words' ''')
-    if DBHandler.cur.fetchone()[0]==1:
-      print("Database exists.")
-      return
-    else:
-      print("Database will be created.")
-      DBHandler.cur.execute('''CREATE TABLE words (word TEXT PRIMARY KEY, stem TEXT, lemma TEXT)''')
-      DBHandler.cur.execute('''CREATE TABLE recentSearches (word TEXT PRIMARY KEY, time TIMESTAMP, starred INTEGER)''')
-      DBHandler.cur.execute('''CREATE TABLE starredWords (id INTEGER, word TEXT)''')
-      DBHandler.cur.execute('''CREATE TABLE recentActions (type TEXT, word1 TEXT, word2 TEXT, time TIMESTAMP)''')
-      DBHandler.cur.execute('''CREATE TABLE subjects (subjectName TEXT, state INTEGER)''')
-
-  @staticmethod
-  def dropTables():
-    DBHandler.cur.execute(''' SELECT count(name) FROM sqlite_master WHERE type=='table' AND name='words' ''')
-    if DBHandler.cur.fetchone()[0]==0:
-      print("Database does not exist.")
-      return
-    else:
-      DBHandler.cur.execute('''DROP TABLE words''')
-      DBHandler.cur.execute('''DROP TABLE recentSearches''')
-      DBHandler.cur.execute('''DROP TABLE starredWords''')
-      DBHandler.cur.execute('''DROP TABLE recentActions''')
-      DBHandler.cur.execute('''DROP TABLE subjects''')
-
-  @staticmethod
-  def getAllWords():
-    DBHandler.cur.execute('SELECT word FROM words ORDER BY word')
-    rows = DBHandler.cur.fetchall()
-    words = [row[0] for row in rows]
-    return words
-
-  @staticmethod
-  def addRecentSearch(word, starred):
-    DBHandler.cur.execute("SELECT * FROM recentSearches WHERE word=?", (word, ))
-    data = DBHandler.cur.fetchall()
-    if len(data)==0:
-      now = datetime.datetime.now()
-      # DBHandler.cur.execute("INSERT INTO recentSearches VALUES (?,?) ON CONFLICT(word) DO NOTHING", (word, now))
-      DBHandler.cur.execute("INSERT INTO recentSearches VALUES (?,?,?)", (word, now, starred))
-      DBHandler.con.commit()
+    if existingDatabasesCount == 0:
+      return False
+    elif existingDatabasesCount == 6:
       return True
     else:
-      now = datetime.datetime.now()
-      DBHandler.cur.execute("UPDATE recentSearches SET time=? WHERE word=?", (now, word))
-      DBHandler.con.commit()
-      return False
+      print("Databases are more than 0 and less than 6.")
+      quit()
 
   @staticmethod
-  def deleteRecentSearch(word):
-    DBHandler.cur.execute("DELETE FROM recentSearches WHERE word=?", (word,))
-    DBHandler.con.commit()
+  def connectToGradeDatabase(grade):
+    gradeDatabaseFilePath = DBHandler.databasesDirectoryPath + DBHandler.gradeFileName + str(grade) + ".db"
+    con = sqlite3.connect(gradeDatabaseFilePath)
+    cur = con.cursor()
+    return con, cur
 
   @staticmethod
-  def getAllRecentSearches():
-    DBHandler.cur.execute('SELECT word FROM recentSearches ORDER BY time')
-    rows = DBHandler.cur.fetchall()
-    words = [row[0] for row in rows]
-    return words
-
-  @staticmethod
-  def addStarredWord(id, word):
-    DBHandler.cur.execute("SELECT * FROM starredWords WHERE word=?", (word, ))
-    data = DBHandler.cur.fetchall()
-    if len(data)==0:
-      # DBHandler.cur.execute("INSERT INTO starredWords VALUES (?,?) ON CONFLICT(word) DO NOTHING", (id, word))
-      DBHandler.cur.execute("INSERT INTO starredWords VALUES (?,?)", (id, word))
-      DBHandler.con.commit()
-      return True
-    else:
-      return False
-
-  @staticmethod
-  def isStarredWord(word):
-    DBHandler.cur.execute("SELECT * FROM starredWords WHERE word=?", (word, ))
-    data = DBHandler.cur.fetchall()
-    if len(data)==0:
-      return False
-    else:
-      return True
-
-  @staticmethod
-  def deleteStarredWord(word):
-    DBHandler.cur.execute("DELETE FROM starredWords WHERE word=?", (word,))
-    DBHandler.con.commit()
-
-  @staticmethod
-  def getStarredWordPosition(word):
-    DBHandler.cur.execute("SELECT COUNT(*) FROM starredWords WHERE word < ?", (word,))
-    position = DBHandler.cur.fetchone()[0]
-    return position
-
-  @staticmethod
-  def getAllStarredWords():
-    DBHandler.cur.execute('SELECT word FROM starredWords ORDER BY word DESC')
-    rows = DBHandler.cur.fetchall()
-    words = [row[0] for row in rows]
-    return words
+  def connectToCommonDatabase():
+    con = sqlite3.connect(DBHandler.databasesDirectoryPath + DBHandler.commonDatabaseFile)
+    cur = con.cursor()
+    return con, cur
 
   @staticmethod
   def closeConnection():
-    DBHandler.con.close()
+    # DBHandler.con.close()
     print("Connection closed successfully!")
