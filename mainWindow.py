@@ -114,8 +114,7 @@ class MainWindow(QWidget):
     from MainWidget.searchingWidget import SearchingWidget
     SearchingWidget.updateDictionaryWords()
 
-    if initial:
-      SearchingWidget.modifyErrorMessage()
+    SearchingWidget.modifyErrorMessage()
       
     from MainWidget.resultsWidget import ResultsWidget
     ResultsWidget.showPlaceholder()

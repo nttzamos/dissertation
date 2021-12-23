@@ -11,8 +11,13 @@ class SearchingWidget(QWidget):
 
   lineEdit = QLineEdit()
 
+  from databaseHandler import DBHandler
+  grades = DBHandler.getGrades()
+  gradesMapping = {}
+  for i in range(len(grades)):
+    gradesMapping[i + 1] = grades[i]
+
   uninitializedStateText = "You have to select a grade first."
-  unknownWordText = "This word is not contained in the dictionary. Please search for another word."
 
   def __init__(self):
     super().__init__()
@@ -117,7 +122,14 @@ class SearchingWidget(QWidget):
 
   @staticmethod
   def modifyErrorMessage():
-    SearchingWidget.errorMessage.setText(SearchingWidget.unknownWordText)
+    SearchingWidget.errorMessage.setText(SearchingWidget.unknownWordText())
+
+  @staticmethod
+  def unknownWordText():
+    from MainWidget.currentSearch import CurrentSearch
+    return "This word is not contained in the books of " + \
+      SearchingWidget.gradesMapping[CurrentSearch.currentGrade] + \
+      ". Please search for another word."
 
   @staticmethod
   def updateDictionaryWords():
@@ -145,7 +157,6 @@ class SearchingWidget(QWidget):
       self.addRecentSearch(SearchingWidget.lineEdit.text())
       SearchingWidget.lineEdit.clear()
     else:
-      # Implement showing necessary message
       self.showErrorMessage = True
       self.setErrorStyleSheet()
 
