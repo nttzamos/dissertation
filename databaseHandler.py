@@ -89,7 +89,7 @@ class DBHandler():
       wordsPerSubject[subjectNames[i]] = currentSubjectWords
       wordsSet = wordsSet | set(currentSubjectWords)
 
-    wordsList = list(wordsSet)
+    wordsList = DBHandler.wordsOrderedAlphabetically(list(wordsSet))
     print()
     print("Grade: " + str(grade))
     grade_middle_1 = timeit.default_timer()
@@ -131,6 +131,13 @@ class DBHandler():
     print("Total: " + str(grade_end - grade_start))
 
     con.close()
+
+  @staticmethod
+  def wordsOrderedAlphabetically(words):
+    table = { 940: 945, 941: 949, 972: 959, 974: 969, 943: 953, 942: 951, 973: 965 }
+
+    normalizedWords = list(map(lambda word: word.translate(table), words))
+    return [word for _, word in sorted(zip(normalizedWords, words))]
 
   @staticmethod
   def initializeSubjectsTable(cur, subjectNames):
@@ -251,7 +258,7 @@ class DBHandler():
         FROM words
         INNER JOIN starredWords
         ON words.id = starredWords.wordId
-        ORDER BY words.word DESC'''
+        ORDER BY words.id DESC'''
 
     cur.execute(sql)
     starredWords = list(map(lambda starredWord: starredWord[0], cur.fetchall()))
