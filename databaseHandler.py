@@ -1,25 +1,16 @@
-from os import listdir
 from os import path
+from pdfParser import PdfParser
 
-import tika, tika.parser as parser
-import string
 import timeit
-import re
-
 import sqlite3
 import datetime
 
 class DBHandler():
-  # con = sqlite3.connect('new.db')
-  # cur = con.cursor()
-
-  gradesSubjectsDirectoryPath = "Resources/Grades/"
-  databasesDirectoryPath = "Databases/"
+  databasesDirectoryPath = "Databases_practice/"
   gradeFileName = "grade_"
   commonDatabaseFile = "common.db"
 
   # --- Initialization code ---
-
   @staticmethod
   def initializeDatabases():
     DBHandler.initializeCommonDatabase()
@@ -81,7 +72,7 @@ class DBHandler():
     cur.execute('''CREATE TABLE starredWords (id INTEGER PRIMARY KEY AUTOINCREMENT, wordId INTEGER)''')
 
     # Creating the subjects table
-    subjectNames = DBHandler.getGradeSubjectsNames(grade)
+    subjectNames = PdfParser.getGradeSubjectsNames(grade)
     DBHandler.initializeSubjectsTable(cur, subjectNames)
     con.commit()
 
@@ -90,11 +81,11 @@ class DBHandler():
 
     grade_start = timeit.default_timer()
 
-    subjectFiles = DBHandler.getGradeSubjectsFiles(grade)
+    subjectFiles = PdfParser.getGradeSubjectsFiles(grade)
     wordsSet = set()
     wordsPerSubject = dict()
     for i in range(len(subjectFiles)):
-      currentSubjectWords = list(set(DBHandler.readSubjectWords(grade, subjectFiles[i])))
+      currentSubjectWords = list(set(PdfParser.readSubjectWords(grade, subjectFiles[i])))
       wordsPerSubject[subjectNames[i]] = currentSubjectWords
       wordsSet = wordsSet | set(currentSubjectWords)
 
@@ -162,7 +153,6 @@ class DBHandler():
     return words
 
   # --- Recent searches code ---
-
   @staticmethod
   def addRecentSearch(word):
     from MainWidget.currentSearch import CurrentSearch
@@ -274,42 +264,6 @@ class DBHandler():
     return cur.fetchone()[0]
 
   @staticmethod
-  def getGradeSubjectsNames(grade):
-    return list(map(
-      lambda subjectFile: subjectFile.replace('.pdf', ''), DBHandler.getGradeSubjectsFiles(grade)
-    ))
-
-  @staticmethod
-  def getGradeSubjectsFiles(grade):
-    return listdir(DBHandler.gradesSubjectsDirectoryPath + str(grade))
-
-  @staticmethod
-  def readSubjectWords(grade, subjectFile):
-    filePath = DBHandler.gradesSubjectsDirectoryPath + str(grade) + "/" + subjectFile
-
-    tika.initVM()
-    raw = parser.from_file(filePath)
-    pdf = raw["content"]
-    words = pdf.split()
-    for i in range(len(words)):
-      words[i] = words[i].lower()
-      words[i] = re.sub(r'[^\w\s]', '', words[i])
-      # words[i] = words[i].translate(str.maketrans('', '', string.punctuation))
-
-    i = 0
-    while i < len(words):
-      if DBHandler.wordIsRemovable(words[i]) or len(words[i])<3:
-        del words[i]
-      else:
-        i += 1
-
-    return words
-
-  @staticmethod
-  def wordIsRemovable(inputString):
-    return any(c.isdigit() for c in inputString) or re.search('[a-zA-Z]', inputString) or not(any(c.isalpha() for c in inputString))
-
-  @staticmethod
   def databasesExist():
     base = DBHandler.databasesDirectoryPath + DBHandler.gradeFileName
     extension = ".db"
@@ -338,8 +292,3 @@ class DBHandler():
     con = sqlite3.connect(DBHandler.databasesDirectoryPath + DBHandler.commonDatabaseFile)
     cur = con.cursor()
     return con, cur
-
-  @staticmethod
-  def closeConnection():
-    # DBHandler.con.close()
-    print("Connection closed successfully!")

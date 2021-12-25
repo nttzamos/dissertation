@@ -115,14 +115,10 @@ class MainWindow(QWidget):
     SearchingWidget.updateDictionaryWords()
 
     SearchingWidget.modifyErrorMessage()
-      
+
     from MainWidget.resultsWidget import ResultsWidget
     ResultsWidget.showPlaceholder()
     MainWidget.currentSearch.searchedWord.setText("Enter a word.")
 
     RecentSearchesWidget.populate(initial)
     StarredWordsWidget.populate(initial)
-
-  @staticmethod
-  def closeEvent(event):
-    DBHandler.closeConnection()

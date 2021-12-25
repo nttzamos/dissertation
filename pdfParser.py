@@ -1,26 +1,25 @@
 from os import listdir
+
 import tika, tika.parser as parser
 import string
 import re
-from databaseHandler import DBHandler
 
 class PdfParser():
-  @staticmethod
-  def readGradeWords(grade):
-    directoryPath = "Resources/Grades/" + str(grade)
-    filesInDirectory = PdfParser.getFilesInDirectory(directoryPath)
-    
-    allSubjectsWords = {}
-    for file in filesInDirectory:
-      subjectWords = PdfParser.readWordsFromFile(directoryPath, file)
-      allSubjectsWords = allSubjectsWords | set(subjectWords)
-
-
-    DBHandler.addMultipleWords(allSubjectsWords)
+  gradesSubjectsDirectoryPath = "Resources/Grades/"
 
   @staticmethod
-  def readWordsFromFile(directoryPath, file):
-    filePath = directoryPath + "/" + file
+  def getGradeSubjectsNames(grade):
+    return list(map(
+      lambda subjectFile: subjectFile.replace('.pdf', ''), PdfParser.getGradeSubjectsFiles(grade)
+    ))
+
+  @staticmethod
+  def getGradeSubjectsFiles(grade):
+    return listdir(PdfParser.gradesSubjectsDirectoryPath + str(grade))
+
+  @staticmethod
+  def readSubjectWords(grade, subjectFile):
+    filePath = PdfParser.gradesSubjectsDirectoryPath + str(grade) + "/" + subjectFile
 
     tika.initVM()
     raw = parser.from_file(filePath)
@@ -28,19 +27,18 @@ class PdfParser():
     words = pdf.split()
     for i in range(len(words)):
       words[i] = words[i].lower()
-      words[i] = words[i].translate(str.maketrans('', '', string.punctuation))
+      words[i] = re.sub(r'[^\w\s]', '', words[i])
+      # words[i] = words[i].translate(str.maketrans('', '', string.punctuation))
 
     i = 0
     while i < len(words):
-      if DBHandler.isRemovable(words[i]) or len(words[i])<3:
+      if PdfParser.wordIsRemovable(words[i]) or len(words[i])<3:
         del words[i]
       else:
         i += 1
 
-  @staticmethod
-  def isRemovable(inputString):
-    return any(c.isdigit() for c in inputString) or re.search('[a-zA-Z]', inputString) or not(any(c.isalpha() for c in inputString))
+    return words
 
   @staticmethod
-  def getFilesInDirectory(directoryPath):
-    return listdir(directoryPath)
+  def wordIsRemovable(inputString):
+    return any(c.isdigit() for c in inputString) or re.search('[a-zA-Z]', inputString) or not(any(c.isalpha() for c in inputString))
