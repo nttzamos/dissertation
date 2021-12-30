@@ -6,7 +6,7 @@ import sqlite3
 import datetime
 
 class DBHandler():
-  databasesDirectoryPath = "Databases_practice/"
+  databasesDirectoryPath = "Databases/"
   gradeFileName = "grade_"
   commonDatabaseFile = "common.db"
 
@@ -76,9 +76,6 @@ class DBHandler():
     DBHandler.initializeSubjectsTable(cur, subjectNames)
     con.commit()
 
-    # con.close()
-    # return
-
     grade_start = timeit.default_timer()
 
     subjectFiles = PdfParser.getGradeSubjectsFiles(grade)
@@ -134,9 +131,12 @@ class DBHandler():
 
   @staticmethod
   def wordsOrderedAlphabetically(words):
-    table = { 940: 945, 941: 949, 972: 959, 974: 969, 943: 953, 942: 951, 973: 965 }
+    translationTable = {
+      940: 945, 941: 949, 972: 959, 974: 969, 943: 953, 942: 951, 973: 965
+    }
 
-    normalizedWords = list(map(lambda word: word.translate(table), words))
+    normalizedWords = list(map(lambda word: word.translate(translationTable), words))
+
     return [word for _, word in sorted(zip(normalizedWords, words))]
 
   @staticmethod
