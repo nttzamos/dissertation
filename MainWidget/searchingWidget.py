@@ -152,21 +152,24 @@ class SearchingWidget(QWidget):
       SearchingWidget.errorMessage.hide()
 
   def searchWithEnter(self):
+    SearchingWidget.mostRecentlySearchedWord = SearchingWidget.lineEdit.text()
+    
     if SearchingWidget.lineEdit.text() in SearchingWidget.dictionaryWords:
-      print('a')
       self.addRecentSearch(SearchingWidget.lineEdit.text())
-      SearchingWidget.lineEdit.clear()
+      self.clearSearch()
     else:
       self.showErrorMessage = True
       self.setErrorStyleSheet()
+      SearchingWidget.setFocusToSearchBar()
 
   def searchWithClick(self, text):
-    print('b')
-    # self.addRecentSearch(text)
-    QTimer.singleShot(0, SearchingWidget.lineEdit.clear)
+    if not text == SearchingWidget.mostRecentlySearchedWord:
+      self.addRecentSearch(text)
+    
+    self.clearSearch()
 
   def clearSearch(self):
-    SearchingWidget.lineEdit.clear()
+    QTimer.singleShot(0, SearchingWidget.lineEdit.clear)
     SearchingWidget.setFocusToSearchBar()
 
   def addRecentSearch(self, word):
