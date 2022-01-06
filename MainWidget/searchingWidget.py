@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QFont, QIcon, QKeySequence, QShortcut
-from PyQt6.QtWidgets import QCompleter, QFrame, QHBoxLayout, QLabel, QLineEdit, QPushButton, QSizePolicy, QVBoxLayout, QWidget
-from PyQt6.QtCore import QEvent, QRect, QStringListModel, QTimer, Qt
+from PyQt6.QtWidgets import QCompleter, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtCore import QStringListModel, QTimer, Qt
 
 from databaseHandler import DBHandler
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
@@ -122,10 +122,10 @@ class SearchingWidget(QWidget):
 
   @staticmethod
   def modifyErrorMessage():
-    SearchingWidget.errorMessage.setText(SearchingWidget.unknownWordText())
+    SearchingWidget.errorMessage.setText(SearchingWidget.unknownWordMessage())
 
   @staticmethod
-  def unknownWordText():
+  def unknownWordMessage():
     from MainWidget.currentSearch import CurrentSearch
     return "This word is not contained in the books of " + \
       SearchingWidget.gradesMapping[CurrentSearch.currentGrade] + \

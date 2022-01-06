@@ -1,21 +1,15 @@
 from os import listdir
 
 import tika, tika.parser as parser
-import string
 import re
 
 class PdfParser():
   gradesSubjectsDirectoryPath = "Resources/Grades/"
 
   validCharacters = [
-    # 95, 170, 186, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233,
-    # 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 248,
-    # 249, 250, 251, 252, 253, 254, 255, 305, 339, 402, 710,
     912, 940, 941, 944, 945, 946, 947, 948, 949, 950, 951, 952, 953, 954, 955,
     956, 957, 958, 959, 960, 961, 962, 963, 964, 965, 966, 967, 968, 969, 970,
     971, 972, 974, 943, 942, 973,
-    # 1072, 1073, 1074, 1076, 1077, 1078, 1080, 1082, 1084, 1085,
-    # 1086, 1087, 1088, 1089, 1090, 1091, 1097, 1102,
     7936, 7937, 7940, 7941, 7952, 7953, 7956, 7957, 7968, 7969, 7972, 7973,
     7974, 7984, 7985, 7988, 7989, 7990, 7991, 8000, 8001, 8004, 8005, 8016,
     8017, 8020, 8021, 8023, 8032, 8033, 8038, 8048, 8049, 8050, 8051, 8052,
@@ -48,7 +42,6 @@ class PdfParser():
     for i in range(len(words)):
       words[i] = words[i].lower()
       words[i] = re.sub(r'[^\w\s]', '', words[i])
-      # words[i] = words[i].translate(str.maketrans('', '', string.punctuation))
 
     words = PdfParser.fixLetterAsciiValue(words)
 

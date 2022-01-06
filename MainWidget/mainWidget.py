@@ -1,10 +1,6 @@
-from typing import Set
-from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QSizePolicy, QVBoxLayout, QWidget
-from MainWidget.currentSearch import CurrentSearch
+from PyQt6.QtWidgets import QVBoxLayout, QWidget
 
-from databaseHandler import DBHandler
-from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+from MainWidget.currentSearch import CurrentSearch
 from MainWidget.searchingWidget import SearchingWidget
 from MainWidget.resultsWidget import ResultsWidget
 from MainWidget.result import Result

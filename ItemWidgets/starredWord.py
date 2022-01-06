@@ -1,5 +1,4 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
-from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QFont, QIcon
 
 from databaseHandler import DBHandler

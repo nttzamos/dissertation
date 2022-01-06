@@ -1,22 +1,15 @@
-from PyQt6.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QMainWindow, QSplitter, QSplitterHandle, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QSplitter, QWidget
 from PyQt6.QtCore import Qt
-
-from databaseHandler import DBHandler
 
 from MainWidget.mainWidget import MainWidget
 
-from SideWidgets.recentActionsWidget import RecentActionsWidget
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
 from SideWidgets.starredWordsWidget import StarredWordsWidget
-from SideWidgets.subjectsWidget import SubjectsWidget
 from titleBar import TitleBar
 
 class MainWindow(QWidget):
-  # DBHandler.init_db()
   recentSearchesWidget = RecentSearchesWidget()
   starredWordsWidget = StarredWordsWidget()
-  # recentActionsWidget = RecentActionsWidget()
-  # subjectsWidget = SubjectsWidget()
   mainWidget = MainWidget()
 
   def __init__(self):
@@ -27,7 +20,7 @@ class MainWindow(QWidget):
     self.layout = QGridLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    # margin between the title bar and the rest of the application
+    # Margin between the title bar and the rest of the application
     self.layout.setSpacing(0)
 
     self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
@@ -54,34 +47,8 @@ class MainWindow(QWidget):
     self.splitterLeftVertical.addWidget(MainWindow.starredWordsWidget)
     MainWindow.starredWordsWidget.initialize()
 
-    # Right Horizontal Splitter - Left Horizontal Splitter (Right Part)
-    # self.splitterRightHorizontal = QSplitter(self.splitterLeftHorizontal)
-    # self.splitterRightHorizontal.setOrientation(Qt.Orientation.Horizontal)
-    # self.splitterRightHorizontal.setChildrenCollapsible(False)
-
     # Main Widget
     self.splitterLeftHorizontal.addWidget(MainWindow.mainWidget)
-
-    # Splitter between "Recent Actions" and "Subjects" widgets
-    # self.splitterRightVertical = QSplitter(self.splitterRightHorizontal)
-    # self.splitterRightVertical.setOrientation(Qt.Orientation.Vertical)
-    # self.splitterRightVertical.setChildrenCollapsible(False)
-
-    # Recent Actions Scroll Area
-    # self.splitterRightVertical.addWidget(MainWindow.recentActionsWidget)
-    # MainWindow.recentActionsWidget.addRecentAction("RecentAction1")
-    # MainWindow.recentActionsWidget.addRecentAction("RecentAction2")
-    # MainWindow.recentActionsWidget.addRecentAction("RecentAction3")
-    # MainWindow.recentActionsWidget.addRecentAction("RecentAction4")
-    # MainWindow.recentActionsWidget.addRecentAction("RecentAction5")
-
-    # Subjects Scroll Area
-    # self.splitterRightVertical.addWidget(MainWindow.subjectsWidget)
-    # MainWindow.subjectsWidget.addSubject("Φυσική")
-    # MainWindow.subjectsWidget.addSubject("Μαθηματικά")
-    # MainWindow.subjectsWidget.addSubject("Χημεία")
-    # MainWindow.subjectsWidget.addSubject("Ιστορία")
-    # MainWindow.subjectsWidget.addSubject("Αρχαία")
 
     self.line = QFrame()
     self.line.setFrameShape(QFrame.Shape.HLine)
