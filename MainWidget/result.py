@@ -40,22 +40,14 @@ class Result(QWidget):
 
     dataWidget.layout.addWidget(self.word_label)
     dataWidget.layout.addWidget(self.buttonsWidget)
-    
+
     self.layout.addWidget(dataWidget)
 
     self.style()
 
   def style(self):
-    self.setStyleSheet(
-      "QWidget { background-color: white; border-radius: 10px}\n"
-      "QPushButton { background-color: white }\n"
-      "QPushButton:hover { background-color: grey }\n"
-      "QPushButton { border-radius: 12px }\n"
-      "QPushButton { border: 1px solid black }\n"
-      "QPushButton { padding-bottom: 5px }\n"
-      "QPushButton { padding-top: 5px }\n"
-      "QLabel { color: blue }"
-    )
+    from styles import Styles
+    self.setStyleSheet(Styles.resultStyle)
 
   def searchWord(self):
     pass

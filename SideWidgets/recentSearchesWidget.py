@@ -77,11 +77,8 @@ class RecentSearchesWidget(QWidget):
       "QLabel { border: 1px solid black; border-top: 0px; border-bottom: 0px; padding: 10px 0px; background-color: white; color: blue }"
     )
 
-    self.setStyleSheet(
-      "QWidget { background-color: black }\n"
-      "QLabel { color: white }\n"
-      "QScrollBar { background-color: none }"
-    )
+    from styles import Styles
+    self.setStyleSheet(Styles.sideWidgetsStyle)
 
   @staticmethod
   def initialize():

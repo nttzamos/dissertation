@@ -55,14 +55,9 @@ class TitleBar(QWidget):
     self.style()
 
   def style(self):
-    self.setStyleSheet(
-      "QPushButton:hover { background-color: grey }\n"
-      "QPushButton { border: none }\n"
-      "QPushButton { padding-bottom: 5px }\n"
-      "QPushButton { padding-top: 5px }\n"
-      "QLabel { color: white }"
-    )
-    
+    from styles import Styles
+    self.setStyleSheet(Styles.titleBarStyle)
+
     self.applicationIcon.setStyleSheet(
       "QPushButton:hover { background-color: none }\n"
     )

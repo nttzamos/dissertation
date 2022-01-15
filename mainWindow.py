@@ -71,10 +71,8 @@ class MainWindow(QWidget):
       "QWidget { background-color: none }"
     )
 
-    self.setStyleSheet(
-      "QWidget { background-color: red }\n"
-      "QPushButton { background-color: none }"
-    )
+    from styles import Styles
+    self.setStyleSheet(Styles.mainWindowStyle)
 
   @staticmethod
   def updateWidgets(initial):

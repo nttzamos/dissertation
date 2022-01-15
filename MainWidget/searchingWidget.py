@@ -5,6 +5,7 @@ from PyQt6.QtCore import QStringListModel, QTimer, Qt
 from databaseHandler import DBHandler
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
 from settings import Settings
+from styles import Styles
 
 class SearchingWidget(QWidget):
   dictionaryWords = []
@@ -93,31 +94,13 @@ class SearchingWidget(QWidget):
     )
 
   def setFocusedStyleSheet(self):
-    self.setStyleSheet(
-      "QWidget { background-color: white; border-radius: 10px; border: 1px solid blue }\n"
-      "QLineEdit { border: none }"
-      "QPushButton { border: none }\n"
-      "QPushButton { padding-bottom: 5px }\n"
-      "QPushButton { padding-top: 5px }"
-    )
+    self.setStyleSheet(Styles.searchingWidgetFocusedStyle)
 
   def setUnfocusedStyleSheet(self):
-    self.setStyleSheet(
-      "QWidget { background-color: white; border-radius: 10px; border: none }\n"
-      "QLineEdit { border: none }"
-      "QPushButton { border: none }\n"
-      "QPushButton { padding-bottom: 5 }\n"
-      "QPushButton { padding-top: 5 }"
-    )
+    self.setStyleSheet(Styles.searchingWidgetUnfocusedStyle)
 
   def setErrorStyleSheet(self):
-    self.setStyleSheet(
-      "QWidget { background-color: white; border-radius: 10px; border: 1px solid red }\n"
-      "QLineEdit { border: none }"
-      "QPushButton { border: none }\n"
-      "QPushButton { padding-bottom: 5 }\n"
-      "QPushButton { padding-top: 5 }"
-    )
+    self.setStyleSheet(Styles.searchingWidgetErrorStyle)
     SearchingWidget.errorMessage.show()
 
   @staticmethod

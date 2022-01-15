@@ -59,14 +59,8 @@ class RecentSearch(QWidget):
     self.style()
 
   def style(self):
-    self.setStyleSheet(
-      "QPushButton:hover { background-color: grey }\n"
-      "QPushButton { border: 1px solid black }\n"
-      "QPushButton { padding-bottom: 5px }\n"
-      "QPushButton { padding-top: 5px }\n"
-      "QLabel { color: white }\n"
-      "QWidget { background-color: green }"
-    )
+    from styles import Styles
+    self.setStyleSheet(Styles.itemWidgetsStyle)
 
   def reloadWord(self):
     from MainWidget.mainWidget import MainWidget

@@ -32,20 +32,17 @@ class ResultsWidget(QWidget):
     self.layout.addWidget(self.scrollArea)
 
     self.style()
-    
+
   def style(self):
-    self.setStyleSheet(
-      "QWidget { background-color: blue }\n"
-      "QLabel { color: white }\n"
-      "QScrollBar { background-color: none }"
-    )
+    from styles import Styles
+    self.setStyleSheet(Styles.resultsWidgetStyle)
 
   @staticmethod
   def showResults(word):
     ResultsWidget.hidePlaceholder()
     ResultsWidget.clearPreviousResults()
     resultsWords = ResultsWidget.getResults(word)
-    
+
     for i in range(len(resultsWords)):
       row = i // ResultsWidget.gridColumns
       column = i % ResultsWidget.gridColumns
