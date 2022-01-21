@@ -69,7 +69,7 @@ class CurrentSearch(QWidget):
   def getAvailableStudents(self):
     return [
       "Please select a student...",
-      "Νίκος", "Στάθης", "Γιώργος", "Δημήτρης", "Ευριπίδης"]
+      "Μαθητής1", "Μαθητής2", "Μαθητής3", "Μαθητής4", "Μαθητής5"]
 
   def getAvailableGrades(self):
     from databaseHandler import DBHandler

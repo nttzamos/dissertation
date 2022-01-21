@@ -21,7 +21,7 @@ class MainWidget(QWidget):
     self.layout.addWidget(MainWidget.currentSearch)
     self.layout.addWidget(MainWidget.resultsWidget)
 
-    self.setMinimumWidth(Settings.rightWidgetWidth)
+    self.setMinimumWidth(Settings.getRightWidgetWidth())
 
   def findMinimumSize(self):
     longResult = Result("123456789012345678901234")

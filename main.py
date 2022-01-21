@@ -9,9 +9,9 @@ from databaseHandler import DBHandler
 DBHandler.initializeDatabases()
 
 from settings import Settings
-Settings.screenWidth = app.primaryScreen().size().width()
-Settings.initializeSettingsDatabase()
-Settings.calculateSizeSettings()
+screenWidth = app.primaryScreen().size().width()
+screenHeight = app.primaryScreen().size().height()
+Settings.initializeSettingsDatabase(screenWidth, screenHeight)
 
 from mainWindow import MainWindow
 from MainWidget.searchingWidget import SearchingWidget

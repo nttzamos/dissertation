@@ -31,7 +31,7 @@ class StarredWord(QWidget):
     self.starButton.clicked.connect(self.toggleStarred)
     self.starButton.setFixedWidth(30)
     self.starButton.setIcon(QIcon("Resources/starred.svg"))
-    
+
     self.line = QFrame()
     self.line.setFrameShape(QFrame.Shape.HLine)
     self.line.setFrameShadow(QFrame.Shadow.Plain)

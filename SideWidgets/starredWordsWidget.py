@@ -12,10 +12,10 @@ class StarredWordsWidget(QWidget):
   gridLayout = QGridLayout(scrollAreaWidgetContents)
   gridLayout.setSpacing(0)
   gridLayout.setContentsMargins(0, 0, 0, 0)
-  
+
   counter = 1000000
   widgetList = []
-  
+
   uninitializedStateText = "Please select a grade first."
   emptyStateText = "You do not have any " + title
 
@@ -45,14 +45,14 @@ class StarredWordsWidget(QWidget):
     sizePolicy = StarredWordsWidget.vspacer.sizePolicy()
     sizePolicy.setRetainSizeWhenHidden(True)
     StarredWordsWidget.vspacer.setSizePolicy(sizePolicy)
-    
+
     self.scrollArea = QScrollArea()
     self.scrollArea.setWidgetResizable(True)
     self.scrollArea.setWidget(StarredWordsWidget.scrollAreaWidgetContents)
     self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
     self.layout.addWidget(self.scrollArea)
 
-    self.setMinimumWidth(Settings.leftWidgetWidth)
+    self.setMinimumWidth(Settings.getLeftWidgetWidth())
 
     self.style()
 
@@ -100,7 +100,7 @@ class StarredWordsWidget(QWidget):
   def addStarredWord(word):
     if StarredWordsWidget.showPlaceholderLabel == True:
       StarredWordsWidget.hidePlaceholder()
-      
+
     widget = StarredWord(word)
     StarredWordsWidget.widgetList.append(widget)
     length = len(StarredWordsWidget.widgetList)

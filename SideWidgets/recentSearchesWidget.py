@@ -68,7 +68,7 @@ class RecentSearchesWidget(QWidget):
     self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
     self.layout.addWidget(self.scrollArea)
 
-    self.setMinimumWidth(Settings.leftWidgetWidth)
+    self.setMinimumWidth(Settings.getLeftWidgetWidth())
 
     self.style()
 

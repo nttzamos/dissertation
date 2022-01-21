@@ -12,7 +12,7 @@ class ResultsWidget(QWidget):
   counter = 1000000
   showPlaceholderLabel = True
   placeholderLabel = QLabel("The results of your search will be displayed here.")
-  gridColumns = Settings.resultsWidgetColumns
+  gridColumns = Settings.getResultsWidgetColumns()
 
   def __init__(self):
     super().__init__()
@@ -57,7 +57,7 @@ class ResultsWidget(QWidget):
       resultsWords.append(word + str(i))
 
     return resultsWords
-    
+
   @staticmethod
   def clearPreviousResults():
     for result in ResultsWidget.widgetList:
