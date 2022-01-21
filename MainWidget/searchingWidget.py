@@ -1,9 +1,10 @@
 from PyQt6.QtGui import QFont, QIcon, QKeySequence, QShortcut
-from PyQt6.QtWidgets import QCompleter, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QCompleter, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QSizePolicy
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 
 from databaseHandler import DBHandler
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+from wordsEditingWidget import WordsEditingWidget
 from settings import Settings
 from styles import Styles
 
@@ -79,8 +80,20 @@ class SearchingWidget(QWidget):
       "QLabel { margin-left: 2px }"
     )
 
+    editWordsButtonFont = QFont(Settings.font, 14)
+    self.editWordsButton = QPushButton("Edit Dictionary Words")
+    self.editWordsButton.setFont(editWordsButtonFont)
+    self.editWordsButton.setContentsMargins(0, 0, 0, 0)
+    self.editWordsButton.clicked.connect(self.openWordsEditingWidget)
+    self.editWordsButton.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+
+    self.subwidget = QWidget()
+    self.subwidget.layout = QHBoxLayout(self.subwidget)
+    self.subwidget.layout.addWidget(SearchingWidget.errorMessage)
+    self.subwidget.layout.addWidget(self.editWordsButton)
+
     self.layout.addWidget(self.searchBarWidget)
-    self.layout.addWidget(SearchingWidget.errorMessage)
+    self.layout.addWidget(self.subwidget)
 
     self.searchBarFocusShortcut = QShortcut(QKeySequence('/'), self)
     self.searchBarFocusShortcut.activated.connect(SearchingWidget.setFocusToSearchBar)
@@ -93,14 +106,20 @@ class SearchingWidget(QWidget):
       "QLineEdit { color: blue }"
     )
 
+    self.subwidget.setStyleSheet("""
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton:hover { background-color: grey }
+      """
+    )
+
   def setFocusedStyleSheet(self):
-    self.setStyleSheet(Styles.searchingWidgetFocusedStyle)
+    self.searchBarWidget.setStyleSheet(Styles.searchingWidgetFocusedStyle)
 
   def setUnfocusedStyleSheet(self):
-    self.setStyleSheet(Styles.searchingWidgetUnfocusedStyle)
+    self.searchBarWidget.setStyleSheet(Styles.searchingWidgetUnfocusedStyle)
 
   def setErrorStyleSheet(self):
-    self.setStyleSheet(Styles.searchingWidgetErrorStyle)
+    self.searchBarWidget.setStyleSheet(Styles.searchingWidgetErrorStyle)
     SearchingWidget.errorMessage.show()
 
   @staticmethod
@@ -136,7 +155,7 @@ class SearchingWidget(QWidget):
 
   def searchWithEnter(self):
     SearchingWidget.mostRecentlySearchedWord = SearchingWidget.lineEdit.text()
-    
+
     if SearchingWidget.lineEdit.text() in SearchingWidget.dictionaryWords:
       self.addRecentSearch(SearchingWidget.lineEdit.text())
       self.clearSearch()
@@ -148,7 +167,7 @@ class SearchingWidget(QWidget):
   def searchWithClick(self, text):
     if not text == SearchingWidget.mostRecentlySearchedWord:
       self.addRecentSearch(text)
-    
+
     self.clearSearch()
 
   def clearSearch(self):
@@ -168,3 +187,7 @@ class SearchingWidget(QWidget):
   @staticmethod
   def setFocusToSearchBar():
     SearchingWidget.lineEdit.setFocus()
+
+  def openWordsEditingWidget(self):
+    settingsDialog = WordsEditingWidget()
+    settingsDialog.exec()

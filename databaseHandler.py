@@ -285,7 +285,45 @@ class DBHandler():
       return True
     else:
       print("Databases are more than 0 and less than 6.")
+      return True
       quit()
+
+  @staticmethod
+  def updateWord(oldWord, newWord, grades):
+    for grade in grades:
+      con, cur = DBHandler.connectToGradeDatabase(grade)
+
+      if DBHandler.wordExists(cur, newWord):
+        DBHandler.removeWordFromGrade(cur, oldWord)
+      else:
+        cur.execute("UPDATE words SET word = ? WHERE word = ?", (newWord, oldWord))
+        # update relevant tables as well?
+
+      con.commit()
+      con.close()
+
+  @staticmethod
+  def deleteWord(word, grades):
+    for grade in grades:
+      con, cur = DBHandler.connectToGradeDatabase(grade)
+
+      DBHandler.removeWordFromGrade(cur, word)
+
+      con.commit()
+      con.close()
+
+  @staticmethod
+  def removeWordFromGrade(cur, word):
+    wordId = DBHandler.getWordId(cur, word)
+    cur.execute("DELETE FROM words WHERE id = ?", (wordId,))
+    cur.execute("DELETE FROM subjectWords WHERE wordId = ?", (wordId,))
+    cur.execute("DELETE FROM recentSearches WHERE wordId = ?", (wordId,))
+    cur.execute("DELETE FROM starredWords WHERE wordId = ?", (wordId,))
+
+  @staticmethod
+  def wordExists(cur, word):
+    cur.execute("SELECT id FROM words WHERE word = ?", (word,))
+    return cur.fetchone()[0]
 
   @staticmethod
   def connectToGradeDatabase(grade):
