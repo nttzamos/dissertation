@@ -42,23 +42,26 @@ class Styles():
   searchingWidgetFocusedStyle = """
     QWidget { background-color: white; border-radius: 10px; border: 1px solid blue }
     QLineEdit { border: none }
+    QPushButton { background-color: none }
     QPushButton { border: none }
-    QPushButton { padding-bottom: 5px }
-    QPushButton { padding-top: 5px }"""
+    QPushButton { padding-bottom: 8px }
+    QPushButton { padding-top: 8px }"""
 
   searchingWidgetUnfocusedStyle = """
     QWidget { background-color: white; border-radius: 10px; border: none }
     QLineEdit { border: none }
+    QPushButton { background-color: none }
     QPushButton { border: none }
-    QPushButton { padding-bottom: 5px }
-    QPushButton { padding-top: 5px }"""
+    QPushButton { padding-bottom: 8px }
+    QPushButton { padding-top: 8px }"""
 
   searchingWidgetErrorStyle = """
     QWidget { background-color: white; border-radius: 10px; border: 1px solid red }
     QLineEdit { border: none }
+    QPushButton { background-color: none }
     QPushButton { border: none }
-    QPushButton { padding-bottom: 5px }
-    QPushButton { padding-top: 5px }"""
+    QPushButton { padding-bottom: 8px }
+    QPushButton { padding-top: 8px }"""
 
   mainWindowStyle = """
     QWidget { background-color: red }

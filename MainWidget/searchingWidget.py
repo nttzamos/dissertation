@@ -51,21 +51,20 @@ class SearchingWidget(QWidget):
 
     self.clearSearchButton = QPushButton()
     self.clearSearchButton.setIcon(QIcon("Resources/clearSearch.png"))
-    self.clearSearchButton.setFixedWidth(30)
     self.clearSearchButton.clicked.connect(self.clearSearch)
     self.hideClearSearchButton = True
     self.clearSearchButton.hide()
 
     self.searchButton = QPushButton()
     self.searchButton.setIcon(QIcon("Resources/search.png"))
-    self.searchButton.setFixedWidth(30)
     self.searchButton.clicked.connect(self.searchWithEnter)
 
     self.searchBarWidget.layout.setSpacing(0)
     self.searchBarWidget.layout.addWidget(self.lineEdit)
     self.searchBarWidget.layout.addWidget(self.clearSearchButton)
-    self.searchBarWidget.layout.addWidget(self.searchButton)
     self.searchBarWidget.layout.addSpacing(5)
+    self.searchBarWidget.layout.addWidget(self.searchButton)
+    self.searchBarWidget.layout.addSpacing(10)
 
     SearchingWidget.errorMessage = QLabel(SearchingWidget.uninitializedStateText, self)
     SearchingWidget.errorMessage.setFont(errorMessageFont)
