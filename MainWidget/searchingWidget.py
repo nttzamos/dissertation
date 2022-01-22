@@ -30,7 +30,7 @@ class SearchingWidget(QWidget):
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 10, 20, 0)
-    self.layout.setSpacing(5)
+    self.layout.setSpacing(0)
 
     SearchingWidget.lineEdit.setFont(lineEditFont)
     SearchingWidget.lineEdit.setContentsMargins(0, 1, 0, 1)
@@ -76,20 +76,19 @@ class SearchingWidget(QWidget):
     SearchingWidget.errorMessage.setStyleSheet(
       "QLabel { color: red }\n"
       "QLabel { background-color: none }\n"
-      "QLabel { border: none }\n"
-      "QLabel { margin-left: 2px }"
+      "QLabel { border: none }"
     )
 
     editWordsButtonFont = QFont(Settings.font, 14)
     self.editWordsButton = QPushButton("Edit Dictionary Words")
     self.editWordsButton.setFont(editWordsButtonFont)
-    self.editWordsButton.setContentsMargins(0, 0, 0, 0)
     self.editWordsButton.clicked.connect(self.openWordsEditingWidget)
     self.editWordsButton.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
     self.subwidget = QWidget()
     self.subwidget.layout = QHBoxLayout(self.subwidget)
-    self.subwidget.layout.addWidget(SearchingWidget.errorMessage)
+    self.subwidget.layout.setContentsMargins(5, 10, 0, 0)
+    self.subwidget.layout.addWidget(SearchingWidget.errorMessage, alignment=Qt.AlignmentFlag.AlignTop)
     self.subwidget.layout.addWidget(self.editWordsButton)
 
     self.layout.addWidget(self.searchBarWidget)

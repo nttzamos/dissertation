@@ -314,16 +314,17 @@ class DBHandler():
 
   @staticmethod
   def removeWordFromGrade(cur, word):
-    wordId = DBHandler.getWordId(cur, word)
-    cur.execute("DELETE FROM words WHERE id = ?", (wordId,))
-    cur.execute("DELETE FROM subjectWords WHERE wordId = ?", (wordId,))
-    cur.execute("DELETE FROM recentSearches WHERE wordId = ?", (wordId,))
-    cur.execute("DELETE FROM starredWords WHERE wordId = ?", (wordId,))
+    if DBHandler.wordExists(cur, word):
+      wordId = DBHandler.getWordId(cur, word)
+      cur.execute("DELETE FROM words WHERE id = ?", (wordId,))
+      cur.execute("DELETE FROM subjectWords WHERE wordId = ?", (wordId,))
+      cur.execute("DELETE FROM recentSearches WHERE wordId = ?", (wordId,))
+      cur.execute("DELETE FROM starredWords WHERE wordId = ?", (wordId,))
 
   @staticmethod
   def wordExists(cur, word):
-    cur.execute("SELECT id FROM words WHERE word = ?", (word,))
-    return cur.fetchone()[0]
+    cur.execute("SELECT COUNT(*) FROM words WHERE word = ?", (word,))
+    return cur.fetchone()[0] > 0
 
   @staticmethod
   def connectToGradeDatabase(grade):
