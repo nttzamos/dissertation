@@ -17,7 +17,8 @@ class SettingsWidget(QDialog):
     self.layout.addWidget(settingLabel1)
     self.layout.addWidget(settingLabel2)
     # remember last grade picked when re opening app
-    #
+    # ask before updating/deleting word
+    # show edit dictionary words button
 
   def style(self):
     self.setStyleSheet(
