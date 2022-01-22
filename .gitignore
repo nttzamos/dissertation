@@ -3,4 +3,6 @@ tempCodeRunnerFile.py
 *.pdf
 Databases/*
 Databases_practice/*
+Databases_nlp/*
+Databases_nlp_double/*
 *.DS_Store

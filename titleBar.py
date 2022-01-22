@@ -3,6 +3,7 @@ from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QWidget
 
 from settings import Settings
+from settingsWidget import SettingsWidget
 
 class TitleBar(QWidget):
   title = "My Dissertation Title"
@@ -38,7 +39,7 @@ class TitleBar(QWidget):
     self.restoreDownWindowButton.setIcon(QIcon("Resources/restoreDownWindow.png"))
     self.restoreDownWindowButton.setFixedWidth(30)
     self.restoreDownWindowButton.clicked.connect(self.restoreDownWindow)
-    
+
     self.closeWindowButton = QPushButton()
     self.closeWindowButton.setIcon(QIcon("Resources/closeWindow.png"))
     self.closeWindowButton.setFixedWidth(30)
@@ -61,15 +62,16 @@ class TitleBar(QWidget):
     self.applicationIcon.setStyleSheet(
       "QPushButton:hover { background-color: none }\n"
     )
-    
+
     self.closeWindowButton.setStyleSheet(
       "QPushButton:hover { background-color: #D11A2A }"
     )
 
 
   def openSettings(self):
-    pass
-  
+    settingsDialog = SettingsWidget()
+    settingsDialog.exec()
+
   def minimizeWindow(self):
     self.parent.showMinimized()
 
