@@ -97,21 +97,33 @@ class WordsEditingWidget(QDialog):
       pass
 
   def updateWordConfirmation(self):
-    answer = QMessageBox.question(self, 'Update Word', 'Are you sure you want to update this word?', QMessageBox.StandardButton.Cancel | QMessageBox.StandardButton.Yes)
-    if answer == QMessageBox.StandardButton.Yes:
-      newWord = self.wordEditingLineEdit.text()
-      DBHandler.updateWord(self.searchedWord, newWord, self.getGrades())
-      self.updateDictionaryWords(self.searchedWord, newWord)
-      QTimer.singleShot(0, self.wordEditingLineEdit.clear)
-      self.wordEditingLineEdit.setDisabled(True)
-      self.wordSelectionLineEdit.setFocus()
+    if Settings.getBooleanSetting('askBeforeActions'):
+      answer = QMessageBox.question(self, 'Update Word', 'Are you sure you want to update this word?', QMessageBox.StandardButton.Cancel | QMessageBox.StandardButton.Yes)
+      if answer == QMessageBox.StandardButton.Yes:
+        self.updateWord()
+    else:
+      self.updateWord()
+
+  def updateWord(self):
+    newWord = self.wordEditingLineEdit.text()
+    DBHandler.updateWord(self.searchedWord, newWord, self.getGrades())
+    self.updateDictionaryWords(self.searchedWord, newWord)
+    QTimer.singleShot(0, self.wordEditingLineEdit.clear)
+    self.wordEditingLineEdit.setDisabled(True)
+    self.wordSelectionLineEdit.setFocus()
 
   def deleteWordConfirmation(self):
-    answer = QMessageBox.question(self, 'Delete Word', 'Are you sure you want to delete this word?', QMessageBox.StandardButton.Cancel | QMessageBox.StandardButton.Yes)
-    if answer == QMessageBox.StandardButton.Yes:
-      DBHandler.deleteWord(self.searchedWord, self.getGrades())
-      self.updateDictionaryWords(self.searchedWord)
-      QTimer.singleShot(0, self.wordSelectionLineEdit.clear)
+    if Settings.getBooleanSetting('askBeforeActions'):
+      answer = QMessageBox.question(self, 'Delete Word', 'Are you sure you want to delete this word?', QMessageBox.StandardButton.Cancel | QMessageBox.StandardButton.Yes)
+      if answer == QMessageBox.StandardButton.Yes:
+        self.deleteWord()
+    else:
+      self.deleteWord()
+
+  def deleteWord(self):
+    DBHandler.deleteWord(self.searchedWord, self.getGrades())
+    self.updateDictionaryWords(self.searchedWord)
+    QTimer.singleShot(0, self.wordSelectionLineEdit.clear)
 
   def deleteButtonClicked(self):
     if self.deletionSelectionButton.isChecked():

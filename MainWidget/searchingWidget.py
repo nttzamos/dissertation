@@ -80,16 +80,22 @@ class SearchingWidget(QWidget):
     )
 
     editWordsButtonFont = QFont(Settings.font, 14)
-    self.editWordsButton = QPushButton("Edit Dictionary Words")
-    self.editWordsButton.setFont(editWordsButtonFont)
-    self.editWordsButton.clicked.connect(self.openWordsEditingWidget)
-    self.editWordsButton.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+    SearchingWidget.editWordsButton = QPushButton("Edit Dictionary Words")
+    SearchingWidget.editWordsButton.setFont(editWordsButtonFont)
+    SearchingWidget.editWordsButton.clicked.connect(self.openWordsEditingWidget)
+    SearchingWidget.editWordsButton.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
     self.subwidget = QWidget()
     self.subwidget.layout = QHBoxLayout(self.subwidget)
     self.subwidget.layout.setContentsMargins(5, 10, 0, 0)
     self.subwidget.layout.addWidget(SearchingWidget.errorMessage, alignment=Qt.AlignmentFlag.AlignTop)
-    self.subwidget.layout.addWidget(self.editWordsButton)
+    self.subwidget.layout.addWidget(SearchingWidget.editWordsButton)
+    sizePolicy = SearchingWidget.editWordsButton.sizePolicy()
+    sizePolicy.setRetainSizeWhenHidden(True)
+    SearchingWidget.editWordsButton.setSizePolicy(sizePolicy)
+
+    if not Settings.getBooleanSetting('showEditDictWordsButton'):
+      SearchingWidget.editWordsButton.hide()
 
     self.layout.addWidget(self.searchBarWidget)
     self.layout.addWidget(self.subwidget)
@@ -131,6 +137,10 @@ class SearchingWidget(QWidget):
     return "This word is not contained in the books of " + \
       SearchingWidget.gradesMapping[CurrentSearch.currentGrade] + \
       ". Please search for another word."
+
+  @staticmethod
+  def toggleEditWordsButtonVisibility(newVisibilityStatus):
+    SearchingWidget.editWordsButton.show() if newVisibilityStatus else SearchingWidget.editWordsButton.hide()
 
   @staticmethod
   def updateDictionaryWords():

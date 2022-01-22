@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QDialog, QLabel
+from PyQt6.QtWidgets import QVBoxLayout, QDialog, QCheckBox
 
 from settings import Settings
 
@@ -6,19 +6,35 @@ class SettingsWidget(QDialog):
   def __init__(self):
     super().__init__()
     self.setWindowTitle("Settings")
-    self.setFixedSize(Settings.screenWidth / 2, Settings.screenHeight / 2)
-    self.setContentsMargins(0, 0, 0, 0)
 
     self.layout = QVBoxLayout(self)
-    self.layout.setContentsMargins(0, 0, 0, 0)
+    self.layout.setContentsMargins(20, 20, 20, 20)
+    self.layout.setSpacing(20)
 
-    settingLabel1 = QLabel("Setting 1")
-    settingLabel2 = QLabel("Setting 2")
-    self.layout.addWidget(settingLabel1)
-    self.layout.addWidget(settingLabel2)
-    # remember last grade picked when re opening app
-    # ask before updating/deleting word
-    # show edit dictionary words button
+    self.rememberLastGradePicked = QCheckBox('Remember last grade picked when re-opening app?', objectName='rememberLastGradePicked')
+    self.rememberLastGradePicked.clicked.connect(lambda: self.toggleSetting('rememberLastGradePicked'))
+    self.rememberLastGradePicked.setChecked(Settings.getBooleanSetting('rememberLastGradePicked'))
+
+    self.askBeforeActions = QCheckBox('Ask before updating/deleting words?', objectName='askBeforeActions')
+    self.askBeforeActions.clicked.connect(lambda: self.toggleSetting('askBeforeActions'))
+    self.askBeforeActions.setChecked(Settings.getBooleanSetting('askBeforeActions'))
+
+    self.showEditDictWordsButton = QCheckBox("Show 'Edit Dictionary Words' button?", objectName='showEditDictWordsButton')
+    self.showEditDictWordsButton.clicked.connect(lambda: self.toggleSetting('showEditDictWordsButton'))
+    self.showEditDictWordsButton.setChecked(Settings.getBooleanSetting('showEditDictWordsButton'))
+
+    self.layout.addWidget(self.rememberLastGradePicked)
+    self.layout.addWidget(self.askBeforeActions)
+    self.layout.addWidget(self.showEditDictWordsButton)
+
+  def toggleSetting(self, settingName):
+    settingCheckbox = self.findChild(QCheckBox, settingName)
+    newValue = settingCheckbox.isChecked()
+    Settings.setBooleanSetting(settingName, newValue)
+
+    if settingName == 'showEditDictWordsButton':
+      from MainWidget.searchingWidget import SearchingWidget
+      SearchingWidget.toggleEditWordsButtonVisibility(newValue)
 
   def style(self):
     self.setStyleSheet(

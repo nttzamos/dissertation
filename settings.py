@@ -21,7 +21,17 @@ class Settings():
     settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
     if not settingsDatabase.get('lastGradePicked'):
       settingsDatabase.set('lastGradePicked', 1)
-      settingsDatabase.dump()
+
+    if isinstance(settingsDatabase.get('rememberLastGradePicked'), bool):
+      settingsDatabase.set('rememberLastGradePicked', 0)
+
+    if isinstance(settingsDatabase.get('askBeforeActions'), bool):
+      settingsDatabase.set('askBeforeActions', 1)
+
+    if isinstance(settingsDatabase.get('showEditDictWordsButton'), bool):
+      settingsDatabase.set('showEditDictWordsButton', 1)
+
+    settingsDatabase.dump()
 
     Settings.calculateSizeSettings(screenWidth, screenHeight)
 
@@ -69,6 +79,18 @@ class Settings():
     resultsWidgetColumns = settingsDatabase.get('rightWidgetWidth') // settingsDatabase.get('singleResultWidth')
 
     return resultsWidgetColumns
+
+  @staticmethod
+  def setBooleanSetting(settingName, newValue):
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+    settingsDatabase.set(settingName, 1 if newValue else 0)
+    settingsDatabase.dump()
+
+  @staticmethod
+  def getBooleanSetting(settingName):
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+
+    return settingsDatabase.get(settingName) == 1
 
     # Fun Experiment
     # chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
