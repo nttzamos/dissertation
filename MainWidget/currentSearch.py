@@ -57,7 +57,7 @@ class CurrentSearch(QWidget):
 
   def style(self):
     self.searchedWord.setStyleSheet(
-      "QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px; background-color: green; color: white }"
+      "QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px; background-color: #F9E4C8; color: black }"
     )
 
     from styles import Styles

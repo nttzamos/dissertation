@@ -33,11 +33,16 @@ class WordsEditingWidget(QDialog):
     actionSelectionLabel.setFont(labelFont)
     self.updateSelectionButton = QRadioButton('Update Word')
     self.updateSelectionButton.setFont(radioButtonFont)
-    self.updateSelectionButton.setChecked(True)
-    self.updateSelectionButton.toggled.connect(self.updateButtonClicked)
     self.deletionSelectionButton = QRadioButton('Delete Word')
     self.deletionSelectionButton.setFont(radioButtonFont)
-    self.deletionSelectionButton.toggled.connect(self.deleteButtonClicked)
+    if Settings.getDefaultEditingAction() == 'update':
+      self.updateSelectionButton.setChecked(True)
+    else:
+      self.deletionSelectionButton.setChecked(True)
+
+    self.updateSelectionButton.toggled.connect(self.updateButtonToggled)
+    self.deletionSelectionButton.toggled.connect(self.deleteButtonToggled)
+
     self.actionSelectionWidget = QWidget()
     self.actionSelectionWidget.layout = QHBoxLayout(self.actionSelectionWidget)
     self.actionSelectionWidget.layout.setContentsMargins(0, 0, 0, 0)
@@ -108,6 +113,10 @@ class WordsEditingWidget(QDialog):
     self.layout.addSpacing(5)
 
     self.layout.addWidget(self.updateWordWidget)
+    if self.deletionSelectionButton.isChecked():
+      self.updateWordWidget.hide()
+
+
     self.style()
 
   def style(self):
@@ -167,13 +176,13 @@ class WordsEditingWidget(QDialog):
     self.updateDictionaryWords(self.searchedWord)
     QTimer.singleShot(0, self.wordSelectionLineEdit.clear)
 
-  def deleteButtonClicked(self):
+  def deleteButtonToggled(self):
     if self.deletionSelectionButton.isChecked():
       QTimer.singleShot(0, self.wordEditingLineEdit.clear)
       self.wordEditingLineEdit.setDisabled(True)
       self.updateWordWidget.hide()
 
-  def updateButtonClicked(self):
+  def updateButtonToggled(self):
     if self.updateSelectionButton.isChecked():
       self.updateWordWidget.show()
 

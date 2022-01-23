@@ -25,7 +25,7 @@ class SearchingWidget(QWidget):
     super().__init__()
 
     lineEditFont = QFont(Settings.font, 14)
-    completerFont = QFont(Settings.font, 10)
+    completerFont = QFont(Settings.font, 12)
     errorMessageFont = completerFont
 
     self.layout = QVBoxLayout(self)
@@ -107,7 +107,7 @@ class SearchingWidget(QWidget):
 
   def style(self):
     SearchingWidget.lineEdit.setStyleSheet(
-      "QLineEdit { color: blue }"
+      "QLineEdit { color: #010101 }"
     )
 
     self.subwidget.setStyleSheet("""

@@ -63,7 +63,7 @@ class MainWindow(QWidget):
 
   def style(self):
     self.splitterLeftHorizontal.setStyleSheet(
-      "QWidget { background-color: yellow }\n"
+      "QWidget { background-color: #FFFAFA }\n"
       "QPushButton { background-color: none }"
     )
 

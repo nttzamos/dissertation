@@ -22,6 +22,12 @@ class Settings():
     if not settingsDatabase.get('lastGradePicked'):
       settingsDatabase.set('lastGradePicked', 1)
 
+    if not settingsDatabase.get('theme'):
+      settingsDatabase.set('theme', 'light')
+
+    if not settingsDatabase.get('defaultEditingAction'):
+      settingsDatabase.set('defaultEditingAction', 'update')
+
     if isinstance(settingsDatabase.get('rememberLastGradePicked'), bool):
       settingsDatabase.set('rememberLastGradePicked', 0)
 
@@ -91,6 +97,30 @@ class Settings():
     settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
 
     return settingsDatabase.get(settingName) == 1
+
+  @staticmethod
+  def setTheme(theme):
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+    settingsDatabase.set('theme', theme)
+    settingsDatabase.dump()
+
+  @staticmethod
+  def getTheme():
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+
+    return settingsDatabase.get('theme')
+
+  @staticmethod
+  def setDefaultEditingAction(defaultEditingAction):
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+    settingsDatabase.set('defaultEditingAction', defaultEditingAction)
+    settingsDatabase.dump()
+
+  @staticmethod
+  def getDefaultEditingAction():
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+
+    return settingsDatabase.get('defaultEditingAction')
 
     # Fun Experiment
     # chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']

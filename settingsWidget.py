@@ -1,4 +1,5 @@
-from PyQt6.QtWidgets import QVBoxLayout, QDialog, QCheckBox
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QWidget, QRadioButton
+from PyQt6.QtCore import Qt
 
 from settings import Settings
 
@@ -23,9 +24,43 @@ class SettingsWidget(QDialog):
     self.showEditDictWordsButton.clicked.connect(lambda: self.toggleSetting('showEditDictWordsButton'))
     self.showEditDictWordsButton.setChecked(Settings.getBooleanSetting('showEditDictWordsButton'))
 
+    self.themeSelectionWidget = QWidget()
+    self.themeSelectionWidget.layout = QHBoxLayout(self.themeSelectionWidget)
+    self.lightThemeButton = QRadioButton('Light Theme')
+    self.lightThemeButton.toggled.connect(self.lightThemeButtonClicked)
+    self.darkThemeButton = QRadioButton('Dark Theme')
+    self.darkThemeButton.toggled.connect(self.darkThemeButtonClicked)
+
+    if Settings.getTheme() == 'light':
+      self.lightThemeButton.setChecked(True)
+    else:
+      self.darkThemeButton.setChecked(True)
+
+    self.themeSelectionWidget.layout.setContentsMargins(0, 0, 0, 0)
+    self.themeSelectionWidget.layout.addWidget(self.lightThemeButton, alignment=Qt.AlignmentFlag.AlignLeft)
+    self.themeSelectionWidget.layout.addWidget(self.darkThemeButton, alignment=Qt.AlignmentFlag.AlignLeft)
+
+    self.defaultEditingActionWidget = QWidget()
+    self.defaultEditingActionWidget.layout = QHBoxLayout(self.defaultEditingActionWidget)
+    self.updateButton = QRadioButton('Update')
+    self.updateButton.toggled.connect(self.updateButtonClicked)
+    self.deleteButton = QRadioButton('Delete')
+    self.deleteButton.toggled.connect(self.deleteButtonClicked)
+
+    if Settings.getDefaultEditingAction() == 'update':
+      self.updateButton.setChecked(True)
+    else:
+      self.deleteButton.setChecked(True)
+
+    self.defaultEditingActionWidget.layout.setContentsMargins(0, 0, 0, 0)
+    self.defaultEditingActionWidget.layout.addWidget(self.updateButton, alignment=Qt.AlignmentFlag.AlignLeft)
+    self.defaultEditingActionWidget.layout.addWidget(self.deleteButton, alignment=Qt.AlignmentFlag.AlignLeft)
+
     self.layout.addWidget(self.rememberLastGradePicked)
     self.layout.addWidget(self.askBeforeActions)
     self.layout.addWidget(self.showEditDictWordsButton)
+    self.layout.addWidget(self.themeSelectionWidget)
+    # self.layout.addWidget(self.defaultEditingActionWidget)
 
   def toggleSetting(self, settingName):
     settingCheckbox = self.findChild(QCheckBox, settingName)
@@ -36,8 +71,18 @@ class SettingsWidget(QDialog):
       from MainWidget.searchingWidget import SearchingWidget
       SearchingWidget.toggleEditWordsButtonVisibility(newValue)
 
-  def style(self):
-    self.setStyleSheet(
-      "QPushButton:hover { background-color: grey }\n"
-      "QWidget { background-color: green }"
-    )
+  def lightThemeButtonClicked(self):
+    if self.lightThemeButton.isChecked():
+      Settings.setTheme('light')
+
+  def darkThemeButtonClicked(self):
+    if self.darkThemeButton.isChecked():
+      Settings.setTheme('dark')
+
+  def updateButtonClicked(self):
+    if self.updateButton.isChecked():
+      Settings.setDefaultEditingAction('update')
+
+  def deleteButtonClicked(self):
+    if self.deleteButton.isChecked():
+      Settings.setDefaultEditingAction('delete')

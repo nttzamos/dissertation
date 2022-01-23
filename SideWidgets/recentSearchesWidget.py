@@ -73,11 +73,8 @@ class RecentSearchesWidget(QWidget):
     self.style()
 
   def style(self):
-    self.titleLabel.setStyleSheet(
-      "QLabel { border: 1px solid black; border-top: 0px; border-bottom: 0px; padding: 10px 0px; background-color: white; color: blue }"
-    )
-
     from styles import Styles
+    self.titleLabel.setStyleSheet(Styles.sideWidgetsTitleLabelStyle)
     self.setStyleSheet(Styles.sideWidgetsStyle)
 
   @staticmethod
