@@ -12,20 +12,31 @@ class WordsEditingWidget(QDialog):
     self.setFixedSize(Settings.screenWidth / 2, Settings.screenHeight / 2)
 
     self.layout = QVBoxLayout(self)
-    self.layout.setContentsMargins(10, 10, 10, 10)
+    self.layout.setContentsMargins(20, 20, 20, 10)
+    self.layout.setSpacing(0)
+
+    labelFont = QFont(Settings.font, 16)
+    comboBoxFont = QFont(Settings.font, 14)
+    radioButtonFont = QFont(Settings.font, 14)
+    checkBoxFont = QFont(Settings.font, 14)
+    lineEditFont = QFont(Settings.font, 14)
+    completerFont = QFont(Settings.font, 12)
 
     gradeSelectionLabel = QLabel('Grade Selection')
-    comboBoxFont = QFont(Settings.font, 14)
+    gradeSelectionLabel.setFont(labelFont)
     self.gradeSelector = QComboBox()
     self.gradeSelector.activated.connect(self.gradeSelectorActivated)
     self.gradeSelector.setFont(comboBoxFont)
     self.gradeSelector.addItems(DBHandler.getGrades())
 
     actionSelectionLabel = QLabel('Action Selection')
+    actionSelectionLabel.setFont(labelFont)
     self.updateSelectionButton = QRadioButton('Update Word')
+    self.updateSelectionButton.setFont(radioButtonFont)
     self.updateSelectionButton.setChecked(True)
     self.updateSelectionButton.toggled.connect(self.updateButtonClicked)
     self.deletionSelectionButton = QRadioButton('Delete Word')
+    self.deletionSelectionButton.setFont(radioButtonFont)
     self.deletionSelectionButton.toggled.connect(self.deleteButtonClicked)
     self.actionSelectionWidget = QWidget()
     self.actionSelectionWidget.layout = QHBoxLayout(self.actionSelectionWidget)
@@ -34,24 +45,39 @@ class WordsEditingWidget(QDialog):
     self.actionSelectionWidget.layout.addWidget(self.deletionSelectionButton)
 
     actionEffectLabel = QLabel('Action Effect')
+    actionEffectLabel.setFont(labelFont)
     self.updateAllGrades = QCheckBox('Update/Delete word for all grades?')
+    self.updateAllGrades.setFont(checkBoxFont)
 
     wordSelectionLabel = QLabel('Word Selection')
+    wordSelectionLabel.setFont(labelFont)
     self.wordSelectionLineEdit = QLineEdit()
+    self.wordSelectionLineEdit.setFont(lineEditFont)
     self.wordSelectionLineEdit.returnPressed.connect(self.wordSelected)
     self.dictionaryWords = DBHandler.getWords(1)
     self.completer = QCompleter(self.dictionaryWords)
     self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
-    completerFont = QFont(Settings.font, 10)
     self.completer.popup().setFont(completerFont)
     self.wordSelectionLineEdit.setCompleter(self.completer)
     self.wordSelectionLineEdit.setPlaceholderText('Please enter a word.')
+    self.wordSelectionLineEdit.setContentsMargins(0, 0, 0, 0)
+    self.wordSelectionLineEdit.textChanged.connect(self.searchTextChanged)
+    self.errorMessageLabel = QLabel("Please search for another word", self)
+    sizePolicy = self.errorMessageLabel.sizePolicy()
+    sizePolicy.setRetainSizeWhenHidden(True)
+    self.errorMessageLabel.setSizePolicy(sizePolicy)
+    self.showErrorMessage = False
+    self.errorMessageLabel.setStyleSheet(
+      "QLabel { color: red }"
+    )
 
     self.updateWordWidget = QWidget()
     self.updateWordWidget.layout = QVBoxLayout(self.updateWordWidget)
     self.updateWordWidget.layout.setContentsMargins(0, 0, 0, 0)
     updateFormLabel = QLabel('Editing Form')
+    updateFormLabel.setFont(labelFont)
     self.wordEditingLineEdit = QLineEdit()
+    self.wordEditingLineEdit.setFont(lineEditFont)
     self.wordEditingLineEdit.returnPressed.connect(self.updateWordConfirmation)
     self.wordEditingLineEdit.setPlaceholderText('You have to select a word first.')
     self.wordEditingLineEdit.setDisabled(True)
@@ -59,28 +85,34 @@ class WordsEditingWidget(QDialog):
     self.updateWordWidget.layout.addWidget(self.wordEditingLineEdit)
 
     self.layout.addWidget(gradeSelectionLabel)
+    self.layout.addSpacing(5)
     self.layout.addWidget(self.gradeSelector)
-    self.layout.addSpacing(10)
+    self.layout.addSpacing(15)
 
     self.layout.addWidget(actionSelectionLabel)
+    self.layout.addSpacing(5)
     self.layout.addWidget(self.actionSelectionWidget)
-    self.layout.addSpacing(10)
+    self.layout.addSpacing(15)
 
     self.layout.addWidget(actionEffectLabel)
+    self.layout.addSpacing(5)
     self.layout.addWidget(self.updateAllGrades)
-    self.layout.addSpacing(10)
+    self.layout.addSpacing(15)
 
     self.layout.addWidget(wordSelectionLabel)
+    self.layout.addSpacing(5)
     self.layout.addWidget(self.wordSelectionLineEdit)
-    self.layout.addSpacing(10)
+    self.layout.addSpacing(2)
+    self.layout.addWidget(self.errorMessageLabel, alignment=Qt.AlignmentFlag.AlignRight)
+    self.errorMessageLabel.hide()
+    self.layout.addSpacing(5)
 
     self.layout.addWidget(self.updateWordWidget)
+    self.style()
 
   def style(self):
-    self.setStyleSheet(
-      "QPushButton:hover { background-color: grey }\n"
-      "QWidget { background-color: green }"
-    )
+    from styles import Styles
+    self.setStyleSheet(Styles.wordsEditingWidgetStyle)
 
   def wordSelected(self):
     self.searchedWord = self.wordSelectionLineEdit.text()
@@ -89,16 +121,23 @@ class WordsEditingWidget(QDialog):
         self.wordEditingLineEdit.setText(self.searchedWord)
         self.wordEditingLineEdit.setEnabled(True)
         self.wordEditingLineEdit.setFocus()
-        QTimer.singleShot(0, self.wordSelectionLineEdit.clear)
       elif self.deletionSelectionButton.isChecked():
         self.deleteWordConfirmation()
     else:
-      # handle case where word is not in dictionary
-      pass
+      self.showErrorMessage = True
+      self.errorMessageLabel.show()
+
+  def searchTextChanged(self):
+    if self.showErrorMessage:
+      self.showErrorMessage = False
+      self.errorMessageLabel.hide()
 
   def updateWordConfirmation(self):
     if Settings.getBooleanSetting('askBeforeActions'):
-      answer = QMessageBox.question(self, 'Update Word', 'Are you sure you want to update this word?', QMessageBox.StandardButton.Cancel | QMessageBox.StandardButton.Yes)
+      newWord = self.wordEditingLineEdit.text()
+      title = 'Update Word'
+      question = "Are you sure you want to update '" + self.searchedWord + "' to '" + newWord + "'?"
+      answer = QMessageBox.question(self, title, question, QMessageBox.StandardButton.Cancel | QMessageBox.StandardButton.Yes)
       if answer == QMessageBox.StandardButton.Yes:
         self.updateWord()
     else:
@@ -108,13 +147,16 @@ class WordsEditingWidget(QDialog):
     newWord = self.wordEditingLineEdit.text()
     DBHandler.updateWord(self.searchedWord, newWord, self.getGrades())
     self.updateDictionaryWords(self.searchedWord, newWord)
+    QTimer.singleShot(0, self.wordSelectionLineEdit.clear)
     QTimer.singleShot(0, self.wordEditingLineEdit.clear)
     self.wordEditingLineEdit.setDisabled(True)
     self.wordSelectionLineEdit.setFocus()
 
   def deleteWordConfirmation(self):
     if Settings.getBooleanSetting('askBeforeActions'):
-      answer = QMessageBox.question(self, 'Delete Word', 'Are you sure you want to delete this word?', QMessageBox.StandardButton.Cancel | QMessageBox.StandardButton.Yes)
+      title = 'Delete Word'
+      question = "Are you sure you want to delete '" + self.searchedWord + "'?"
+      answer = QMessageBox.question(self, title, question, QMessageBox.StandardButton.Cancel | QMessageBox.StandardButton.Yes)
       if answer == QMessageBox.StandardButton.Yes:
         self.deleteWord()
     else:

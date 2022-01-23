@@ -35,9 +35,8 @@ class Styles():
     QLabel { color: blue }"""
 
   currentSearchStyle = """
-    QComboBox { background-color: none }
-    QComboBox { color: blue }
-    QWidget { background-color: none }"""
+    QWidget { background-color: none }
+    QComboBox { color: blue }"""
 
   searchingWidgetFocusedStyle = """
     QWidget { background-color: white; border-radius: 10px; border: 1px solid blue }
@@ -66,3 +65,9 @@ class Styles():
   mainWindowStyle = """
     QWidget { background-color: red }
     QPushButton { background-color: none }"""
+
+  wordsEditingWidgetStyle = """
+    QWidget { background-color: none }
+    QDialog { background-color: yellow }
+    QComboBox { color: blue }
+    QLabel { color: red }"""
