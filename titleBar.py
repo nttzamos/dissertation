@@ -19,6 +19,7 @@ class TitleBar(QWidget):
 
     self.applicationIcon = QPushButton()
     self.applicationIcon.setIcon(QIcon("Resources/windowIcon.svg"))
+    self.applicationIcon.setFixedHeight(30)
     self.applicationIcon.setFixedWidth(30)
 
     self.title = QLabel(TitleBar.title)
@@ -27,21 +28,25 @@ class TitleBar(QWidget):
 
     self.settingsButton = QPushButton()
     self.settingsButton.setIcon(QIcon("Resources/settings.png"))
+    self.settingsButton.setFixedHeight(30)
     self.settingsButton.setFixedWidth(30)
     self.settingsButton.clicked.connect(self.openSettings)
 
     self.minimizeWindowButton = QPushButton()
     self.minimizeWindowButton.setIcon(QIcon("Resources/minimizeWindow.png"))
+    self.minimizeWindowButton.setFixedHeight(30)
     self.minimizeWindowButton.setFixedWidth(30)
     self.minimizeWindowButton.clicked.connect(self.minimizeWindow)
 
     self.restoreDownWindowButton = QPushButton()
     self.restoreDownWindowButton.setIcon(QIcon("Resources/restoreDownWindow.png"))
+    self.restoreDownWindowButton.setFixedHeight(30)
     self.restoreDownWindowButton.setFixedWidth(30)
     self.restoreDownWindowButton.clicked.connect(self.restoreDownWindow)
 
     self.closeWindowButton = QPushButton()
     self.closeWindowButton.setIcon(QIcon("Resources/closeWindow.png"))
+    self.closeWindowButton.setFixedHeight(30)
     self.closeWindowButton.setFixedWidth(30)
     self.closeWindowButton.clicked.connect(self.closeWindow)
 
