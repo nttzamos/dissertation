@@ -4,7 +4,7 @@ from MainWidget.currentSearch import CurrentSearch
 from MainWidget.searchingWidget import SearchingWidget
 from MainWidget.resultsWidget import ResultsWidget
 from MainWidget.result import Result
-from settings import Settings
+from MenuBar.settings import Settings
 
 class MainWidget(QWidget):
   searchingWidget = SearchingWidget()

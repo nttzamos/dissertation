@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QComboBox, QHBoxLayout, QLabel, QSizePolicy, QVBoxLa
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from settings import Settings
+from MenuBar.settings import Settings
 
 class CurrentSearch(QWidget):
   currentGrade = -1
@@ -56,12 +56,9 @@ class CurrentSearch(QWidget):
     self.style()
 
   def style(self):
-    self.searchedWord.setStyleSheet(
-      "QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px; background-color: #F9E4C8; color: black }"
-    )
-
-    from styles import Styles
+    from Common.styles import Styles
     self.setStyleSheet(Styles.currentSearchStyle)
+    self.searchedWord.setStyleSheet(Styles.searchedWordStyle)
 
   def getCurrentWord(self):
     return self.searchedWord.text()
@@ -72,7 +69,7 @@ class CurrentSearch(QWidget):
       "Μαθητής1", "Μαθητής2", "Μαθητής3", "Μαθητής4", "Μαθητής5"]
 
   def getAvailableGrades(self):
-    from databaseHandler import DBHandler
+    from Common.databaseHandler import DBHandler
     grades = DBHandler.getGrades()
     grades[0:0] = ["You have to select a student.", "Please select a grade..."]
     return grades
@@ -81,7 +78,7 @@ class CurrentSearch(QWidget):
     if CurrentSearch.currentGrade == -1:
       return ["You have to select a student and a grade.", "You have to select a grade."]
     else:
-      from databaseHandler import DBHandler
+      from Common.databaseHandler import DBHandler
       currentGradeSubjects = DBHandler.getGradeSubjects(CurrentSearch.currentGrade)
       currentGradeSubjects.insert(0, "Please select a subject...")
       return currentGradeSubjects
@@ -109,7 +106,7 @@ class CurrentSearch(QWidget):
       Settings.modifyLastGradePicked(grade)
       self.subjectSelector.clear()
       self.subjectSelector.addItems(self.getAvailableSubjects())
-      from mainWindow import MainWindow
+      from MainWidget.mainWindow import MainWindow
       MainWindow.updateWidgets(previousGrade == -1)
 
   def subjectSelectorActivated(self, index):

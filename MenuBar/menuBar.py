@@ -2,12 +2,10 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QWidget
 
-from settings import Settings
-from settingsWidget import SettingsWidget
+from MenuBar.settings import Settings
+from MenuBar.settingsWidget import SettingsWidget
 
-class TitleBar(QWidget):
-  title = "My Dissertation Title"
-
+class MenuBar(QWidget):
   def __init__(self, parent):
     super().__init__()
     self.parent = parent
@@ -22,7 +20,7 @@ class TitleBar(QWidget):
     self.applicationIcon.setFixedHeight(30)
     self.applicationIcon.setFixedWidth(30)
 
-    self.title = QLabel(TitleBar.title)
+    self.title = QLabel("My Dissertation Title")
     font = QFont(Settings.font, 14)
     self.title.setFont(font)
 
@@ -61,17 +59,10 @@ class TitleBar(QWidget):
     self.style()
 
   def style(self):
-    from styles import Styles
-    self.setStyleSheet(Styles.titleBarStyle)
-
-    self.applicationIcon.setStyleSheet(
-      "QPushButton:hover { background-color: none }\n"
-    )
-
-    self.closeWindowButton.setStyleSheet(
-      "QPushButton:hover { background-color: #D11A2A }"
-    )
-
+    from Common.styles import Styles
+    self.setStyleSheet(Styles.menuBarStyle)
+    self.applicationIcon.setStyleSheet(Styles.applicationIconStyle)
+    self.closeWindowButton.setStyleSheet(Styles.closeWindowButtonStyle)
 
   def openSettings(self):
     settingsDialog = SettingsWidget()

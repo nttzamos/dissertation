@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QVBoxLayout, QLineEdit, QComboBox, QDialog, QLabel, 
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 from PyQt6.QtGui import QFont
 
-from settings import Settings
-from databaseHandler import DBHandler
+from MenuBar.settings import Settings
+from Common.databaseHandler import DBHandler
 
 class WordsEditingWidget(QDialog):
   def __init__(self):
@@ -72,9 +72,6 @@ class WordsEditingWidget(QDialog):
     sizePolicy.setRetainSizeWhenHidden(True)
     self.errorMessageLabel.setSizePolicy(sizePolicy)
     self.showErrorMessage = False
-    self.errorMessageLabel.setStyleSheet(
-      "QLabel { color: red }"
-    )
 
     self.updateWordWidget = QWidget()
     self.updateWordWidget.layout = QVBoxLayout(self.updateWordWidget)
@@ -120,8 +117,9 @@ class WordsEditingWidget(QDialog):
     self.style()
 
   def style(self):
-    from styles import Styles
+    from Common.styles import Styles
     self.setStyleSheet(Styles.wordsEditingWidgetStyle)
+    self.errorMessageLabel.setStyleSheet(Styles.errorMessageLabelStyle)
 
   def wordSelected(self):
     self.searchedWord = self.wordSelectionLineEdit.text()

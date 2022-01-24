@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
 from ItemWidgets.starredWord import StarredWord
-from settings import Settings
+from MenuBar.settings import Settings
 
 class StarredWordsWidget(QWidget):
   title = "Starred Words"
@@ -57,7 +57,7 @@ class StarredWordsWidget(QWidget):
     self.style()
 
   def style(self):
-    from styles import Styles
+    from Common.styles import Styles
     self.titleLabel.setStyleSheet(Styles.sideWidgetsTitleLabelStyle)
     self.setStyleSheet(Styles.sideWidgetsStyle)
 
@@ -78,7 +78,7 @@ class StarredWordsWidget(QWidget):
       StarredWordsWidget.widgetList = []
       StarredWordsWidget.counter = 1000000
 
-    from databaseHandler import DBHandler
+    from Common.databaseHandler import DBHandler
     starredWords = DBHandler.getStarredWords()
 
     if len(starredWords) == 0:

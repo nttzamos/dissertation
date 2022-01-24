@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QWidget, QRadioButton
 from PyQt6.QtCore import Qt
 
-from settings import Settings
+from MenuBar.settings import Settings
 
 class SettingsWidget(QDialog):
   def __init__(self):

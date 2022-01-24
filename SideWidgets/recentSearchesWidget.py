@@ -3,8 +3,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
 from ItemWidgets.recentSearch import RecentSearch
-from databaseHandler import DBHandler
-from settings import Settings
+from MenuBar.settings import Settings
+from Common.databaseHandler import DBHandler
 
 class RecentSearchesWidget(QWidget):
   title = "Recent Searches"
@@ -27,21 +27,6 @@ class RecentSearchesWidget(QWidget):
 
   def __init__(self):
     super().__init__()
-
-    # self.setStyleSheet(
-    #   "QScrollBar { border: none; background: rgb(45, 45, 68); width: 14px; margin: 15px 0 15px 0; border-radius: 0px; }\n"
-    #   "QScrollBar::handle:vertical { background-color: rgb(80, 80, 122); min-height: 30px; border-radius: 7px; }\n"
-    #   "QScrollBar::handle:vertical:hover{ background-color: rgb(255, 0, 127); }\n"
-    #   "QScrollBar::handle:vertical:pressed { background-color: rgb(185, 0, 92); }\n"
-    #   # "QScrollBar::sub-line:vertical { border: none; background-color: rgb(59, 59, 90); height: 15px; border-top-left-radius: 7px; border-top-right-radius: 7px; subcontrol-position: top; subcontrol-origin: margin; }\n"
-    #   # "QScrollBar::sub-line:vertical:hover { background-color: rgb(255, 0, 127); }\n"
-    #   # "QScrollBar::sub-line:vertical:pressed { background-color: rgb(185, 0, 92); }\n"
-    #   # "QScrollBar::add-line:vertical { border: none; background-color: rgb(59, 59, 90); height: 15px; border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; subcontrol-position: bottom; subcontrol-origin: margin; }\n"
-    #   # "QScrollBar::add-line:vertical:hover { background-color: rgb(255, 0, 127); }\n"
-    #   # "QScrollBar::add-line:vertical:pressed { background-color: rgb(185, 0, 92); }\n"
-    #   "QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical { background: none; }\n"
-    #   "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { background: none; }\n"
-    # )
 
     self.layout = QVBoxLayout(self)
     self.titleLabel = QLabel(RecentSearchesWidget.title)
@@ -73,7 +58,7 @@ class RecentSearchesWidget(QWidget):
     self.style()
 
   def style(self):
-    from styles import Styles
+    from Common.styles import Styles
     self.titleLabel.setStyleSheet(Styles.sideWidgetsTitleLabelStyle)
     self.setStyleSheet(Styles.sideWidgetsStyle)
 

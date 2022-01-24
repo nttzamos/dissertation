@@ -16,7 +16,7 @@ class Result(QWidget):
     # Word
     self.word_label = QLabel(self, text=word)
     self.word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    from settings import Settings
+    from MenuBar.settings import Settings
     font = QFont(Settings.font, 20)
     self.word_label.setFont(font)
 
@@ -46,7 +46,7 @@ class Result(QWidget):
     self.style()
 
   def style(self):
-    from styles import Styles
+    from Common.styles import Styles
     self.setStyleSheet(Styles.resultStyle)
 
   def searchWord(self):

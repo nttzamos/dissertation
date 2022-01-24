@@ -2,18 +2,18 @@ from PyQt6.QtGui import QFont, QIcon, QKeySequence, QShortcut
 from PyQt6.QtWidgets import QCompleter, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QSizePolicy
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 
-from databaseHandler import DBHandler
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
-from wordsEditingWidget import WordsEditingWidget
-from settings import Settings
-from styles import Styles
+from MainWidget.wordsEditingWidget import WordsEditingWidget
+from MenuBar.settings import Settings
+from Common.databaseHandler import DBHandler
+from Common.styles import Styles
 
 class SearchingWidget(QWidget):
   dictionaryWords = []
 
   lineEdit = QLineEdit()
 
-  from databaseHandler import DBHandler
+  from Common.databaseHandler import DBHandler
   grades = DBHandler.getGrades()
   gradesMapping = {}
   for i in range(len(grades)):
@@ -72,11 +72,6 @@ class SearchingWidget(QWidget):
     sizePolicy.setRetainSizeWhenHidden(True)
     SearchingWidget.errorMessage.setSizePolicy(sizePolicy)
     SearchingWidget.errorMessage.hide()
-    SearchingWidget.errorMessage.setStyleSheet(
-      "QLabel { color: red }\n"
-      "QLabel { background-color: none }\n"
-      "QLabel { border: none }"
-    )
 
     editWordsButtonFont = QFont(Settings.font, 14)
     SearchingWidget.editWordsButton = QPushButton("Edit Dictionary Words")
@@ -106,15 +101,8 @@ class SearchingWidget(QWidget):
     self.setFocusedStyleSheet()
 
   def style(self):
-    SearchingWidget.lineEdit.setStyleSheet(
-      "QLineEdit { color: #010101 }"
-    )
-
-    self.subwidget.setStyleSheet("""
-      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
-      QPushButton:hover { background-color: grey }
-      """
-    )
+    SearchingWidget.errorMessage.setStyleSheet(Styles.errorMessageStyle)
+    self.subwidget.setStyleSheet(Styles.subwidgetStyle)
 
   def setFocusedStyleSheet(self):
     self.searchBarWidget.setStyleSheet(Styles.searchingWidgetFocusedStyle)

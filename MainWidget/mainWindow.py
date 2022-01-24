@@ -5,7 +5,7 @@ from MainWidget.mainWidget import MainWidget
 
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
 from SideWidgets.starredWordsWidget import StarredWordsWidget
-from titleBar import TitleBar
+from MenuBar.menuBar import MenuBar
 
 class MainWindow(QWidget):
   recentSearchesWidget = RecentSearchesWidget()
@@ -24,7 +24,7 @@ class MainWindow(QWidget):
     self.layout.setSpacing(0)
 
     self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
-    self.titleBar = TitleBar(self)
+    self.menuBar = MenuBar(self)
 
     self.centralWidget = QWidget(self)
     self.windowLayout = QHBoxLayout(self.centralWidget)
@@ -55,23 +55,17 @@ class MainWindow(QWidget):
     self.line.setFrameShadow(QFrame.Shadow.Plain)
     self.line.setFixedHeight(2)
 
-    self.layout.addWidget(self.titleBar, 0, 0)
+    self.layout.addWidget(self.menuBar, 0, 0)
     self.layout.addWidget(self.line, 1, 0)
     self.layout.addWidget(self.splitterLeftHorizontal, 2, 0)
 
     self.style()
 
   def style(self):
-    self.splitterLeftHorizontal.setStyleSheet(
-      "QWidget { background-color: #FFFAFA }\n"
-      "QPushButton { background-color: none }"
-    )
+    self.line.setStyleSheet("QWidget { background-color: none }")
 
-    self.line.setStyleSheet(
-      "QWidget { background-color: none }"
-    )
-
-    from styles import Styles
+    from Common.styles import Styles
+    self.splitterLeftHorizontal.setStyleSheet(Styles.mainWindowBackgroundStyle)
     self.setStyleSheet(Styles.mainWindowStyle)
 
   @staticmethod

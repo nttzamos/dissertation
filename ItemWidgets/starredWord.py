@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
 from PyQt6.QtGui import QFont, QIcon
 
-from databaseHandler import DBHandler
+from Common.databaseHandler import DBHandler
 
 class StarredWord(QWidget):
   def __init__(self, word):
@@ -18,7 +18,7 @@ class StarredWord(QWidget):
     self.dataWidget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.word = QLabel(word)
-    from settings import Settings
+    from MenuBar.settings import Settings
     font = QFont(Settings.font, 14)
     self.word.setFont(font)
 
@@ -48,7 +48,7 @@ class StarredWord(QWidget):
     self.style()
 
   def style(self):
-    from styles import Styles
+    from Common.styles import Styles
     self.setStyleSheet(Styles.itemWidgetsStyle)
 
   def toggleStarred(self):

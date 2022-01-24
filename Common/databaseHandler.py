@@ -1,5 +1,5 @@
 from os import path
-from pdfParser import PdfParser
+from Common.pdfParser import PdfParser
 
 import timeit
 import sqlite3

@@ -3,7 +3,7 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
 
 from MainWidget.result import Result
-from settings import Settings
+from MenuBar.settings import Settings
 
 class ResultsWidget(QWidget):
   scrollAreaWidgetContents = QWidget()
@@ -34,7 +34,7 @@ class ResultsWidget(QWidget):
     self.style()
 
   def style(self):
-    from styles import Styles
+    from Common.styles import Styles
     self.setStyleSheet(Styles.resultsWidgetStyle)
 
   @staticmethod
