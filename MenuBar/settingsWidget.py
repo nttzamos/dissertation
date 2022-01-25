@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QWidget, QRadioButton
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QWidget, QRadioButton, QSpinBox, QLabel
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
 
@@ -13,6 +13,19 @@ class SettingsWidget(QDialog):
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 20, 20, 20)
     self.layout.setSpacing(20)
+
+    maximumResultsLabel = QLabel('Maximum Results:')
+    self.maximumResultsSpinBox = QSpinBox()
+    self.maximumResultsSpinBox.valueChanged.connect(self.maximumResultsChanged)
+    self.maximumResultsSpinBox.setValue(Settings.getMaximumResults())
+    self.maximumResultsSpinBox.setMinimum(1)
+    self.maximumResultsSpinBox.setMaximum(50)
+
+    self.maximumResultsSelectionWidget = QWidget()
+    self.maximumResultsSelectionWidget.layout = QHBoxLayout(self.maximumResultsSelectionWidget)
+    self.maximumResultsSelectionWidget.layout.setContentsMargins(0, 0, 0, 0)
+    self.maximumResultsSelectionWidget.layout.addWidget(maximumResultsLabel)
+    self.maximumResultsSelectionWidget.layout.addWidget(self.maximumResultsSpinBox)
 
     self.rememberLastGradePicked = QCheckBox('Remember last grade picked when re-opening app?', objectName='rememberLastGradePicked')
     self.rememberLastGradePicked.clicked.connect(lambda: self.toggleSetting('rememberLastGradePicked'))
@@ -58,6 +71,7 @@ class SettingsWidget(QDialog):
     self.defaultEditingActionWidget.layout.addWidget(self.updateButton, alignment=Qt.AlignmentFlag.AlignLeft)
     self.defaultEditingActionWidget.layout.addWidget(self.deleteButton, alignment=Qt.AlignmentFlag.AlignLeft)
 
+    self.layout.addWidget(self.maximumResultsSelectionWidget)
     self.layout.addWidget(self.rememberLastGradePicked)
     self.layout.addWidget(self.askBeforeActions)
     self.layout.addWidget(self.showEditDictWordsButton)
@@ -69,6 +83,9 @@ class SettingsWidget(QDialog):
   def style(self):
     from Common.styles import Styles
     self.setStyleSheet(Styles.settingsWidgetStyle)
+
+  def maximumResultsChanged(self):
+    Settings.setMaximumResults(self.maximumResultsSpinBox.value())
 
   def toggleSetting(self, settingName):
     settingCheckbox = self.findChild(QCheckBox, settingName)

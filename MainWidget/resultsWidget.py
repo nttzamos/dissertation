@@ -5,6 +5,9 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidg
 from MainWidget.result import Result
 from MenuBar.settings import Settings
 
+import enchant
+from queue import PriorityQueue
+
 class ResultsWidget(QWidget):
   scrollAreaWidgetContents = QWidget()
   gridLayout = QGridLayout(scrollAreaWidgetContents)
@@ -54,12 +57,30 @@ class ResultsWidget(QWidget):
 
   @staticmethod
   def getResults(word):
-    resultsWords = []
-    for i in range(15):
-      if i % 2 == 0:
-        resultsWords.append(word + str(i) + "123")
+    from Common.databaseHandler import DBHandler
+    from MainWidget.currentSearch import CurrentSearch
+    grade = CurrentSearch.currentGrade
+    dictionaryWords = DBHandler.getWords(grade)
+    maximumSize = Settings.getMaximumResults() + 1
+
+    queue = PriorityQueue()
+    for i in range(len(dictionaryWords)):
+      distance = enchant.utils.levenshtein(word, dictionaryWords[i]) * -1
+      if queue.qsize() < maximumSize:
+        queue.put((distance, dictionaryWords[i]))
       else:
-        resultsWords.append(word)
+        tmp = queue.get()
+        if tmp[0] < distance:
+          queue.put((distance, dictionaryWords[i]))
+        else:
+          queue.put(tmp)
+
+    resultsWords = []
+    for i in range(maximumSize):
+      resultsWords.append(queue.get()[1])
+
+    resultsWords.remove(word)
+    resultsWords.sort()
 
     return resultsWords
 

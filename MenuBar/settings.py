@@ -12,6 +12,10 @@ class Settings():
   @staticmethod
   def initializeSettingsDatabase(screenWidth, screenHeight):
     settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+
+    if not settingsDatabase.get('maximumResults'):
+      settingsDatabase.set('maximumResults', 20)
+
     if not settingsDatabase.get('lastGradePicked'):
       settingsDatabase.set('lastGradePicked', 1)
 
@@ -96,6 +100,18 @@ class Settings():
     resultsWidgetColumns = settingsDatabase.get('rightWidgetWidth') // (settingsDatabase.get('singleResultWidth') + 10)
 
     return resultsWidgetColumns
+
+  @staticmethod
+  def setMaximumResults(maximumResults):
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+    settingsDatabase.set('maximumResults', maximumResults)
+    settingsDatabase.dump()
+
+  @staticmethod
+  def getMaximumResults():
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+
+    return settingsDatabase.get('maximumResults')
 
   @staticmethod
   def setBooleanSetting(settingName, newValue):
