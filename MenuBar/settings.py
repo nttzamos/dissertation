@@ -6,7 +6,7 @@ from MainWidget.result import Result
 import pickledb
 
 class Settings():
-  settingsDatabaseFile = "settings.json"
+  settingsDatabaseFile = "MenuBar/settings.json"
 
   font = QFont().family()
   screenWidth = 0

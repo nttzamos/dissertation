@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QVBoxLayout, QLineEdit, QComboBox, QDialog, QLabel, QCompleter, QCheckBox, QRadioButton, QWidget, QHBoxLayout, QPushButton, QMessageBox
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QIcon
 
 from MenuBar.settings import Settings
 from Common.databaseHandler import DBHandler
@@ -9,6 +9,7 @@ class WordsEditingWidget(QDialog):
   def __init__(self):
     super().__init__()
     self.setWindowTitle('Edit Dictionary Words')
+    self.setWindowIcon(QIcon("Resources/windowIcon.svg"))
     self.setFixedSize(Settings.screenWidth / 2, Settings.screenHeight / 2)
 
     self.layout = QVBoxLayout(self)
@@ -113,6 +114,7 @@ class WordsEditingWidget(QDialog):
     if self.deletionSelectionButton.isChecked():
       self.updateWordWidget.hide()
 
+    self.wordSelectionLineEdit.setFocus()
 
     self.style()
 

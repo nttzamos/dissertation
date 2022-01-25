@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QWidget, QRadioButton
+from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
 
 from MenuBar.settings import Settings
@@ -7,6 +8,7 @@ class SettingsWidget(QDialog):
   def __init__(self):
     super().__init__()
     self.setWindowTitle("Settings")
+    self.setWindowIcon(QIcon("Resources/windowIcon.svg"))
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 20, 20, 20)
@@ -61,6 +63,12 @@ class SettingsWidget(QDialog):
     self.layout.addWidget(self.showEditDictWordsButton)
     self.layout.addWidget(self.themeSelectionWidget)
     # self.layout.addWidget(self.defaultEditingActionWidget)
+
+    self.style()
+
+  def style(self):
+    from Common.styles import Styles
+    self.setStyleSheet(Styles.settingsWidgetStyle)
 
   def toggleSetting(self, settingName):
     settingCheckbox = self.findChild(QCheckBox, settingName)
