@@ -13,6 +13,7 @@ class ResultsWidget(QWidget):
   showPlaceholderLabel = True
   placeholderLabel = QLabel("The results of your search will be displayed here.")
   gridColumns = Settings.getResultsWidgetColumns()
+  singleResultWidth = Settings.getSingleResultWidth()
 
   def __init__(self):
     super().__init__()
@@ -41,12 +42,13 @@ class ResultsWidget(QWidget):
   def showResults(word):
     ResultsWidget.hidePlaceholder()
     ResultsWidget.clearPreviousResults()
+    ResultsWidget.gridLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
     resultsWords = ResultsWidget.getResults(word)
 
     for i in range(len(resultsWords)):
       row = i // ResultsWidget.gridColumns
       column = i % ResultsWidget.gridColumns
-      result = Result(resultsWords[i])
+      result = Result(resultsWords[i], ResultsWidget.singleResultWidth)
       ResultsWidget.widgetList.append(result)
       ResultsWidget.gridLayout.addWidget(result, row, column)
 
@@ -54,7 +56,10 @@ class ResultsWidget(QWidget):
   def getResults(word):
     resultsWords = []
     for i in range(15):
-      resultsWords.append(word + str(i))
+      if i % 2 == 0:
+        resultsWords.append(word + str(i) + "123")
+      else:
+        resultsWords.append(word)
 
     return resultsWords
 
@@ -70,6 +75,7 @@ class ResultsWidget(QWidget):
     ResultsWidget.clearPreviousResults()
     if not ResultsWidget.showPlaceholderLabel:
       ResultsWidget.showPlaceholderLabel = True
+      ResultsWidget.gridLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
       ResultsWidget.placeholderLabel.show()
 
   @staticmethod

@@ -7,14 +7,7 @@ import pickledb
 
 class Settings():
   settingsDatabaseFile = "MenuBar/settings.json"
-
   font = QFont().family()
-  screenWidth = 0
-  screenHeight = 0
-  leftWidgetWidth = 0
-  resultsWidgetColumns = 0
-  rightWidgetWidth = 0
-  singleResultWidth = 0
 
   @staticmethod
   def initializeSettingsDatabase(screenWidth, screenHeight):
@@ -68,6 +61,18 @@ class Settings():
       settingsDatabase.dump()
 
   @staticmethod
+  def getScreenWidth():
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+
+    return settingsDatabase.get('screenWidth')
+
+  @staticmethod
+  def getScreenHeight():
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+
+    return settingsDatabase.get('screenHeight')
+
+  @staticmethod
   def getLeftWidgetWidth():
     settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
 
@@ -80,9 +85,15 @@ class Settings():
     return settingsDatabase.get('rightWidgetWidth')
 
   @staticmethod
+  def getSingleResultWidth():
+    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
+
+    return settingsDatabase.get('singleResultWidth')
+
+  @staticmethod
   def getResultsWidgetColumns():
     settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
-    resultsWidgetColumns = settingsDatabase.get('rightWidgetWidth') // settingsDatabase.get('singleResultWidth')
+    resultsWidgetColumns = settingsDatabase.get('rightWidgetWidth') // (settingsDatabase.get('singleResultWidth') + 10)
 
     return resultsWidgetColumns
 

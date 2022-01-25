@@ -10,7 +10,7 @@ class WordsEditingWidget(QDialog):
     super().__init__()
     self.setWindowTitle('Edit Dictionary Words')
     self.setWindowIcon(QIcon("Resources/windowIcon.svg"))
-    self.setFixedSize(Settings.screenWidth / 2, Settings.screenHeight / 2)
+    # self.setFixedSize(Settings.getScreenWidth() / 2, Settings.getScreenHeight() / 2)
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 20, 20, 10)

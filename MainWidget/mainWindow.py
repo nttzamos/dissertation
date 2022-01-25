@@ -14,9 +14,7 @@ class MainWindow(QWidget):
 
   def __init__(self):
     super().__init__()
-    self.init_gui()
 
-  def init_gui(self):
     self.layout = QGridLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)
 

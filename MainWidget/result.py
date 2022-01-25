@@ -3,11 +3,14 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 
 class Result(QWidget):
-  def __init__(self, word):
+  def __init__(self, word, widgetWidth=None):
     super().__init__()
 
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(0, 0, 10, 10)
+
+    if widgetWidth != None:
+      self.setFixedWidth(widgetWidth)
 
     dataWidget = QWidget()
     dataWidget.layout = QVBoxLayout(dataWidget)
