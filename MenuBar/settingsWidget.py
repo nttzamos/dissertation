@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QWidget, QRadioButton, QSpinBox, QLabel
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 
 from MenuBar.settings import Settings
@@ -14,6 +14,10 @@ class SettingsWidget(QDialog):
     self.layout.setContentsMargins(20, 20, 20, 20)
     self.layout.setSpacing(20)
 
+    sectionLabelFont = QFont(Settings.font, 16)
+
+    resultsSectionLabel = QLabel('Results Settings')
+    resultsSectionLabel.setFont(sectionLabelFont)
     maximumResultsLabel = QLabel('Maximum Results:')
     self.maximumResultsSpinBox = QSpinBox()
     self.maximumResultsSpinBox.valueChanged.connect(self.maximumResultsChanged)
@@ -23,9 +27,15 @@ class SettingsWidget(QDialog):
 
     self.maximumResultsSelectionWidget = QWidget()
     self.maximumResultsSelectionWidget.layout = QHBoxLayout(self.maximumResultsSelectionWidget)
-    self.maximumResultsSelectionWidget.layout.setContentsMargins(0, 0, 0, 0)
+    self.maximumResultsSelectionWidget.layout.setContentsMargins(30, 0, 0, 0)
     self.maximumResultsSelectionWidget.layout.addWidget(maximumResultsLabel)
     self.maximumResultsSelectionWidget.layout.addWidget(self.maximumResultsSpinBox)
+
+    generalSectionLabel = QLabel('General Settings')
+    generalSectionLabel.setFont(sectionLabelFont)
+    generalSettingsWidget = QWidget()
+    generalSettingsWidget.layout = QVBoxLayout(generalSettingsWidget)
+    generalSettingsWidget.layout.setContentsMargins(30, 0, 0, 0)
 
     self.rememberLastGradePicked = QCheckBox('Remember last grade picked when re-opening app?', objectName='rememberLastGradePicked')
     self.rememberLastGradePicked.clicked.connect(lambda: self.toggleSetting('rememberLastGradePicked'))
@@ -39,6 +49,12 @@ class SettingsWidget(QDialog):
     self.showEditDictWordsButton.clicked.connect(lambda: self.toggleSetting('showEditDictWordsButton'))
     self.showEditDictWordsButton.setChecked(Settings.getBooleanSetting('showEditDictWordsButton'))
 
+    generalSettingsWidget.layout.addWidget(self.rememberLastGradePicked)
+    generalSettingsWidget.layout.addWidget(self.askBeforeActions)
+    generalSettingsWidget.layout.addWidget(self.showEditDictWordsButton)
+
+    themeSectionLabel = QLabel('Theme Settings (changes will take effect when re-opening app)')
+    themeSectionLabel.setFont(sectionLabelFont)
     self.themeSelectionWidget = QWidget()
     self.themeSelectionWidget.layout = QHBoxLayout(self.themeSelectionWidget)
     self.lightThemeButton = QRadioButton('Light Theme')
@@ -51,7 +67,7 @@ class SettingsWidget(QDialog):
     else:
       self.darkThemeButton.setChecked(True)
 
-    self.themeSelectionWidget.layout.setContentsMargins(0, 0, 0, 0)
+    self.themeSelectionWidget.layout.setContentsMargins(30, 0, 0, 0)
     self.themeSelectionWidget.layout.addWidget(self.lightThemeButton, alignment=Qt.AlignmentFlag.AlignLeft)
     self.themeSelectionWidget.layout.addWidget(self.darkThemeButton, alignment=Qt.AlignmentFlag.AlignLeft)
 
@@ -67,14 +83,15 @@ class SettingsWidget(QDialog):
     else:
       self.deleteButton.setChecked(True)
 
-    self.defaultEditingActionWidget.layout.setContentsMargins(0, 0, 0, 0)
+    self.defaultEditingActionWidget.layout.setContentsMargins(30, 0, 0, 0)
     self.defaultEditingActionWidget.layout.addWidget(self.updateButton, alignment=Qt.AlignmentFlag.AlignLeft)
     self.defaultEditingActionWidget.layout.addWidget(self.deleteButton, alignment=Qt.AlignmentFlag.AlignLeft)
 
+    self.layout.addWidget(resultsSectionLabel)
     self.layout.addWidget(self.maximumResultsSelectionWidget)
-    self.layout.addWidget(self.rememberLastGradePicked)
-    self.layout.addWidget(self.askBeforeActions)
-    self.layout.addWidget(self.showEditDictWordsButton)
+    self.layout.addWidget(generalSectionLabel)
+    self.layout.addWidget(generalSettingsWidget)
+    self.layout.addWidget(themeSectionLabel)
     self.layout.addWidget(self.themeSelectionWidget)
     # self.layout.addWidget(self.defaultEditingActionWidget)
 
