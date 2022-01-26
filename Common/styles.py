@@ -21,7 +21,6 @@ class Styles():
 
   if theme == 'light':
     settingsWidgetStyle = """
-      QWidget { background-color: #FFFAFA }
       QCheckBox { color: black }
       QRadioButton { color: black }"""
   else:

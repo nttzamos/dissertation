@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QWidget, QRadioButton, QSpinBox, QLabel
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QWidget, QRadioButton, QSpinBox, QLabel, QGroupBox
 from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 
@@ -16,8 +16,6 @@ class SettingsWidget(QDialog):
 
     sectionLabelFont = QFont(Settings.font, 16)
 
-    resultsSectionLabel = QLabel('Results Settings')
-    resultsSectionLabel.setFont(sectionLabelFont)
     maximumResultsLabel = QLabel('Maximum Results:')
     self.maximumResultsSpinBox = QSpinBox()
     self.maximumResultsSpinBox.valueChanged.connect(self.maximumResultsChanged)
@@ -25,17 +23,17 @@ class SettingsWidget(QDialog):
     self.maximumResultsSpinBox.setMinimum(1)
     self.maximumResultsSpinBox.setMaximum(50)
 
-    self.maximumResultsSelectionWidget = QWidget()
-    self.maximumResultsSelectionWidget.layout = QHBoxLayout(self.maximumResultsSelectionWidget)
-    self.maximumResultsSelectionWidget.layout.setContentsMargins(30, 0, 0, 0)
-    self.maximumResultsSelectionWidget.layout.addWidget(maximumResultsLabel)
-    self.maximumResultsSelectionWidget.layout.addWidget(self.maximumResultsSpinBox)
+    maximumResultsSelectionWidget = QGroupBox('Maximum results')
+    maximumResultsSelectionWidget.setFont(sectionLabelFont)
+    maximumResultsSelectionWidget.layout = QHBoxLayout(maximumResultsSelectionWidget)
+    maximumResultsSelectionWidget.layout.setContentsMargins(10, 0, 0, 0)
+    maximumResultsSelectionWidget.layout.addWidget(maximumResultsLabel)
+    maximumResultsSelectionWidget.layout.addWidget(self.maximumResultsSpinBox)
 
-    generalSectionLabel = QLabel('General Settings')
-    generalSectionLabel.setFont(sectionLabelFont)
-    generalSettingsWidget = QWidget()
+    generalSettingsWidget = QGroupBox("General Settings")
+    generalSettingsWidget.setFont(sectionLabelFont)
     generalSettingsWidget.layout = QVBoxLayout(generalSettingsWidget)
-    generalSettingsWidget.layout.setContentsMargins(30, 0, 0, 0)
+    generalSettingsWidget.layout.setContentsMargins(10, 0, 0, 0)
 
     self.rememberLastGradePicked = QCheckBox('Remember last grade picked when re-opening app?', objectName='rememberLastGradePicked')
     self.rememberLastGradePicked.clicked.connect(lambda: self.toggleSetting('rememberLastGradePicked'))
@@ -53,10 +51,9 @@ class SettingsWidget(QDialog):
     generalSettingsWidget.layout.addWidget(self.askBeforeActions)
     generalSettingsWidget.layout.addWidget(self.showEditDictWordsButton)
 
-    themeSectionLabel = QLabel('Theme Settings (changes will take effect when re-opening app)')
-    themeSectionLabel.setFont(sectionLabelFont)
-    self.themeSelectionWidget = QWidget()
-    self.themeSelectionWidget.layout = QHBoxLayout(self.themeSelectionWidget)
+    themeSelectionWidget = QGroupBox("Theme Section")
+    themeSelectionWidget.setFont(sectionLabelFont)
+    themeSelectionWidget.layout = QHBoxLayout(themeSelectionWidget)
     self.lightThemeButton = QRadioButton('Light Theme')
     self.lightThemeButton.toggled.connect(self.lightThemeButtonClicked)
     self.darkThemeButton = QRadioButton('Dark Theme')
@@ -67,9 +64,9 @@ class SettingsWidget(QDialog):
     else:
       self.darkThemeButton.setChecked(True)
 
-    self.themeSelectionWidget.layout.setContentsMargins(30, 0, 0, 0)
-    self.themeSelectionWidget.layout.addWidget(self.lightThemeButton, alignment=Qt.AlignmentFlag.AlignLeft)
-    self.themeSelectionWidget.layout.addWidget(self.darkThemeButton, alignment=Qt.AlignmentFlag.AlignLeft)
+    themeSelectionWidget.layout.setContentsMargins(10, 0, 0, 0)
+    themeSelectionWidget.layout.addWidget(self.lightThemeButton, alignment=Qt.AlignmentFlag.AlignLeft)
+    themeSelectionWidget.layout.addWidget(self.darkThemeButton, alignment=Qt.AlignmentFlag.AlignLeft)
 
     self.defaultEditingActionWidget = QWidget()
     self.defaultEditingActionWidget.layout = QHBoxLayout(self.defaultEditingActionWidget)
@@ -87,12 +84,9 @@ class SettingsWidget(QDialog):
     self.defaultEditingActionWidget.layout.addWidget(self.updateButton, alignment=Qt.AlignmentFlag.AlignLeft)
     self.defaultEditingActionWidget.layout.addWidget(self.deleteButton, alignment=Qt.AlignmentFlag.AlignLeft)
 
-    self.layout.addWidget(resultsSectionLabel)
-    self.layout.addWidget(self.maximumResultsSelectionWidget)
-    self.layout.addWidget(generalSectionLabel)
+    self.layout.addWidget(maximumResultsSelectionWidget)
     self.layout.addWidget(generalSettingsWidget)
-    self.layout.addWidget(themeSectionLabel)
-    self.layout.addWidget(self.themeSelectionWidget)
+    self.layout.addWidget(themeSelectionWidget)
     # self.layout.addWidget(self.defaultEditingActionWidget)
 
     self.style()
