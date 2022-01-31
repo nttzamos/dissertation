@@ -194,10 +194,16 @@ class Styles():
   if theme == 'light':
     currentSearchStyle = """
       QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }
       QComboBox { color: black }"""
   else:
     currentSearchStyle = """
       QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }
       QComboBox { color: black }"""
 
   if theme == 'light':
@@ -207,6 +213,62 @@ class Styles():
     searchedWordStyle = """
       QLabel { border: 1px solid white; border-radius: 50%; padding: 0px 50px; background-color: #423F3E; color: white }"""
       # QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px; background-color: #B85C38; color: black }"""
+
+  if theme == 'light':
+    studentAdditionStyle = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }"""
+  else:
+    studentAdditionStyle = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }
+      QComboBox { color: black }"""
+
+  if theme == 'light':
+    studentUpdateStyle = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }"""
+  else:
+    studentUpdateStyle = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }
+      QComboBox { color: black }"""
+
+  if theme == 'light':
+    profileAdditionStyle = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }"""
+  else:
+    profileAdditionStyle = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }
+      QComboBox { color: black }"""
+
+  if theme == 'light':
+    profileUpdateStyle = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }"""
+  else:
+    profileUpdateStyle = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }
+      QComboBox { color: black }"""
 
   if theme == 'light':
     resultsWidgetStyle = """

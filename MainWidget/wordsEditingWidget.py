@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QLineEdit, QComboBox, QDialog, QLabel, QCompleter, QCheckBox, QRadioButton, QWidget, QHBoxLayout, QPushButton, QMessageBox
+from PyQt6.QtWidgets import QVBoxLayout, QLineEdit, QComboBox, QDialog, QLabel, QCompleter, QCheckBox, QRadioButton, QWidget, QHBoxLayout, QMessageBox
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 from PyQt6.QtGui import QFont, QIcon
 
@@ -60,7 +60,7 @@ class WordsEditingWidget(QDialog):
     self.wordSelectionLineEdit = QLineEdit()
     self.wordSelectionLineEdit.setFont(lineEditFont)
     self.wordSelectionLineEdit.returnPressed.connect(self.wordSelected)
-    self.dictionaryWords = DBHandler.getWords(1)
+    self.dictionaryWords = DBHandler.getGradeWords(1)
     self.completer = QCompleter(self.dictionaryWords)
     self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
     self.completer.popup().setFont(completerFont)
@@ -196,7 +196,7 @@ class WordsEditingWidget(QDialog):
     return grades
 
   def gradeSelectorActivated(self, index):
-    self.dictionaryWords = DBHandler.getWords(index + 1)
+    self.dictionaryWords = DBHandler.getGradeWords(index + 1)
     model = QStringListModel(self.dictionaryWords, self.completer)
     self.completer.setModel(model)
 

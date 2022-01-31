@@ -39,12 +39,6 @@ class Settings():
     Settings.calculateSizeSettings(screenWidth, screenHeight)
 
   @staticmethod
-  def modifyLastGradePicked(grade):
-    settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
-    settingsDatabase.set('lastGradePicked', grade)
-    settingsDatabase.dump()
-
-  @staticmethod
   def calculateSizeSettings(screenWidth, screenHeight):
     settingsDatabase = pickledb.load(Settings.settingsDatabaseFile, False)
     if not settingsDatabase.get('screenWidth') == screenWidth:
@@ -58,7 +52,7 @@ class Settings():
       rightWidgetWidth = screenWidth - leftWidgetWidth - 2
       settingsDatabase.set('rightWidgetWidth', rightWidgetWidth)
 
-      longResult = Result("WWWWWWWWWW") # 10
+      longResult = Result("WWWWWWWWWW", initial=True) # 10
       singleResultWidth = longResult.sizeHint().width()
       settingsDatabase.set('singleResultWidth', singleResultWidth)
 

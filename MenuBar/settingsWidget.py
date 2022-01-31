@@ -15,9 +15,11 @@ class SettingsWidget(QDialog):
     self.layout.setSpacing(20)
 
     sectionLabelFont = QFont(Settings.font, 16)
+    spinBoxFont = QFont(Settings.font, 12)
 
     maximumResultsLabel = QLabel('Maximum Results:')
     self.maximumResultsSpinBox = QSpinBox()
+    self.maximumResultsSpinBox.setFont(spinBoxFont)
     self.maximumResultsSpinBox.valueChanged.connect(self.maximumResultsChanged)
     self.maximumResultsSpinBox.setValue(Settings.getMaximumResults())
     self.maximumResultsSpinBox.setMinimum(1)

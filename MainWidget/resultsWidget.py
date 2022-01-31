@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidg
 from MainWidget.result import Result
 from MenuBar.settings import Settings
 
-import enchant
+# import enchant
 from queue import PriorityQueue
 
 class ResultsWidget(QWidget):
@@ -51,21 +51,20 @@ class ResultsWidget(QWidget):
     for i in range(len(resultsWords)):
       row = i // ResultsWidget.gridColumns
       column = i % ResultsWidget.gridColumns
-      result = Result(resultsWords[i], ResultsWidget.singleResultWidth)
+      result = Result(resultsWords[i], widgetWidth=ResultsWidget.singleResultWidth)
       ResultsWidget.widgetList.append(result)
       ResultsWidget.gridLayout.addWidget(result, row, column)
 
   @staticmethod
   def getResults(word):
-    from Common.databaseHandler import DBHandler
-    from MainWidget.currentSearch import CurrentSearch
-    grade = CurrentSearch.currentGrade
-    dictionaryWords = DBHandler.getWords(grade)
+    from MainWidget.searchingWidget import SearchingWidget
+    dictionaryWords = SearchingWidget.dictionaryWords
     maximumSize = Settings.getMaximumResults() + 1
 
     queue = PriorityQueue()
     for i in range(len(dictionaryWords)):
-      distance = enchant.utils.levenshtein(word, dictionaryWords[i]) * -1
+      # distance = enchant.utils.levenshtein(word, dictionaryWords[i]) * -1
+      distance = 5
       if queue.qsize() < maximumSize:
         queue.put((distance, dictionaryWords[i]))
       else:
@@ -79,9 +78,10 @@ class ResultsWidget(QWidget):
     for i in range(maximumSize):
       resultsWords.append(queue.get()[1])
 
-    resultsWords.remove(word)
-    resultsWords.sort()
+    if word in resultsWords:
+      resultsWords.remove(word)
 
+    resultsWords.sort()
     return resultsWords
 
   @staticmethod

@@ -26,4 +26,4 @@ class MainWidget(QWidget):
   def addWord(word):
     if (word != MainWidget.currentSearch.getCurrentWord()):
       MainWidget.currentSearch.searchedWord.setText(word)
-      ResultsWidget.showResults(word)
+      # ResultsWidget.showResults(word)

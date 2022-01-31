@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 
 class Result(QWidget):
-  def __init__(self, word, widgetWidth=None):
+  def __init__(self, word, widgetWidth=None, initial=False):
     super().__init__()
 
     self.layout = QHBoxLayout(self)
@@ -38,7 +38,7 @@ class Result(QWidget):
     self.starButton.clicked.connect(self.notifyStarred)
     self.starButton.setFixedWidth(30)
     from Common.databaseHandler import DBHandler
-    if DBHandler.starredWordExists(word):
+    if (not initial) and DBHandler.starredWordExists(word):
       self.starButton.setIcon(QIcon("Resources/starred.svg"))
       self.isStarred = True
     else:

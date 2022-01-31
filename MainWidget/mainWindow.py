@@ -67,11 +67,11 @@ class MainWindow(QWidget):
     self.setStyleSheet(Styles.mainWindowStyle)
 
   @staticmethod
-  def updateWidgets(initial):
+  def updateWidgets(initial, profileId, gradeId, subjectName):
     from MainWidget.searchingWidget import SearchingWidget
-    SearchingWidget.updateDictionaryWords()
+    SearchingWidget.updateDictionaryWords(profileId, gradeId, subjectName)
 
-    SearchingWidget.modifyErrorMessage()
+    SearchingWidget.modifyErrorMessage(profileId)
 
     from MainWidget.resultsWidget import ResultsWidget
     ResultsWidget.showPlaceholder()

@@ -115,14 +115,14 @@ class SearchingWidget(QWidget):
     SearchingWidget.errorMessage.show()
 
   @staticmethod
-  def modifyErrorMessage():
-    SearchingWidget.errorMessage.setText(SearchingWidget.unknownWordMessage())
+  def modifyErrorMessage(profileId):
+    SearchingWidget.errorMessage.setText(SearchingWidget.unknownWordMessage(profileId))
 
   @staticmethod
-  def unknownWordMessage():
-    from MainWidget.currentSearch import CurrentSearch
+  def unknownWordMessage(profileId):
+    from Common.databaseHandler import DBHandler
     return "This word is not contained in the books of " + \
-      SearchingWidget.gradesMapping[CurrentSearch.currentGrade] + \
+      DBHandler.getProfileName(profileId) + \
       ". Please search for another word."
 
   @staticmethod
@@ -130,9 +130,8 @@ class SearchingWidget(QWidget):
     SearchingWidget.editWordsButton.show() if newVisibilityStatus else SearchingWidget.editWordsButton.hide()
 
   @staticmethod
-  def updateDictionaryWords():
-    from MainWidget.currentSearch import CurrentSearch
-    SearchingWidget.dictionaryWords = DBHandler.getWords(CurrentSearch.currentGrade)
+  def updateDictionaryWords(profileId, gradeId, subjectName):
+    SearchingWidget.dictionaryWords = DBHandler.getWords(profileId, gradeId, subjectName)
     model = QStringListModel(SearchingWidget.dictionaryWords, SearchingWidget.completer)
     SearchingWidget.completer.setModel(model)
 
@@ -185,5 +184,5 @@ class SearchingWidget(QWidget):
     SearchingWidget.lineEdit.setFocus()
 
   def openWordsEditingWidget(self):
-    settingsDialog = WordsEditingWidget()
-    settingsDialog.exec()
+    wordsEditingDialog = WordsEditingWidget()
+    wordsEditingDialog.exec()
