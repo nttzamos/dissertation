@@ -100,6 +100,9 @@ class StudentAdditionWidget(QWidget):
     from MainWidget.studentUpdateWidget import StudentUpdateWidget
     StudentUpdateWidget.addStudent(studentName)
 
+    from MainWidget.currentSearch import CurrentSearch
+    CurrentSearch.addStudent(studentName)
+
   def studentIsInvalid(self):
     studentName = self.nameLineEdit.text()
     if len(studentName) == 0:

@@ -144,6 +144,8 @@ class StudentUpdateWidget(QWidget):
         return
 
     newStudentName = self.nameLineEdit.text()
+    from MainWidget.currentSearch import CurrentSearch
+    CurrentSearch.updateStudent(StudentUpdateWidget.studentSelector.currentText(), newStudentName)
     self.studentSelector.setItemText(self.studentSelector.currentIndex(), newStudentName)
     DBHandler.updateStudentName(self.studentId, newStudentName)
 
@@ -152,15 +154,23 @@ class StudentUpdateWidget(QWidget):
       if checkBox.isChecked():
         profileNames.append(checkBox.text())
 
-    profileToRemove = list(set(self.studentProfiles) - set(profileNames))
+    profilesToRemove = list(set(self.studentProfiles) - set(profileNames))
     profilesToAdd = list(set(profileNames) - set(self.studentProfiles))
+    self.studentProfiles = profileNames
     DBHandler.addStudentProfiles(self.studentId, profilesToAdd)
-    DBHandler.removeStudentProfiles(self.studentId, profileToRemove)
+    DBHandler.removeStudentProfiles(self.studentId, profilesToRemove)
+
+    if CurrentSearch.studentSelector.currentText() == newStudentName:
+      CurrentSearch.addProfiles(profilesToAdd)
+      CurrentSearch.removeProfiles(profilesToRemove)
 
   def deleteStudent(self):
     DBHandler.removeStudent(self.studentId)
     for checkbox in StudentUpdateWidget.checkBoxes:
       StudentUpdateWidget.profilesSelectionWidget.layout.removeWidget(checkbox)
+
+    from MainWidget.currentSearch import CurrentSearch
+    CurrentSearch.removeStudent(StudentUpdateWidget.studentSelector.currentText())
 
     StudentUpdateWidget.studentSelector.removeItem(StudentUpdateWidget.studentSelector.currentIndex())
     if StudentUpdateWidget.studentSelector.count() == 0:
@@ -207,7 +217,6 @@ class StudentUpdateWidget(QWidget):
     checkBoxFont = QFont(Settings.font, 14)
     checkBox.setFont(checkBoxFont)
     StudentUpdateWidget.checkBoxes.append(checkBox)
-    print(StudentUpdateWidget.lastIndexUsed)
     StudentUpdateWidget.lastIndexUsed += 1
     StudentUpdateWidget.profilesSelectionWidget.layout.addWidget(checkBox, StudentUpdateWidget.lastIndexUsed, 0)
 

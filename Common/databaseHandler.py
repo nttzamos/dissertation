@@ -35,8 +35,10 @@ class DBHandler():
     cur.execute('''CREATE TABLE profile (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, grade_id INTEGER)''')
     cur.execute('''CREATE TABLE student_profile (id INTEGER PRIMARY KEY AUTOINCREMENT, student_id INTEGER, profile_id INTEGER)''')
     cur.execute('''CREATE TABLE profile_subject (id INTEGER PRIMARY KEY AUTOINCREMENT, profile_id INTEGER, subject_id INTEGER)''')
-    cur.execute('''CREATE TABLE recent_search (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, profile_id INTEGER, subject_id INTEGER, searched_at TIMESTAMP)''')
-    cur.execute('''CREATE TABLE starred_word (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, profile_id INTEGER, subject_id INTEGER)''')
+
+    # Should we maybe remove profile_id?
+    cur.execute('''CREATE TABLE recent_search (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, profile_id INTEGER, student_id INTEGER, subject_id INTEGER, searched_at TIMESTAMP)''')
+    cur.execute('''CREATE TABLE starred_word (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, profile_id INTEGER, student_id INTEGER, subject_id INTEGER)''')
 
     for i in range(6):
       cur.execute("INSERT INTO grade VALUES (?, ?) ON CONFLICT(id) DO NOTHING", (i + 1, gradesNames[i]))
@@ -121,14 +123,6 @@ class DBHandler():
     for profile in profiles:
       profileId = DBHandler.getProfileId(profile)
       cur.execute("DELETE FROM student_profile WHERE student_id = ? AND profile_id = ?", (studentId, profileId))
-
-    con.commit()
-    con.close()
-
-    con, cur = DBHandler.connectToDatabase()
-    for profile in profiles:
-      profileId = DBHandler.getProfileId(profile)
-      cur.execute("INSERT INTO student_profile VALUES (null, ?, ?)", (studentId, profileId))
 
     con.commit()
     con.close()
@@ -412,7 +406,7 @@ class DBHandler():
   @staticmethod
   def addRecentSearch(word):
     from MainWidget.currentSearch import CurrentSearch
-    profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
+    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
     if subjectName == -1:
       return # got to change
 
@@ -424,9 +418,9 @@ class DBHandler():
     con, cur = DBHandler.connectToDatabase()
 
     if recentSearchExists:
-      cur.execute("UPDATE recent_search SET searched_at = ? WHERE word_id = ? AND profile_id = ?", (dateTimeNow, wordId, profileId))
+      cur.execute("UPDATE recent_search SET searched_at = ? WHERE word_id = ? AND profile_id = ? AND student_id = ?", (dateTimeNow, wordId, profileId, studentId))
     else:
-      cur.execute("INSERT INTO recent_search VALUES (null, ?, ?, ?, ?)", (wordId, profileId, subjectId, dateTimeNow))
+      cur.execute("INSERT INTO recent_search VALUES (null, ?, ?, ?, ?, ?)", (wordId, profileId, studentId, subjectId, dateTimeNow))
 
     con.commit()
     con.close()
@@ -443,38 +437,41 @@ class DBHandler():
   @staticmethod
   def removeRecentSearch(word):
     from MainWidget.currentSearch import CurrentSearch
-    profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
+    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
 
     con, cur = DBHandler.connectToDatabase()
     wordId = DBHandler.getWordId(grade, word)
-    cur.execute("DELETE FROM recent_search WHERE word_id = ? AND profile_id = ?", (wordId, profileId))
+    cur.execute("DELETE FROM recent_search WHERE word_id = ? AND profile_id = ? AND student_id = ?", (wordId, profileId, studentId))
     con.commit()
     con.close()
 
   @staticmethod
   def getRecentSearches():
     from MainWidget.currentSearch import CurrentSearch
-    profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
+    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
     if subjectName == -1:
-      extraInfo = profileId
+      extraInfo = (profileId, studentId)
       query = ('SELECT word '
         'FROM ' + DBHandler.getGradeTableName(grade) + ' ' +
         'INNER JOIN recent_search '
         'ON ' + DBHandler.getGradeTableName(grade) + '.id = recent_search.word_id '
         'WHERE recent_search.profile_id = ? '
+        'AND recent_search.student_id = ? '
         'ORDER BY recent_search.searched_at ')
     else:
-      extraInfo = DBHandler.getSubjectId(grade, subjectName)
+      extraInfo = (DBHandler.getSubjectId(grade, subjectName), profileId, studentId)
       query = ('SELECT word '
         'FROM ' + DBHandler.getGradeTableName(grade) + ' ' +
         'INNER JOIN recent_search '
         'ON ' + DBHandler.getGradeTableName(grade) + '.id = recent_search.word_id '
         'WHERE recent_search.subject_id = ? '
+        'AND recent_search.profile_id = ? '
+        'AND recent_search.student_id = ? '
         'ORDER BY recent_search.searched_at ')
 
     con, cur = DBHandler.connectToDatabase()
 
-    cur.execute(query, (extraInfo,))
+    cur.execute(query, extraInfo)
     recentSearches = list(map(lambda recentSearch: recentSearch[0], cur.fetchall()))
     con.close()
     return recentSearches
@@ -482,8 +479,7 @@ class DBHandler():
   @staticmethod
   def addStarredWord(word):
     from MainWidget.currentSearch import CurrentSearch
-    profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
-    print(subjectName)
+    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
     if subjectName == -1:
       return # got to change
 
@@ -492,57 +488,60 @@ class DBHandler():
     con, cur = DBHandler.connectToDatabase()
     wordId = DBHandler.getWordId(grade, word)
 
-    cur.execute("INSERT INTO starred_word VALUES (null, ?, ?, ?)", (wordId, profileId, subjectId))
+    cur.execute("INSERT INTO starred_word VALUES (null, ?, ?, ?, ?)", (wordId, profileId, studentId, subjectId))
     con.commit()
     con.close()
 
   @staticmethod
   def starredWordExists(word):
     from MainWidget.currentSearch import CurrentSearch
-    profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
+    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
 
     wordId = DBHandler.getWordId(grade, word)
     con, cur = DBHandler.connectToDatabase()
 
-    cur.execute("SELECT COUNT(*) FROM starred_word WHERE word_id = ? AND profile_id = ?", (wordId, profileId))
+    cur.execute("SELECT COUNT(*) FROM starred_word WHERE word_id = ? AND profile_id = ? AND student_id = ?", (wordId, profileId, studentId))
     return cur.fetchone()[0] > 0
 
   @staticmethod
   def removeStarredWord(word):
     from MainWidget.currentSearch import CurrentSearch
-    profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
+    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
 
     con, cur = DBHandler.connectToDatabase()
     wordId = DBHandler.getWordId(grade, word)
-    cur.execute("DELETE FROM starred_word WHERE word_id = ? AND profile_id = ?", (wordId, profileId))
+    cur.execute("DELETE FROM starred_word WHERE word_id = ? AND profile_id = ? AND student_id = ?", (wordId, profileId, studentId))
     con.commit()
     con.close()
 
   @staticmethod
   def getStarredWords():
     from MainWidget.currentSearch import CurrentSearch
-    profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
+    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
 
     con, cur = DBHandler.connectToDatabase()
 
     if subjectName == -1:
-      extraInfo = profileId
+      extraInfo = (profileId, studentId)
       query = ('SELECT word '
           'FROM ' + DBHandler.getGradeTableName(grade) + ' ' +
           'INNER JOIN starred_word '
           'ON ' + DBHandler.getGradeTableName(grade) + '.id = starred_word.word_id '
           'WHERE starred_word.profile_id = ? '
+          'AND starred_word.student_id = ? '
           'ORDER BY ' + DBHandler.getGradeTableName(grade) + '.id DESC')
     else:
-      extraInfo = DBHandler.getSubjectId(grade, subjectName)
+      extraInfo = (DBHandler.getSubjectId(grade, subjectName), profileId, studentId)
       query = ('SELECT word '
           'FROM ' + DBHandler.getGradeTableName(grade) + ' ' +
           'INNER JOIN starred_word '
           'ON ' + DBHandler.getGradeTableName(grade) + '.id = starred_word.word_id '
           'WHERE starred_word.subject_id = ? '
+          'AND starred_word.profile_id = ? '
+          'AND starred_word.student_id = ? '
           'ORDER BY ' + DBHandler.getGradeTableName(grade) + '.id DESC')
 
-    cur.execute(query, (extraInfo,))
+    cur.execute(query, extraInfo)
     starredWords = list(map(lambda starredWord: starredWord[0], cur.fetchall()))
     con.close()
     return starredWords

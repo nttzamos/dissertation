@@ -128,10 +128,10 @@ class ProfileUpdateWidget(QWidget):
 
   def profileSelectorActivated(self, index):
     profileName = ProfileUpdateWidget.profileSelector.currentText()
-    self.profileId, gradeId, gradeName, self.profileSubjectsIds = DBHandler.getProfileDetails(profileName)
+    self.profileId, self.gradeId, gradeName, self.profileSubjectsIds = DBHandler.getProfileDetails(profileName)
     ProfileUpdateWidget.gradeLabel.setText(gradeName)
     self.nameLineEdit.setText(profileName)
-    gradeSubjects = DBHandler.getGradeSubjects(gradeId)
+    gradeSubjects = DBHandler.getGradeSubjects(self.gradeId)
 
     for checkbox in self.checkBoxes:
       self.subjectsSelectionWidget.layout.removeWidget(checkbox)
@@ -157,13 +157,17 @@ class ProfileUpdateWidget(QWidget):
       if answer == QMessageBox.StandardButton.Ok:
         return
 
+    oldProfileName = ProfileUpdateWidget.profileSelector.currentText()
     newProfileName = self.nameLineEdit.text()
 
+    from MainWidget.currentSearch import CurrentSearch
+    CurrentSearch.updateProfile(oldProfileName, newProfileName)
+
     from MainWidget.studentAdditionWidget import StudentAdditionWidget
-    StudentAdditionWidget.updateProfile(ProfileUpdateWidget.profileSelector.currentText(), newProfileName)
+    StudentAdditionWidget.updateProfile(oldProfileName, newProfileName)
 
     from MainWidget.studentUpdateWidget import StudentUpdateWidget
-    StudentUpdateWidget.updateProfile(ProfileUpdateWidget.profileSelector.currentText(), newProfileName)
+    StudentUpdateWidget.updateProfile(oldProfileName, newProfileName)
 
     self.profileSelector.setItemText(self.profileSelector.currentIndex(), newProfileName)
     DBHandler.updateProfileName(self.profileId, newProfileName)
@@ -173,10 +177,23 @@ class ProfileUpdateWidget(QWidget):
       if self.checkBoxes[i].isChecked():
         subjectsIds.append(i + 1)
 
-    subjectsToRemove = list(set(self.profileSubjectsIds) - set(subjectsIds))
-    subjectsToAdd = list(set(subjectsIds) - set(self.profileSubjectsIds))
-    DBHandler.addProfileSubjects(self.profileId, subjectsToAdd)
-    DBHandler.removeProfileSubjects(self.profileId, subjectsToRemove)
+    subjectsToRemove1 = list(set(self.profileSubjectsIds) - set(subjectsIds))
+    subjectsToAdd1 = list(set(subjectsIds) - set(self.profileSubjectsIds))
+    self.profileSubjectsIds = subjectsToAdd1
+    DBHandler.addProfileSubjects(self.profileId, subjectsToAdd1)
+    DBHandler.removeProfileSubjects(self.profileId, subjectsToRemove1)
+
+    if CurrentSearch.profileSelector.currentText() == newProfileName:
+      subjectsToAdd = []
+      for id in subjectsToAdd1:
+        subjectsToAdd.append(DBHandler.getSubjectName(id))
+
+      subjectsToRemove = []
+      for id in subjectsToRemove1:
+        subjectsToRemove.append(DBHandler.getSubjectName(id))
+
+      CurrentSearch.addSubjects(subjectsToAdd)
+      CurrentSearch.removeSubjects(subjectsToRemove)
 
   def deleteProfile(self):
     DBHandler.removeProfile(self.profileId)
@@ -188,6 +205,9 @@ class ProfileUpdateWidget(QWidget):
 
     from MainWidget.studentUpdateWidget import StudentUpdateWidget
     StudentUpdateWidget.removeProfile(ProfileUpdateWidget.profileSelector.currentText())
+
+    from MainWidget.currentSearch import CurrentSearch
+    CurrentSearch.removeProfiles([ProfileUpdateWidget.profileSelector.currentText()])
 
     ProfileUpdateWidget.profileSelector.removeItem(ProfileUpdateWidget.profileSelector.currentIndex())
     if ProfileUpdateWidget.profileSelector.count() == 0:
