@@ -130,12 +130,15 @@ class DBHandler():
   @staticmethod
   def getStudentProfiles(studentId):
     con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT profile_id FROM student_profile WHERE student_id = ?", (studentId,))
-    profileIds = list(map(lambda profileId: profileId[0], cur.fetchall()))
 
-    profileNames = []
-    for profileId in profileIds:
-      profileNames.append(DBHandler.getProfileName(profileId))
+    query = ('SELECT profile.name '
+        'FROM student_profile '
+        'INNER JOIN profile '
+        'ON student_profile.profile_id = profile.id '
+        'WHERE student_profile.student_id = ?')
+
+    cur.execute(query, (studentId,))
+    profileNames = list(map(lambda profileName: profileName[0], cur.fetchall()))
 
     con.close()
 
@@ -216,11 +219,10 @@ class DBHandler():
 
   @staticmethod
   def getProfileDetails(profileName):
-    profileId = DBHandler.getProfileId(profileName)
-
     con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT grade_id FROM profile WHERE id = ?", (profileId,))
-    gradeId = cur.fetchone()[0]
+    cur.execute("SELECT id, grade_id FROM profile WHERE name = ?", (profileName,))
+    profileId, gradeId = cur.fetchone()
+
     cur.execute("SELECT name FROM grade WHERE id = ?", (gradeId,))
     gradeName = cur.fetchone()[0]
 
