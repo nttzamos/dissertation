@@ -19,7 +19,8 @@ class SearchingWidget(QWidget):
   for i in range(len(grades)):
     gradesMapping[i + 1] = grades[i]
 
-  uninitializedStateText = "You have to select a grade first."
+  uninitializedStateText = 'You have to select a subject first.'
+  mostRecentlySearchedWord = ''
 
   def __init__(self):
     super().__init__()
@@ -113,6 +114,10 @@ class SearchingWidget(QWidget):
   def setErrorStyleSheet(self):
     self.searchBarWidget.setStyleSheet(Styles.searchingWidgetErrorStyle)
     SearchingWidget.errorMessage.show()
+
+  @staticmethod
+  def setInitialErrorMessage():
+    SearchingWidget.errorMessage.setText(SearchingWidget.uninitializedStateText)
 
   @staticmethod
   def modifyErrorMessage(profileId):

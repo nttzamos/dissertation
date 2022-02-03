@@ -6,8 +6,6 @@ from ItemWidgets.starredWord import StarredWord
 from MenuBar.settings import Settings
 
 class StarredWordsWidget(QWidget):
-  title = "Starred Words"
-
   scrollAreaWidgetContents = QWidget()
   gridLayout = QGridLayout(scrollAreaWidgetContents)
   gridLayout.setSpacing(0)
@@ -16,19 +14,16 @@ class StarredWordsWidget(QWidget):
   counter = 1000000
   widgetList = []
 
-  uninitializedStateText = "Please select a grade first."
-  emptyStateText = "You do not have any " + title
-
   placeholderLabel = QLabel()
   showPlaceholderLabel = False
 
-  vspacer = QLabel("f")
+  vspacer = QLabel('f')
 
   def __init__(self):
     super().__init__()
 
     self.layout = QVBoxLayout(self)
-    self.titleLabel = QLabel(StarredWordsWidget.title)
+    self.titleLabel = QLabel('Starred Words')
     self.titleLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
     font = QFont(Settings.font, 18)
     self.titleLabel.setFont(font)
@@ -63,26 +58,18 @@ class StarredWordsWidget(QWidget):
 
   @staticmethod
   def initialize():
-    StarredWordsWidget.placeholderLabel.setText(StarredWordsWidget.uninitializedStateText)
     StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.vspacer, 1000001, 0, 1, -1)
     StarredWordsWidget.showPlaceholder()
 
   @staticmethod
-  def populate(initial):
-    if initial:
-      StarredWordsWidget.placeholderLabel.setText(StarredWordsWidget.emptyStateText)
-
-    if not initial:
-      for starredWord in StarredWordsWidget.widgetList:
-        StarredWordsWidget.gridLayout.removeWidget(starredWord)
-      StarredWordsWidget.widgetList = []
-      StarredWordsWidget.counter = 1000000
+  def populate():
+    StarredWordsWidget.clearPreviousStarredWords()
 
     from Common.databaseHandler import DBHandler
     starredWords = DBHandler.getStarredWords()
 
     if len(starredWords) == 0:
-      StarredWordsWidget.showPlaceholder()
+      StarredWordsWidget.showPlaceholder(text = 'You do not have any Starred Words')
       return
     else:
       StarredWordsWidget.hidePlaceholder()
@@ -108,7 +95,7 @@ class StarredWordsWidget(QWidget):
   def removeStarredWord(obj):
     StarredWordsWidget.widgetList.remove(obj)
     if len(StarredWordsWidget.widgetList)==0:
-      StarredWordsWidget.showPlaceholder()
+      StarredWordsWidget.showPlaceholder(text = 'You do not have any Starred Words')
 
   @staticmethod
   def toggleStarredBottom(word):
@@ -118,7 +105,18 @@ class StarredWordsWidget(QWidget):
         return
 
   @staticmethod
-  def showPlaceholder():
+  def clearPreviousStarredWords():
+    for starredWord in StarredWordsWidget.widgetList:
+      starredWord.hide()
+      starredWord.deleteLater()
+
+    StarredWordsWidget.widgetList = []
+    StarredWordsWidget.counter = 1000000
+    StarredWordsWidget.showPlaceholder()
+
+  @staticmethod
+  def showPlaceholder(text = 'Please select a subject first.'):
+    StarredWordsWidget.placeholderLabel.setText(text)
     if not StarredWordsWidget.showPlaceholderLabel:
       StarredWordsWidget.showPlaceholderLabel = True
       StarredWordsWidget.gridLayout.addWidget(StarredWordsWidget.placeholderLabel)

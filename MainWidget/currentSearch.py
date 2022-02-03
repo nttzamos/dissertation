@@ -6,7 +6,7 @@ from Common.databaseHandler import DBHandler
 from MenuBar.settings import Settings
 
 class CurrentSearch(QWidget):
-  initialSearch = True
+  subjectSelectorActive = False
 
   def __init__(self):
     super().__init__()
@@ -45,7 +45,6 @@ class CurrentSearch(QWidget):
     CurrentSearch.profileSelector = QComboBox()
     CurrentSearch.profileSelector.setFont(comboBoxFont)
     CurrentSearch.profileSelector.addItem('You have to select a student.')
-    CurrentSearch.profileSelectorConnected = False
 
     CurrentSearch.subjectSelector = QComboBox()
     CurrentSearch.subjectSelector.setFont(comboBoxFont)
@@ -67,6 +66,8 @@ class CurrentSearch(QWidget):
     self.searchedWord.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
     CurrentSearch.studentSelector.activated.connect(self.studentSelectorActivatedInitial)
+    CurrentSearch.profileSelector.activated.connect(CurrentSearch.profileSelectorActivatedInitial)
+    CurrentSearch.subjectSelector.activated.connect(CurrentSearch.subjectSelectorActivatedInitial)
 
     self.style()
 
@@ -96,10 +97,17 @@ class CurrentSearch(QWidget):
       CurrentSearch.studentSelector.activated.connect(CurrentSearch.studentSelectorActivated)
       CurrentSearch.profileSelector.removeItem(0)
       CurrentSearch.subjectSelector.removeItem(0)
+      CurrentSearch.lastStudentPicked = 'Please select a student...'
       CurrentSearch.studentSelectorActivated(0)
 
   @staticmethod
   def studentSelectorActivated(index):
+    if CurrentSearch.studentSelector.currentText() == CurrentSearch.lastStudentPicked: return
+
+    CurrentSearch.lastStudentPicked = CurrentSearch.studentSelector.currentText()
+
+    from MainWidget.mainWindow import MainWindow
+    MainWindow.clearPreviousSubjectDetails()
     studentName = CurrentSearch.studentSelector.currentText()
     CurrentSearch.profileSelector.clear()
     from Common.databaseHandler import DBHandler
@@ -111,10 +119,9 @@ class CurrentSearch(QWidget):
       studentProfiles[0:0] = ['Please select a profile...']
       CurrentSearch.profileSelector.addItems(studentProfiles)
       CurrentSearch.profileSelector.setEnabled(True)
-      if CurrentSearch.profileSelectorConnected:
-        CurrentSearch.profileSelector.activated.disconnect()
+
+      CurrentSearch.profileSelector.activated.disconnect()
       CurrentSearch.profileSelector.activated.connect(CurrentSearch.profileSelectorActivatedInitial)
-      CurrentSearch.profileSelectorConnected = True
 
     CurrentSearch.subjectSelector.clear()
     CurrentSearch.subjectSelector.addItem('You have to select a profile.')
@@ -126,10 +133,17 @@ class CurrentSearch(QWidget):
       CurrentSearch.profileSelector.removeItem(0)
       CurrentSearch.profileSelector.activated.disconnect()
       CurrentSearch.profileSelector.activated.connect(CurrentSearch.profileSelectorActivated)
+      CurrentSearch.lastProfilePicked = 'Please select a profile...'
       CurrentSearch.profileSelectorActivated(0)
 
   @staticmethod
   def profileSelectorActivated(index):
+    if CurrentSearch.profileSelector.currentText() == CurrentSearch.lastProfilePicked: return
+
+    CurrentSearch.lastProfilePicked = CurrentSearch.profileSelector.currentText()
+
+    from MainWidget.mainWindow import MainWindow
+    MainWindow.clearPreviousSubjectDetails()
     CurrentSearch.profileId, CurrentSearch.gradeId, gradeName, profileSubjects = DBHandler.getProfileDetails(CurrentSearch.profileSelector.currentText())
     CurrentSearch.subjectSelector.clear()
     CurrentSearch.subjectSelector.addItem('Please select a subject...')
@@ -138,6 +152,7 @@ class CurrentSearch(QWidget):
     if len(profileSubjects) > 1:
       CurrentSearch.subjectSelector.addItem('All Subjects')
 
+    CurrentSearch.subjectSelector.activated.disconnect()
     CurrentSearch.subjectSelector.activated.connect(CurrentSearch.subjectSelectorActivatedInitial)
     CurrentSearch.subjectSelector.setEnabled(True)
 
@@ -147,13 +162,18 @@ class CurrentSearch(QWidget):
       CurrentSearch.subjectSelector.removeItem(0)
       CurrentSearch.subjectSelector.activated.disconnect()
       CurrentSearch.subjectSelector.activated.connect(CurrentSearch.subjectSelectorActivated)
+      CurrentSearch.lastSubjectPicked = 'Please select a subject...'
       CurrentSearch.subjectSelectorActivated(CurrentSearch.subjectSelector.currentIndex())
 
   @staticmethod
   def subjectSelectorActivated(index):
+    if CurrentSearch.subjectSelector.currentText() == CurrentSearch.lastSubjectPicked: return
+
+    CurrentSearch.lastSubjectPicked = CurrentSearch.subjectSelector.currentText()
+
+    CurrentSearch.subjectSelectorActive = True
     from MainWidget.mainWindow import MainWindow
-    MainWindow.updateWidgets(CurrentSearch.initialSearch, CurrentSearch.profileId, CurrentSearch.gradeId, CurrentSearch.subjectSelector.currentText())
-    CurrentSearch.initialSearch = False
+    MainWindow.updateWidgets(CurrentSearch.profileId, CurrentSearch.gradeId, CurrentSearch.subjectSelector.currentText())
 
   @staticmethod
   def getCurrentSelectionDetails():
@@ -242,6 +262,8 @@ class CurrentSearch(QWidget):
 
   @staticmethod
   def addSubjects(subjectNames):
+    subjectNames.append('All Subjects')
+    CurrentSearch.subjectSelector.removeItem(CurrentSearch.subjectSelector.count() - 1)
     CurrentSearch.subjectSelector.addItems(subjectNames)
 
   @staticmethod

@@ -7,8 +7,6 @@ from MenuBar.settings import Settings
 from Common.databaseHandler import DBHandler
 
 class RecentSearchesWidget(QWidget):
-  title = "Recent Searches"
-
   scrollAreaWidgetContents = QWidget()
   gridLayout = QGridLayout(scrollAreaWidgetContents)
   gridLayout.setSpacing(0)
@@ -17,19 +15,16 @@ class RecentSearchesWidget(QWidget):
   counter = 1000000
   widgetList = []
 
-  uninitializedStateText = "Please select a grade first."
-  emptyStateText = "You do not have any " + title
-
   placeholderLabel = QLabel()
   showPlaceholderLabel = False
 
-  vspacer = QLabel("f")
+  vspacer = QLabel('f')
 
   def __init__(self):
     super().__init__()
 
     self.layout = QVBoxLayout(self)
-    self.titleLabel = QLabel(RecentSearchesWidget.title)
+    self.titleLabel = QLabel('Recent Searches')
     self.titleLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
     font = QFont(Settings.font, 18)
     self.titleLabel.setFont(font)
@@ -64,44 +59,27 @@ class RecentSearchesWidget(QWidget):
 
   @staticmethod
   def initialize():
-    RecentSearchesWidget.placeholderLabel.setText(RecentSearchesWidget.uninitializedStateText)
     RecentSearchesWidget.gridLayout.addWidget(RecentSearchesWidget.vspacer, 1000001, 0, 1, -1)
     RecentSearchesWidget.showPlaceholder()
 
   @staticmethod
-  def populate(initial):
-    if initial:
-      RecentSearchesWidget.placeholderLabel.setText(RecentSearchesWidget.emptyStateText)
-      RecentSearchesWidget.showPlaceholder()
-
-    if not initial:
-      for recentSearch in RecentSearchesWidget.widgetList:
-        RecentSearchesWidget.gridLayout.removeWidget(recentSearch)
-      RecentSearchesWidget.widgetList = []
-      RecentSearchesWidget.counter = 1000000
+  def populate():
+    RecentSearchesWidget.clearPreviousRecentSearches()
 
     recentSearches = DBHandler.getRecentSearches()
     starredWords = DBHandler.getStarredWords()
 
     if len(recentSearches) == 0:
-      RecentSearchesWidget.showPlaceholder()
+      RecentSearchesWidget.showPlaceholder(text = 'You do not have any Recent Searches')
       return
     else:
       RecentSearchesWidget.hidePlaceholder()
 
     for word in recentSearches:
-      if word in starredWords:
-        condition=True
-      else:
-        condition=False
-      widget = RecentSearch(word, condition)
+      widget = RecentSearch(word, word in starredWords)
       RecentSearchesWidget.widgetList.append(widget)
       RecentSearchesWidget.gridLayout.addWidget(widget, RecentSearchesWidget.counter, 0)
       RecentSearchesWidget.counter -= 1
-
-  def getMaximumWidth(self):
-    longStarredWord = RecentSearch("0123456789012345678901234", True)
-    return longStarredWord.sizeHint().width()
 
   @staticmethod
   def addRecentSearch(word, condition):
@@ -134,10 +112,21 @@ class RecentSearchesWidget(QWidget):
   def removeRecentSearch(obj):
     RecentSearchesWidget.widgetList.remove(obj)
     if len(RecentSearchesWidget.widgetList)==0:
-      RecentSearchesWidget.showPlaceholder()
+      RecentSearchesWidget.showPlaceholder(text = 'You do not have any Recent Searches')
 
   @staticmethod
-  def showPlaceholder():
+  def clearPreviousRecentSearches():
+    for recentSearch in RecentSearchesWidget.widgetList:
+      recentSearch.hide()
+      recentSearch.deleteLater()
+
+    RecentSearchesWidget.widgetList = []
+    RecentSearchesWidget.counter = 1000000
+    RecentSearchesWidget.showPlaceholder()
+
+  @staticmethod
+  def showPlaceholder(text = 'Please select a subject first.'):
+    RecentSearchesWidget.placeholderLabel.setText(text)
     if not RecentSearchesWidget.showPlaceholderLabel:
       RecentSearchesWidget.showPlaceholderLabel = True
       RecentSearchesWidget.gridLayout.addWidget(RecentSearchesWidget.placeholderLabel)

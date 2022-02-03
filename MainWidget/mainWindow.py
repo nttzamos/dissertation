@@ -67,7 +67,7 @@ class MainWindow(QWidget):
     self.setStyleSheet(Styles.mainWindowStyle)
 
   @staticmethod
-  def updateWidgets(initial, profileId, gradeId, subjectName):
+  def updateWidgets(profileId, gradeId, subjectName):
     from MainWidget.searchingWidget import SearchingWidget
     SearchingWidget.updateDictionaryWords(profileId, gradeId, subjectName)
 
@@ -77,5 +77,19 @@ class MainWindow(QWidget):
     ResultsWidget.showPlaceholder()
     MainWidget.currentSearch.searchedWord.setText("Enter a word.")
 
-    RecentSearchesWidget.populate(initial)
-    StarredWordsWidget.populate(initial)
+    RecentSearchesWidget.populate()
+    StarredWordsWidget.populate()
+
+  @staticmethod
+  def clearPreviousSubjectDetails():
+    if not MainWidget.currentSearch.subjectSelectorActive: return
+
+    from MainWidget.searchingWidget import SearchingWidget
+    SearchingWidget.setInitialErrorMessage()
+
+    from MainWidget.resultsWidget import ResultsWidget
+    ResultsWidget.showPlaceholder()
+    MainWidget.currentSearch.subjectSelectorActive = False
+
+    RecentSearchesWidget.clearPreviousRecentSearches()
+    StarredWordsWidget.clearPreviousStarredWords()
