@@ -128,7 +128,7 @@ class ProfileUpdateWidget(QWidget):
 
   def profileSelectorActivated(self, index):
     profileName = ProfileUpdateWidget.profileSelector.currentText()
-    self.profileId, self.gradeId, gradeName, self.profileSubjectsIds = DBHandler.getProfileDetails(profileName)
+    self.profileId, self.gradeId, gradeName, self.profileSubjects = DBHandler.getProfileDetails(profileName)
     ProfileUpdateWidget.gradeLabel.setText(gradeName)
     self.nameLineEdit.setText(profileName)
     gradeSubjects = DBHandler.getGradeSubjects(self.gradeId)
@@ -143,7 +143,7 @@ class ProfileUpdateWidget(QWidget):
       checkBox.setFont(checkBoxFont)
       self.checkBoxes.append(checkBox)
 
-      if i + 1 in self.profileSubjectsIds:
+      if gradeSubjects[i] in self.profileSubjects:
         checkBox.setChecked(True)
 
       self.subjectsSelectionWidget.layout.addWidget(checkBox, i, 0)
@@ -172,26 +172,18 @@ class ProfileUpdateWidget(QWidget):
     self.profileSelector.setItemText(self.profileSelector.currentIndex(), newProfileName)
     DBHandler.updateProfileName(self.profileId, newProfileName)
 
-    subjectsIds = []
-    for i in range(len(self.checkBoxes)):
-      if self.checkBoxes[i].isChecked():
-        subjectsIds.append(i + 1)
+    subjectsNames = []
+    for checkBox in self.checkBoxes:
+      if checkBox.isChecked():
+        subjectsNames.append(checkBox.text())
 
-    subjectsToRemove1 = list(set(self.profileSubjectsIds) - set(subjectsIds))
-    subjectsToAdd1 = list(set(subjectsIds) - set(self.profileSubjectsIds))
-    self.profileSubjectsIds = subjectsToAdd1
-    DBHandler.addProfileSubjects(self.profileId, subjectsToAdd1)
-    DBHandler.removeProfileSubjects(self.profileId, subjectsToRemove1)
+    subjectsToRemove = list(set(self.profileSubjects) - set(subjectsNames))
+    subjectsToAdd = list(set(subjectsNames) - set(self.profileSubjects))
+    self.profileSubjects = subjectsNames
+    DBHandler.addProfileSubjects(self.gradeId, self.profileId, subjectsToAdd)
+    DBHandler.removeProfileSubjects(self.gradeId, self.profileId, subjectsToRemove)
 
     if CurrentSearch.profileSelector.currentText() == newProfileName:
-      subjectsToAdd = []
-      for id in subjectsToAdd1:
-        subjectsToAdd.append(DBHandler.getSubjectName(id))
-
-      subjectsToRemove = []
-      for id in subjectsToRemove1:
-        subjectsToRemove.append(DBHandler.getSubjectName(id))
-
       CurrentSearch.addSubjects(subjectsToAdd)
       CurrentSearch.removeSubjects(subjectsToRemove)
 

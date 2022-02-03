@@ -45,6 +45,7 @@ class CurrentSearch(QWidget):
     CurrentSearch.profileSelector = QComboBox()
     CurrentSearch.profileSelector.setFont(comboBoxFont)
     CurrentSearch.profileSelector.addItem('You have to select a student.')
+    CurrentSearch.profileSelectorConnected = False
 
     CurrentSearch.subjectSelector = QComboBox()
     CurrentSearch.subjectSelector.setFont(comboBoxFont)
@@ -110,7 +111,10 @@ class CurrentSearch(QWidget):
       studentProfiles[0:0] = ['Please select a profile...']
       CurrentSearch.profileSelector.addItems(studentProfiles)
       CurrentSearch.profileSelector.setEnabled(True)
+      if CurrentSearch.profileSelectorConnected:
+        CurrentSearch.profileSelector.activated.disconnect()
       CurrentSearch.profileSelector.activated.connect(CurrentSearch.profileSelectorActivatedInitial)
+      CurrentSearch.profileSelectorConnected = True
 
     CurrentSearch.subjectSelector.clear()
     CurrentSearch.subjectSelector.addItem('You have to select a profile.')
@@ -126,13 +130,12 @@ class CurrentSearch(QWidget):
 
   @staticmethod
   def profileSelectorActivated(index):
-    CurrentSearch.profileId, CurrentSearch.gradeId, gradeName, profileSubjectsIds = DBHandler.getProfileDetails(CurrentSearch.profileSelector.currentText())
+    CurrentSearch.profileId, CurrentSearch.gradeId, gradeName, profileSubjects = DBHandler.getProfileDetails(CurrentSearch.profileSelector.currentText())
     CurrentSearch.subjectSelector.clear()
     CurrentSearch.subjectSelector.addItem('Please select a subject...')
-    for subjectId in profileSubjectsIds:
-      CurrentSearch.subjectSelector.addItem(DBHandler.getSubjectName(subjectId))
+    CurrentSearch.subjectSelector.addItems(profileSubjects)
 
-    if len(profileSubjectsIds) > 1:
+    if len(profileSubjects) > 1:
       CurrentSearch.subjectSelector.addItem('All Subjects')
 
     CurrentSearch.subjectSelector.activated.connect(CurrentSearch.subjectSelectorActivatedInitial)
@@ -182,7 +185,8 @@ class CurrentSearch(QWidget):
     currentIndex = CurrentSearch.studentSelector.currentIndex()
     CurrentSearch.studentSelector.removeItem(index)
 
-    if CurrentSearch.studentSelector.count() == 0 or CurrentSearch.studentSelector.currentText() == 'Please select a profile...':
+    if (CurrentSearch.studentSelector.count() == 0
+        or (CurrentSearch.studentSelector.count() == 1 and CurrentSearch.studentSelector.currentText() == 'Please select a student...')):
       CurrentSearch.studentSelector.clear()
       CurrentSearch.studentSelector.addItem('There are no students.')
       CurrentSearch.studentSelector.setDisabled(True)
@@ -224,7 +228,9 @@ class CurrentSearch(QWidget):
       index = CurrentSearch.profileSelector.findText(profileName)
       if index != -1:
         CurrentSearch.profileSelector.removeItem(index)
-    if CurrentSearch.profileSelector.count() == 0:
+
+    if (CurrentSearch.profileSelector.count() == 0
+        or (CurrentSearch.profileSelector.count() == 1 and CurrentSearch.profileSelector.currentText() == 'Please select a profile...')):
       CurrentSearch.profileSelector.clear()
       CurrentSearch.profileSelector.addItem('This student has no profiles.')
       CurrentSearch.profileSelector.setDisabled(True)

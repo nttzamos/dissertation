@@ -224,8 +224,14 @@ class DBHandler():
     cur.execute("SELECT name FROM grade WHERE id = ?", (gradeId,))
     gradeName = cur.fetchone()[0]
 
-    cur.execute("SELECT subject_id FROM profile_subject WHERE profile_id = ?", (profileId,))
-    profileSubjects = list(map(lambda subject: subject[0], cur.fetchall()))
+    query = ('SELECT name '
+        'FROM subject '
+        'INNER JOIN profile_subject '
+        'ON subject.id = profile_subject.subject_id '
+        'WHERE profile_subject.profile_id = ?')
+
+    cur.execute(query, (profileId,))
+    profileSubjects = list(map(lambda word: word[0], cur.fetchall()))
 
     con.close()
     return profileId, gradeId, gradeName, profileSubjects
@@ -240,24 +246,28 @@ class DBHandler():
     return profileNameExists
 
   @staticmethod
-  def addProfileSubjects(profileId, subjects):
+  def addProfileSubjects(gradeId, profileId, subjects):
     con, cur = DBHandler.connectToDatabase()
 
-    profileSubjects = list(zip([profileId] * len(subjects), subjects))
+    subjectsIds = []
+    for subject in subjects:
+      subjectsIds.append(DBHandler.getSubjectId(gradeId, subject))
+
+    profileSubjects = list(zip([profileId] * len(subjectsIds), subjectsIds))
     cur.executemany("INSERT INTO profile_subject VALUES (null, ?, ?)", profileSubjects)
 
     con.commit()
     con.close()
 
   @staticmethod
-  def removeProfileSubjects(profileId, subjectsIds):
+  def removeProfileSubjects(gradeId, profileId, subjects):
     con, cur = DBHandler.connectToDatabase()
 
     # query = "DELETE FROM profileSubjects WHERE id IN ({})".format(", ".join("?" * len(subjects)))
     # cur.execute(query, subjects)
 
-    for subjectsId in subjectsIds:
-      cur.execute("DELETE FROM profile_subject WHERE profile_id = ? AND subject_id = ?", (profileId, subjectsId))
+    for subject in subjects:
+      cur.execute("DELETE FROM profile_subject WHERE profile_id = ? AND subject_id = ?", (profileId, DBHandler.getSubjectId(gradeId, subject)))
 
     con.commit()
     con.close()

@@ -29,7 +29,7 @@ class ProfileAdditionWIdget(QWidget):
     self.nameLineEdit.setFont(lineEditFont)
     nameWidget.layout.addWidget(self.nameLineEdit)
 
-    gradeSelectionWidget = QGroupBox('Subject Selection')
+    gradeSelectionWidget = QGroupBox('Grade Selection')
     gradeSelectionWidget.setFont(sectionLabelFont)
     gradeSelectionWidget.layout = QHBoxLayout(gradeSelectionWidget)
     gradeSelectionWidget.layout.setContentsMargins(10, 10, 10, 10)
@@ -43,7 +43,7 @@ class ProfileAdditionWIdget(QWidget):
 
     gradeSelectionWidget.layout.addWidget(self.gradeSelector)
 
-    subjectsWidget = QGroupBox('Profile Selection')
+    subjectsWidget = QGroupBox('Subject Selection')
     subjectsWidget.setFont(sectionLabelFont)
     subjectsWidget.layout = QHBoxLayout(subjectsWidget)
     subjectsWidget.layout.setContentsMargins(10, 0, 0, 0)
