@@ -71,7 +71,11 @@ class MainWindow(QWidget):
     from MainWidget.searchingWidget import SearchingWidget
     SearchingWidget.updateDictionaryWords(profileId, gradeId, subjectName)
 
-    SearchingWidget.modifyErrorMessage(profileId)
+    from Common.databaseHandler import DBHandler
+    if subjectName == 'All Subjects':
+      SearchingWidget.modifyErrorMessage(DBHandler.getProfileName(profileId), False)
+    else:
+      SearchingWidget.modifyErrorMessage(subjectName, True)
 
     from MainWidget.resultsWidget import ResultsWidget
     ResultsWidget.showPlaceholder()

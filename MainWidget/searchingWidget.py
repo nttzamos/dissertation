@@ -120,15 +120,17 @@ class SearchingWidget(QWidget):
     SearchingWidget.errorMessage.setText(SearchingWidget.uninitializedStateText)
 
   @staticmethod
-  def modifyErrorMessage(profileId):
-    SearchingWidget.errorMessage.setText(SearchingWidget.unknownWordMessage(profileId))
+  def modifyErrorMessage(text, single):
+    SearchingWidget.errorMessage.setText(SearchingWidget.unknownWordMessage(text, single))
 
   @staticmethod
-  def unknownWordMessage(profileId):
-    from Common.databaseHandler import DBHandler
-    return "This word is not contained in the books of " + \
-      DBHandler.getProfileName(profileId) + \
-      ". Please search for another word."
+  def unknownWordMessage(text, single):
+    if single:
+      return 'This word is not contained in the book ' + \
+        text + '. Please search for another word.'
+    else:
+      return "This word is not contained in the books of the profile '" + \
+        text + "'. Please search for another word."
 
   @staticmethod
   def toggleEditWordsButtonVisibility(newVisibilityStatus):
