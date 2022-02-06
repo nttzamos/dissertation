@@ -26,7 +26,7 @@ class WordsEditingWidget(QDialog):
     gradeSelectionLabel = QLabel('Grade Selection')
     gradeSelectionLabel.setFont(labelFont)
     self.gradeSelector = QComboBox()
-    self.gradeSelector.activated.connect(self.gradeSelectorActivated)
+    self.gradeSelector.activated.connect(self.updateWordsList)
     self.gradeSelector.setFont(comboBoxFont)
     self.gradeSelector.addItems(DBHandler.getGrades())
 
@@ -54,6 +54,12 @@ class WordsEditingWidget(QDialog):
     actionEffectLabel.setFont(labelFont)
     self.updateAllGrades = QCheckBox('Update/Delete word for all grades?')
     self.updateAllGrades.setFont(checkBoxFont)
+
+    wordsListLabel = QLabel('Words List')
+    wordsListLabel.setFont(labelFont)
+    self.showCandidates = QCheckBox('Show only candidate words for update/deletion?')
+    self.showCandidates.setFont(checkBoxFont)
+    self.showCandidates.toggled.connect(self.updateWordsList)
 
     wordSelectionLabel = QLabel('Word Selection')
     wordSelectionLabel.setFont(labelFont)
@@ -100,6 +106,11 @@ class WordsEditingWidget(QDialog):
     self.layout.addWidget(actionEffectLabel)
     self.layout.addSpacing(5)
     self.layout.addWidget(self.updateAllGrades)
+    self.layout.addSpacing(15)
+
+    self.layout.addWidget(wordsListLabel)
+    self.layout.addSpacing(5)
+    self.layout.addWidget(self.showCandidates)
     self.layout.addSpacing(15)
 
     self.layout.addWidget(wordSelectionLabel)
@@ -152,6 +163,15 @@ class WordsEditingWidget(QDialog):
     else:
       self.updateWord()
 
+  def updateWordsList(self, unusedVariable):
+    if self.showCandidates.isChecked():
+      self.dictionaryWords = DBHandler.getCandidateWords(self.gradeSelector.currentIndex() + 1)
+    else:
+      self.dictionaryWords = DBHandler.getGradeWords(self.gradeSelector.currentIndex() + 1)
+
+    model = QStringListModel(self.dictionaryWords, self.completer)
+    self.completer.setModel(model)
+
   def updateWord(self):
     newWord = self.wordEditingLineEdit.text()
     DBHandler.updateWord(self.searchedWord, newWord, self.getGrades())
@@ -194,11 +214,6 @@ class WordsEditingWidget(QDialog):
       grades.append(self.gradeSelector.currentIndex() + 1)
 
     return grades
-
-  def gradeSelectorActivated(self, index):
-    self.dictionaryWords = DBHandler.getGradeWords(index + 1)
-    model = QStringListModel(self.dictionaryWords, self.completer)
-    self.completer.setModel(model)
 
   def updateDictionaryWords(self, oldWord, newWord=None):
     if not (newWord == None or newWord in self.dictionaryWords):

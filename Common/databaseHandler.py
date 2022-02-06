@@ -35,6 +35,7 @@ class DBHandler():
     cur.execute('''CREATE TABLE profile (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, grade_id INTEGER)''')
     cur.execute('''CREATE TABLE student_profile (id INTEGER PRIMARY KEY AUTOINCREMENT, student_id INTEGER, profile_id INTEGER)''')
     cur.execute('''CREATE TABLE profile_subject (id INTEGER PRIMARY KEY AUTOINCREMENT, profile_id INTEGER, subject_id INTEGER)''')
+    cur.execute('''CREATE TABLE candidate (id INTEGER PRIMARY KEY AUTOINCREMENT, grade_id INTEGER, word_id INTEGER)''')
 
     # Should we maybe remove profile_id?
     cur.execute('''CREATE TABLE recent_search (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, profile_id INTEGER, student_id INTEGER, subject_id INTEGER, searched_at TIMESTAMP)''')
@@ -323,7 +324,7 @@ class DBHandler():
       wordsPerSubject[subjectNames[i]] = currentSubjectWords
       wordsSet = wordsSet | set(currentSubjectWords)
 
-    wordsList = DBHandler.wordsOrderedAlphabetically(list(wordsSet))
+    wordsList = DBHandler.sortWordsAlphabetically(list(wordsSet))
     # print()
     # print("Grade: " + str(grade))
     # grade_middle_1 = timeit.default_timer()
@@ -364,7 +365,7 @@ class DBHandler():
     con.close()
 
   @staticmethod
-  def wordsOrderedAlphabetically(words):
+  def sortWordsAlphabetically(words):
     translationTable = {
       940: 945, 941: 949, 972: 959, 974: 969, 943: 953, 942: 951, 973: 965
     }
@@ -410,6 +411,21 @@ class DBHandler():
   def getGradeWords(gradeId):
     con, cur = DBHandler.connectToDatabase()
     cur.execute('SELECT word FROM ' + DBHandler.getGradeTableName(gradeId) + ' ORDER BY word')
+    words = list(map(lambda word: word[0], cur.fetchall()))
+
+    con.close()
+    return words
+
+  @staticmethod
+  def getCandidateWords(gradeId):
+    con, cur = DBHandler.connectToDatabase()
+    query = ('SELECT word '
+        'FROM ' + DBHandler.getGradeTableName(gradeId) + ' ' +
+        'INNER JOIN candidate '
+        'ON ' + DBHandler.getGradeTableName(gradeId) + '.id = candidate.word_id '
+        'WHERE candidate.grade_id = ?')
+
+    cur.execute(query, (gradeId,))
     words = list(map(lambda word: word[0], cur.fetchall()))
 
     con.close()
