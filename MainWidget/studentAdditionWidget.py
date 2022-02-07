@@ -11,10 +11,8 @@ class StudentAdditionWidget(QWidget):
   def __init__(self):
     super().__init__()
     self.layout = QVBoxLayout(self)
-    self.layout.setContentsMargins(0, 0, 0, 0)
+    self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
-
-    self.setFixedSize(Settings.getScreenWidth() / 2, Settings.getScreenHeight() / 2)
 
     sectionLabelFont = QFont(Settings.font, 16)
     checkBoxFont = QFont(Settings.font, 14)
@@ -23,7 +21,7 @@ class StudentAdditionWidget(QWidget):
     nameWidget = QGroupBox('Student Name')
     nameWidget.setFont(sectionLabelFont)
     nameWidget.layout = QHBoxLayout(nameWidget)
-    nameWidget.layout.setContentsMargins(10, 0, 0, 0)
+    nameWidget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.nameLineEdit = QLineEdit()
     self.nameLineEdit.setFont(lineEditFont)
@@ -32,7 +30,7 @@ class StudentAdditionWidget(QWidget):
     profilesWidget = QGroupBox('Profile Selection')
     profilesWidget.setFont(sectionLabelFont)
     profilesWidget.layout = QHBoxLayout(profilesWidget)
-    profilesWidget.layout.setContentsMargins(10, 0, 0, 0)
+    profilesWidget.layout.setContentsMargins(10, 5, 10, 10)
 
     StudentAdditionWidget.profilesSelectionWidget = QWidget()
     StudentAdditionWidget.profilesSelectionWidget.layout = QGridLayout(StudentAdditionWidget.profilesSelectionWidget)
@@ -67,9 +65,8 @@ class StudentAdditionWidget(QWidget):
 
     self.layout.addWidget(nameWidget)
     self.layout.addWidget(profilesWidget)
-    self.layout.addSpacing(10)
+    self.layout.addSpacing(15)
     self.layout.addWidget(saveButton, alignment=Qt.AlignmentFlag.AlignRight)
-    self.layout.addSpacing(10)
 
     self.style()
 

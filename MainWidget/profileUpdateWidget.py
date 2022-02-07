@@ -10,10 +10,8 @@ class ProfileUpdateWidget(QWidget):
     super().__init__()
 
     self.layout = QVBoxLayout(self)
-    self.layout.setContentsMargins(0, 0, 0, 0)
+    self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
-
-    self.setFixedSize(Settings.getScreenWidth() / 2, Settings.getScreenHeight() - 150) # got to change
 
     sectionLabelFont = QFont(Settings.font, 16)
     comboBoxFont = QFont(Settings.font, 14)
@@ -23,7 +21,7 @@ class ProfileUpdateWidget(QWidget):
     profileSelectionWidget = QGroupBox('Profile Selection')
     profileSelectionWidget.setFont(sectionLabelFont)
     profileSelectionWidget.layout = QHBoxLayout(profileSelectionWidget)
-    profileSelectionWidget.layout.setContentsMargins(10, 10, 10, 10)
+    profileSelectionWidget.layout.setContentsMargins(10, 5, 10, 10)
 
     profiles = DBHandler.getProfiles()
 
@@ -44,7 +42,7 @@ class ProfileUpdateWidget(QWidget):
     self.nameWidget = QGroupBox('Profile Name')
     self.nameWidget.setFont(sectionLabelFont)
     self.nameWidget.layout = QHBoxLayout(self.nameWidget)
-    self.nameWidget.layout.setContentsMargins(10, 0, 0, 0)
+    self.nameWidget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.nameLineEdit = QLineEdit()
     self.nameLineEdit.setFont(lineEditFont)
@@ -54,7 +52,7 @@ class ProfileUpdateWidget(QWidget):
     gradeLabelWidget = QGroupBox('Profile Grade')
     gradeLabelWidget.setFont(sectionLabelFont)
     gradeLabelWidget.layout = QHBoxLayout(gradeLabelWidget)
-    gradeLabelWidget.layout.setContentsMargins(10, 10, 10, 10)
+    gradeLabelWidget.layout.setContentsMargins(10, 5, 10, 10)
 
     ProfileUpdateWidget.gradeLabel = QLabel('Please select a profile...')
     ProfileUpdateWidget.gradeLabel.setFont(labelFont)
@@ -64,7 +62,7 @@ class ProfileUpdateWidget(QWidget):
     subjectsWidget = QGroupBox('Subject Selection')
     subjectsWidget.setFont(sectionLabelFont)
     subjectsWidget.layout = QHBoxLayout(subjectsWidget)
-    subjectsWidget.layout.setContentsMargins(10, 0, 0, 0)
+    subjectsWidget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.subjectsSelectionWidget = QWidget()
     self.subjectsSelectionWidget.layout = QGridLayout(self.subjectsSelectionWidget)
@@ -98,16 +96,17 @@ class ProfileUpdateWidget(QWidget):
 
     buttonsWidget = QWidget()
     buttonsWidget.layout = QHBoxLayout(buttonsWidget)
+    buttonsWidget.layout.setContentsMargins(0, 0, 0, 0)
     buttonsWidget.layout.addWidget(self.deleteButton)
+    buttonsWidget.layout.addSpacing(10)
     buttonsWidget.layout.addWidget(self.saveButton)
 
     self.layout.addWidget(profileSelectionWidget)
     self.layout.addWidget(self.nameWidget)
     self.layout.addWidget(gradeLabelWidget)
     self.layout.addWidget(subjectsWidget)
-    self.layout.addSpacing(10)
+    self.layout.addSpacing(15)
     self.layout.addWidget(buttonsWidget, alignment=Qt.AlignmentFlag.AlignRight)
-    self.layout.addSpacing(10)
 
     self.style()
 
@@ -149,10 +148,13 @@ class ProfileUpdateWidget(QWidget):
       self.subjectsSelectionWidget.layout.addWidget(checkBox, i, 0)
 
   def updateProfile(self):
-    isInvalid, text = self.profileIsInvalid()
+    if self.profileSelector.currentText() in DBHandler.getGrades():
+      isInvalid, text = True, 'Grade profiles can not be updated.'
+    else:
+      isInvalid, text = self.profileIsInvalid()
 
     if isInvalid:
-      title = 'Error Saving Profile'
+      title = 'Error Updating Profile'
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -188,6 +190,13 @@ class ProfileUpdateWidget(QWidget):
       CurrentSearch.removeSubjects(subjectsToRemove)
 
   def deleteProfile(self):
+    if self.profileSelector.currentText() in DBHandler.getGrades():
+      title = 'Error Deleting Profile'
+      text = 'Grade profiles can not be deleted.'
+      answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
+      if answer == QMessageBox.StandardButton.Ok:
+        return
+
     DBHandler.removeProfile(self.profileId)
     for checkbox in self.checkBoxes:
       self.subjectsSelectionWidget.layout.removeWidget(checkbox)

@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLabel, QGroupBox, QScrollArea, QCheckBox, QPushButton, QComboBox, QLineEdit, QSizePolicy, QMessageBox
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
 from Common.databaseHandler import DBHandler
@@ -12,8 +12,6 @@ class StudentUpdateWidget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    self.setFixedSize(Settings.getScreenWidth() / 2, Settings.getScreenHeight() / 2)
-
     sectionLabelFont = QFont(Settings.font, 16)
     comboBoxFont = QFont(Settings.font, 14)
     lineEditFont = QFont(Settings.font, 14)
@@ -21,7 +19,7 @@ class StudentUpdateWidget(QWidget):
     studentSelectionWidget = QGroupBox('Student Selection')
     studentSelectionWidget.setFont(sectionLabelFont)
     studentSelectionWidget.layout = QHBoxLayout(studentSelectionWidget)
-    studentSelectionWidget.layout.setContentsMargins(10, 10, 10, 10)
+    studentSelectionWidget.layout.setContentsMargins(10, 5, 10, 10)
 
     students = DBHandler.getStudents()
 
@@ -42,7 +40,7 @@ class StudentUpdateWidget(QWidget):
     self.nameWidget = QGroupBox('Student Name')
     self.nameWidget.setFont(sectionLabelFont)
     self.nameWidget.layout = QHBoxLayout(self.nameWidget)
-    self.nameWidget.layout.setContentsMargins(10, 0, 0, 0)
+    self.nameWidget.layout.setContentsMargins(10, 5, 10, 10)
     self.nameWidget.hide()
 
     self.nameLineEdit = QLineEdit()
@@ -52,7 +50,7 @@ class StudentUpdateWidget(QWidget):
     profilesWidget = QGroupBox('Profile Selection')
     profilesWidget.setFont(sectionLabelFont)
     profilesWidget.layout = QHBoxLayout(profilesWidget)
-    profilesWidget.layout.setContentsMargins(10, 10, 10, 10)
+    profilesWidget.layout.setContentsMargins(10, 5, 10, 10)
 
     StudentUpdateWidget.profilesSelectionWidget = QWidget()
     StudentUpdateWidget.profilesSelectionWidget.layout = QGridLayout(StudentUpdateWidget.profilesSelectionWidget)
@@ -86,13 +84,15 @@ class StudentUpdateWidget(QWidget):
 
     buttonsWidget = QWidget()
     buttonsWidget.layout = QHBoxLayout(buttonsWidget)
+    buttonsWidget.layout.setContentsMargins(0, 0, 0, 0)
     buttonsWidget.layout.addWidget(self.deleteButton)
+    buttonsWidget.layout.addSpacing(10)
     buttonsWidget.layout.addWidget(self.saveButton)
 
     self.layout.addWidget(studentSelectionWidget)
     self.layout.addWidget(self.nameWidget)
     self.layout.addWidget(profilesWidget)
-    self.layout.addSpacing(20)
+    self.layout.addSpacing(15)
     self.layout.addWidget(buttonsWidget, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.style()

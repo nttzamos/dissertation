@@ -13,7 +13,7 @@ class StudentsDataEditingWidget(QDialog):
     super().__init__()
     self.setWindowTitle('Edit Students List')
     self.setWindowIcon(QIcon('Resources/windowIcon.svg'))
-    # self.setFixedSize(Settings.getScreenWidth() / 2, Settings.getScreenHeight() / 2)
+    self.setFixedWidth(Settings.getScreenWidth() / 2)
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)
