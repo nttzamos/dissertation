@@ -262,8 +262,10 @@ class CurrentSearch(QWidget):
 
   @staticmethod
   def addSubjects(subjectNames):
+    if CurrentSearch.subjectSelector.findText('All Subjects') != -1:
+      CurrentSearch.subjectSelector.removeItem(CurrentSearch.subjectSelector.count() - 1)
+
     subjectNames.append('All Subjects')
-    CurrentSearch.subjectSelector.removeItem(CurrentSearch.subjectSelector.count() - 1)
     CurrentSearch.subjectSelector.addItems(subjectNames)
 
   @staticmethod

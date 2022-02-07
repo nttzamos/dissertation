@@ -231,7 +231,8 @@ class DBHandler():
         'FROM subject '
         'INNER JOIN profile_subject '
         'ON subject.id = profile_subject.subject_id '
-        'WHERE profile_subject.profile_id = ?')
+        'WHERE profile_subject.profile_id = ? '
+        'ORDER BY name')
 
     cur.execute(query, (profileId,))
     profileSubjects = list(map(lambda word: word[0], cur.fetchall()))
