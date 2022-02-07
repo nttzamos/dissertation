@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QLineEdit, QComboBox, QDialog, QLabel, QCompleter, QCheckBox, QRadioButton, QWidget, QHBoxLayout, QMessageBox
+from PyQt6.QtWidgets import QVBoxLayout, QLineEdit, QComboBox, QDialog, QLabel, QCompleter, QCheckBox, QRadioButton, QWidget, QHBoxLayout, QMessageBox, QGroupBox
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 from PyQt6.QtGui import QFont, QIcon
 
@@ -10,28 +10,31 @@ class WordsEditingWidget(QDialog):
     super().__init__()
     self.setWindowTitle('Edit Dictionary Words')
     self.setWindowIcon(QIcon("Resources/windowIcon.svg"))
-    # self.setFixedSize(Settings.getScreenWidth() / 2, Settings.getScreenHeight() / 2)
 
     self.layout = QVBoxLayout(self)
-    self.layout.setContentsMargins(20, 20, 20, 10)
+    self.layout.setContentsMargins(20, 0, 20, 15)
     self.layout.setSpacing(0)
 
-    labelFont = QFont(Settings.font, 16)
+    labelFont = QFont(Settings.font, 12)
     comboBoxFont = QFont(Settings.font, 14)
     radioButtonFont = QFont(Settings.font, 14)
     checkBoxFont = QFont(Settings.font, 14)
     lineEditFont = QFont(Settings.font, 14)
     completerFont = QFont(Settings.font, 12)
+    sectionLabelFont = QFont(Settings.font, 16)
+    errorMessageFont = QFont(Settings.font, 10)
 
-    gradeSelectionLabel = QLabel('Grade Selection')
-    gradeSelectionLabel.setFont(labelFont)
     self.gradeSelector = QComboBox()
     self.gradeSelector.activated.connect(self.updateWordsList)
     self.gradeSelector.setFont(comboBoxFont)
     self.gradeSelector.addItems(DBHandler.getGrades())
 
-    actionSelectionLabel = QLabel('Action Selection')
-    actionSelectionLabel.setFont(labelFont)
+    gradeSelectionWidget = QGroupBox('Grade Selection')
+    gradeSelectionWidget.setFont(sectionLabelFont)
+    gradeSelectionWidget.layout = QVBoxLayout(gradeSelectionWidget)
+    gradeSelectionWidget.layout.setContentsMargins(10, 10, 10, 10)
+    gradeSelectionWidget.layout.addWidget(self.gradeSelector)
+
     self.updateSelectionButton = QRadioButton('Update Word')
     self.updateSelectionButton.setFont(radioButtonFont)
     self.deletionSelectionButton = QRadioButton('Delete Word')
@@ -44,22 +47,31 @@ class WordsEditingWidget(QDialog):
     self.updateSelectionButton.toggled.connect(self.updateButtonToggled)
     self.deletionSelectionButton.toggled.connect(self.deleteButtonToggled)
 
-    self.actionSelectionWidget = QWidget()
-    self.actionSelectionWidget.layout = QHBoxLayout(self.actionSelectionWidget)
-    self.actionSelectionWidget.layout.setContentsMargins(0, 0, 0, 0)
-    self.actionSelectionWidget.layout.addWidget(self.updateSelectionButton)
-    self.actionSelectionWidget.layout.addWidget(self.deletionSelectionButton)
+    actionSelectionButtons = QWidget()
+    actionSelectionButtons.layout = QHBoxLayout(actionSelectionButtons)
+    actionSelectionButtons.layout.setContentsMargins(0, 0, 0, 0)
+    actionSelectionButtons.layout.addWidget(self.updateSelectionButton)
+    actionSelectionButtons.layout.addWidget(self.deletionSelectionButton)
 
-    actionEffectLabel = QLabel('Action Effect')
-    actionEffectLabel.setFont(labelFont)
+    actionSelectionWidget = QGroupBox('Action Selection')
+    actionSelectionWidget.setFont(sectionLabelFont)
+    actionSelectionWidget.layout = QVBoxLayout(actionSelectionWidget)
+    actionSelectionWidget.layout.setContentsMargins(10, 10, 10, 10)
+    actionSelectionWidget.layout.addWidget(actionSelectionButtons)
+
     self.updateAllGrades = QCheckBox('Update/Delete word for all grades?')
     self.updateAllGrades.setFont(checkBoxFont)
 
-    wordsListLabel = QLabel('Words List')
-    wordsListLabel.setFont(labelFont)
     self.showCandidates = QCheckBox('Show only candidate words for update/deletion?')
     self.showCandidates.setFont(checkBoxFont)
     self.showCandidates.toggled.connect(self.updateWordsList)
+
+    parametersConfigurationWidget = QGroupBox('Parameter Configuration')
+    parametersConfigurationWidget.setFont(sectionLabelFont)
+    parametersConfigurationWidget.layout = QVBoxLayout(parametersConfigurationWidget)
+    parametersConfigurationWidget.layout.setContentsMargins(10, 10, 10, 10)
+    parametersConfigurationWidget.layout.addWidget(self.updateAllGrades)
+    parametersConfigurationWidget.layout.addWidget(self.showCandidates)
 
     wordSelectionLabel = QLabel('Word Selection')
     wordSelectionLabel.setFont(labelFont)
@@ -72,9 +84,9 @@ class WordsEditingWidget(QDialog):
     self.completer.popup().setFont(completerFont)
     self.wordSelectionLineEdit.setCompleter(self.completer)
     self.wordSelectionLineEdit.setPlaceholderText('Please enter a word.')
-    self.wordSelectionLineEdit.setContentsMargins(0, 0, 0, 0)
     self.wordSelectionLineEdit.textChanged.connect(self.searchTextChanged)
     self.errorMessageLabel = QLabel("Please search for another word", self)
+    self.errorMessageLabel.setFont(errorMessageFont)
     sizePolicy = self.errorMessageLabel.sizePolicy()
     sizePolicy.setRetainSizeWhenHidden(True)
     self.errorMessageLabel.setSizePolicy(sizePolicy)
@@ -90,40 +102,34 @@ class WordsEditingWidget(QDialog):
     self.wordEditingLineEdit.returnPressed.connect(self.updateWordConfirmation)
     self.wordEditingLineEdit.setPlaceholderText('You have to select a word first.')
     self.wordEditingLineEdit.setDisabled(True)
+    self.updateWordWidget.layout.setSpacing(5)
     self.updateWordWidget.layout.addWidget(updateFormLabel)
     self.updateWordWidget.layout.addWidget(self.wordEditingLineEdit)
 
-    self.layout.addWidget(gradeSelectionLabel)
-    self.layout.addSpacing(5)
-    self.layout.addWidget(self.gradeSelector)
-    self.layout.addSpacing(15)
-
-    self.layout.addWidget(actionSelectionLabel)
-    self.layout.addSpacing(5)
-    self.layout.addWidget(self.actionSelectionWidget)
-    self.layout.addSpacing(15)
-
-    self.layout.addWidget(actionEffectLabel)
-    self.layout.addSpacing(5)
-    self.layout.addWidget(self.updateAllGrades)
-    self.layout.addSpacing(15)
-
-    self.layout.addWidget(wordsListLabel)
-    self.layout.addSpacing(5)
-    self.layout.addWidget(self.showCandidates)
-    self.layout.addSpacing(15)
-
-    self.layout.addWidget(wordSelectionLabel)
-    self.layout.addSpacing(5)
-    self.layout.addWidget(self.wordSelectionLineEdit)
-    self.layout.addSpacing(2)
-    self.layout.addWidget(self.errorMessageLabel, alignment=Qt.AlignmentFlag.AlignRight)
+    wordEditingWidget = QGroupBox('Word Editing')
+    wordEditingWidget.setFont(sectionLabelFont)
+    wordEditingWidget.layout = QVBoxLayout(wordEditingWidget)
+    wordEditingWidget.layout.setContentsMargins(10, 10, 10, 10)
+    wordEditingWidget.layout.setSpacing(0)
+    wordEditingWidget.layout.addWidget(wordSelectionLabel)
+    wordEditingWidget.layout.addSpacing(5)
+    wordEditingWidget.layout.addWidget(self.wordSelectionLineEdit)
+    wordEditingWidget.layout.addWidget(self.errorMessageLabel, alignment=Qt.AlignmentFlag.AlignRight)
     self.errorMessageLabel.hide()
-    self.layout.addSpacing(5)
-
-    self.layout.addWidget(self.updateWordWidget)
+    wordEditingWidget.layout.addWidget(self.updateWordWidget)
     if self.deletionSelectionButton.isChecked():
       self.updateWordWidget.hide()
+
+    self.layout.addWidget(gradeSelectionWidget)
+    self.layout.addSpacing(15)
+
+    self.layout.addWidget(actionSelectionWidget)
+    self.layout.addSpacing(15)
+
+    self.layout.addWidget(parametersConfigurationWidget)
+    self.layout.addSpacing(15)
+
+    self.layout.addWidget(wordEditingWidget)
 
     self.wordSelectionLineEdit.setFocus()
 
