@@ -4,9 +4,9 @@ import tika, tika.parser as parser
 import re
 
 class PdfParser():
-  gradesSubjectsDirectoryPath = "Resources/Grades/"
+  grades_subjects_directory_path = 'Resources/Grades/'
 
-  validCharacters = [
+  valid_characters = [
     912, 940, 941, 944, 945, 946, 947, 948, 949, 950, 951, 952, 953, 954, 955,
     956, 957, 958, 959, 960, 961, 962, 963, 964, 965, 966, 967, 968, 969, 970,
     971, 972, 974, 943, 942, 973,
@@ -18,36 +18,38 @@ class PdfParser():
   ]
 
   @staticmethod
-  def getGradeSubjectsNames(grade):
+  def get_grade_subjects_names(grade):
     return list(map(
-      lambda subjectFile: subjectFile.replace('.pdf', ''), PdfParser.getGradeSubjectsFiles(grade)
+      lambda subject_file: subject_file.replace('.pdf', ''), PdfParser.get_grade_subjects_files(grade)
     ))
 
   @staticmethod
-  def getGradeSubjectsFiles(grade):
-    return listdir(PdfParser.gradesSubjectsDirectoryPath + str(grade))
+  def get_grade_subjects_files(grade):
+    return listdir(PdfParser.grades_subjects_directory_path + str(grade))
 
   @staticmethod
-  def readSubjectWords(grade, subjectFile):
-    filePath = PdfParser.gradesSubjectsDirectoryPath + str(grade) + "/" + subjectFile
+  def read_subject_words(grade, subject_file, raw_text=False):
+    filePath = PdfParser.grades_subjects_directory_path + str(grade) + '/' + subject_file
 
     tika.initVM()
     raw = parser.from_file(filePath)
-    pdf = raw["content"]
+    pdf = raw['content']
 
-    return PdfParser.cleanWords(pdf.split())
+    if raw_text: return pdf
+
+    return PdfParser.clean_words(pdf.split())
 
   @staticmethod
-  def cleanWords(words):
+  def clean_words(words):
     for i in range(len(words)):
       words[i] = words[i].lower()
       words[i] = re.sub(r'[^\w\s]', '', words[i])
 
-    words = PdfParser.fixLetterAsciiValue(words)
+    words = PdfParser.fix_letter_ascii_value(words)
 
     i = 0
     while i < len(words):
-      if PdfParser.wordIsRemovable(words[i]):
+      if PdfParser.word_is_removable(words[i]):
         del words[i]
       else:
         i += 1
@@ -55,18 +57,18 @@ class PdfParser():
     return words
 
   @staticmethod
-  def fixLetterAsciiValue(words):
+  def fix_letter_ascii_value(words):
     table = { 181: 956 }
 
     return list(map(lambda word: word.translate(table), words))
 
   @staticmethod
-  def wordIsRemovable(word):
+  def word_is_removable(word):
     if len(word) < 3:
       return True
 
     for character in word:
-      if not ord(character) in PdfParser.validCharacters:
+      if not ord(character) in PdfParser.valid_characters:
         return True
 
     return False

@@ -6,9 +6,9 @@ from MainWidget.resultsWidget import ResultsWidget
 from MenuBar.settings import Settings
 
 class MainWidget(QWidget):
-  searchingWidget = SearchingWidget()
-  currentSearch = CurrentSearch()
-  resultsWidget = ResultsWidget()
+  searching_widget = SearchingWidget()
+  current_search = CurrentSearch()
+  results_widget = ResultsWidget()
 
   def __init__(self):
     super().__init__()
@@ -16,14 +16,14 @@ class MainWidget(QWidget):
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    self.layout.addWidget(MainWidget.searchingWidget)
-    self.layout.addWidget(MainWidget.currentSearch)
-    self.layout.addWidget(MainWidget.resultsWidget)
+    self.layout.addWidget(MainWidget.searching_widget)
+    self.layout.addWidget(MainWidget.current_search)
+    self.layout.addWidget(MainWidget.results_widget)
 
-    self.setMinimumWidth(Settings.getRightWidgetWidth())
+    self.setMinimumWidth(Settings.get_right_widget_width())
 
   @staticmethod
-  def addWord(word):
-    if (word != MainWidget.currentSearch.getCurrentWord()):
-      MainWidget.currentSearch.searchedWord.setText(word)
-      # ResultsWidget.showResults(word)
+  def add_word(word):
+    if (word != MainWidget.current_search.get_current_word()):
+      MainWidget.current_search.searched_word.setText(word)
+      # ResultsWidget.show_results(word)

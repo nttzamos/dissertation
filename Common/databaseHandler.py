@@ -6,28 +6,28 @@ import sqlite3
 import datetime
 
 class DBHandler():
-  databasesDirectoryPath = "Databases/"
-  databaseFile = "database.db"
+  databases_directory_path = 'Databases/'
+  database_file = 'database.db'
 
   @staticmethod
-  def initializeDatabases():
-    if path.isfile(DBHandler.databasesDirectoryPath + DBHandler.databaseFile):
+  def initialize_databases():
+    if path.isfile(DBHandler.databases_directory_path + DBHandler.database_file):
       return
 
-    DBHandler.initializeCommonDatabase()
+    DBHandler.initialize_common_database()
     for grade in range(1, 7):
-      DBHandler.initializeGradeDatabase(grade)
+      DBHandler.initialize_grade_database(grade)
 
   @staticmethod
-  def initializeCommonDatabase():
-    databaseFilePath = DBHandler.databasesDirectoryPath + DBHandler.databaseFile
+  def initialize_common_database():
+    database_file_path = DBHandler.databases_directory_path + DBHandler.database_file
 
-    if path.isfile(databaseFilePath):
+    if path.isfile(database_file_path):
       return
 
-    con = sqlite3.connect(databaseFilePath)
+    con = sqlite3.connect(database_file_path)
     cur = con.cursor()
-    gradesNames = ["Α' Δημοτικού", "Β' Δημοτικού", "Γ' Δημοτικού", "Δ' Δημοτικού", "Ε' Δημοτικού", "ΣΤ' Δημοτικού"]
+    grades_names = ["Α' Δημοτικού", "Β' Δημοτικού", "Γ' Δημοτικού", "Δ' Δημοτικού", "Ε' Δημοτικού", "ΣΤ' Δημοτικού"]
 
     cur.execute('''CREATE TABLE grade (id INTEGER PRIMARY KEY, name TEXT)''')
     cur.execute('''CREATE TABLE subject (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, grade_id INTEGER)''')
@@ -42,95 +42,95 @@ class DBHandler():
     cur.execute('''CREATE TABLE starred_word (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, profile_id INTEGER, student_id INTEGER, subject_id INTEGER)''')
 
     for i in range(6):
-      cur.execute("INSERT INTO grade VALUES (?, ?) ON CONFLICT(id) DO NOTHING", (i + 1, gradesNames[i]))
+      cur.execute('INSERT INTO grade VALUES (?, ?) ON CONFLICT(id) DO NOTHING', (i + 1, grades_names[i]))
     con.commit()
     con.close()
 
   @staticmethod
-  def addStudent(name, profiles):
-    con, cur = DBHandler.connectToDatabase()
+  def add_student(name, profiles):
+    con, cur = DBHandler.connect_to_database()
 
-    cur.execute("INSERT INTO student VALUES (null, ?)", (name,))
+    cur.execute('INSERT INTO student VALUES (null, ?)', (name,))
     con.commit()
     con.close()
 
-    DBHandler.addStudentProfiles(cur.lastrowid, profiles)
+    DBHandler.add_student_profiles(cur.lastrowid, profiles)
 
   @staticmethod
-  def updateStudentName(studentId, newStudentName):
-    con, cur = DBHandler.connectToDatabase()
+  def update_student_name(student_id, new_student_name):
+    con, cur = DBHandler.connect_to_database()
 
-    cur.execute("UPDATE student SET name = ? WHERE id = ?", (newStudentName, studentId))
-    con.commit()
-    con.close()
-
-  @staticmethod
-  def removeStudent(id):
-    con, cur = DBHandler.connectToDatabase()
-
-    cur.execute("DELETE FROM student WHERE id = ?", (id,))
-    cur.execute("DELETE FROM student_profile WHERE student_id = ?", (id,))
+    cur.execute('UPDATE student SET name = ? WHERE id = ?', (new_student_name, student_id))
     con.commit()
     con.close()
 
   @staticmethod
-  def getStudents():
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT name FROM student ORDER BY name")
+  def remove_student(id):
+    con, cur = DBHandler.connect_to_database()
+
+    cur.execute('DELETE FROM student WHERE id = ?', (id,))
+    cur.execute('DELETE FROM student_profile WHERE student_id = ?', (id,))
+    con.commit()
+    con.close()
+
+  @staticmethod
+  def get_students():
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT name FROM student ORDER BY name')
     students = list(map(lambda student: student[0], cur.fetchall()))
 
     con.close()
     return students
 
   @staticmethod
-  def getStudentId(studentName):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT id FROM student WHERE name = ?", (studentName,))
-    studentId = cur.fetchone()[0]
+  def get_student_id(student_name):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT id FROM student WHERE name = ?', (student_name,))
+    student_id = cur.fetchone()[0]
     con.close()
-    return studentId
+    return student_id
 
   @staticmethod
-  def getStudentDetails(studentName):
-    studentId = DBHandler.getStudentId(studentName)
-    return studentId, DBHandler.getStudentProfiles(studentId)
+  def get_student_details(student_name):
+    student_id = DBHandler.get_student_id(student_name)
+    return student_id, DBHandler.get_student_profiles(student_id)
 
   @staticmethod
-  def studentNameExists(studentName):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT COUNT(*) FROM student WHERE name = ?", (studentName,))
-    studentNameExists = cur.fetchone()[0] > 0
+  def student_name_exists(student_name):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT COUNT(*) FROM student WHERE name = ?', (student_name,))
+    student_name_exists = cur.fetchone()[0] > 0
     con.close()
 
-    return studentNameExists
+    return student_name_exists
 
   @staticmethod
-  def addStudentProfiles(studentId, profiles):
-    con, cur = DBHandler.connectToDatabase()
+  def add_student_profiles(student_id, profiles):
+    con, cur = DBHandler.connect_to_database()
     for profile in profiles:
-      profileId = DBHandler.getProfileId(profile)
-      cur.execute("INSERT INTO student_profile VALUES (null, ?, ?)", (studentId, profileId))
+      profile_id = DBHandler.get_profile_id(profile)
+      cur.execute('INSERT INTO student_profile VALUES (null, ?, ?)', (student_id, profile_id))
 
     con.commit()
     con.close()
 
   @staticmethod
-  def removeStudentProfiles(studentId, profiles):
-    con, cur = DBHandler.connectToDatabase()
+  def remove_student_profiles(student_id, profiles):
+    con, cur = DBHandler.connect_to_database()
 
-    # query = "DELETE FROM profileSubjects WHERE id IN ({})".format(", ".join("?" * len(subjects)))
+    # query = 'DELETE FROM profile_subjects WHERE id IN ({})'.format(', '.join('?' * len(subjects)))
     # cur.execute(query, subjects)
 
     for profile in profiles:
-      profileId = DBHandler.getProfileId(profile)
-      cur.execute("DELETE FROM student_profile WHERE student_id = ? AND profile_id = ?", (studentId, profileId))
+      profile_id = DBHandler.get_profile_id(profile)
+      cur.execute('DELETE FROM student_profile WHERE student_id = ? AND profile_id = ?', (student_id, profile_id))
 
     con.commit()
     con.close()
 
   @staticmethod
-  def getStudentProfiles(studentId):
-    con, cur = DBHandler.connectToDatabase()
+  def get_student_profiles(student_id):
+    con, cur = DBHandler.connect_to_database()
 
     query = ('SELECT profile.name '
         'FROM student_profile '
@@ -138,94 +138,94 @@ class DBHandler():
         'ON student_profile.profile_id = profile.id '
         'WHERE student_profile.student_id = ?')
 
-    cur.execute(query, (studentId,))
-    profileNames = list(map(lambda profileName: profileName[0], cur.fetchall()))
+    cur.execute(query, (student_id,))
+    profile_names = list(map(lambda profile_name: profile_name[0], cur.fetchall()))
 
     con.close()
 
-    return profileNames
+    return profile_names
 
   @staticmethod
-  def addProfile(name, grade, subjects):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT name, id FROM subject WHERE grade_id = ?", (grade,))
-    subjectDictionary = dict(cur.fetchall())
+  def add_profile(name, grade, subjects):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT name, id FROM subject WHERE grade_id = ?', (grade,))
+    subject_dictionary = dict(cur.fetchall())
     con.close()
 
-    subjectIds = []
+    subject_ids = []
     for subject in subjects:
-      subjectIds.append(subjectDictionary[subject])
+      subject_ids.append(subject_dictionary[subject])
 
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("INSERT INTO profile VALUES (null, ?, ?)", (name, grade))
-    profileSubjects = list(zip([cur.lastrowid] * len(subjectIds), subjectIds))
-    cur.executemany("INSERT INTO profile_subject VALUES (null, ?, ?)", profileSubjects)
-
-    con.commit()
-    con.close()
-
-  @staticmethod
-  def updateProfileName(profileId, newProfileName):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("UPDATE profile SET name = ? WHERE id = ?", (newProfileName, profileId))
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('INSERT INTO profile VALUES (null, ?, ?)', (name, grade))
+    profile_subjects = list(zip([cur.lastrowid] * len(subject_ids), subject_ids))
+    cur.executemany('INSERT INTO profile_subject VALUES (null, ?, ?)', profile_subjects)
 
     con.commit()
     con.close()
 
   @staticmethod
-  def removeProfile(id):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("DELETE FROM profile WHERE id = ?", (id,))
-    cur.execute("DELETE FROM profile_subject WHERE profile_id = ?", (id,))
-    cur.execute("DELETE FROM student_profile WHERE profile_id = ?", (id,))
+  def update_profile_name(profile_id, new_profile_name):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('UPDATE profile SET name = ? WHERE id = ?', (new_profile_name, profile_id))
 
     con.commit()
     con.close()
 
   @staticmethod
-  def getProfiles():
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT name FROM profile ORDER BY id")
+  def remove_profile(id):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('DELETE FROM profile WHERE id = ?', (id,))
+    cur.execute('DELETE FROM profile_subject WHERE profile_id = ?', (id,))
+    cur.execute('DELETE FROM student_profile WHERE profile_id = ?', (id,))
+
+    con.commit()
+    con.close()
+
+  @staticmethod
+  def get_profiles():
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT name FROM profile ORDER BY id')
     profiles = list(map(lambda profile: profile[0], cur.fetchall()))
 
     con.close()
     return profiles
 
   @staticmethod
-  def getProfileId(profileName):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT id FROM profile WHERE name = ?", (profileName,))
-    profileId = cur.fetchone()[0]
+  def get_profile_id(profile_name):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT id FROM profile WHERE name = ?', (profile_name,))
+    profile_id = cur.fetchone()[0]
     con.close()
 
-    return profileId
+    return profile_id
 
   @staticmethod
-  def getProfileName(profileId):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT name FROM profile WHERE id = ?", (profileId,))
-    profileName = cur.fetchone()[0]
+  def get_profile_name(profile_id):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT name FROM profile WHERE id = ?', (profile_id,))
+    profile_name = cur.fetchone()[0]
     con.close()
 
-    return profileName
+    return profile_name
 
   @staticmethod
-  def getProfileGrade(profileId):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT grade_id FROM profile WHERE id = ?", (profileId,))
-    profileGrade = cur.fetchone()[0]
+  def get_profile_grade(profile_id):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT grade_id FROM profile WHERE id = ?', (profile_id,))
+    profile_grade = cur.fetchone()[0]
     con.close()
 
-    return profileGrade
+    return profile_grade
 
   @staticmethod
-  def getProfileDetails(profileName):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT id, grade_id FROM profile WHERE name = ?", (profileName,))
-    profileId, gradeId = cur.fetchone()
+  def get_profile_details(profile_name):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT id, grade_id FROM profile WHERE name = ?', (profile_name,))
+    profile_id, grade_id = cur.fetchone()
 
-    cur.execute("SELECT name FROM grade WHERE id = ?", (gradeId,))
-    gradeName = cur.fetchone()[0]
+    cur.execute('SELECT name FROM grade WHERE id = ?', (grade_id,))
+    grade_name = cur.fetchone()[0]
 
     query = ('SELECT name '
         'FROM subject '
@@ -234,429 +234,429 @@ class DBHandler():
         'WHERE profile_subject.profile_id = ? '
         'ORDER BY name')
 
-    cur.execute(query, (profileId,))
-    profileSubjects = list(map(lambda word: word[0], cur.fetchall()))
+    cur.execute(query, (profile_id,))
+    profile_subjects = list(map(lambda word: word[0], cur.fetchall()))
 
     con.close()
-    return profileId, gradeId, gradeName, profileSubjects
+    return profile_id, grade_id, grade_name, profile_subjects
 
   @staticmethod
-  def profileNameExists(profileName):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT COUNT(*) FROM profile WHERE name = ?", (profileName,))
-    profileNameExists = cur.fetchone()[0] > 0
+  def profile_name_exists(profile_name):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT COUNT(*) FROM profile WHERE name = ?', (profile_name,))
+    profile_name_exists = cur.fetchone()[0] > 0
     con.close()
 
-    return profileNameExists
+    return profile_name_exists
 
   @staticmethod
-  def addProfileSubjects(gradeId, profileId, subjects):
-    con, cur = DBHandler.connectToDatabase()
+  def add_profile_subjects(grade_id, profile_id, subjects):
+    con, cur = DBHandler.connect_to_database()
 
-    subjectsIds = []
+    subjects_ids = []
     for subject in subjects:
-      subjectsIds.append(DBHandler.getSubjectId(gradeId, subject))
+      subjects_ids.append(DBHandler.get_subject_id(grade_id, subject))
 
-    profileSubjects = list(zip([profileId] * len(subjectsIds), subjectsIds))
-    cur.executemany("INSERT INTO profile_subject VALUES (null, ?, ?)", profileSubjects)
+    profile_subjects = list(zip([profile_id] * len(subjects_ids), subjects_ids))
+    cur.executemany('INSERT INTO profile_subject VALUES (null, ?, ?)', profile_subjects)
 
     con.commit()
     con.close()
 
   @staticmethod
-  def removeProfileSubjects(gradeId, profileId, subjects):
-    con, cur = DBHandler.connectToDatabase()
+  def remove_profile_subjects(grade_id, profile_id, subjects):
+    con, cur = DBHandler.connect_to_database()
 
-    # query = "DELETE FROM profileSubjects WHERE id IN ({})".format(", ".join("?" * len(subjects)))
+    # query = 'DELETE FROM profile_subjects WHERE id IN ({})'.format(', '.join('?' * len(subjects)))
     # cur.execute(query, subjects)
 
     for subject in subjects:
-      cur.execute("DELETE FROM profile_subject WHERE profile_id = ? AND subject_id = ?", (profileId, DBHandler.getSubjectId(gradeId, subject)))
+      cur.execute('DELETE FROM profile_subject WHERE profile_id = ? AND subject_id = ?', (profile_id, DBHandler.get_subject_id(grade_id, subject)))
 
     con.commit()
     con.close()
 
   @staticmethod
-  def getProfileSubjects(profileId):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT subject_id FROM profile_subject WHERE profile_id = ?", (profileId,))
+  def get_profile_subjects(profile_id):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT subject_id FROM profile_subject WHERE profile_id = ?', (profile_id,))
 
-    profileSubjects = list(map(lambda subject: subject[0], cur.fetchall()))
+    profile_subjects = list(map(lambda subject: subject[0], cur.fetchall()))
 
     con.close()
-    return profileSubjects
+    return profile_subjects
 
   @staticmethod
-  def getGrades():
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT name FROM grade ORDER BY id")
+  def get_grades():
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT name FROM grade ORDER BY id')
     grades = list(map(lambda grade: grade[0], cur.fetchall()))
 
     con.close()
     return grades
 
   @staticmethod
-  def initializeGradeDatabase(grade):
-    databaseFilePath = DBHandler.databasesDirectoryPath + DBHandler.databaseFile
+  def initialize_grade_database(grade):
+    database_file_path = DBHandler.databases_directory_path + DBHandler.database_file
 
-    gradeTableName = DBHandler.getGradeTableName(grade)
-    subjectTableName = DBHandler.getSubjectTableName(grade)
+    grade_table_name = DBHandler.get_grade_table_name(grade)
+    subject_table_name = DBHandler.get_subject_table_name(grade)
 
-    con = sqlite3.connect(databaseFilePath)
+    con = sqlite3.connect(database_file_path)
     cur = con.cursor()
 
-    cur.execute('CREATE TABLE ' + gradeTableName + ' (id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT)')
-    cur.execute('CREATE TABLE ' + subjectTableName + ' (id INTEGER PRIMARY KEY AUTOINCREMENT, subject_id INTEGER, word_id INTEGER)')
+    cur.execute('CREATE TABLE ' + grade_table_name + ' (id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT)')
+    cur.execute('CREATE TABLE ' + subject_table_name + ' (id INTEGER PRIMARY KEY AUTOINCREMENT, subject_id INTEGER, word_id INTEGER)')
 
-    subjectNames = PdfParser.getGradeSubjectsNames(grade)
-    DBHandler.initializeSubjectsTable(cur, grade, subjectNames)
+    subject_names = PdfParser.get_grade_subjects_names(grade)
+    DBHandler.initialize_subjects_table(cur, grade, subject_names)
     con.commit()
 
     # grade_start = timeit.default_timer()
 
-    # subjectFiles = PdfParser.getGradeSubjectsFiles(grade)
-    wordsSet = set()
-    wordsPerSubject = dict()
-    for i in range(len(subjectNames)):
-      # currentSubjectWords = list(set(PdfParser.readSubjectWords(grade, subjectFiles[i])))
-      currentSubjectWords = ['Νίκος1', 'Νίκος2', 'Νίκος3']
-      for j in range(len(currentSubjectWords)):
-        currentSubjectWords[j] = 'subject' + str(i) + str(grade) + currentSubjectWords[j]
-      wordsPerSubject[subjectNames[i]] = currentSubjectWords
-      wordsSet = wordsSet | set(currentSubjectWords)
+    # subject_files = PdfParser.get_grade_subjects_files(grade)
+    words_set = set()
+    words_per_subject = dict()
+    for i in range(len(subject_names)):
+      # current_subject_words = list(set(PdfParser.read_subject_words(grade, subject_files[i])))
+      current_subject_words = ['Νίκος1', 'Νίκος2', 'Νίκος3']
+      for j in range(len(current_subject_words)):
+        current_subject_words[j] = 'subject' + str(i) + str(grade) + current_subject_words[j]
+      words_per_subject[subject_names[i]] = current_subject_words
+      words_set = words_set | set(current_subject_words)
 
-    wordsList = DBHandler.sortWordsAlphabetically(list(wordsSet))
+    words_list = DBHandler.sort_words_alphabetically(list(words_set))
     # print()
-    # print("Grade: " + str(grade))
+    # print('Grade: ' + str(grade))
     # grade_middle_1 = timeit.default_timer()
-    # print("Creating lists: " + str(grade_middle_1 - grade_start))
+    # print('Creating lists: ' + str(grade_middle_1 - grade_start))
 
-    words = list(zip(list(range(1, len(wordsList) + 1)), wordsList))
-    cur.executemany('INSERT INTO ' + gradeTableName + ' VALUES (?, ?)', words)
+    words = list(zip(list(range(1, len(words_list) + 1)), words_list))
+    cur.executemany('INSERT INTO ' + grade_table_name + ' VALUES (?, ?)', words)
     con.commit()
 
     # grade_middle_2 = timeit.default_timer()
-    # print("Creating words table: " + str(grade_middle_2 - grade_middle_1))
+    # print('Creating words table: ' + str(grade_middle_2 - grade_middle_1))
 
-    for i in range(len(subjectNames)):
+    for i in range(len(subject_names)):
       # Implementation 1
-      # for j in range(len(wordsPerSubject[subjectNames[i]])):
-      #   currentWord = wordsPerSubject[subjectNames[i]][j]
-      #   wordsListIndex = wordsList.index(currentWord)
-      #   cur.execute("INSERT INTO subject_words VALUES (null, ?, ?) ON CONFLICT(id) DO NOTHING", (i + 1, wordsListIndex))
+      # for j in range(len(words_per_subject[subject_names[i]])):
+      #   currentWord = words_per_subject[subject_names[i]][j]
+      #   words_list_index = words_list.index(currentWord)
+      #   cur.execute('INSERT INTO subject_words VALUES (null, ?, ?) ON CONFLICT(id) DO NOTHING', (i + 1, words_list_index))
       # con.commit()
 
       # Implementation 2
-      wordsListIndeces = list()
+      words_list_indeces = list()
 
-      n = len(wordsPerSubject[subjectNames[i]])
+      n = len(words_per_subject[subject_names[i]])
 
       for j in range(n):
-        wordsListIndeces.append(wordsList.index(wordsPerSubject[subjectNames[i]][j]))
+        words_list_indeces.append(words_list.index(words_per_subject[subject_names[i]][j]))
 
-      subjectId = DBHandler.getSubjectId(grade, subjectNames[i])
-      subjectsWords = list(zip([subjectId] * n, wordsListIndeces))
-      cur.executemany('INSERT INTO ' + subjectTableName + ' VALUES (null, ?, ?) ON CONFLICT(id) DO NOTHING', subjectsWords)
+      subject_id = DBHandler.get_subject_id(grade, subject_names[i])
+      subjects_words = list(zip([subject_id] * n, words_list_indeces))
+      cur.executemany('INSERT INTO ' + subject_table_name + ' VALUES (null, ?, ?) ON CONFLICT(id) DO NOTHING', subjects_words)
       con.commit()
 
     # grade_end = timeit.default_timer()
-    # print("Creating subject_word table: " + str(grade_end - grade_middle_2))
-    # print("Total: " + str(grade_end - grade_start))
+    # print('Creating subject_word table: ' + str(grade_end - grade_middle_2))
+    # print('Total: ' + str(grade_end - grade_start))
 
     con.close()
 
   @staticmethod
-  def sortWordsAlphabetically(words):
-    translationTable = {
+  def sort_words_alphabetically(words):
+    translation_table = {
       940: 945, 941: 949, 972: 959, 974: 969, 943: 953, 942: 951, 973: 965
     }
 
-    normalizedWords = list(map(lambda word: word.translate(translationTable), words))
+    normalized_words = list(map(lambda word: word.translate(translation_table), words))
 
-    return [word for _, word in sorted(zip(normalizedWords, words))]
-
-  @staticmethod
-  def initializeSubjectsTable(cur, grade, subjectNames):
-    subjects = list(zip(subjectNames, [grade] * len(subjectNames)))
-
-    cur.executemany("INSERT INTO subject VALUES (null, ?, ?) ON CONFLICT(id) DO NOTHING", subjects)
+    return [word for _, word in sorted(zip(normalized_words, words))]
 
   @staticmethod
-  def getWords(profileId, gradeId, subjectName):
-    if subjectName == 'All Subjects':
-      subjectIds = DBHandler.getProfileSubjects(profileId)
+  def initialize_subjects_table(cur, grade, subject_names):
+    subjects = list(zip(subject_names, [grade] * len(subject_names)))
+
+    cur.executemany('INSERT INTO subject VALUES (null, ?, ?) ON CONFLICT(id) DO NOTHING', subjects)
+
+  @staticmethod
+  def get_words(profile_id, grade_id, subject_name):
+    if subject_name == 'All Subjects':
+      subject_ids = DBHandler.get_profile_subjects(profile_id)
     else:
-      subjectIds = [DBHandler.getSubjectId(gradeId, subjectName)]
+      subject_ids = [DBHandler.get_subject_id(grade_id, subject_name)]
 
-    con, cur = DBHandler.connectToDatabase()
+    con, cur = DBHandler.connect_to_database()
 
-    wordsSet = set()
-    for subjectId in subjectIds:
+    words_set = set()
+    for subject_id in subject_ids:
       query = ('SELECT word '
-        'FROM ' + DBHandler.getGradeTableName(gradeId) + ' ' +
-        'INNER JOIN ' + DBHandler.getSubjectTableName(gradeId) + ' ' +
-        'ON ' + DBHandler.getGradeTableName(gradeId) + '.id = ' + DBHandler.getSubjectTableName(gradeId) + '.word_id '
-        'WHERE ' + DBHandler.getSubjectTableName(gradeId) + '.subject_id = ?')
+        'FROM ' + DBHandler.get_grade_table_name(grade_id) + ' ' +
+        'INNER JOIN ' + DBHandler.get_subject_table_name(grade_id) + ' ' +
+        'ON ' + DBHandler.get_grade_table_name(grade_id) + '.id = ' + DBHandler.get_subject_table_name(grade_id) + '.word_id '
+        'WHERE ' + DBHandler.get_subject_table_name(grade_id) + '.subject_id = ?')
 
-      cur.execute(query, (subjectId,))
-      subjectWords = list(map(lambda word: word[0], cur.fetchall()))
-      wordsSet = wordsSet | set(subjectWords)
+      cur.execute(query, (subject_id,))
+      subject_words = list(map(lambda word: word[0], cur.fetchall()))
+      words_set = words_set | set(subject_words)
 
     con.close()
-    words = list(wordsSet)
+    words = list(words_set)
     words.sort()
 
     return words
 
   @staticmethod
-  def getGradeWords(gradeId):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute('SELECT word FROM ' + DBHandler.getGradeTableName(gradeId) + ' ORDER BY word')
+  def get_grade_words(grade_id):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT word FROM ' + DBHandler.get_grade_table_name(grade_id) + ' ORDER BY word')
     words = list(map(lambda word: word[0], cur.fetchall()))
 
     con.close()
     return words
 
   @staticmethod
-  def getCandidateWords(gradeId):
-    con, cur = DBHandler.connectToDatabase()
+  def get_candidate_words(grade_id):
+    con, cur = DBHandler.connect_to_database()
     query = ('SELECT word '
-        'FROM ' + DBHandler.getGradeTableName(gradeId) + ' ' +
+        'FROM ' + DBHandler.get_grade_table_name(grade_id) + ' ' +
         'INNER JOIN candidate '
-        'ON ' + DBHandler.getGradeTableName(gradeId) + '.id = candidate.word_id '
+        'ON ' + DBHandler.get_grade_table_name(grade_id) + '.id = candidate.word_id '
         'WHERE candidate.grade_id = ?')
 
-    cur.execute(query, (gradeId,))
+    cur.execute(query, (grade_id,))
     words = list(map(lambda word: word[0], cur.fetchall()))
 
     con.close()
     return words
 
   @staticmethod
-  def addRecentSearch(word):
+  def add_recent_search(word):
     from MainWidget.currentSearch import CurrentSearch
-    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
-    if subjectName == -1:
+    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
+    if subject_name == -1:
       return # got to change
 
-    subjectId = DBHandler.getSubjectId(grade, subjectName)
+    subject_id = DBHandler.get_subject_id(grade, subject_name)
 
-    wordId = DBHandler.getWordId(grade, word)
-    recentSearchExists = DBHandler.recentSearchExists(wordId, profileId)
-    dateTimeNow = datetime.datetime.now()
-    con, cur = DBHandler.connectToDatabase()
+    word_id = DBHandler.get_word_id(grade, word)
+    recent_search_exists = DBHandler.recent_search_exists(word_id, profile_id)
+    date_time_now = datetime.datetime.now()
+    con, cur = DBHandler.connect_to_database()
 
-    if recentSearchExists:
-      cur.execute("UPDATE recent_search SET searched_at = ? WHERE word_id = ? AND profile_id = ? AND student_id = ?", (dateTimeNow, wordId, profileId, studentId))
+    if recent_search_exists:
+      cur.execute('UPDATE recent_search SET searched_at = ? WHERE word_id = ? AND profile_id = ? AND student_id = ?', (date_time_now, word_id, profile_id, student_id))
     else:
-      cur.execute("INSERT INTO recent_search VALUES (null, ?, ?, ?, ?, ?)", (wordId, profileId, studentId, subjectId, dateTimeNow))
+      cur.execute('INSERT INTO recent_search VALUES (null, ?, ?, ?, ?, ?)', (word_id, profile_id, student_id, subject_id, date_time_now))
 
     con.commit()
     con.close()
-    return recentSearchExists
+    return recent_search_exists
 
   @staticmethod
-  def recentSearchExists(wordId, profileId):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT COUNT(*) FROM recent_search WHERE word_id = ? AND profile_id = ?", (wordId, profileId))
-    recentSearchExists = cur.fetchone()[0] > 0
+  def recent_search_exists(word_id, profile_id):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT COUNT(*) FROM recent_search WHERE word_id = ? AND profile_id = ?', (word_id, profile_id))
+    recent_search_exists = cur.fetchone()[0] > 0
     con.close()
-    return recentSearchExists
+    return recent_search_exists
 
   @staticmethod
-  def removeRecentSearch(word):
+  def remove_recent_search(word):
     from MainWidget.currentSearch import CurrentSearch
-    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
+    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
 
-    con, cur = DBHandler.connectToDatabase()
-    wordId = DBHandler.getWordId(grade, word)
-    cur.execute("DELETE FROM recent_search WHERE word_id = ? AND profile_id = ? AND student_id = ?", (wordId, profileId, studentId))
+    con, cur = DBHandler.connect_to_database()
+    word_id = DBHandler.get_word_id(grade, word)
+    cur.execute('DELETE FROM recent_search WHERE word_id = ? AND profile_id = ? AND student_id = ?', (word_id, profile_id, student_id))
     con.commit()
     con.close()
 
   @staticmethod
-  def getRecentSearches():
+  def get_recent_searches():
     from MainWidget.currentSearch import CurrentSearch
-    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
-    if subjectName == -1:
-      extraInfo = (profileId, studentId)
+    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
+    if subject_name == -1:
+      extra_info = (profile_id, student_id)
       query = ('SELECT word '
-        'FROM ' + DBHandler.getGradeTableName(grade) + ' ' +
+        'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
         'INNER JOIN recent_search '
-        'ON ' + DBHandler.getGradeTableName(grade) + '.id = recent_search.word_id '
+        'ON ' + DBHandler.get_grade_table_name(grade) + '.id = recent_search.word_id '
         'WHERE recent_search.profile_id = ? '
         'AND recent_search.student_id = ? '
         'ORDER BY recent_search.searched_at ')
     else:
-      extraInfo = (DBHandler.getSubjectId(grade, subjectName), profileId, studentId)
+      extra_info = (DBHandler.get_subject_id(grade, subject_name), profile_id, student_id)
       query = ('SELECT word '
-        'FROM ' + DBHandler.getGradeTableName(grade) + ' ' +
+        'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
         'INNER JOIN recent_search '
-        'ON ' + DBHandler.getGradeTableName(grade) + '.id = recent_search.word_id '
+        'ON ' + DBHandler.get_grade_table_name(grade) + '.id = recent_search.word_id '
         'WHERE recent_search.subject_id = ? '
         'AND recent_search.profile_id = ? '
         'AND recent_search.student_id = ? '
         'ORDER BY recent_search.searched_at ')
 
-    con, cur = DBHandler.connectToDatabase()
+    con, cur = DBHandler.connect_to_database()
 
-    cur.execute(query, extraInfo)
-    recentSearches = list(map(lambda recentSearch: recentSearch[0], cur.fetchall()))
+    cur.execute(query, extra_info)
+    recent_searches = list(map(lambda recent_search: recent_search[0], cur.fetchall()))
     con.close()
-    return recentSearches
+    return recent_searches
 
   @staticmethod
-  def addStarredWord(word):
+  def add_starred_word(word):
     from MainWidget.currentSearch import CurrentSearch
-    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
-    if subjectName == -1:
+    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
+    if subject_name == -1:
       return # got to change
 
-    subjectId = DBHandler.getSubjectId(grade, subjectName)
+    subject_id = DBHandler.get_subject_id(grade, subject_name)
 
-    con, cur = DBHandler.connectToDatabase()
-    wordId = DBHandler.getWordId(grade, word)
+    con, cur = DBHandler.connect_to_database()
+    word_id = DBHandler.get_word_id(grade, word)
 
-    cur.execute("INSERT INTO starred_word VALUES (null, ?, ?, ?, ?)", (wordId, profileId, studentId, subjectId))
+    cur.execute('INSERT INTO starred_word VALUES (null, ?, ?, ?, ?)', (word_id, profile_id, student_id, subject_id))
     con.commit()
     con.close()
 
   @staticmethod
-  def starredWordExists(word):
+  def starred_word_exists(word):
     from MainWidget.currentSearch import CurrentSearch
-    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
+    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
 
-    wordId = DBHandler.getWordId(grade, word)
-    con, cur = DBHandler.connectToDatabase()
+    word_id = DBHandler.get_word_id(grade, word)
+    con, cur = DBHandler.connect_to_database()
 
-    cur.execute("SELECT COUNT(*) FROM starred_word WHERE word_id = ? AND profile_id = ? AND student_id = ?", (wordId, profileId, studentId))
+    cur.execute('SELECT COUNT(*) FROM starred_word WHERE word_id = ? AND profile_id = ? AND student_id = ?', (word_id, profile_id, student_id))
     return cur.fetchone()[0] > 0
 
   @staticmethod
-  def removeStarredWord(word):
+  def remove_starred_word(word):
     from MainWidget.currentSearch import CurrentSearch
-    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
+    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
 
-    con, cur = DBHandler.connectToDatabase()
-    wordId = DBHandler.getWordId(grade, word)
-    cur.execute("DELETE FROM starred_word WHERE word_id = ? AND profile_id = ? AND student_id = ?", (wordId, profileId, studentId))
+    con, cur = DBHandler.connect_to_database()
+    word_id = DBHandler.get_word_id(grade, word)
+    cur.execute('DELETE FROM starred_word WHERE word_id = ? AND profile_id = ? AND student_id = ?', (word_id, profile_id, student_id))
     con.commit()
     con.close()
 
   @staticmethod
-  def getStarredWords():
+  def get_starred_words():
     from MainWidget.currentSearch import CurrentSearch
-    studentId, profileId, grade, subjectName = CurrentSearch.getCurrentSelectionDetails()
+    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
 
-    con, cur = DBHandler.connectToDatabase()
+    con, cur = DBHandler.connect_to_database()
 
-    if subjectName == -1:
-      extraInfo = (profileId, studentId)
+    if subject_name == -1:
+      extra_info = (profile_id, student_id)
       query = ('SELECT word '
-          'FROM ' + DBHandler.getGradeTableName(grade) + ' ' +
+          'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
           'INNER JOIN starred_word '
-          'ON ' + DBHandler.getGradeTableName(grade) + '.id = starred_word.word_id '
+          'ON ' + DBHandler.get_grade_table_name(grade) + '.id = starred_word.word_id '
           'WHERE starred_word.profile_id = ? '
           'AND starred_word.student_id = ? '
-          'ORDER BY ' + DBHandler.getGradeTableName(grade) + '.id DESC')
+          'ORDER BY ' + DBHandler.get_grade_table_name(grade) + '.id DESC')
     else:
-      extraInfo = (DBHandler.getSubjectId(grade, subjectName), profileId, studentId)
+      extra_info = (DBHandler.get_subject_id(grade, subject_name), profile_id, student_id)
       query = ('SELECT word '
-          'FROM ' + DBHandler.getGradeTableName(grade) + ' ' +
+          'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
           'INNER JOIN starred_word '
-          'ON ' + DBHandler.getGradeTableName(grade) + '.id = starred_word.word_id '
+          'ON ' + DBHandler.get_grade_table_name(grade) + '.id = starred_word.word_id '
           'WHERE starred_word.subject_id = ? '
           'AND starred_word.profile_id = ? '
           'AND starred_word.student_id = ? '
-          'ORDER BY ' + DBHandler.getGradeTableName(grade) + '.id DESC')
+          'ORDER BY ' + DBHandler.get_grade_table_name(grade) + '.id DESC')
 
-    cur.execute(query, extraInfo)
-    starredWords = list(map(lambda starredWord: starredWord[0], cur.fetchall()))
+    cur.execute(query, extra_info)
+    starred_words = list(map(lambda starredWord: starredWord[0], cur.fetchall()))
     con.close()
-    return starredWords
+    return starred_words
 
   @staticmethod
-  def getSubjectId(grade, subject):
-    con, cur = DBHandler.connectToDatabase()
+  def get_subject_id(grade, subject):
+    con, cur = DBHandler.connect_to_database()
     cur.execute('SELECT id FROM subject WHERE grade_id = ? AND name = ?', (grade, subject))
-    subjectId = cur.fetchone()[0]
+    subject_id = cur.fetchone()[0]
     cur.close()
     con.close()
-    return subjectId
+    return subject_id
 
   @staticmethod
-  def getSubjectName(subjectId):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute('SELECT name FROM subject WHERE id = ?', (subjectId,))
-    subjectName = cur.fetchone()[0]
+  def get_subject_name(subject_id):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT name FROM subject WHERE id = ?', (subject_id,))
+    subject_name = cur.fetchone()[0]
     cur.close()
     con.close()
-    return subjectName
+    return subject_name
 
   @staticmethod
-  def getWordId(grade, word):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute('SELECT id FROM ' + DBHandler.getGradeTableName(grade) + ' WHERE word = ?', (word,))
-    wordId = cur.fetchone()[0]
+  def get_word_id(grade, word):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT id FROM ' + DBHandler.get_grade_table_name(grade) + ' WHERE word = ?', (word,))
+    word_id = cur.fetchone()[0]
     cur.close()
     con.close()
-    return wordId
+    return word_id
 
   @staticmethod
-  def updateWord(oldWord, newWord, grades):
+  def update_word(old_word, new_word, grades):
     for grade in grades:
-      con, cur = DBHandler.connectToDatabase()
+      con, cur = DBHandler.connect_to_database()
 
-      if DBHandler.wordExists(cur, grade, newWord):
-        DBHandler.removeWordFromGrade(cur, oldWord)
+      if DBHandler.word_exists(cur, grade, new_word):
+        DBHandler.remove_word_from_grade(cur, old_word)
       else:
-        cur.execute('UPDATE ' + DBHandler.getGradeTableName(grade) + ' SET word = ? WHERE word = ?', (newWord , oldWord))
+        cur.execute('UPDATE ' + DBHandler.get_grade_table_name(grade) + ' SET word = ? WHERE word = ?', (new_word , old_word))
 
       con.commit()
       con.close()
 
   @staticmethod
-  def deleteWord(word, grades):
+  def delete_word(word, grades):
     for grade in grades:
-      con, cur = DBHandler.connectToDatabase()
+      con, cur = DBHandler.connect_to_database()
 
-      DBHandler.removeWordFromGrade(cur, grade, word)
+      DBHandler.remove_word_from_grade(cur, grade, word)
 
       con.commit()
       con.close()
 
   @staticmethod
-  def removeWordFromGrade(cur, grade, word):
-    if DBHandler.wordExists(cur, grade, word):
-      wordId = DBHandler.getWordId(cur, word)
-      cur.execute('DELETE FROM ' + DBHandler.getGradeTableName(grade) + ' WHERE id = ?', (wordId,))
-      cur.execute('DELETE FROM subject_word WHERE word_id = ?', (wordId,))
-      cur.execute('DELETE FROM recent_search WHERE word_id = ?', (wordId,))
-      cur.execute('DELETE FROM starred_word WHERE word_id = ?', (wordId,))
+  def remove_word_from_grade(cur, grade, word):
+    if DBHandler.word_exists(cur, grade, word):
+      word_id = DBHandler.get_word_id(cur, word)
+      cur.execute('DELETE FROM ' + DBHandler.get_grade_table_name(grade) + ' WHERE id = ?', (word_id,))
+      cur.execute('DELETE FROM subject_word WHERE word_id = ?', (word_id,))
+      cur.execute('DELETE FROM recent_search WHERE word_id = ?', (word_id,))
+      cur.execute('DELETE FROM starred_word WHERE word_id = ?', (word_id,))
 
   @staticmethod
-  def wordExists(cur, grade, word):
-    cur.execute('SELECT COUNT(*) FROM ' + DBHandler.getGradeTableName(grade) + ' WHERE word = ?', (word,))
+  def word_exists(cur, grade, word):
+    cur.execute('SELECT COUNT(*) FROM ' + DBHandler.get_grade_table_name(grade) + ' WHERE word = ?', (word,))
     return cur.fetchone()[0] > 0
 
   @staticmethod
-  def getGradeSubjects(grade):
-    con, cur = DBHandler.connectToDatabase()
-    cur.execute("SELECT name FROM subject WHERE grade_id = ? ORDER BY name", (grade,))
+  def get_grade_subjects(grade):
+    con, cur = DBHandler.connect_to_database()
+    cur.execute('SELECT name FROM subject WHERE grade_id = ? ORDER BY name', (grade,))
     subjects = list(map(lambda subject: subject[0], cur.fetchall()))
     con.close()
     return subjects
 
   @staticmethod
-  def getGradeTableName(grade):
+  def get_grade_table_name(grade):
     return 'grade_' + str(grade) + '_word'
 
   @staticmethod
-  def getSubjectTableName(grade):
+  def get_subject_table_name(grade):
     return 'subject_' + str(grade) + '_word'
 
   @staticmethod
-  def connectToDatabase():
-    con = sqlite3.connect(DBHandler.databasesDirectoryPath + DBHandler.databaseFile)
+  def connect_to_database():
+    con = sqlite3.connect(DBHandler.databases_directory_path + DBHandler.database_file)
     cur = con.cursor()
     return con, cur

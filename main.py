@@ -6,12 +6,12 @@ app = QApplication(sys.argv)
 
 # Imports must be below here
 from Common.databaseHandler import DBHandler
-DBHandler.initializeDatabases()
+DBHandler.initialize_databases()
 
 from MenuBar.settings import Settings
-screenWidth = app.primaryScreen().size().width()
-screenHeight = app.primaryScreen().size().height()
-Settings.initializeSettingsDatabase(screenWidth, screenHeight)
+screen_width = app.primaryScreen().size().width()
+screen_height = app.primaryScreen().size().height()
+Settings.initialize_settings_database(screen_width, screen_height)
 
 from MainWidget.mainWindow import MainWindow
 from MainWidget.searchingWidget import SearchingWidget
@@ -19,6 +19,6 @@ from MainWidget.searchingWidget import SearchingWidget
 window = MainWindow()
 window.showMaximized()
 
-SearchingWidget.setFocusToSearchBar()
+SearchingWidget.set_focus_to_search_bar()
 
 sys.exit(app.exec())

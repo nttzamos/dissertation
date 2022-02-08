@@ -13,83 +13,83 @@ class RecentSearch(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
-    self.dataWidget = QWidget()
-    self.dataWidget.layout = QHBoxLayout(self.dataWidget)
-    self.dataWidget.layout.setContentsMargins(0, 0, 0, 0)
+    self.data_widget = QWidget()
+    self.data_widget.layout = QHBoxLayout(self.data_widget)
+    self.data_widget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.word = QLabel(word)
     from MenuBar.settings import Settings
     font = QFont(Settings.font, 14)
     self.word.setFont(font)
 
-    self.reloadButton = QPushButton()
-    self.reloadButton.setIcon(QIcon("Resources/reload.svg"))
-    self.reloadButton.clicked.connect(self.reloadWord)
-    self.reloadButton.setFixedWidth(30)
+    self.reload_button = QPushButton()
+    self.reload_button.setIcon(QIcon('Resources/reload.svg'))
+    self.reload_button.clicked.connect(self.reload_word)
+    self.reload_button.setFixedWidth(30)
 
-    self.starButton = QPushButton()
-    self.starButton.clicked.connect(self.notifyStarred)
-    self.starButton.setFixedWidth(30)
+    self.star_button = QPushButton()
+    self.star_button.clicked.connect(self.notify_starred)
+    self.star_button.setFixedWidth(30)
 
-    self.isStarred = condition
+    self.is_starred = condition
     if condition:
-      self.starButton.setIcon(QIcon("Resources/starred.svg"))
+      self.star_button.setIcon(QIcon('Resources/starred.svg'))
     else:
-      self.starButton.setIcon(QIcon("Resources/unstarred.svg"))
+      self.star_button.setIcon(QIcon('Resources/unstarred.svg'))
 
-    self.deleteButton = QPushButton()
-    self.deleteButton.setIcon(QIcon("Resources/delete2.svg"))
-    self.deleteButton.clicked.connect(self.removeWord)
-    self.deleteButton.setFixedWidth(30)
+    self.delete_button = QPushButton()
+    self.delete_button.setIcon(QIcon('Resources/delete2.svg'))
+    self.delete_button.clicked.connect(self.removeWord)
+    self.delete_button.setFixedWidth(30)
 
     self.line = QFrame()
     self.line.setFrameShape(QFrame.Shape.HLine)
     self.line.setFrameShadow(QFrame.Shadow.Plain)
 
-    self.dataWidget.layout.addSpacing(5)
-    self.dataWidget.layout.addWidget(self.word)
-    self.dataWidget.layout.addWidget(self.reloadButton)
-    self.dataWidget.layout.addWidget(self.starButton)
-    self.dataWidget.layout.addWidget(self.deleteButton)
-    self.dataWidget.layout.addSpacing(5)
+    self.data_widget.layout.addSpacing(5)
+    self.data_widget.layout.addWidget(self.word)
+    self.data_widget.layout.addWidget(self.reload_button)
+    self.data_widget.layout.addWidget(self.star_button)
+    self.data_widget.layout.addWidget(self.delete_button)
+    self.data_widget.layout.addSpacing(5)
 
-    self.layout.addWidget(self.dataWidget)
+    self.layout.addWidget(self.data_widget)
     self.layout.addWidget(self.line)
 
     self.style()
 
   def style(self):
     from Common.styles import Styles
-    self.setStyleSheet(Styles.itemWidgetsStyle)
+    self.setStyleSheet(Styles.item_widgets_style)
 
-  def reloadWord(self):
+  def reload_word(self):
     from MainWidget.mainWidget import MainWidget
-    MainWidget.addWord(self.word.text())
+    MainWidget.add_word(self.word.text())
 
-  def notifyStarred(self):
+  def notify_starred(self):
     from SideWidgets.starredWordsWidget import StarredWordsWidget
     word = self.word.text()
 
-    if DBHandler.starredWordExists(word):
-      DBHandler.removeStarredWord(word)
-      StarredWordsWidget.toggleStarredBottom(word)
+    if DBHandler.starred_word_exists(word):
+      DBHandler.remove_starred_word(word)
+      StarredWordsWidget.toggle_starred_bottom(word)
     else:
-      DBHandler.addStarredWord(word)
-      StarredWordsWidget.addStarredWord(word)
+      DBHandler.add_starred_word(word)
+      StarredWordsWidget.add_starred_word(word)
 
-    self.toggleStarredIcon()
+    self.toggle_starred_icon()
 
-  def toggleStarredIcon(self):
-    if self.isStarred:
-      self.isStarred = False
-      self.starButton.setIcon(QIcon("Resources/unstarred.svg"))
+  def toggle_starred_icon(self):
+    if self.is_starred:
+      self.is_starred = False
+      self.star_button.setIcon(QIcon('Resources/unstarred.svg'))
     else:
-      self.isStarred = True
-      self.starButton.setIcon(QIcon("Resources/starred.svg"))
+      self.is_starred = True
+      self.star_button.setIcon(QIcon('Resources/starred.svg'))
 
   def removeWord(self):
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget
-    DBHandler.removeRecentSearch(self.word.text())
+    DBHandler.remove_recent_search(self.word.text())
     self.hide()
-    RecentSearchesWidget.removeRecentSearch(self)
+    RecentSearchesWidget.remove_recent_search(self)
     self.deleteLater()

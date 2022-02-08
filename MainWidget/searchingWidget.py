@@ -9,122 +9,122 @@ from Common.databaseHandler import DBHandler
 from Common.styles import Styles
 
 class SearchingWidget(QWidget):
-  dictionaryWords = []
+  dictionary_words = []
 
-  lineEdit = QLineEdit()
+  line_edit = QLineEdit()
 
   from Common.databaseHandler import DBHandler
-  grades = DBHandler.getGrades()
-  gradesMapping = {}
+  grades = DBHandler.get_grades()
+  grades_mapping = {}
   for i in range(len(grades)):
-    gradesMapping[i + 1] = grades[i]
+    grades_mapping[i + 1] = grades[i]
 
-  uninitializedStateText = 'You have to select a subject first.'
-  mostRecentlySearchedWord = ''
+  uninitialized_state_text = 'You have to select a subject first.'
+  most_recently_searched_word = ''
 
   def __init__(self):
     super().__init__()
 
-    lineEditFont = QFont(Settings.font, 14)
-    completerFont = QFont(Settings.font, 12)
-    errorMessageFont = completerFont
+    line_edit_font = QFont(Settings.font, 14)
+    completer_font = QFont(Settings.font, 12)
+    error_message_font = completer_font
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 10, 20, 0)
     self.layout.setSpacing(0)
 
-    SearchingWidget.lineEdit.setFont(lineEditFont)
-    SearchingWidget.lineEdit.setContentsMargins(0, 1, 0, 1)
-    SearchingWidget.lineEdit.returnPressed.connect(self.searchWithEnter)
-    SearchingWidget.lineEdit.textChanged.connect(self.searchTextChanged)
-    self.showErrorMessage = False
+    SearchingWidget.line_edit.setFont(line_edit_font)
+    SearchingWidget.line_edit.setContentsMargins(0, 1, 0, 1)
+    SearchingWidget.line_edit.returnPressed.connect(self.search_with_enter)
+    SearchingWidget.line_edit.textChanged.connect(self.search_text_changed)
+    self.show_error_message = False
 
-    SearchingWidget.completer = QCompleter(SearchingWidget.dictionaryWords)
+    SearchingWidget.completer = QCompleter(SearchingWidget.dictionary_words)
     SearchingWidget.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
-    SearchingWidget.completer.activated.connect(self.searchWithClick)
-    SearchingWidget.completer.popup().setFont(completerFont)
-    SearchingWidget.lineEdit.setCompleter(SearchingWidget.completer)
-    SearchingWidget.lineEdit.setPlaceholderText("Please enter a word.")
+    SearchingWidget.completer.activated.connect(self.search_with_click)
+    SearchingWidget.completer.popup().setFont(completer_font)
+    SearchingWidget.line_edit.setCompleter(SearchingWidget.completer)
+    SearchingWidget.line_edit.setPlaceholderText('Please enter a word.')
 
-    self.searchBarWidget = QWidget()
-    self.searchBarWidget.layout = QHBoxLayout(self.searchBarWidget)
-    self.searchBarWidget.layout.setContentsMargins(10, 0, 0, 0)
+    self.search_bar_widget = QWidget()
+    self.search_bar_widget.layout = QHBoxLayout(self.search_bar_widget)
+    self.search_bar_widget.layout.setContentsMargins(10, 0, 0, 0)
 
-    self.clearSearchButton = QPushButton()
-    self.clearSearchButton.setIcon(QIcon("Resources/clearSearch.png"))
-    self.clearSearchButton.clicked.connect(self.clearSearch)
-    self.hideClearSearchButton = True
-    self.clearSearchButton.hide()
+    self.clear_search_button = QPushButton()
+    self.clear_search_button.setIcon(QIcon('Resources/clear_search.png'))
+    self.clear_search_button.clicked.connect(self.clear_search)
+    self.hide_clear_search_button = True
+    self.clear_search_button.hide()
 
-    self.searchButton = QPushButton()
-    self.searchButton.setIcon(QIcon("Resources/search.png"))
-    self.searchButton.clicked.connect(self.searchWithEnter)
+    self.search_button = QPushButton()
+    self.search_button.setIcon(QIcon('Resources/search.png'))
+    self.search_button.clicked.connect(self.search_with_enter)
 
-    self.searchBarWidget.layout.setSpacing(0)
-    self.searchBarWidget.layout.addWidget(self.lineEdit)
-    self.searchBarWidget.layout.addWidget(self.clearSearchButton)
-    self.searchBarWidget.layout.addSpacing(5)
-    self.searchBarWidget.layout.addWidget(self.searchButton)
-    self.searchBarWidget.layout.addSpacing(10)
+    self.search_bar_widget.layout.setSpacing(0)
+    self.search_bar_widget.layout.addWidget(self.line_edit)
+    self.search_bar_widget.layout.addWidget(self.clear_search_button)
+    self.search_bar_widget.layout.addSpacing(5)
+    self.search_bar_widget.layout.addWidget(self.search_button)
+    self.search_bar_widget.layout.addSpacing(10)
 
-    SearchingWidget.errorMessage = QLabel(SearchingWidget.uninitializedStateText, self)
-    SearchingWidget.errorMessage.setFont(errorMessageFont)
-    sizePolicy = SearchingWidget.errorMessage.sizePolicy()
-    sizePolicy.setRetainSizeWhenHidden(True)
-    SearchingWidget.errorMessage.setSizePolicy(sizePolicy)
-    SearchingWidget.errorMessage.hide()
+    SearchingWidget.error_message = QLabel(SearchingWidget.uninitialized_state_text, self)
+    SearchingWidget.error_message.setFont(error_message_font)
+    size_policy = SearchingWidget.error_message.sizePolicy()
+    size_policy.setRetainSizeWhenHidden(True)
+    SearchingWidget.error_message.setSizePolicy(size_policy)
+    SearchingWidget.error_message.hide()
 
-    editWordsButtonFont = QFont(Settings.font, 14)
-    SearchingWidget.editWordsButton = QPushButton("Edit Dictionary Words")
-    SearchingWidget.editWordsButton.setFont(editWordsButtonFont)
-    SearchingWidget.editWordsButton.clicked.connect(self.openWordsEditingWidget)
-    SearchingWidget.editWordsButton.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+    edit_words_button_font = QFont(Settings.font, 14)
+    SearchingWidget.edit_words_button = QPushButton('Edit Dictionary Words')
+    SearchingWidget.edit_words_button.setFont(edit_words_button_font)
+    SearchingWidget.edit_words_button.clicked.connect(self.open_words_editing_widget)
+    SearchingWidget.edit_words_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
     self.subwidget = QWidget()
     self.subwidget.layout = QHBoxLayout(self.subwidget)
     self.subwidget.layout.setContentsMargins(5, 10, 0, 0)
-    self.subwidget.layout.addWidget(SearchingWidget.errorMessage, alignment=Qt.AlignmentFlag.AlignTop)
-    self.subwidget.layout.addWidget(SearchingWidget.editWordsButton)
-    sizePolicy = SearchingWidget.editWordsButton.sizePolicy()
-    sizePolicy.setRetainSizeWhenHidden(True)
-    SearchingWidget.editWordsButton.setSizePolicy(sizePolicy)
+    self.subwidget.layout.addWidget(SearchingWidget.error_message, alignment=Qt.AlignmentFlag.AlignTop)
+    self.subwidget.layout.addWidget(SearchingWidget.edit_words_button)
+    size_policy = SearchingWidget.edit_words_button.sizePolicy()
+    size_policy.setRetainSizeWhenHidden(True)
+    SearchingWidget.edit_words_button.setSizePolicy(size_policy)
 
-    if not Settings.getBooleanSetting('showEditDictWordsButton'):
-      SearchingWidget.editWordsButton.hide()
+    if not Settings.get_boolean_setting('show_edit_dict_words_button'):
+      SearchingWidget.edit_words_button.hide()
 
-    self.layout.addWidget(self.searchBarWidget)
+    self.layout.addWidget(self.search_bar_widget)
     self.layout.addWidget(self.subwidget)
 
-    self.searchBarFocusShortcut = QShortcut(QKeySequence('/'), self)
-    self.searchBarFocusShortcut.activated.connect(SearchingWidget.setFocusToSearchBar)
+    self.search_bar_focus_shortcut = QShortcut(QKeySequence('/'), self)
+    self.search_bar_focus_shortcut.activated.connect(SearchingWidget.set_focus_to_search_bar)
 
     self.style()
-    self.setFocusedStyleSheet()
+    self.set_focused_styleSheet()
 
   def style(self):
-    SearchingWidget.errorMessage.setStyleSheet(Styles.errorMessageStyle)
-    self.subwidget.setStyleSheet(Styles.subwidgetStyle)
+    SearchingWidget.error_message.setStyleSheet(Styles.error_message_style)
+    self.subwidget.setStyleSheet(Styles.subwidget_style)
 
-  def setFocusedStyleSheet(self):
-    self.searchBarWidget.setStyleSheet(Styles.searchingWidgetFocusedStyle)
+  def set_focused_styleSheet(self):
+    self.search_bar_widget.setStyleSheet(Styles.searching_widget_focused_style)
 
   def setUnfocusedStyleSheet(self):
-    self.searchBarWidget.setStyleSheet(Styles.searchingWidgetUnfocusedStyle)
+    self.search_bar_widget.setStyleSheet(Styles.searching_widget_unfocused_style)
 
-  def setErrorStyleSheet(self):
-    self.searchBarWidget.setStyleSheet(Styles.searchingWidgetErrorStyle)
-    SearchingWidget.errorMessage.show()
-
-  @staticmethod
-  def setInitialErrorMessage():
-    SearchingWidget.errorMessage.setText(SearchingWidget.uninitializedStateText)
+  def set_error_style_sheet(self):
+    self.search_bar_widget.setStyleSheet(Styles.searching_widget_error_style)
+    SearchingWidget.error_message.show()
 
   @staticmethod
-  def modifyErrorMessage(text, single):
-    SearchingWidget.errorMessage.setText(SearchingWidget.unknownWordMessage(text, single))
+  def set_initial_error_message():
+    SearchingWidget.error_message.setText(SearchingWidget.uninitialized_state_text)
 
   @staticmethod
-  def unknownWordMessage(text, single):
+  def modify_error_message(text, single):
+    SearchingWidget.error_message.setText(SearchingWidget.unknown_word_message(text, single))
+
+  @staticmethod
+  def unknown_word_message(text, single):
     if single:
       return 'This word is not contained in the book ' + \
         text + '. Please search for another word.'
@@ -133,63 +133,63 @@ class SearchingWidget(QWidget):
         text + "'. Please search for another word."
 
   @staticmethod
-  def toggleEditWordsButtonVisibility(newVisibilityStatus):
-    SearchingWidget.editWordsButton.show() if newVisibilityStatus else SearchingWidget.editWordsButton.hide()
+  def toggle_edit_words_button_visibility(new_visibility_status):
+    SearchingWidget.edit_words_button.show() if new_visibility_status else SearchingWidget.edit_words_button.hide()
 
   @staticmethod
-  def updateDictionaryWords(profileId, gradeId, subjectName):
-    SearchingWidget.dictionaryWords = DBHandler.getWords(profileId, gradeId, subjectName)
-    model = QStringListModel(SearchingWidget.dictionaryWords, SearchingWidget.completer)
+  def update_dictionary_words(profile_id, grade_id, subject_name):
+    SearchingWidget.dictionary_words = DBHandler.get_words(profile_id, grade_id, subject_name)
+    model = QStringListModel(SearchingWidget.dictionary_words, SearchingWidget.completer)
     SearchingWidget.completer.setModel(model)
 
-  def searchTextChanged(self):
-    if not self.hideClearSearchButton and not SearchingWidget.lineEdit.text():
-      self.clearSearchButton.hide()
-      self.hideClearSearchButton = True
-    elif self.hideClearSearchButton and SearchingWidget.lineEdit.text():
-      self.clearSearchButton.show()
-      self.hideClearSearchButton = False
+  def search_text_changed(self):
+    if not self.hide_clear_search_button and not SearchingWidget.line_edit.text():
+      self.clear_search_button.hide()
+      self.hide_clear_search_button = True
+    elif self.hide_clear_search_button and SearchingWidget.line_edit.text():
+      self.clear_search_button.show()
+      self.hide_clear_search_button = False
 
-    if self.showErrorMessage:
-      self.showErrorMessage = False
-      self.setFocusedStyleSheet()
-      SearchingWidget.errorMessage.hide()
+    if self.show_error_message:
+      self.show_error_message = False
+      self.set_focused_styleSheet()
+      SearchingWidget.error_message.hide()
 
-  def searchWithEnter(self):
-    SearchingWidget.mostRecentlySearchedWord = SearchingWidget.lineEdit.text()
+  def search_with_enter(self):
+    SearchingWidget.most_recently_searched_word = SearchingWidget.line_edit.text()
 
-    if SearchingWidget.lineEdit.text() in SearchingWidget.dictionaryWords:
-      self.addRecentSearch(SearchingWidget.lineEdit.text())
-      self.clearSearch()
+    if SearchingWidget.line_edit.text() in SearchingWidget.dictionary_words:
+      self.add_recent_search(SearchingWidget.line_edit.text())
+      self.clear_search()
     else:
-      self.showErrorMessage = True
-      self.setErrorStyleSheet()
-      SearchingWidget.setFocusToSearchBar()
+      self.show_error_message = True
+      self.set_error_style_sheet()
+      SearchingWidget.set_focus_to_search_bar()
 
-  def searchWithClick(self, text):
-    if not text == SearchingWidget.mostRecentlySearchedWord:
-      self.addRecentSearch(text)
+  def search_with_click(self, text):
+    if not text == SearchingWidget.most_recently_searched_word:
+      self.add_recent_search(text)
 
-    self.clearSearch()
+    self.clear_search()
 
-  def clearSearch(self):
-    QTimer.singleShot(0, SearchingWidget.lineEdit.clear)
-    SearchingWidget.setFocusToSearchBar()
+  def clear_search(self):
+    QTimer.singleShot(0, SearchingWidget.line_edit.clear)
+    SearchingWidget.set_focus_to_search_bar()
 
-  def addRecentSearch(self, word):
+  def add_recent_search(self, word):
     from MainWidget.mainWidget import MainWidget
-    MainWidget.addWord(word)
+    MainWidget.add_word(word)
 
-    recentSearchExists = DBHandler.addRecentSearch(word)
-    if recentSearchExists:
-      RecentSearchesWidget.removeAndAddRecentSearch(word)
+    recent_search_exists = DBHandler.add_recent_search(word)
+    if recent_search_exists:
+      RecentSearchesWidget.remove_and_add_recent_search(word)
     else:
-      RecentSearchesWidget.addRecentSearch(word, False)
+      RecentSearchesWidget.add_recent_search(word, False)
 
   @staticmethod
-  def setFocusToSearchBar():
-    SearchingWidget.lineEdit.setFocus()
+  def set_focus_to_search_bar():
+    SearchingWidget.line_edit.setFocus()
 
-  def openWordsEditingWidget(self):
-    wordsEditingDialog = WordsEditingWidget()
-    wordsEditingDialog.exec()
+  def open_words_editing_widget(self):
+    words_editing_dialog = WordsEditingWidget()
+    words_editing_dialog.exec()

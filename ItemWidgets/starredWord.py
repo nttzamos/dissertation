@@ -13,57 +13,57 @@ class StarredWord(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
-    self.dataWidget = QWidget()
-    self.dataWidget.layout = QHBoxLayout(self.dataWidget)
-    self.dataWidget.layout.setContentsMargins(0, 0, 0, 0)
+    self.data_widget = QWidget()
+    self.data_widget.layout = QHBoxLayout(self.data_widget)
+    self.data_widget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.word = QLabel(word)
     from MenuBar.settings import Settings
     font = QFont(Settings.font, 14)
     self.word.setFont(font)
 
-    self.reloadButton = QPushButton()
-    self.reloadButton.setIcon(QIcon("Resources/reload.svg"))
-    self.reloadButton.clicked.connect(self.reloadWord)
-    self.reloadButton.setFixedWidth(30)
+    self.reload_button = QPushButton()
+    self.reload_button.setIcon(QIcon('Resources/reload.svg'))
+    self.reload_button.clicked.connect(self.reload_word)
+    self.reload_button.setFixedWidth(30)
 
-    self.starButton = QPushButton()
-    self.starButton.clicked.connect(self.toggleStarred)
-    self.starButton.setFixedWidth(30)
-    self.starButton.setIcon(QIcon("Resources/starred.svg"))
+    self.star_button = QPushButton()
+    self.star_button.clicked.connect(self.toggle_starred)
+    self.star_button.setFixedWidth(30)
+    self.star_button.setIcon(QIcon('Resources/starred.svg'))
 
     self.line = QFrame()
     self.line.setFrameShape(QFrame.Shape.HLine)
     self.line.setFrameShadow(QFrame.Shadow.Plain)
 
-    self.dataWidget.layout.addSpacing(5)
-    self.dataWidget.layout.addWidget(self.word)
-    self.dataWidget.layout.addWidget(self.reloadButton)
-    self.dataWidget.layout.addWidget(self.starButton)
-    self.dataWidget.layout.addSpacing(5)
+    self.data_widget.layout.addSpacing(5)
+    self.data_widget.layout.addWidget(self.word)
+    self.data_widget.layout.addWidget(self.reload_button)
+    self.data_widget.layout.addWidget(self.star_button)
+    self.data_widget.layout.addSpacing(5)
 
-    self.layout.addWidget(self.dataWidget)
+    self.layout.addWidget(self.data_widget)
     self.layout.addWidget(self.line)
 
     self.style()
 
   def style(self):
     from Common.styles import Styles
-    self.setStyleSheet(Styles.itemWidgetsStyle)
+    self.setStyleSheet(Styles.item_widgets_style)
 
-  def toggleStarred(self):
+  def toggle_starred(self):
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget
     word = self.word.text()
-    DBHandler.removeStarredWord(word)
-    RecentSearchesWidget.toggleStarredUpper(word)
+    DBHandler.remove_starred_word(word)
+    RecentSearchesWidget.toggle_starred_upper(word)
     self.removeWord()
 
   def removeWord(self):
     from SideWidgets.starredWordsWidget import StarredWordsWidget
     self.hide()
-    StarredWordsWidget.removeStarredWord(self)
+    StarredWordsWidget.remove_starred_word(self)
     self.deleteLater()
 
-  def reloadWord(self):
+  def reload_word(self):
     from MainWidget.mainWidget import MainWidget
-    MainWidget.addWord(self.word.text())
+    MainWidget.add_word(self.word.text())

@@ -1,83 +1,83 @@
 class Styles():
   from MenuBar.settings import Settings
-  theme = Settings.getTheme()
+  theme = Settings.get_theme()
 
   if theme == 'light':
-    menuBarStyle = """
+    menu_bar_style = """
       QPushButton:hover { background-color: grey }
       QPushButton { border: none }
       QPushButton { padding-bottom: 5px }
       QPushButton { padding-top: 5px }
       QLabel { color: black }"""
   else:
-    menuBarStyle = """
+    menu_bar_style = """
       QPushButton:hover { background-color: grey }
       QPushButton { border: none }
       QPushButton { padding-bottom: 5px }
       QPushButton { padding-top: 5px }
       QLabel { color: white }"""
 
-  applicationIconStyle = """QPushButton:hover { background-color: none }"""
+  application_icon_style = """QPushButton:hover { background-color: none }"""
 
   if theme == 'light':
-    settingsWidgetStyle = """
+    settings_widget_style = """
       QCheckBox { color: black }
       QRadioButton { color: black }"""
   else:
-    settingsWidgetStyle = """
+    settings_widget_style = """
       QWidget { background-color: #171010 }
       QCheckBox { color: white }
       QRadioButton { color: white }"""
 
   if theme == 'light':
-    closeWindowButtonStyle = """
+    close_window_button_style = """
       QPushButton:hover { background-color: #D11A2A }"""
   else:
-    closeWindowButtonStyle = """
+    close_window_button_style = """
       QPushButton:hover { background-color: #D11A2A }"""
 
   if theme == 'light':
-    mainWindowStyle = """
+    main_window_style = """
       QWidget { background-color: #F9CF93 }
       QPushButton { background-color: none }"""
   else:
-    mainWindowStyle = """
+    main_window_style = """
       QWidget { background-color: #2B2B2B }
       QPushButton { background-color: none }"""
       # QWidget { background-color: #E0C097 }
 
   if theme == 'light':
-    mainWindowBackgroundStyle = """
+    main_window_background_style = """
       QWidget { background-color: #FFFAFA }\n
       QPushButton { background-color: none }"""
   else:
-    mainWindowBackgroundStyle = """
+    main_window_background_style = """
       QWidget { background-color: #171010 }\n
       QPushButton { background-color: none }"""
       # QWidget { background-color: #5C3D2E }
 
   if theme == 'light':
-    sideWidgetsStyle = """
+    side_widgets_style = """
       QWidget { background-color: #DEDEDE }
       QLabel { color: black }
       QScrollBar { background-color: none }"""
   else:
-    sideWidgetsStyle = """
+    side_widgets_style = """
       QWidget { background-color: #362222 }
       QLabel { color: white }
       QScrollBar { background-color: none }"""
       # QWidget { background-color: #2D2424 }
 
   if theme == 'light':
-    sideWidgetsTitleLabelStyle = """
+    side_widgets_title_label_style = """
       QLabel { border : 1px solid black; border-bottom: 0px; padding: 10px 0px; background-color: #F9E4C8; color: #1C1C1C }"""
   else:
-    sideWidgetsTitleLabelStyle = """
+    side_widgets_title_label_style = """
       QLabel { border : 1px solid white; border-bottom: 0px; padding: 10px 0px; background-color: #423F3E; color: white }"""
       # QLabel { border : 1px solid black; border-bottom: 0px; padding: 10px 0px; background-color: #B85C38; color: blue }"""
 
   if theme == 'light':
-    itemWidgetsStyle = """
+    item_widgets_style = """
       QWidget { background-color: #FBF7F0 }
       QLabel { color: black }
       QPushButton:hover { background-color: grey }
@@ -86,7 +86,7 @@ class Styles():
       QPushButton { padding-top: 5px }
       QPushButton { background-color: none }"""
   else:
-    itemWidgetsStyle = """
+    item_widgets_style = """
       QWidget { background-color: #171010 }
       QLabel { color: white }
       QPushButton:hover { background-color: grey }
@@ -96,7 +96,7 @@ class Styles():
       QPushButton { background-color: white }"""
 
   if theme == 'light':
-    searchingWidgetFocusedStyle = """
+    searching_widget_focused_style = """
       QWidget { background-color: white; border-radius: 10px; border: 1px solid blue }
       QLineEdit { border: none }
       QPushButton { background-color: none }
@@ -104,7 +104,7 @@ class Styles():
       QPushButton { padding-bottom: 8px }
       QPushButton { padding-top: 8px }"""
   else:
-    searchingWidgetFocusedStyle = """
+    searching_widget_focused_style = """
       QWidget { background-color: white; border-radius: 10px; border: 1px solid blue }
       QLineEdit { border: none }
       QPushButton { background-color: none }
@@ -113,7 +113,7 @@ class Styles():
       QPushButton { padding-top: 8px }"""
 
   if theme == 'light':
-    searchingWidgetUnfocusedStyle = """
+    searching_widget_unfocused_style = """
       QWidget { background-color: white; border-radius: 10px; border: none }
       QLineEdit { border: none }
       QPushButton { background-color: none }
@@ -121,7 +121,7 @@ class Styles():
       QPushButton { padding-bottom: 8px }
       QPushButton { padding-top: 8px }"""
   else:
-    searchingWidgetUnfocusedStyle = """
+    searching_widget_unfocused_style = """
       QWidget { background-color: white; border-radius: 10px; border: none }
       QLineEdit { border: none }
       QPushButton { background-color: none }
@@ -130,7 +130,7 @@ class Styles():
       QPushButton { padding-top: 8px }"""
 
   if theme == 'light':
-    searchingWidgetErrorStyle = """
+    searching_widget_error_style = """
       QWidget { background-color: white; border-radius: 10px; border: 1px solid red }
       QLineEdit { border: none }
       QPushButton { background-color: none }
@@ -138,7 +138,7 @@ class Styles():
       QPushButton { padding-bottom: 8px }
       QPushButton { padding-top: 8px }"""
   else:
-    searchingWidgetErrorStyle = """
+    searching_widget_error_style = """
       QWidget { background-color: white; border-radius: 10px; border: 1px solid red }
       QLineEdit { border: none }
       QPushButton { background-color: none }
@@ -147,29 +147,29 @@ class Styles():
       QPushButton { padding-top: 8px }"""
 
   if theme == 'light':
-    subwidgetStyle = """
+    subwidget_style = """
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: black }
       QPushButton:hover { background-color: grey }"""
   else:
-    subwidgetStyle = """
+    subwidget_style = """
       QPushButton { border: 1px solid white; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: white }
       QPushButton:hover { background-color: grey }"""
 
   if theme == 'light':
-    errorMessageStyle = """
+    error_message_style = """
       QLabel { color: red }
       QLabel { background-color: none }
       QLabel { border: none }"""
   else:
-    errorMessageStyle = """
+    error_message_style = """
       QLabel { color: red }
       QLabel { background-color: none }
       QLabel { border: none }"""
 
   if theme == 'light':
-    wordsEditingWidgetStyle = """
+    words_editing_widget_style = """
       QWidget { background-color: none }
       QDialog { background-color: #FFFAFA }
       QComboBox { color: black }
@@ -177,7 +177,7 @@ class Styles():
       QRadioButton { color: black }
       QLabel { color: black }"""
   else:
-    wordsEditingWidgetStyle = """
+    words_editing_widget_style = """
       QWidget { background-color: none }
       QDialog { background-color: #171010 }
       QComboBox { color: black }
@@ -187,19 +187,19 @@ class Styles():
       # QDialog { background-color: #5C3D2E }
 
   if theme == 'light':
-    errorMessageLabelStyle = """QLabel { color: red }"""
+    error_message_labelStyle = """QLabel { color: red }"""
   else:
-    errorMessageLabelStyle = """QLabel { color: red }"""
+    error_message_labelStyle = """QLabel { color: red }"""
 
   if theme == 'light':
-    currentSearchStyle = """
+    current_search_style = """
       QWidget { background-color: none }
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: black }
       QPushButton:hover { background-color: grey }
       QComboBox { color: black }"""
   else:
-    currentSearchStyle = """
+    current_search_style = """
       QWidget { background-color: none }
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: black }
@@ -207,21 +207,21 @@ class Styles():
       QComboBox { color: black }"""
 
   if theme == 'light':
-    searchedWordStyle = """
+    searched_word_style = """
       QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px; background-color: #F9E4C8; color: black }"""
   else:
-    searchedWordStyle = """
+    searched_word_style = """
       QLabel { border: 1px solid white; border-radius: 50%; padding: 0px 50px; background-color: #423F3E; color: white }"""
       # QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px; background-color: #B85C38; color: black }"""
 
   if theme == 'light':
-    studentAdditionStyle = """
+    student_addition_style = """
       QWidget { background-color: none }
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: black }
       QPushButton:hover { background-color: grey }"""
   else:
-    studentAdditionStyle = """
+    student_addition_style = """
       QWidget { background-color: none }
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: black }
@@ -229,13 +229,13 @@ class Styles():
       QComboBox { color: black }"""
 
   if theme == 'light':
-    studentUpdateStyle = """
+    student_update_style = """
       QWidget { background-color: none }
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: black }
       QPushButton:hover { background-color: grey }"""
   else:
-    studentUpdateStyle = """
+    student_update_style = """
       QWidget { background-color: none }
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: black }
@@ -243,13 +243,13 @@ class Styles():
       QComboBox { color: black }"""
 
   if theme == 'light':
-    profileAdditionStyle = """
+    profile_addition_style = """
       QWidget { background-color: none }
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: black }
       QPushButton:hover { background-color: grey }"""
   else:
-    profileAdditionStyle = """
+    profile_addition_style = """
       QWidget { background-color: none }
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: black }
@@ -257,13 +257,13 @@ class Styles():
       QComboBox { color: black }"""
 
   if theme == 'light':
-    profileUpdateStyle = """
+    profile_update_style = """
       QWidget { background-color: none }
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: black }
       QPushButton:hover { background-color: grey }"""
   else:
-    profileUpdateStyle = """
+    profile_update_style = """
       QWidget { background-color: none }
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
       QPushButton { color: black }
@@ -271,19 +271,19 @@ class Styles():
       QComboBox { color: black }"""
 
   if theme == 'light':
-    resultsWidgetStyle = """
+    results_widget_style = """
       QWidget { background-color: #DEDEDE }
       QLabel { color: black }
       QScrollBar { background-color: none }"""
   else:
-    resultsWidgetStyle = """
+    results_widget_style = """
       QWidget { background-color: #362222 }
       QLabel { color: white }
       QScrollBar { background-color: none }"""
       # QWidget { background-color: #2D2424 }
 
   if theme == 'light':
-    resultStyle = """
+    result_style = """
       QWidget { background-color: white; border-radius: 10px}
       QPushButton { background-color: white }
       QPushButton:hover { background-color: grey }
@@ -293,7 +293,7 @@ class Styles():
       QPushButton { padding-top: 5px }
       QLabel { color: black }"""
   else:
-    resultStyle = """
+    result_style = """
       QWidget { background-color: black; border-radius: 10px}
       QPushButton { background-color: white }
       QPushButton:hover { background-color: grey }

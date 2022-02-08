@@ -13,30 +13,30 @@ class StudentsDataEditingWidget(QDialog):
     super().__init__()
     self.setWindowTitle('Edit Students List')
     self.setWindowIcon(QIcon('Resources/windowIcon.svg'))
-    self.setFixedWidth(Settings.getScreenWidth() / 2)
+    self.setFixedWidth(Settings.get_screen_width() / 2)
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
-    comboBoxFont = QFont(Settings.font, 14)
+    combo_box_font = QFont(Settings.font, 14)
 
     # Add a new student widget
-    addStudentWidget = StudentAdditionWidget()
+    add_studentWidget = StudentAdditionWidget()
 
     # Edit existing students widget
     editStudentWidget = StudentUpdateWidget()
 
     # Add a new profile widget
-    addProfileWidget = ProfileAdditionWIdget()
+    add_profileWidget = ProfileAdditionWIdget()
 
     # Edit existing profiles widget
-    editProfilesWidget = ProfileUpdateWidget()
+    editprofiles_widget = ProfileUpdateWidget()
 
     tabwidget = QTabWidget()
-    tabwidget.addTab(addStudentWidget, 'Add a new student')
+    tabwidget.addTab(add_studentWidget, 'Add a new student')
     tabwidget.addTab(editStudentWidget, 'Update existing student')
-    tabwidget.addTab(addProfileWidget, 'Add a new profile')
-    tabwidget.addTab(editProfilesWidget, 'Update Existing profile')
+    tabwidget.addTab(add_profileWidget, 'Add a new profile')
+    tabwidget.addTab(editprofiles_widget, 'Update Existing profile')
 
     self.layout.addWidget(tabwidget)

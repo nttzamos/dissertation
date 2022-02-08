@@ -6,7 +6,7 @@ from Common.databaseHandler import DBHandler
 from MenuBar.settings import Settings
 
 class CurrentSearch(QWidget):
-  subjectSelectorActive = False
+  subject_selector_active = False
 
   def __init__(self):
     super().__init__()
@@ -15,268 +15,268 @@ class CurrentSearch(QWidget):
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(50, 50, 50, 50)
 
-    searchedWordFont = QFont(Settings.font, 20)
-    comboBoxFont = QFont(Settings.font, 14)
+    searched_word_font = QFont(Settings.font, 20)
+    combo_box_font = QFont(Settings.font, 14)
 
-    self.searchedWord = QLabel("Enter a word.")
-    self.searchedWord.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    self.searchedWord.setMaximumHeight(100)
-    self.searchedWord.setFont(searchedWordFont)
+    self.searched_word = QLabel('Enter a word.')
+    self.searched_word.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    self.searched_word.setMaximumHeight(100)
+    self.searched_word.setFont(searched_word_font)
 
-    self.searchDetails = QWidget()
-    self.searchDetails.layout = QVBoxLayout(self.searchDetails)
+    self.search_details = QWidget()
+    self.search_details.layout = QVBoxLayout(self.search_details)
 
-    self.openStudentDataWidgetButton = QPushButton('Edit students/profiles list')
-    self.openStudentDataWidgetButton.setFont(comboBoxFont)
-    self.openStudentDataWidgetButton.clicked.connect(self.openStudentDataWidget)
-    self.openStudentDataWidgetButton.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+    self.open_student_data_widget_button = QPushButton('Edit students/profiles list')
+    self.open_student_data_widget_button.setFont(combo_box_font)
+    self.open_student_data_widget_button.clicked.connect(self.open_student_data_widget)
+    self.open_student_data_widget_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
-    CurrentSearch.studentSelector = QComboBox()
-    CurrentSearch.studentSelector.setFont(comboBoxFont)
+    CurrentSearch.student_selector = QComboBox()
+    CurrentSearch.student_selector.setFont(combo_box_font)
 
-    students = self.getAvailableStudents()
+    students = self.get_available_students()
     if len(students) > 0:
       students[0:0] = ['Please select a student...']
-      CurrentSearch.studentSelector.addItems(students)
+      CurrentSearch.student_selector.addItems(students)
     else:
-      CurrentSearch.studentSelector.addItem('There are no students.')
-      CurrentSearch.studentSelector.setDisabled(True)
+      CurrentSearch.student_selector.addItem('There are no students.')
+      CurrentSearch.student_selector.setDisabled(True)
 
-    CurrentSearch.profileSelector = QComboBox()
-    CurrentSearch.profileSelector.setFont(comboBoxFont)
-    CurrentSearch.profileSelector.addItem('You have to select a student.')
+    CurrentSearch.profile_selector = QComboBox()
+    CurrentSearch.profile_selector.setFont(combo_box_font)
+    CurrentSearch.profile_selector.addItem('You have to select a student.')
 
-    CurrentSearch.subjectSelector = QComboBox()
-    CurrentSearch.subjectSelector.setFont(comboBoxFont)
-    CurrentSearch.subjectSelector.addItem('You have to select a student and a profile.')
+    CurrentSearch.subject_selector = QComboBox()
+    CurrentSearch.subject_selector.setFont(combo_box_font)
+    CurrentSearch.subject_selector.addItem('You have to select a student and a profile.')
 
-    CurrentSearch.profileSelector.setDisabled(True)
-    CurrentSearch.subjectSelector.setDisabled(True)
+    CurrentSearch.profile_selector.setDisabled(True)
+    CurrentSearch.subject_selector.setDisabled(True)
 
-    self.searchDetails.layout.addWidget(self.openStudentDataWidgetButton, alignment=Qt.AlignmentFlag.AlignRight)
-    self.searchDetails.layout.addWidget(CurrentSearch.studentSelector)
-    self.searchDetails.layout.addWidget(CurrentSearch.profileSelector)
-    self.searchDetails.layout.addWidget(CurrentSearch.subjectSelector)
+    self.search_details.layout.addWidget(self.open_student_data_widget_button, alignment=Qt.AlignmentFlag.AlignRight)
+    self.search_details.layout.addWidget(CurrentSearch.student_selector)
+    self.search_details.layout.addWidget(CurrentSearch.profile_selector)
+    self.search_details.layout.addWidget(CurrentSearch.subject_selector)
 
-    self.layout.addWidget(self.searchedWord)
+    self.layout.addWidget(self.searched_word)
     self.layout.addSpacing(100)
-    self.layout.addWidget(self.searchDetails)
+    self.layout.addWidget(self.search_details)
 
-    self.searchDetails.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-    self.searchedWord.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+    self.search_details.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+    self.searched_word.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
-    CurrentSearch.studentSelector.activated.connect(self.studentSelectorActivatedInitial)
-    CurrentSearch.profileSelector.activated.connect(CurrentSearch.profileSelectorActivatedInitial)
-    CurrentSearch.subjectSelector.activated.connect(CurrentSearch.subjectSelectorActivatedInitial)
+    CurrentSearch.student_selector.activated.connect(self.student_selector_activated_initial)
+    CurrentSearch.profile_selector.activated.connect(CurrentSearch.profile_selector_activated_initial)
+    CurrentSearch.subject_selector.activated.connect(CurrentSearch.subject_selector_activated_initial)
 
     self.style()
 
   def style(self):
     from Common.styles import Styles
-    self.setStyleSheet(Styles.currentSearchStyle)
-    self.searchedWord.setStyleSheet(Styles.searchedWordStyle)
+    self.setStyleSheet(Styles.current_search_style)
+    self.searched_word.setStyleSheet(Styles.searched_word_style)
 
-  def getCurrentWord(self): # got to change
-    return self.searchedWord.text()
+  def get_current_word(self): # got to change
+    return self.searched_word.text()
 
-  def openStudentDataWidget(self):
+  def open_student_data_widget(self):
     from MainWidget.studentsDataEditingWidget import StudentsDataEditingWidget
-    studentsEditingDialog = StudentsDataEditingWidget()
-    studentsEditingDialog.exec()
+    students_editing_dialog = StudentsDataEditingWidget()
+    students_editing_dialog.exec()
 
-  def getAvailableStudents(self):
+  def get_available_students(self):
     from Common.databaseHandler import DBHandler
-    students = DBHandler.getStudents()
+    students = DBHandler.get_students()
     return students
 
   @staticmethod
-  def studentSelectorActivatedInitial(index):
+  def student_selector_activated_initial(index):
     if index != 0:
-      CurrentSearch.studentSelector.removeItem(0)
-      CurrentSearch.studentSelector.activated.disconnect()
-      CurrentSearch.studentSelector.activated.connect(CurrentSearch.studentSelectorActivated)
-      CurrentSearch.profileSelector.removeItem(0)
-      CurrentSearch.subjectSelector.removeItem(0)
-      CurrentSearch.lastStudentPicked = 'Please select a student...'
-      CurrentSearch.studentSelectorActivated(0)
+      CurrentSearch.student_selector.removeItem(0)
+      CurrentSearch.student_selector.activated.disconnect()
+      CurrentSearch.student_selector.activated.connect(CurrentSearch.student_selector_activated)
+      CurrentSearch.profile_selector.removeItem(0)
+      CurrentSearch.subject_selector.removeItem(0)
+      CurrentSearch.last_student_picked = 'Please select a student...'
+      CurrentSearch.student_selector_activated(0)
 
   @staticmethod
-  def studentSelectorActivated(index):
-    if CurrentSearch.studentSelector.currentText() == CurrentSearch.lastStudentPicked: return
+  def student_selector_activated(index):
+    if CurrentSearch.student_selector.currentText() == CurrentSearch.last_student_picked: return
 
-    CurrentSearch.lastStudentPicked = CurrentSearch.studentSelector.currentText()
+    CurrentSearch.last_student_picked = CurrentSearch.student_selector.currentText()
 
     from MainWidget.mainWindow import MainWindow
-    MainWindow.clearPreviousSubjectDetails()
-    studentName = CurrentSearch.studentSelector.currentText()
-    CurrentSearch.profileSelector.clear()
+    MainWindow.clear_previous_subject_details()
+    student_name = CurrentSearch.student_selector.currentText()
+    CurrentSearch.profile_selector.clear()
     from Common.databaseHandler import DBHandler
-    CurrentSearch.studentId, studentProfiles = DBHandler.getStudentDetails(studentName)
-    if len(studentProfiles) == 0:
-      CurrentSearch.profileSelector.addItem('This student has no profiles.')
-      CurrentSearch.profileSelector.setDisabled(True)
+    CurrentSearch.student_id, student_profiles = DBHandler.get_student_details(student_name)
+    if len(student_profiles) == 0:
+      CurrentSearch.profile_selector.addItem('This student has no profiles.')
+      CurrentSearch.profile_selector.setDisabled(True)
     else:
-      studentProfiles[0:0] = ['Please select a profile...']
-      CurrentSearch.profileSelector.addItems(studentProfiles)
-      CurrentSearch.profileSelector.setEnabled(True)
+      student_profiles[0:0] = ['Please select a profile...']
+      CurrentSearch.profile_selector.addItems(student_profiles)
+      CurrentSearch.profile_selector.setEnabled(True)
 
-      CurrentSearch.profileSelector.activated.disconnect()
-      CurrentSearch.profileSelector.activated.connect(CurrentSearch.profileSelectorActivatedInitial)
+      CurrentSearch.profile_selector.activated.disconnect()
+      CurrentSearch.profile_selector.activated.connect(CurrentSearch.profile_selector_activated_initial)
 
-    CurrentSearch.subjectSelector.clear()
-    CurrentSearch.subjectSelector.addItem('You have to select a profile.')
-    CurrentSearch.subjectSelector.setDisabled(True)
+    CurrentSearch.subject_selector.clear()
+    CurrentSearch.subject_selector.addItem('You have to select a profile.')
+    CurrentSearch.subject_selector.setDisabled(True)
 
   @staticmethod
-  def profileSelectorActivatedInitial(index):
+  def profile_selector_activated_initial(index):
     if index != 0:
-      CurrentSearch.profileSelector.removeItem(0)
-      CurrentSearch.profileSelector.activated.disconnect()
-      CurrentSearch.profileSelector.activated.connect(CurrentSearch.profileSelectorActivated)
-      CurrentSearch.lastProfilePicked = 'Please select a profile...'
-      CurrentSearch.profileSelectorActivated(0)
+      CurrentSearch.profile_selector.removeItem(0)
+      CurrentSearch.profile_selector.activated.disconnect()
+      CurrentSearch.profile_selector.activated.connect(CurrentSearch.profile_selector_activated)
+      CurrentSearch.last_profile_picked = 'Please select a profile...'
+      CurrentSearch.profile_selector_activated(0)
 
   @staticmethod
-  def profileSelectorActivated(index):
-    if CurrentSearch.profileSelector.currentText() == CurrentSearch.lastProfilePicked: return
+  def profile_selector_activated(index):
+    if CurrentSearch.profile_selector.currentText() == CurrentSearch.last_profile_picked: return
 
-    CurrentSearch.lastProfilePicked = CurrentSearch.profileSelector.currentText()
+    CurrentSearch.last_profile_picked = CurrentSearch.profile_selector.currentText()
 
     from MainWidget.mainWindow import MainWindow
-    MainWindow.clearPreviousSubjectDetails()
-    CurrentSearch.profileId, CurrentSearch.gradeId, gradeName, profileSubjects = DBHandler.getProfileDetails(CurrentSearch.profileSelector.currentText())
-    CurrentSearch.subjectSelector.clear()
-    CurrentSearch.subjectSelector.addItem('Please select a subject...')
-    CurrentSearch.subjectSelector.addItems(profileSubjects)
+    MainWindow.clear_previous_subject_details()
+    CurrentSearch.profile_id, CurrentSearch.grade_id, grade_name, profile_subjects = DBHandler.get_profile_details(CurrentSearch.profile_selector.currentText())
+    CurrentSearch.subject_selector.clear()
+    CurrentSearch.subject_selector.addItem('Please select a subject...')
+    CurrentSearch.subject_selector.addItems(profile_subjects)
 
-    if len(profileSubjects) > 1:
-      CurrentSearch.subjectSelector.addItem('All Subjects')
+    if len(profile_subjects) > 1:
+      CurrentSearch.subject_selector.addItem('All Subjects')
 
-    CurrentSearch.subjectSelector.activated.disconnect()
-    CurrentSearch.subjectSelector.activated.connect(CurrentSearch.subjectSelectorActivatedInitial)
-    CurrentSearch.subjectSelector.setEnabled(True)
+    CurrentSearch.subject_selector.activated.disconnect()
+    CurrentSearch.subject_selector.activated.connect(CurrentSearch.subject_selector_activated_initial)
+    CurrentSearch.subject_selector.setEnabled(True)
 
   @staticmethod
-  def subjectSelectorActivatedInitial(index):
+  def subject_selector_activated_initial(index):
     if index != 0:
-      CurrentSearch.subjectSelector.removeItem(0)
-      CurrentSearch.subjectSelector.activated.disconnect()
-      CurrentSearch.subjectSelector.activated.connect(CurrentSearch.subjectSelectorActivated)
-      CurrentSearch.lastSubjectPicked = 'Please select a subject...'
-      CurrentSearch.subjectSelectorActivated(CurrentSearch.subjectSelector.currentIndex())
+      CurrentSearch.subject_selector.removeItem(0)
+      CurrentSearch.subject_selector.activated.disconnect()
+      CurrentSearch.subject_selector.activated.connect(CurrentSearch.subject_selector_activated)
+      CurrentSearch.last_subject_picked = 'Please select a subject...'
+      CurrentSearch.subject_selector_activated(CurrentSearch.subject_selector.currentIndex())
 
   @staticmethod
-  def subjectSelectorActivated(index):
-    if CurrentSearch.subjectSelector.currentText() == CurrentSearch.lastSubjectPicked: return
+  def subject_selector_activated(index):
+    if CurrentSearch.subject_selector.currentText() == CurrentSearch.last_subject_picked: return
 
-    CurrentSearch.lastSubjectPicked = CurrentSearch.subjectSelector.currentText()
+    CurrentSearch.last_subject_picked = CurrentSearch.subject_selector.currentText()
 
-    CurrentSearch.subjectSelectorActive = True
+    CurrentSearch.subject_selector_active = True
     from MainWidget.mainWindow import MainWindow
-    MainWindow.updateWidgets(CurrentSearch.profileId, CurrentSearch.gradeId, CurrentSearch.subjectSelector.currentText())
+    MainWindow.update_widgets(CurrentSearch.profile_id, CurrentSearch.grade_id, CurrentSearch.subject_selector.currentText())
 
   @staticmethod
-  def getCurrentSelectionDetails():
-    subjectName = CurrentSearch.subjectSelector.currentText()
-    if subjectName == 'All Subjects':
-      subjectName = -1
+  def get_current_selection_details():
+    subject_name = CurrentSearch.subject_selector.currentText()
+    if subject_name == 'All Subjects':
+      subject_name = -1
 
-    return CurrentSearch.studentId, CurrentSearch.profileId, CurrentSearch.gradeId, subjectName
-
-  @staticmethod
-  def addStudent(studentName):
-    if CurrentSearch.studentSelector.currentText() == 'There are no students.':
-      CurrentSearch.studentSelector.setEnabled(True)
-      CurrentSearch.studentSelector.clear()
-      CurrentSearch.studentSelector.addItem('Please select a student...')
-      CurrentSearch.studentSelector.activated.disconnect()
-      CurrentSearch.studentSelector.activated.connect(CurrentSearch.studentSelectorActivatedInitial)
-
-    CurrentSearch.studentSelector.addItem(studentName)
+    return CurrentSearch.student_id, CurrentSearch.profile_id, CurrentSearch.grade_id, subject_name
 
   @staticmethod
-  def updateStudent(oldStudentName, newStudentName):
-    index = CurrentSearch.studentSelector.findText(oldStudentName)
-    CurrentSearch.studentSelector.setItemText(index, newStudentName)
+  def add_student(student_name):
+    if CurrentSearch.student_selector.currentText() == 'There are no students.':
+      CurrentSearch.student_selector.setEnabled(True)
+      CurrentSearch.student_selector.clear()
+      CurrentSearch.student_selector.addItem('Please select a student...')
+      CurrentSearch.student_selector.activated.disconnect()
+      CurrentSearch.student_selector.activated.connect(CurrentSearch.student_selector_activated_initial)
+
+    CurrentSearch.student_selector.addItem(student_name)
 
   @staticmethod
-  def removeStudent(studentName):
-    index = CurrentSearch.studentSelector.findText(studentName)
-    currentIndex = CurrentSearch.studentSelector.currentIndex()
-    CurrentSearch.studentSelector.removeItem(index)
-
-    if (CurrentSearch.studentSelector.count() == 0
-        or (CurrentSearch.studentSelector.count() == 1 and CurrentSearch.studentSelector.currentText() == 'Please select a student...')):
-      CurrentSearch.studentSelector.clear()
-      CurrentSearch.studentSelector.addItem('There are no students.')
-      CurrentSearch.studentSelector.setDisabled(True)
-      CurrentSearch.profileSelector.setDisabled(True)
-      CurrentSearch.profileSelector.clear()
-      CurrentSearch.profileSelector.addItem('You have to select a student.')
-      CurrentSearch.subjectSelector.clear()
-      CurrentSearch.subjectSelector.setDisabled(True)
-      CurrentSearch.subjectSelector.addItem('You have to select a student and a profile.')
-    elif index == currentIndex:
-      CurrentSearch.studentSelectorActivated(CurrentSearch.studentSelector.currentIndex())
+  def update_student(old_student_name, new_student_name):
+    index = CurrentSearch.student_selector.findText(old_student_name)
+    CurrentSearch.student_selector.setItemText(index, new_student_name)
 
   @staticmethod
-  def addProfiles(profileNames):
-    if len(profileNames) == 0: return
+  def remove_student(student_name):
+    index = CurrentSearch.student_selector.findText(student_name)
+    current_index = CurrentSearch.student_selector.currentIndex()
+    CurrentSearch.student_selector.removeItem(index)
 
-    if CurrentSearch.profileSelector.currentText() == 'This student has no profiles.':
-      CurrentSearch.profileSelector.setEnabled(True)
-      CurrentSearch.profileSelector.clear()
-      CurrentSearch.profileSelector.addItem('Please select a profile...')
-      CurrentSearch.profileSelector.activated.disconnect()
-      CurrentSearch.profileSelector.activated.connect(CurrentSearch.profileSelectorActivatedInitial)
-
-    CurrentSearch.profileSelector.addItems(profileNames)
+    if (CurrentSearch.student_selector.count() == 0
+        or (CurrentSearch.student_selector.count() == 1 and CurrentSearch.student_selector.currentText() == 'Please select a student...')):
+      CurrentSearch.student_selector.clear()
+      CurrentSearch.student_selector.addItem('There are no students.')
+      CurrentSearch.student_selector.setDisabled(True)
+      CurrentSearch.profile_selector.setDisabled(True)
+      CurrentSearch.profile_selector.clear()
+      CurrentSearch.profile_selector.addItem('You have to select a student.')
+      CurrentSearch.subject_selector.clear()
+      CurrentSearch.subject_selector.setDisabled(True)
+      CurrentSearch.subject_selector.addItem('You have to select a student and a profile.')
+    elif index == current_index:
+      CurrentSearch.student_selector_activated(CurrentSearch.student_selector.currentIndex())
 
   @staticmethod
-  def updateProfile(oldProfileName, newProfileName):
-    index = CurrentSearch.profileSelector.findText(oldProfileName)
+  def add_profiles(profile_names):
+    if len(profile_names) == 0: return
+
+    if CurrentSearch.profile_selector.currentText() == 'This student has no profiles.':
+      CurrentSearch.profile_selector.setEnabled(True)
+      CurrentSearch.profile_selector.clear()
+      CurrentSearch.profile_selector.addItem('Please select a profile...')
+      CurrentSearch.profile_selector.activated.disconnect()
+      CurrentSearch.profile_selector.activated.connect(CurrentSearch.profile_selector_activated_initial)
+
+    CurrentSearch.profile_selector.addItems(profile_names)
+
+  @staticmethod
+  def update_profile(old_profile_name, new_profile_name):
+    index = CurrentSearch.profile_selector.findText(old_profile_name)
     if index != -1:
-      CurrentSearch.profileSelector.setItemText(index, newProfileName)
+      CurrentSearch.profile_selector.setItemText(index, new_profile_name)
 
   @staticmethod
-  def removeProfiles(profileNames):
-    if len(profileNames) == 0: return
+  def remove_profiles(profile_names):
+    if len(profile_names) == 0: return
 
-    text = CurrentSearch.profileSelector.currentText()
+    text = CurrentSearch.profile_selector.currentText()
 
-    for profileName in profileNames:
-      index = CurrentSearch.profileSelector.findText(profileName)
+    for profile_name in profile_names:
+      index = CurrentSearch.profile_selector.findText(profile_name)
       if index != -1:
-        CurrentSearch.profileSelector.removeItem(index)
+        CurrentSearch.profile_selector.removeItem(index)
 
-    if (CurrentSearch.profileSelector.count() == 0
-        or (CurrentSearch.profileSelector.count() == 1 and CurrentSearch.profileSelector.currentText() == 'Please select a profile...')):
-      CurrentSearch.profileSelector.clear()
-      CurrentSearch.profileSelector.addItem('This student has no profiles.')
-      CurrentSearch.profileSelector.setDisabled(True)
-      CurrentSearch.subjectSelector.clear()
-      CurrentSearch.subjectSelector.setDisabled(True)
-      CurrentSearch.subjectSelector.addItem('You have to select a student and a profile.')
-    elif text != CurrentSearch.profileSelector.currentText():
-      CurrentSearch.profileSelectorActivated(CurrentSearch.profileSelector.currentIndex())
-
-  @staticmethod
-  def addSubjects(subjectNames):
-    if CurrentSearch.subjectSelector.findText('All Subjects') != -1:
-      CurrentSearch.subjectSelector.removeItem(CurrentSearch.subjectSelector.count() - 1)
-
-    subjectNames.append('All Subjects')
-    CurrentSearch.subjectSelector.addItems(subjectNames)
+    if (CurrentSearch.profile_selector.count() == 0
+        or (CurrentSearch.profile_selector.count() == 1 and CurrentSearch.profile_selector.currentText() == 'Please select a profile...')):
+      CurrentSearch.profile_selector.clear()
+      CurrentSearch.profile_selector.addItem('This student has no profiles.')
+      CurrentSearch.profile_selector.setDisabled(True)
+      CurrentSearch.subject_selector.clear()
+      CurrentSearch.subject_selector.setDisabled(True)
+      CurrentSearch.subject_selector.addItem('You have to select a student and a profile.')
+    elif text != CurrentSearch.profile_selector.currentText():
+      CurrentSearch.profile_selector_activated(CurrentSearch.profile_selector.currentIndex())
 
   @staticmethod
-  def removeSubjects(subjectNames):
-    if len(subjectNames) == 0: return
+  def add_subjects(subject_names):
+    if CurrentSearch.subject_selector.findText('All Subjects') != -1:
+      CurrentSearch.subject_selector.removeItem(CurrentSearch.subject_selector.count() - 1)
 
-    text = CurrentSearch.subjectSelector.currentText()
+    subject_names.append('All Subjects')
+    CurrentSearch.subject_selector.addItems(subject_names)
 
-    for subjectName in subjectNames:
-      index = CurrentSearch.subjectSelector.findText(subjectName)
-      CurrentSearch.subjectSelector.removeItem(index)
+  @staticmethod
+  def remove_subjects(subject_names):
+    if len(subject_names) == 0: return
 
-    if text != CurrentSearch.subjectSelector.currentText():
-      CurrentSearch.subjectSelectorActivated(CurrentSearch.subjectSelector.currentIndex())
+    text = CurrentSearch.subject_selector.currentText()
+
+    for subject_name in subject_names:
+      index = CurrentSearch.subject_selector.findText(subject_name)
+      CurrentSearch.subject_selector.removeItem(index)
+
+    if text != CurrentSearch.subject_selector.currentText():
+      CurrentSearch.subject_selector_activated(CurrentSearch.subject_selector.currentIndex())

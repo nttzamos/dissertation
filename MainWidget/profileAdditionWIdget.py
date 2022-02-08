@@ -13,135 +13,135 @@ class ProfileAdditionWIdget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    sectionLabelFont = QFont(Settings.font, 16)
-    comboBoxFont = QFont(Settings.font, 14)
-    checkBoxFont = QFont(Settings.font, 14)
-    lineEditFont = QFont(Settings.font, 14)
+    section_label_font = QFont(Settings.font, 16)
+    combo_box_font = QFont(Settings.font, 14)
+    check_box_font = QFont(Settings.font, 14)
+    line_edit_font = QFont(Settings.font, 14)
 
-    nameWidget = QGroupBox('Profile Name')
-    nameWidget.setFont(sectionLabelFont)
-    nameWidget.layout = QHBoxLayout(nameWidget)
-    nameWidget.layout.setContentsMargins(10, 5, 10, 10)
+    name_widget = QGroupBox('Profile Name')
+    name_widget.setFont(section_label_font)
+    name_widget.layout = QHBoxLayout(name_widget)
+    name_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    self.nameLineEdit = QLineEdit()
-    self.nameLineEdit.setFont(lineEditFont)
-    nameWidget.layout.addWidget(self.nameLineEdit)
+    self.name_line_edit = QLineEdit()
+    self.name_line_edit.setFont(line_edit_font)
+    name_widget.layout.addWidget(self.name_line_edit)
 
-    gradeSelectionWidget = QGroupBox('Grade Selection')
-    gradeSelectionWidget.setFont(sectionLabelFont)
-    gradeSelectionWidget.layout = QHBoxLayout(gradeSelectionWidget)
-    gradeSelectionWidget.layout.setContentsMargins(10, 5, 10, 10)
+    grade_selection_widget = QGroupBox('Grade Selection')
+    grade_selection_widget.setFont(section_label_font)
+    grade_selection_widget.layout = QHBoxLayout(grade_selection_widget)
+    grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    grades = DBHandler.getGrades()
+    grades = DBHandler.get_grades()
 
-    self.gradeSelector = QComboBox()
-    self.gradeSelector.setFont(comboBoxFont)
-    self.gradeSelector.addItems(grades)
-    self.gradeSelector.activated.connect(self.gradeSelectorActivated)
+    self.grade_selector = QComboBox()
+    self.grade_selector.setFont(combo_box_font)
+    self.grade_selector.addItems(grades)
+    self.grade_selector.activated.connect(self.grade_selector_activated)
 
-    gradeSelectionWidget.layout.addWidget(self.gradeSelector)
+    grade_selection_widget.layout.addWidget(self.grade_selector)
 
-    subjectsWidget = QGroupBox('Subject Selection')
-    subjectsWidget.setFont(sectionLabelFont)
-    subjectsWidget.layout = QHBoxLayout(subjectsWidget)
-    subjectsWidget.layout.setContentsMargins(10, 5, 10, 10)
+    subjects_widget = QGroupBox('Subject Selection')
+    subjects_widget.setFont(section_label_font)
+    subjects_widget.layout = QHBoxLayout(subjects_widget)
+    subjects_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    self.subjectsSelectionWidget = QWidget()
-    self.subjectsSelectionWidget.layout = QGridLayout(self.subjectsSelectionWidget)
+    self.subjects_selection_widget = QWidget()
+    self.subjects_selection_widget.layout = QGridLayout(self.subjects_selection_widget)
 
-    scrollArea = QScrollArea()
-    scrollArea.setWidgetResizable(True)
-    scrollArea.setWidget(self.subjectsSelectionWidget)
-    scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-    self.subjectsSelectionWidget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+    scroll_area = QScrollArea()
+    scroll_area.setWidgetResizable(True)
+    scroll_area.setWidget(self.subjects_selection_widget)
+    scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+    self.subjects_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
 
-    gradeSubjects = DBHandler.getGradeSubjects(1)
+    grade_subjects = DBHandler.get_grade_subjects(1)
 
-    self.checkBoxes = []
-    for i in range(len(gradeSubjects)):
-      checkBox = QCheckBox(gradeSubjects[i])
-      checkBox.setFont(checkBoxFont)
-      self.checkBoxes.append(checkBox)
-      self.subjectsSelectionWidget.layout.addWidget(checkBox, i, 0)
+    self.check_boxes = []
+    for i in range(len(grade_subjects)):
+      check_box = QCheckBox(grade_subjects[i])
+      check_box.setFont(check_box_font)
+      self.check_boxes.append(check_box)
+      self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
 
-    vspacer = QLabel("f")
-    invisibleFont = QFont(Settings.font, 1)
-    vspacer.setFont(invisibleFont)
-    sizePolicy = vspacer.sizePolicy()
-    sizePolicy.setRetainSizeWhenHidden(True)
-    vspacer.setSizePolicy(sizePolicy)
-    self.subjectsSelectionWidget.layout.addWidget(vspacer, 1000, 0)
+    vspacer = QLabel('f')
+    invisible_font = QFont(Settings.font, 1)
+    vspacer.setFont(invisible_font)
+    size_policy = vspacer.sizePolicy()
+    size_policy.setRetainSizeWhenHidden(True)
+    vspacer.setSizePolicy(size_policy)
+    self.subjects_selection_widget.layout.addWidget(vspacer, 1000, 0)
 
-    subjectsWidget.layout.addWidget(scrollArea)
+    subjects_widget.layout.addWidget(scroll_area)
 
-    self.saveButton = QPushButton('Save New Profile')
-    self.saveButton.pressed.connect(self.saveProfile)
+    self.save_button = QPushButton('Save New Profile')
+    self.save_button.pressed.connect(self.saveProfile)
 
-    self.layout.addWidget(nameWidget)
-    self.layout.addWidget(gradeSelectionWidget)
-    self.layout.addWidget(subjectsWidget)
+    self.layout.addWidget(name_widget)
+    self.layout.addWidget(grade_selection_widget)
+    self.layout.addWidget(subjects_widget)
     self.layout.addSpacing(15)
-    self.layout.addWidget(self.saveButton, alignment=Qt.AlignmentFlag.AlignRight)
+    self.layout.addWidget(self.save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.style()
 
   def style(self):
     from Common.styles import Styles
-    self.setStyleSheet(Styles.profileAdditionStyle)
+    self.setStyleSheet(Styles.profile_addition_style)
 
-  def gradeSelectorActivated(self, index):
-    for checkbox in self.checkBoxes:
-      self.subjectsSelectionWidget.layout.removeWidget(checkbox)
+  def grade_selector_activated(self, index):
+    for check_box in self.check_boxes:
+      self.subjects_selection_widget.layout.removeWidget(check_box)
 
-    gradeSubjects = DBHandler.getGradeSubjects(index + 1)
+    grade_subjects = DBHandler.get_grade_subjects(index + 1)
 
-    checkBoxFont = QFont(Settings.font, 14)
-    self.checkBoxes = []
-    for i in range(len(gradeSubjects)):
-      checkBox = QCheckBox(gradeSubjects[i])
-      checkBox.setFont(checkBoxFont)
-      self.checkBoxes.append(checkBox)
-      self.subjectsSelectionWidget.layout.addWidget(checkBox, i, 0)
+    check_box_font = QFont(Settings.font, 14)
+    self.check_boxes = []
+    for i in range(len(grade_subjects)):
+      check_box = QCheckBox(grade_subjects[i])
+      check_box.setFont(check_box_font)
+      self.check_boxes.append(check_box)
+      self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
 
   def saveProfile(self):
-    isInvalid, text = self.profileIsInvalid()
+    is_invalid, text = self.profile_is_invalid()
 
-    if isInvalid:
+    if is_invalid:
       title = 'Error Saving Profile'
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
 
-    profileName = self.nameLineEdit.text()
-    QTimer.singleShot(0, self.nameLineEdit.clear)
+    profile_name = self.name_line_edit.text()
+    QTimer.singleShot(0, self.name_line_edit.clear)
 
     subjects = []
-    for checkBox in self.checkBoxes:
-      if checkBox.isChecked():
-        subjects.append(checkBox.text())
-        checkBox.setChecked(False)
+    for check_box in self.check_boxes:
+      if check_box.isChecked():
+        subjects.append(check_box.text())
+        check_box.setChecked(False)
 
-    DBHandler.addProfile(profileName, self.gradeSelector.currentIndex() + 1, subjects)
+    DBHandler.add_profile(profile_name, self.grade_selector.currentIndex() + 1, subjects)
 
     from MainWidget.profileUpdateWidget import ProfileUpdateWidget
-    ProfileUpdateWidget.addProfile(profileName)
+    ProfileUpdateWidget.add_profile(profile_name)
 
     from MainWidget.studentAdditionWidget import StudentAdditionWidget
-    StudentAdditionWidget.addProfile(profileName)
+    StudentAdditionWidget.add_profile(profile_name)
 
     from MainWidget.studentUpdateWidget import StudentUpdateWidget
-    StudentUpdateWidget.addProfile(profileName)
+    StudentUpdateWidget.add_profile(profile_name)
 
-  def profileIsInvalid(self):
-    profileName = self.nameLineEdit.text()
-    if len(profileName) == 0:
+  def profile_is_invalid(self):
+    profile_name = self.name_line_edit.text()
+    if len(profile_name) == 0:
       return True, 'Profile can not be saved because the profile name is empty.'
 
-    if DBHandler.profileNameExists(profileName):
+    if DBHandler.profile_name_exists(profile_name):
       return True, 'Profile can not be saved as this name is already used for another profile.'
 
-    for checkBox in self.checkBoxes:
-      if checkBox.isChecked():
+    for check_box in self.check_boxes:
+      if check_box.isChecked():
         return False, ''
 
     return True, 'Profile can not be saved because none of the grade subjects have been selected.'

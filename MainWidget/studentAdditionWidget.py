@@ -6,7 +6,7 @@ from Common.databaseHandler import DBHandler
 from MenuBar.settings import Settings
 
 class StudentAdditionWidget(QWidget):
-  lastIndexUsed = -1
+  last_index_used = -1
 
   def __init__(self):
     super().__init__()
@@ -14,126 +14,126 @@ class StudentAdditionWidget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    sectionLabelFont = QFont(Settings.font, 16)
-    checkBoxFont = QFont(Settings.font, 14)
-    lineEditFont = QFont(Settings.font, 14)
+    section_label_font = QFont(Settings.font, 16)
+    check_box_font = QFont(Settings.font, 14)
+    line_edit_font = QFont(Settings.font, 14)
 
-    nameWidget = QGroupBox('Student Name')
-    nameWidget.setFont(sectionLabelFont)
-    nameWidget.layout = QHBoxLayout(nameWidget)
-    nameWidget.layout.setContentsMargins(10, 5, 10, 10)
+    name_widget = QGroupBox('Student Name')
+    name_widget.setFont(section_label_font)
+    name_widget.layout = QHBoxLayout(name_widget)
+    name_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    self.nameLineEdit = QLineEdit()
-    self.nameLineEdit.setFont(lineEditFont)
-    nameWidget.layout.addWidget(self.nameLineEdit)
+    self.name_line_edit = QLineEdit()
+    self.name_line_edit.setFont(line_edit_font)
+    name_widget.layout.addWidget(self.name_line_edit)
 
-    profilesWidget = QGroupBox('Profile Selection')
-    profilesWidget.setFont(sectionLabelFont)
-    profilesWidget.layout = QHBoxLayout(profilesWidget)
-    profilesWidget.layout.setContentsMargins(10, 5, 10, 10)
+    profiles_widget = QGroupBox('Profile Selection')
+    profiles_widget.setFont(section_label_font)
+    profiles_widget.layout = QHBoxLayout(profiles_widget)
+    profiles_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    StudentAdditionWidget.profilesSelectionWidget = QWidget()
-    StudentAdditionWidget.profilesSelectionWidget.layout = QGridLayout(StudentAdditionWidget.profilesSelectionWidget)
+    StudentAdditionWidget.profiles_selection_widget = QWidget()
+    StudentAdditionWidget.profiles_selection_widget.layout = QGridLayout(StudentAdditionWidget.profiles_selection_widget)
 
-    scrollArea = QScrollArea()
-    scrollArea.setWidgetResizable(True)
-    scrollArea.setWidget(StudentAdditionWidget.profilesSelectionWidget)
-    scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+    scroll_area = QScrollArea()
+    scroll_area.setWidgetResizable(True)
+    scroll_area.setWidget(StudentAdditionWidget.profiles_selection_widget)
+    scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
 
-    profiles = DBHandler.getProfiles()
+    profiles = DBHandler.get_profiles()
 
-    StudentAdditionWidget.checkBoxes = []
+    StudentAdditionWidget.check_boxes = []
     for i in range(len(profiles)):
-      checkBox = QCheckBox(profiles[i])
-      checkBox.setFont(checkBoxFont)
-      StudentAdditionWidget.checkBoxes.append(checkBox)
-      StudentAdditionWidget.profilesSelectionWidget.layout.addWidget(checkBox, i, 0)
-      StudentAdditionWidget.lastIndexUsed = i
+      check_box = QCheckBox(profiles[i])
+      check_box.setFont(check_box_font)
+      StudentAdditionWidget.check_boxes.append(check_box)
+      StudentAdditionWidget.profiles_selection_widget.layout.addWidget(check_box, i, 0)
+      StudentAdditionWidget.last_index_used = i
 
-    vspacer = QLabel("f")
-    invisibleFont = QFont(Settings.font, 1)
-    vspacer.setFont(invisibleFont)
-    sizePolicy = vspacer.sizePolicy()
-    sizePolicy.setRetainSizeWhenHidden(True)
-    vspacer.setSizePolicy(sizePolicy)
-    StudentAdditionWidget.profilesSelectionWidget.layout.addWidget(vspacer, 1000, 0)
+    vspacer = QLabel('f')
+    invisible_font = QFont(Settings.font, 1)
+    vspacer.setFont(invisible_font)
+    size_policy = vspacer.sizePolicy()
+    size_policy.setRetainSizeWhenHidden(True)
+    vspacer.setSizePolicy(size_policy)
+    StudentAdditionWidget.profiles_selection_widget.layout.addWidget(vspacer, 1000, 0)
 
-    profilesWidget.layout.addWidget(scrollArea)
+    profiles_widget.layout.addWidget(scroll_area)
 
-    saveButton = QPushButton('Save New Student')
-    saveButton.pressed.connect(self.saveStudent)
+    save_button = QPushButton('Save New Student')
+    save_button.pressed.connect(self.saveStudent)
 
-    self.layout.addWidget(nameWidget)
-    self.layout.addWidget(profilesWidget)
+    self.layout.addWidget(name_widget)
+    self.layout.addWidget(profiles_widget)
     self.layout.addSpacing(15)
-    self.layout.addWidget(saveButton, alignment=Qt.AlignmentFlag.AlignRight)
+    self.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.style()
 
   def style(self):
     from Common.styles import Styles
-    self.setStyleSheet(Styles.studentAdditionStyle)
+    self.setStyleSheet(Styles.student_addition_style)
 
   def saveStudent(self):
-    isInvalid, text = self.studentIsInvalid()
+    is_invalid, text = self.student_is_invalid()
 
-    if isInvalid:
+    if is_invalid:
       title = 'Error Saving Student'
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
 
-    studentName = self.nameLineEdit.text()
-    QTimer.singleShot(0, self.nameLineEdit.clear)
+    student_name = self.name_line_edit.text()
+    QTimer.singleShot(0, self.name_line_edit.clear)
 
-    checkedProfiles = []
-    for checkBox in StudentAdditionWidget.checkBoxes:
-      if checkBox.isChecked():
-        checkedProfiles.append(checkBox.text())
-        checkBox.setChecked(False)
+    checked_profiles = []
+    for check_box in StudentAdditionWidget.check_boxes:
+      if check_box.isChecked():
+        checked_profiles.append(check_box.text())
+        check_box.setChecked(False)
 
-    DBHandler.addStudent(studentName, checkedProfiles)
+    DBHandler.add_student(student_name, checked_profiles)
 
     from MainWidget.studentUpdateWidget import StudentUpdateWidget
-    StudentUpdateWidget.addStudent(studentName)
+    StudentUpdateWidget.add_student(student_name)
 
     from MainWidget.currentSearch import CurrentSearch
-    CurrentSearch.addStudent(studentName)
+    CurrentSearch.add_student(student_name)
 
-  def studentIsInvalid(self):
-    studentName = self.nameLineEdit.text()
-    if len(studentName) == 0:
+  def student_is_invalid(self):
+    student_name = self.name_line_edit.text()
+    if len(student_name) == 0:
       return True, 'Student can not be saved because the profile name is empty.'
 
-    if DBHandler.studentNameExists(studentName):
+    if DBHandler.student_name_exists(student_name):
       return True, 'Student can not be saved as this name is already used for another profile.'
 
-    for checkBox in StudentAdditionWidget.checkBoxes:
-      if checkBox.isChecked():
+    for check_box in StudentAdditionWidget.check_boxes:
+      if check_box.isChecked():
         return False, ''
 
     return True, 'Student can not be saved because none of the profiles have been selected.'
 
   @staticmethod
-  def addProfile(profileName):
-    checkBox = QCheckBox(profileName)
-    checkBoxFont = QFont(Settings.font, 14)
-    checkBox.setFont(checkBoxFont)
-    StudentAdditionWidget.checkBoxes.append(checkBox)
-    StudentAdditionWidget.lastIndexUsed += 1
-    StudentAdditionWidget.profilesSelectionWidget.layout.addWidget(checkBox, StudentAdditionWidget.lastIndexUsed, 0)
+  def add_profile(profile_name):
+    check_box = QCheckBox(profile_name)
+    check_box_font = QFont(Settings.font, 14)
+    check_box.setFont(check_box_font)
+    StudentAdditionWidget.check_boxes.append(check_box)
+    StudentAdditionWidget.last_index_used += 1
+    StudentAdditionWidget.profiles_selection_widget.layout.addWidget(check_box, StudentAdditionWidget.last_index_used, 0)
 
   @staticmethod
-  def updateProfile(oldProfileName, newProfileName):
-    for checkBox in StudentAdditionWidget.checkBoxes:
-      if checkBox.text() == oldProfileName:
-        checkBox.setText(newProfileName)
+  def update_profile(old_profile_name, new_profile_name):
+    for check_box in StudentAdditionWidget.check_boxes:
+      if check_box.text() == old_profile_name:
+        check_box.setText(new_profile_name)
         return
 
   @staticmethod
-  def removeProfile(profileName):
-    for checkBox in StudentAdditionWidget.checkBoxes:
-      if checkBox.text() == profileName:
-        StudentAdditionWidget.profilesSelectionWidget.layout.removeWidget(checkBox)
-        StudentAdditionWidget.checkBoxes.remove(checkBox)
+  def remove_profile(profile_name):
+    for check_box in StudentAdditionWidget.check_boxes:
+      if check_box.text() == profile_name:
+        StudentAdditionWidget.profiles_selection_widget.layout.removeWidget(check_box)
+        StudentAdditionWidget.check_boxes.remove(check_box)
         return

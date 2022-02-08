@@ -9,14 +9,14 @@ from MenuBar.settings import Settings
 from queue import PriorityQueue
 
 class ResultsWidget(QWidget):
-  scrollAreaWidgetContents = QWidget()
-  gridLayout = QGridLayout(scrollAreaWidgetContents)
-  widgetList = []
+  scroll_area_widget_contents = QWidget()
+  grid_layout = QGridLayout(scroll_area_widget_contents)
+  widget_list = []
   counter = 1000000
-  showPlaceholderLabel = True
-  placeholderLabel = QLabel("The results of your search will be displayed here.")
-  gridColumns = Settings.getResultsWidgetColumns()
-  singleResultWidth = Settings.getSingleResultWidth()
+  show_placeholder_label = True
+  placeholder_label = QLabel('The results of your search will be displayed here.')
+  grid_columns = Settings.get_results_widget_columns()
+  single_result_width = Settings.get_single_result_width()
 
   def __init__(self):
     super().__init__()
@@ -26,81 +26,81 @@ class ResultsWidget(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
 
     font = QFont(Settings.font, 14)
-    ResultsWidget.placeholderLabel.setFont(font)
-    ResultsWidget.gridLayout.addWidget(ResultsWidget.placeholderLabel)
+    ResultsWidget.placeholder_label.setFont(font)
+    ResultsWidget.grid_layout.addWidget(ResultsWidget.placeholder_label)
 
-    ResultsWidget.gridLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    self.scrollArea = QScrollArea()
-    self.scrollArea.setWidgetResizable(True)
-    self.scrollArea.setWidget(ResultsWidget.scrollAreaWidgetContents)
-    self.layout.addWidget(self.scrollArea)
+    ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    self.scroll_area = QScrollArea()
+    self.scroll_area.setWidgetResizable(True)
+    self.scroll_area.setWidget(ResultsWidget.scroll_area_widget_contents)
+    self.layout.addWidget(self.scroll_area)
 
     self.style()
 
   def style(self):
     from Common.styles import Styles
-    self.setStyleSheet(Styles.resultsWidgetStyle)
+    self.setStyleSheet(Styles.results_widget_style)
 
   @staticmethod
-  def showResults(word):
-    ResultsWidget.hidePlaceholder()
-    ResultsWidget.clearPreviousResults()
-    ResultsWidget.gridLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
-    resultsWords = ResultsWidget.getResults(word)
+  def show_results(word):
+    ResultsWidget.hide_placeholder()
+    ResultsWidget.clear_previous_results()
+    ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+    results_words = ResultsWidget.getResults(word)
 
-    for i in range(len(resultsWords)):
-      row = i // ResultsWidget.gridColumns
-      column = i % ResultsWidget.gridColumns
-      result = Result(resultsWords[i], widgetWidth=ResultsWidget.singleResultWidth)
-      ResultsWidget.widgetList.append(result)
-      ResultsWidget.gridLayout.addWidget(result, row, column)
+    for i in range(len(results_words)):
+      row = i // ResultsWidget.grid_columns
+      column = i % ResultsWidget.grid_columns
+      result = Result(results_words[i], widget_width=ResultsWidget.single_result_width)
+      ResultsWidget.widget_list.append(result)
+      ResultsWidget.grid_layout.addWidget(result, row, column)
 
   @staticmethod
   def getResults(word):
     from MainWidget.searchingWidget import SearchingWidget
-    dictionaryWords = SearchingWidget.dictionaryWords
-    maximumSize = Settings.getMaximumResults() + 1
+    dictionary_words = SearchingWidget.dictionary_words
+    maximum_size = Settings.get_maximum_results() + 1
 
     queue = PriorityQueue()
-    for i in range(len(dictionaryWords)):
-      # distance = enchant.utils.levenshtein(word, dictionaryWords[i]) * -1
+    for i in range(len(dictionary_words)):
+      # distance = enchant.utils.levenshtein(word, dictionary_words[i]) * -1
       distance = 5
-      if queue.qsize() < maximumSize:
-        queue.put((distance, dictionaryWords[i]))
+      if queue.qsize() < maximum_size:
+        queue.put((distance, dictionary_words[i]))
       else:
         tmp = queue.get()
         if tmp[0] < distance:
-          queue.put((distance, dictionaryWords[i]))
+          queue.put((distance, dictionary_words[i]))
         else:
           queue.put(tmp)
 
-    resultsWords = []
-    for i in range(maximumSize):
-      resultsWords.append(queue.get()[1])
+    results_words = []
+    for i in range(maximum_size):
+      results_words.append(queue.get()[1])
 
-    if word in resultsWords:
-      resultsWords.remove(word)
+    if word in results_words:
+      results_words.remove(word)
 
-    resultsWords.sort()
-    return resultsWords
+    results_words.sort()
+    return results_words
 
   @staticmethod
-  def clearPreviousResults():
-    for result in ResultsWidget.widgetList:
+  def clear_previous_results():
+    for result in ResultsWidget.widget_list:
       result.hide()
       result.deleteLater()
-    ResultsWidget.widgetList = []
+    ResultsWidget.widget_list = []
 
   @staticmethod
-  def showPlaceholder():
-    ResultsWidget.clearPreviousResults()
-    if not ResultsWidget.showPlaceholderLabel:
-      ResultsWidget.showPlaceholderLabel = True
-      ResultsWidget.gridLayout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-      ResultsWidget.placeholderLabel.show()
+  def show_placeholder():
+    ResultsWidget.clear_previous_results()
+    if not ResultsWidget.show_placeholder_label:
+      ResultsWidget.show_placeholder_label = True
+      ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+      ResultsWidget.placeholder_label.show()
 
   @staticmethod
-  def hidePlaceholder():
-    if ResultsWidget.showPlaceholderLabel:
-      ResultsWidget.showPlaceholderLabel = False
-      ResultsWidget.placeholderLabel.hide()
+  def hide_placeholder():
+    if ResultsWidget.show_placeholder_label:
+      ResultsWidget.show_placeholder_label = False
+      ResultsWidget.placeholder_label.hide()

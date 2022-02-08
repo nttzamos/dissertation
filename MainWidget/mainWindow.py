@@ -8,9 +8,9 @@ from SideWidgets.starredWordsWidget import StarredWordsWidget
 from MenuBar.menuBar import MenuBar
 
 class MainWindow(QWidget):
-  recentSearchesWidget = RecentSearchesWidget()
-  starredWordsWidget = StarredWordsWidget()
-  mainWidget = MainWidget()
+  recent_searches_widget = RecentSearchesWidget()
+  starred_words_widget = StarredWordsWidget()
+  main_widget = MainWidget()
 
   def __init__(self):
     super().__init__()
@@ -24,29 +24,26 @@ class MainWindow(QWidget):
     self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
     self.menuBar = MenuBar(self)
 
-    self.centralWidget = QWidget(self)
-    self.windowLayout = QHBoxLayout(self.centralWidget)
-
     # Left Horizontal Splitter
-    self.splitterLeftHorizontal = QSplitter(self)
-    self.splitterLeftHorizontal.setOrientation(Qt.Orientation.Horizontal)
-    self.splitterLeftHorizontal.setChildrenCollapsible(False)
+    self.splitter_left_horizontal = QSplitter(self)
+    self.splitter_left_horizontal.setOrientation(Qt.Orientation.Horizontal)
+    self.splitter_left_horizontal.setChildrenCollapsible(False)
 
-    # Splitter between "Recent Searches" and "Starred Words" widgets
-    self.splitterLeftVertical = QSplitter(self.splitterLeftHorizontal)
-    self.splitterLeftVertical.setOrientation(Qt.Orientation.Vertical)
-    self.splitterLeftVertical.setChildrenCollapsible(False)
+    # Splitter between 'Recent Searches' and 'Starred Words' widgets
+    self.splitter_left_vertical = QSplitter(self.splitter_left_horizontal)
+    self.splitter_left_vertical.setOrientation(Qt.Orientation.Vertical)
+    self.splitter_left_vertical.setChildrenCollapsible(False)
 
     # Recent Searches Scroll Area
-    self.splitterLeftVertical.addWidget(MainWindow.recentSearchesWidget)
-    MainWindow.recentSearchesWidget.initialize()
+    self.splitter_left_vertical.addWidget(MainWindow.recent_searches_widget)
+    MainWindow.recent_searches_widget.initialize()
 
     # Starred Words Scroll Area
-    self.splitterLeftVertical.addWidget(MainWindow.starredWordsWidget)
-    MainWindow.starredWordsWidget.initialize()
+    self.splitter_left_vertical.addWidget(MainWindow.starred_words_widget)
+    MainWindow.starred_words_widget.initialize()
 
     # Main Widget
-    self.splitterLeftHorizontal.addWidget(MainWindow.mainWidget)
+    self.splitter_left_horizontal.addWidget(MainWindow.main_widget)
 
     self.line = QFrame()
     self.line.setFrameShape(QFrame.Shape.HLine)
@@ -55,45 +52,45 @@ class MainWindow(QWidget):
 
     self.layout.addWidget(self.menuBar, 0, 0)
     self.layout.addWidget(self.line, 1, 0)
-    self.layout.addWidget(self.splitterLeftHorizontal, 2, 0)
+    self.layout.addWidget(self.splitter_left_horizontal, 2, 0)
 
     self.style()
 
   def style(self):
-    self.line.setStyleSheet("QWidget { background-color: none }")
+    self.line.setStyleSheet('QWidget { background-color: none }')
 
     from Common.styles import Styles
-    self.splitterLeftHorizontal.setStyleSheet(Styles.mainWindowBackgroundStyle)
-    self.setStyleSheet(Styles.mainWindowStyle)
+    self.splitter_left_horizontal.setStyleSheet(Styles.main_window_background_style)
+    self.setStyleSheet(Styles.main_window_style)
 
   @staticmethod
-  def updateWidgets(profileId, gradeId, subjectName):
+  def update_widgets(profile_id, grade_id, subject_name):
     from MainWidget.searchingWidget import SearchingWidget
-    SearchingWidget.updateDictionaryWords(profileId, gradeId, subjectName)
+    SearchingWidget.update_dictionary_words(profile_id, grade_id, subject_name)
 
     from Common.databaseHandler import DBHandler
-    if subjectName == 'All Subjects':
-      SearchingWidget.modifyErrorMessage(DBHandler.getProfileName(profileId), False)
+    if subject_name == 'All Subjects':
+      SearchingWidget.modify_error_message(DBHandler.get_profile_name(profile_id), False)
     else:
-      SearchingWidget.modifyErrorMessage(subjectName, True)
+      SearchingWidget.modify_error_message(subject_name, True)
 
     from MainWidget.resultsWidget import ResultsWidget
-    ResultsWidget.showPlaceholder()
-    MainWidget.currentSearch.searchedWord.setText("Enter a word.")
+    ResultsWidget.show_placeholder()
+    MainWidget.current_search.searched_word.setText('Enter a word.')
 
     RecentSearchesWidget.populate()
     StarredWordsWidget.populate()
 
   @staticmethod
-  def clearPreviousSubjectDetails():
-    if not MainWidget.currentSearch.subjectSelectorActive: return
+  def clear_previous_subject_details():
+    if not MainWidget.current_search.subject_selector_active: return
 
     from MainWidget.searchingWidget import SearchingWidget
-    SearchingWidget.setInitialErrorMessage()
+    SearchingWidget.set_initial_error_message()
 
     from MainWidget.resultsWidget import ResultsWidget
-    ResultsWidget.showPlaceholder()
-    MainWidget.currentSearch.subjectSelectorActive = False
+    ResultsWidget.show_placeholder()
+    MainWidget.current_search.subject_selector_active = False
 
-    RecentSearchesWidget.clearPreviousRecentSearches()
-    StarredWordsWidget.clearPreviousStarredWords()
+    RecentSearchesWidget.clear_previous_recent_searches()
+    StarredWordsWidget.clear_previous_starred_words()

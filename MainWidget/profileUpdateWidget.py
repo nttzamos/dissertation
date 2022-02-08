@@ -13,234 +13,234 @@ class ProfileUpdateWidget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    sectionLabelFont = QFont(Settings.font, 16)
-    comboBoxFont = QFont(Settings.font, 14)
-    labelFont = QFont(Settings.font, 14)
-    lineEditFont = QFont(Settings.font, 14)
+    section_label_font = QFont(Settings.font, 16)
+    combo_box_font = QFont(Settings.font, 14)
+    label_font = QFont(Settings.font, 14)
+    line_edit_font = QFont(Settings.font, 14)
 
-    profileSelectionWidget = QGroupBox('Profile Selection')
-    profileSelectionWidget.setFont(sectionLabelFont)
-    profileSelectionWidget.layout = QHBoxLayout(profileSelectionWidget)
-    profileSelectionWidget.layout.setContentsMargins(10, 5, 10, 10)
+    profile_selection_widget = QGroupBox('Profile Selection')
+    profile_selection_widget.setFont(section_label_font)
+    profile_selection_widget.layout = QHBoxLayout(profile_selection_widget)
+    profile_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    profiles = DBHandler.getProfiles()
+    profiles = DBHandler.get_profiles()
 
-    ProfileUpdateWidget.profileSelector = QComboBox()
-    ProfileUpdateWidget.profileSelector.setFont(comboBoxFont)
+    ProfileUpdateWidget.profile_selector = QComboBox()
+    ProfileUpdateWidget.profile_selector.setFont(combo_box_font)
 
     if len(profiles) == 0:
-      ProfileUpdateWidget.profileSelector.addItem('There are no profiles')
-      ProfileUpdateWidget.profileSelector.setDisabled(True)
+      ProfileUpdateWidget.profile_selector.addItem('There are no profiles')
+      ProfileUpdateWidget.profile_selector.setDisabled(True)
     else:
       profiles[0:0] = ['Please select a profile...']
-      ProfileUpdateWidget.profileSelector.addItems(profiles)
+      ProfileUpdateWidget.profile_selector.addItems(profiles)
 
-    ProfileUpdateWidget.profileSelector.activated.connect(self.profileSelectorActivatedInitial)
+    ProfileUpdateWidget.profile_selector.activated.connect(self.profile_selector_activated_initial)
 
-    profileSelectionWidget.layout.addWidget(ProfileUpdateWidget.profileSelector)
+    profile_selection_widget.layout.addWidget(ProfileUpdateWidget.profile_selector)
 
-    self.nameWidget = QGroupBox('Profile Name')
-    self.nameWidget.setFont(sectionLabelFont)
-    self.nameWidget.layout = QHBoxLayout(self.nameWidget)
-    self.nameWidget.layout.setContentsMargins(10, 5, 10, 10)
+    self.name_widget = QGroupBox('Profile Name')
+    self.name_widget.setFont(section_label_font)
+    self.name_widget.layout = QHBoxLayout(self.name_widget)
+    self.name_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    self.nameLineEdit = QLineEdit()
-    self.nameLineEdit.setFont(lineEditFont)
-    self.nameWidget.layout.addWidget(self.nameLineEdit)
-    self.nameWidget.hide()
+    self.name_line_edit = QLineEdit()
+    self.name_line_edit.setFont(line_edit_font)
+    self.name_widget.layout.addWidget(self.name_line_edit)
+    self.name_widget.hide()
 
-    gradeLabelWidget = QGroupBox('Profile Grade')
-    gradeLabelWidget.setFont(sectionLabelFont)
-    gradeLabelWidget.layout = QHBoxLayout(gradeLabelWidget)
-    gradeLabelWidget.layout.setContentsMargins(10, 5, 10, 10)
+    grade_label_widget = QGroupBox('Profile Grade')
+    grade_label_widget.setFont(section_label_font)
+    grade_label_widget.layout = QHBoxLayout(grade_label_widget)
+    grade_label_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    ProfileUpdateWidget.gradeLabel = QLabel('Please select a profile...')
-    ProfileUpdateWidget.gradeLabel.setFont(labelFont)
+    ProfileUpdateWidget.grade_label = QLabel('Please select a profile...')
+    ProfileUpdateWidget.grade_label.setFont(label_font)
 
-    gradeLabelWidget.layout.addWidget(ProfileUpdateWidget.gradeLabel)
+    grade_label_widget.layout.addWidget(ProfileUpdateWidget.grade_label)
 
-    subjectsWidget = QGroupBox('Subject Selection')
-    subjectsWidget.setFont(sectionLabelFont)
-    subjectsWidget.layout = QHBoxLayout(subjectsWidget)
-    subjectsWidget.layout.setContentsMargins(10, 5, 10, 10)
+    subjects_widget = QGroupBox('Subject Selection')
+    subjects_widget.setFont(section_label_font)
+    subjects_widget.layout = QHBoxLayout(subjects_widget)
+    subjects_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    self.subjectsSelectionWidget = QWidget()
-    self.subjectsSelectionWidget.layout = QGridLayout(self.subjectsSelectionWidget)
-    self.subjectsSelectionWidget.setDisabled(True)
+    self.subjects_selection_widget = QWidget()
+    self.subjects_selection_widget.layout = QGridLayout(self.subjects_selection_widget)
+    self.subjects_selection_widget.setDisabled(True)
 
-    scrollArea = QScrollArea()
-    scrollArea.setWidgetResizable(True)
-    scrollArea.setWidget(self.subjectsSelectionWidget)
-    scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-    self.subjectsSelectionWidget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+    scroll_area = QScrollArea()
+    scroll_area.setWidgetResizable(True)
+    scroll_area.setWidget(self.subjects_selection_widget)
+    scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+    self.subjects_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
 
-    self.checkBoxes = []
+    self.check_boxes = []
 
-    vspacer = QLabel("f")
-    invisibleFont = QFont(Settings.font, 1)
-    vspacer.setFont(invisibleFont)
-    sizePolicy = vspacer.sizePolicy()
-    sizePolicy.setRetainSizeWhenHidden(True)
-    vspacer.setSizePolicy(sizePolicy)
-    self.subjectsSelectionWidget.layout.addWidget(vspacer, 1000, 0)
+    vspacer = QLabel('f')
+    invisible_font = QFont(Settings.font, 1)
+    vspacer.setFont(invisible_font)
+    size_policy = vspacer.sizePolicy()
+    size_policy.setRetainSizeWhenHidden(True)
+    vspacer.setSizePolicy(size_policy)
+    self.subjects_selection_widget.layout.addWidget(vspacer, 1000, 0)
 
-    subjectsWidget.layout.addWidget(scrollArea)
+    subjects_widget.layout.addWidget(scroll_area)
 
-    self.saveButton = QPushButton('Update Existing Profile')
-    self.saveButton.pressed.connect(self.updateProfile)
-    self.saveButton.setDisabled(True)
+    self.save_button = QPushButton('Update Existing Profile')
+    self.save_button.pressed.connect(self.update_profile)
+    self.save_button.setDisabled(True)
 
-    self.deleteButton = QPushButton('Delete Profile')
-    self.deleteButton.pressed.connect(self.deleteProfile)
-    self.deleteButton.setDisabled(True)
+    self.delete_button = QPushButton('Delete Profile')
+    self.delete_button.pressed.connect(self.delete_profile)
+    self.delete_button.setDisabled(True)
 
-    buttonsWidget = QWidget()
-    buttonsWidget.layout = QHBoxLayout(buttonsWidget)
-    buttonsWidget.layout.setContentsMargins(0, 0, 0, 0)
-    buttonsWidget.layout.addWidget(self.deleteButton)
-    buttonsWidget.layout.addSpacing(10)
-    buttonsWidget.layout.addWidget(self.saveButton)
+    buttons_widget = QWidget()
+    buttons_widget.layout = QHBoxLayout(buttons_widget)
+    buttons_widget.layout.setContentsMargins(0, 0, 0, 0)
+    buttons_widget.layout.addWidget(self.delete_button)
+    buttons_widget.layout.addSpacing(10)
+    buttons_widget.layout.addWidget(self.save_button)
 
-    self.layout.addWidget(profileSelectionWidget)
-    self.layout.addWidget(self.nameWidget)
-    self.layout.addWidget(gradeLabelWidget)
-    self.layout.addWidget(subjectsWidget)
+    self.layout.addWidget(profile_selection_widget)
+    self.layout.addWidget(self.name_widget)
+    self.layout.addWidget(grade_label_widget)
+    self.layout.addWidget(subjects_widget)
     self.layout.addSpacing(15)
-    self.layout.addWidget(buttonsWidget, alignment=Qt.AlignmentFlag.AlignRight)
+    self.layout.addWidget(buttons_widget, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.style()
 
   def style(self):
     from Common.styles import Styles
-    self.setStyleSheet(Styles.profileUpdateStyle)
+    self.setStyleSheet(Styles.profile_update_style)
 
-  def profileSelectorActivatedInitial(self, index):
+  def profile_selector_activated_initial(self, index):
     if index != 0:
-      ProfileUpdateWidget.profileSelector.removeItem(0)
-      ProfileUpdateWidget.profileSelector.activated.disconnect()
-      ProfileUpdateWidget.profileSelector.activated.connect(self.profileSelectorActivated)
-      self.profileSelectorActivated(index - 1)
-      self.saveButton.setEnabled(True)
-      self.deleteButton.setEnabled(True)
-      self.subjectsSelectionWidget.setEnabled(True)
-      self.nameWidget.show()
+      ProfileUpdateWidget.profile_selector.removeItem(0)
+      ProfileUpdateWidget.profile_selector.activated.disconnect()
+      ProfileUpdateWidget.profile_selector.activated.connect(self.profile_selector_activated)
+      self.profile_selector_activated(index - 1)
+      self.save_button.setEnabled(True)
+      self.delete_button.setEnabled(True)
+      self.subjects_selection_widget.setEnabled(True)
+      self.name_widget.show()
 
-  def profileSelectorActivated(self, index):
-    profileName = ProfileUpdateWidget.profileSelector.currentText()
-    self.profileId, self.gradeId, gradeName, self.profileSubjects = DBHandler.getProfileDetails(profileName)
-    ProfileUpdateWidget.gradeLabel.setText(gradeName)
-    self.nameLineEdit.setText(profileName)
-    gradeSubjects = DBHandler.getGradeSubjects(self.gradeId)
+  def profile_selector_activated(self, index):
+    profile_name = ProfileUpdateWidget.profile_selector.currentText()
+    self.profile_id, self.grade_id, grade_name, self.profile_subjects = DBHandler.get_profile_details(profile_name)
+    ProfileUpdateWidget.grade_label.setText(grade_name)
+    self.name_line_edit.setText(profile_name)
+    grade_subjects = DBHandler.get_grade_subjects(self.grade_id)
 
-    for checkbox in self.checkBoxes:
-      self.subjectsSelectionWidget.layout.removeWidget(checkbox)
+    for check_box in self.check_boxes:
+      self.subjects_selection_widget.layout.removeWidget(check_box)
 
-    checkBoxFont = QFont(Settings.font, 14)
-    self.checkBoxes = []
-    for i in range(len(gradeSubjects)):
-      checkBox = QCheckBox(gradeSubjects[i])
-      checkBox.setFont(checkBoxFont)
-      self.checkBoxes.append(checkBox)
+    check_box_font = QFont(Settings.font, 14)
+    self.check_boxes = []
+    for i in range(len(grade_subjects)):
+      check_box = QCheckBox(grade_subjects[i])
+      check_box.setFont(check_box_font)
+      self.check_boxes.append(check_box)
 
-      if gradeSubjects[i] in self.profileSubjects:
-        checkBox.setChecked(True)
+      if grade_subjects[i] in self.profile_subjects:
+        check_box.setChecked(True)
 
-      self.subjectsSelectionWidget.layout.addWidget(checkBox, i, 0)
+      self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
 
-  def updateProfile(self):
-    if self.profileSelector.currentText() in DBHandler.getGrades():
-      isInvalid, text = True, 'Grade profiles can not be updated.'
+  def update_profile(self):
+    if self.profile_selector.currentText() in DBHandler.get_grades():
+      is_invalid, text = True, 'Grade profiles can not be updated.'
     else:
-      isInvalid, text = self.profileIsInvalid()
+      is_invalid, text = self.profile_is_invalid()
 
-    if isInvalid:
+    if is_invalid:
       title = 'Error Updating Profile'
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
 
-    oldProfileName = ProfileUpdateWidget.profileSelector.currentText()
-    newProfileName = self.nameLineEdit.text()
+    old_profile_name = ProfileUpdateWidget.profile_selector.currentText()
+    new_profile_name = self.name_line_edit.text()
 
     from MainWidget.currentSearch import CurrentSearch
-    CurrentSearch.updateProfile(oldProfileName, newProfileName)
+    CurrentSearch.update_profile(old_profile_name, new_profile_name)
 
     from MainWidget.studentAdditionWidget import StudentAdditionWidget
-    StudentAdditionWidget.updateProfile(oldProfileName, newProfileName)
+    StudentAdditionWidget.update_profile(old_profile_name, new_profile_name)
 
     from MainWidget.studentUpdateWidget import StudentUpdateWidget
-    StudentUpdateWidget.updateProfile(oldProfileName, newProfileName)
+    StudentUpdateWidget.update_profile(old_profile_name, new_profile_name)
 
-    self.profileSelector.setItemText(self.profileSelector.currentIndex(), newProfileName)
-    DBHandler.updateProfileName(self.profileId, newProfileName)
+    self.profile_selector.setItemText(self.profile_selector.currentIndex(), new_profile_name)
+    DBHandler.update_profile_name(self.profile_id, new_profile_name)
 
-    subjectsNames = []
-    for checkBox in self.checkBoxes:
-      if checkBox.isChecked():
-        subjectsNames.append(checkBox.text())
+    subjects_names = []
+    for check_box in self.check_boxes:
+      if check_box.isChecked():
+        subjects_names.append(check_box.text())
 
-    subjectsToRemove = list(set(self.profileSubjects) - set(subjectsNames))
-    subjectsToAdd = list(set(subjectsNames) - set(self.profileSubjects))
-    self.profileSubjects = subjectsNames
-    DBHandler.addProfileSubjects(self.gradeId, self.profileId, subjectsToAdd)
-    DBHandler.removeProfileSubjects(self.gradeId, self.profileId, subjectsToRemove)
+    subjects_to_remove = list(set(self.profile_subjects) - set(subjects_names))
+    subjects_to_add = list(set(subjects_names) - set(self.profile_subjects))
+    self.profile_subjects = subjects_names
+    DBHandler.add_profile_subjects(self.grade_id, self.profile_id, subjects_to_add)
+    DBHandler.remove_profile_subjects(self.grade_id, self.profile_id, subjects_to_remove)
 
-    if CurrentSearch.profileSelector.currentText() == newProfileName:
-      CurrentSearch.addSubjects(subjectsToAdd)
-      CurrentSearch.removeSubjects(subjectsToRemove)
+    if CurrentSearch.profile_selector.currentText() == new_profile_name:
+      CurrentSearch.add_subjects(subjects_to_add)
+      CurrentSearch.remove_subjects(subjects_to_remove)
 
-  def deleteProfile(self):
-    if self.profileSelector.currentText() in DBHandler.getGrades():
+  def delete_profile(self):
+    if self.profile_selector.currentText() in DBHandler.get_grades():
       title = 'Error Deleting Profile'
       text = 'Grade profiles can not be deleted.'
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
 
-    DBHandler.removeProfile(self.profileId)
-    for checkbox in self.checkBoxes:
-      self.subjectsSelectionWidget.layout.removeWidget(checkbox)
+    DBHandler.remove_profile(self.profile_id)
+    for check_box in self.check_boxes:
+      self.subjects_selection_widget.layout.removeWidget(check_box)
 
     from MainWidget.studentAdditionWidget import StudentAdditionWidget
-    StudentAdditionWidget.removeProfile(ProfileUpdateWidget.profileSelector.currentText())
+    StudentAdditionWidget.remove_profile(ProfileUpdateWidget.profile_selector.currentText())
 
     from MainWidget.studentUpdateWidget import StudentUpdateWidget
-    StudentUpdateWidget.removeProfile(ProfileUpdateWidget.profileSelector.currentText())
+    StudentUpdateWidget.remove_profile(ProfileUpdateWidget.profile_selector.currentText())
 
     from MainWidget.currentSearch import CurrentSearch
-    CurrentSearch.removeProfiles([ProfileUpdateWidget.profileSelector.currentText()])
+    CurrentSearch.remove_profiles([ProfileUpdateWidget.profile_selector.currentText()])
 
-    ProfileUpdateWidget.profileSelector.removeItem(ProfileUpdateWidget.profileSelector.currentIndex())
-    if ProfileUpdateWidget.profileSelector.count() == 0:
-      ProfileUpdateWidget.profileSelector.addItem('There are no profiles')
-      ProfileUpdateWidget.profileSelector.setDisabled(True)
-      ProfileUpdateWidget.profileSelector.activated.disconnect()
-      ProfileUpdateWidget.profileSelector.activated.connect(self.profileSelectorActivatedInitial)
-      ProfileUpdateWidget.gradeLabel.setText('You have to add a profile...')
-      self.nameWidget.hide()
+    ProfileUpdateWidget.profile_selector.removeItem(ProfileUpdateWidget.profile_selector.currentIndex())
+    if ProfileUpdateWidget.profile_selector.count() == 0:
+      ProfileUpdateWidget.profile_selector.addItem('There are no profiles')
+      ProfileUpdateWidget.profile_selector.setDisabled(True)
+      ProfileUpdateWidget.profile_selector.activated.disconnect()
+      ProfileUpdateWidget.profile_selector.activated.connect(self.profile_selector_activated_initial)
+      ProfileUpdateWidget.grade_label.setText('You have to add a profile...')
+      self.name_widget.hide()
       return
 
-    self.profileSelectorActivated(0)
+    self.profile_selector_activated(0)
 
-  def profileIsInvalid(self):
-    profileName = self.nameLineEdit.text()
-    if len(profileName) == 0:
+  def profile_is_invalid(self):
+    profile_name = self.name_line_edit.text()
+    if len(profile_name) == 0:
       return True, 'Profile can not be updated because the profile name is empty.'
 
-    if ProfileUpdateWidget.profileSelector.currentText() != profileName and DBHandler.profileNameExists(profileName):
+    if ProfileUpdateWidget.profile_selector.currentText() != profile_name and DBHandler.profile_name_exists(profile_name):
       return True, 'Profile can not be updated as this name is already used for another profile.'
 
-    for checkBox in self.checkBoxes:
-      if checkBox.isChecked():
+    for check_box in self.check_boxes:
+      if check_box.isChecked():
         return False, ''
 
     return True, 'Profile can not be updated because none of the grade subjects have been selected.'
 
   @staticmethod
-  def addProfile(profileName):
-    if ProfileUpdateWidget.profileSelector.currentText() == 'There are no profiles':
-      ProfileUpdateWidget.profileSelector.setItemText(0, 'Please select a profile...')
-      ProfileUpdateWidget.gradeLabel.setText('Please select a profile...')
-      ProfileUpdateWidget.profileSelector.setEnabled(True)
+  def add_profile(profile_name):
+    if ProfileUpdateWidget.profile_selector.currentText() == 'There are no profiles':
+      ProfileUpdateWidget.profile_selector.setItemText(0, 'Please select a profile...')
+      ProfileUpdateWidget.grade_label.setText('Please select a profile...')
+      ProfileUpdateWidget.profile_selector.setEnabled(True)
 
-    ProfileUpdateWidget.profileSelector.addItem(profileName)
+    ProfileUpdateWidget.profile_selector.addItem(profile_name)
