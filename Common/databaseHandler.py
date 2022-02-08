@@ -431,29 +431,35 @@ class DBHandler():
   def add_recent_search(word):
     from MainWidget.currentSearch import CurrentSearch
     student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
-    if subject_name == -1:
-      return # got to change
+    if subject_name == 'All Subjects':
+      return
 
     subject_id = DBHandler.get_subject_id(grade, subject_name)
 
     word_id = DBHandler.get_word_id(grade, word)
-    recent_search_exists = DBHandler.recent_search_exists(word_id, profile_id)
+    recent_search_exists = DBHandler.recent_search_exists(word_id, profile_id, student_id, subject_id)
     date_time_now = datetime.datetime.now()
     con, cur = DBHandler.connect_to_database()
 
     if recent_search_exists:
-      cur.execute('UPDATE recent_search SET searched_at = ? WHERE word_id = ? AND profile_id = ? AND student_id = ?', (date_time_now, word_id, profile_id, student_id))
+      query = ('UPDATE recent_search SET searched_at = ? '
+        'WHERE word_id = ? AND profile_id = ? '
+        'AND student_id = ? AND subject_id = ?')
+      cur.execute(query, (date_time_now, word_id, profile_id, student_id, subject_id))
     else:
-      cur.execute('INSERT INTO recent_search VALUES (null, ?, ?, ?, ?, ?)', (word_id, profile_id, student_id, subject_id, date_time_now))
+      values = (word_id, profile_id, student_id, subject_id, date_time_now)
+      cur.execute('INSERT INTO recent_search VALUES (null, ?, ?, ?, ?, ?)', values)
 
     con.commit()
     con.close()
     return recent_search_exists
 
   @staticmethod
-  def recent_search_exists(word_id, profile_id):
+  def recent_search_exists(word_id, profile_id, student_id, subject_id):
     con, cur = DBHandler.connect_to_database()
-    cur.execute('SELECT COUNT(*) FROM recent_search WHERE word_id = ? AND profile_id = ?', (word_id, profile_id))
+    query = ('SELECT COUNT(*) FROM recent_search WHERE word_id = ? '
+      'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+    cur.execute(query, (word_id, profile_id, student_id, subject_id))
     recent_search_exists = cur.fetchone()[0] > 0
     con.close()
     return recent_search_exists
@@ -463,9 +469,13 @@ class DBHandler():
     from MainWidget.currentSearch import CurrentSearch
     student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
 
-    con, cur = DBHandler.connect_to_database()
+    subject_id = DBHandler.get_subject_id(grade, subject_name)
     word_id = DBHandler.get_word_id(grade, word)
-    cur.execute('DELETE FROM recent_search WHERE word_id = ? AND profile_id = ? AND student_id = ?', (word_id, profile_id, student_id))
+    con, cur = DBHandler.connect_to_database()
+
+    query = ('DELETE FROM recent_search WHERE word_id = ? '
+      'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+    cur.execute(query, (word_id, profile_id, student_id, subject_id))
     con.commit()
     con.close()
 
@@ -473,8 +483,8 @@ class DBHandler():
   def get_recent_searches():
     from MainWidget.currentSearch import CurrentSearch
     student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
-    if subject_name == -1:
-      extra_info = (profile_id, student_id)
+    if subject_name == 'All Subjects':
+      values = (profile_id, student_id)
       query = ('SELECT word '
         'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
         'INNER JOIN recent_search '
@@ -483,7 +493,7 @@ class DBHandler():
         'AND recent_search.student_id = ? '
         'ORDER BY recent_search.searched_at')
     else:
-      extra_info = (DBHandler.get_subject_id(grade, subject_name), profile_id, student_id)
+      values = (DBHandler.get_subject_id(grade, subject_name), profile_id, student_id)
       query = ('SELECT word '
         'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
         'INNER JOIN recent_search '
@@ -495,7 +505,7 @@ class DBHandler():
 
     con, cur = DBHandler.connect_to_database()
 
-    cur.execute(query, extra_info)
+    cur.execute(query, values)
     recent_searches = list(map(lambda recent_search: recent_search[0], cur.fetchall()))
     con.close()
     return recent_searches
@@ -504,15 +514,15 @@ class DBHandler():
   def add_starred_word(word):
     from MainWidget.currentSearch import CurrentSearch
     student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
-    if subject_name == -1:
-      return # got to change
+    if subject_name == 'All Subjects':
+      return
 
     subject_id = DBHandler.get_subject_id(grade, subject_name)
-
-    con, cur = DBHandler.connect_to_database()
     word_id = DBHandler.get_word_id(grade, word)
+    con, cur = DBHandler.connect_to_database()
 
-    cur.execute('INSERT INTO starred_word VALUES (null, ?, ?, ?, ?)', (word_id, profile_id, student_id, subject_id))
+    values = (word_id, profile_id, student_id, subject_id)
+    cur.execute('INSERT INTO starred_word VALUES (null, ?, ?, ?, ?)', values)
     con.commit()
     con.close()
 
@@ -521,10 +531,13 @@ class DBHandler():
     from MainWidget.currentSearch import CurrentSearch
     student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
 
+    subject_id = DBHandler.get_subject_id(grade, subject_name)
     word_id = DBHandler.get_word_id(grade, word)
     con, cur = DBHandler.connect_to_database()
 
-    cur.execute('SELECT COUNT(*) FROM starred_word WHERE word_id = ? AND profile_id = ? AND student_id = ?', (word_id, profile_id, student_id))
+    query = ('SELECT COUNT(*) FROM starred_word WHERE word_id = ? '
+      'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+    cur.execute(query, (word_id, profile_id, student_id, subject_id))
     starred_word_exists = cur.fetchone()[0] > 0
     con.close()
     return starred_word_exists
@@ -534,9 +547,13 @@ class DBHandler():
     from MainWidget.currentSearch import CurrentSearch
     student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
 
-    con, cur = DBHandler.connect_to_database()
+    subject_id = DBHandler.get_subject_id(grade, subject_name)
     word_id = DBHandler.get_word_id(grade, word)
-    cur.execute('DELETE FROM starred_word WHERE word_id = ? AND profile_id = ? AND student_id = ?', (word_id, profile_id, student_id))
+    con, cur = DBHandler.connect_to_database()
+
+    query = ('DELETE FROM starred_word WHERE word_id = ? '
+      'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+    cur.execute(query, (word_id, profile_id, student_id, subject_id))
     con.commit()
     con.close()
 
@@ -547,8 +564,8 @@ class DBHandler():
 
     con, cur = DBHandler.connect_to_database()
 
-    if subject_name == -1:
-      extra_info = (profile_id, student_id)
+    if subject_name == 'All Subjects':
+      values = (profile_id, student_id)
       query = ('SELECT word '
         'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
         'INNER JOIN starred_word '
@@ -557,7 +574,7 @@ class DBHandler():
         'AND starred_word.student_id = ? '
         'ORDER BY ' + DBHandler.get_grade_table_name(grade) + '.id DESC')
     else:
-      extra_info = (DBHandler.get_subject_id(grade, subject_name), profile_id, student_id)
+      values = (DBHandler.get_subject_id(grade, subject_name), profile_id, student_id)
       query = ('SELECT word '
         'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
         'INNER JOIN starred_word '
@@ -567,7 +584,7 @@ class DBHandler():
         'AND starred_word.student_id = ? '
         'ORDER BY ' + DBHandler.get_grade_table_name(grade) + '.id DESC')
 
-    cur.execute(query, extra_info)
+    cur.execute(query, values)
     starred_words = list(map(lambda starredWord: starredWord[0], cur.fetchall()))
     con.close()
     return starred_words

@@ -190,11 +190,7 @@ class CurrentSearch(QWidget):
 
   @staticmethod
   def get_current_selection_details():
-    subject_name = CurrentSearch.subject_selector.currentText()
-    if subject_name == 'All Subjects':
-      subject_name = -1
-
-    return CurrentSearch.student_id, CurrentSearch.profile_id, CurrentSearch.grade_id, subject_name
+    return CurrentSearch.student_id, CurrentSearch.profile_id, CurrentSearch.grade_id, CurrentSearch.subject_selector.currentText()
 
   @staticmethod
   def add_student(student_name):

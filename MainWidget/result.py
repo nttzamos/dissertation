@@ -69,7 +69,7 @@ class Result(QWidget):
 
     recent_search_exists = DBHandler.add_recent_search(word)
     if recent_search_exists:
-      RecentSearchesWidget.removeAndadd_recent_search(word)
+      RecentSearchesWidget.remove_and_add_recent_search(word)
     else:
       RecentSearchesWidget.add_recent_search(word, False)
 
