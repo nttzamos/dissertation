@@ -37,9 +37,9 @@ class SettingsWidget(QDialog):
     general_settings_widget.layout = QVBoxLayout(general_settings_widget)
     general_settings_widget.layout.setContentsMargins(10, 0, 0, 0)
 
-    self.remember_last_grade_picked = QCheckBox('Remember last grade picked when re-opening app?', objectName='remember_last_grade_picked')
-    self.remember_last_grade_picked.clicked.connect(lambda: self.toggle_setting('remember_last_grade_picked'))
-    self.remember_last_grade_picked.setChecked(Settings.get_boolean_setting('remember_last_grade_picked'))
+    self.remember_last_student_picked = QCheckBox('Remember last student picked when re-opening app?', objectName='remember_last_student_picked')
+    self.remember_last_student_picked.clicked.connect(lambda: self.toggle_setting('remember_last_student_picked'))
+    self.remember_last_student_picked.setChecked(Settings.get_boolean_setting('remember_last_student_picked'))
 
     self.ask_before_actions = QCheckBox('Ask before updating/deleting words?', objectName='ask_before_actions')
     self.ask_before_actions.clicked.connect(lambda: self.toggle_setting('ask_before_actions'))
@@ -49,7 +49,7 @@ class SettingsWidget(QDialog):
     self.show_edit_dict_words_button.clicked.connect(lambda: self.toggle_setting('show_edit_dict_words_button'))
     self.show_edit_dict_words_button.setChecked(Settings.get_boolean_setting('show_edit_dict_words_button'))
 
-    general_settings_widget.layout.addWidget(self.remember_last_grade_picked)
+    general_settings_widget.layout.addWidget(self.remember_last_student_picked)
     general_settings_widget.layout.addWidget(self.ask_before_actions)
     general_settings_widget.layout.addWidget(self.show_edit_dict_words_button)
 

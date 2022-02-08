@@ -82,7 +82,7 @@ class StarredWordsWidget(QWidget):
 
   @staticmethod
   def add_starred_word(word):
-    if StarredWordsWidget.show_placeholder_label == True:
+    if StarredWordsWidget.show_placeholder_label:
       StarredWordsWidget.hide_placeholder()
 
     widget = StarredWord(word)

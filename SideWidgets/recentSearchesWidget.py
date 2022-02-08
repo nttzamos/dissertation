@@ -83,7 +83,7 @@ class RecentSearchesWidget(QWidget):
 
   @staticmethod
   def add_recent_search(word, condition):
-    if RecentSearchesWidget.show_placeholder_label == True:
+    if RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.hide_placeholder()
 
     condition = DBHandler.starred_word_exists(word)

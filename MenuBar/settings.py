@@ -16,8 +16,8 @@ class Settings():
     if not settings_database.get('maximum_results'):
       settings_database.set('maximum_results', 20)
 
-    if not settings_database.get('_last_grade_picked'):
-      settings_database.set('_last_grade_picked', 1)
+    if not settings_database.get('last_student_picked'):
+      settings_database.set('last_student_picked', 1)
 
     if not settings_database.get('theme'):
       settings_database.set('theme', 'light')
@@ -25,8 +25,8 @@ class Settings():
     if not settings_database.get('default_editing_action'):
       settings_database.set('default_editing_action', 'update')
 
-    if isinstance(settings_database.get('remember_last_grade_picked'), bool):
-      settings_database.set('remember_last_grade_picked', 0)
+    if isinstance(settings_database.get('remember_last_student_picked'), bool):
+      settings_database.set('remember_last_student_picked', 0)
 
     if isinstance(settings_database.get('ask_before_actions'), bool):
       settings_database.set('ask_before_actions', 1)
@@ -118,6 +118,17 @@ class Settings():
     settings_database = pickledb.load(Settings.settings_database_file, False)
 
     return settings_database.get(setting_name) == 1
+
+  @staticmethod
+  def set_last_student_picked(last_student_picked):
+    settings_database = pickledb.load(Settings.settings_database_file, False)
+    settings_database.set('last_student_picked', last_student_picked)
+    settings_database.dump()
+
+  @staticmethod
+  def get_last_student_picked():
+    settings_database = pickledb.load(Settings.settings_database_file, False)
+    return settings_database.get('last_student_picked')
 
   @staticmethod
   def set_theme(theme):

@@ -69,6 +69,14 @@ class CurrentSearch(QWidget):
     CurrentSearch.profile_selector.activated.connect(CurrentSearch.profile_selector_activated_initial)
     CurrentSearch.subject_selector.activated.connect(CurrentSearch.subject_selector_activated_initial)
 
+    CurrentSearch.initialize_selected_student = False
+    remember_last_student_picked = Settings.get_boolean_setting('remember_last_student_picked')
+    last_student_picked = Settings.get_last_student_picked()
+    if remember_last_student_picked and last_student_picked in students:
+      CurrentSearch.student_selector.setCurrentText(last_student_picked)
+      CurrentSearch.initialize_selected_student = True
+      CurrentSearch.student_selector_activated_initial(1)
+
     self.style()
 
   def style(self):
@@ -104,10 +112,15 @@ class CurrentSearch(QWidget):
   def student_selector_activated(index):
     if CurrentSearch.student_selector.currentText() == CurrentSearch.last_student_picked: return
 
-    CurrentSearch.last_student_picked = CurrentSearch.student_selector.currentText()
+    if not CurrentSearch.initialize_selected_student:
+      from MainWidget.mainWindow import MainWindow
+      MainWindow.clear_previous_subject_details()
 
-    from MainWidget.mainWindow import MainWindow
-    MainWindow.clear_previous_subject_details()
+    CurrentSearch.initialize_selected_student = False
+
+    CurrentSearch.last_student_picked = CurrentSearch.student_selector.currentText()
+    Settings.set_last_student_picked(CurrentSearch.last_student_picked)
+
     student_name = CurrentSearch.student_selector.currentText()
     CurrentSearch.profile_selector.clear()
     from Common.databaseHandler import DBHandler
