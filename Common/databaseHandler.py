@@ -118,9 +118,6 @@ class DBHandler():
   def remove_student_profiles(student_id, profiles):
     con, cur = DBHandler.connect_to_database()
 
-    # query = 'DELETE FROM profile_subjects WHERE id IN ({})'.format(', '.join('?' * len(subjects)))
-    # cur.execute(query, subjects)
-
     for profile in profiles:
       profile_id = DBHandler.get_profile_id(profile)
       cur.execute('DELETE FROM student_profile WHERE student_id = ? AND profile_id = ?', (student_id, profile_id))
@@ -132,11 +129,12 @@ class DBHandler():
   def get_student_profiles(student_id):
     con, cur = DBHandler.connect_to_database()
 
-    query = ('SELECT profile.name '
-        'FROM student_profile '
-        'INNER JOIN profile '
-        'ON student_profile.profile_id = profile.id '
-        'WHERE student_profile.student_id = ?')
+    query = ('SELECT name '
+      'FROM profile '
+      'INNER JOIN student_profile '
+      'ON profile.id = student_profile.profile_id '
+      'WHERE student_profile.student_id = ? '
+      'ORDER BY name')
 
     cur.execute(query, (student_id,))
     profile_names = list(map(lambda profile_name: profile_name[0], cur.fetchall()))
@@ -185,7 +183,7 @@ class DBHandler():
   @staticmethod
   def get_profiles():
     con, cur = DBHandler.connect_to_database()
-    cur.execute('SELECT name FROM profile ORDER BY id')
+    cur.execute('SELECT name FROM profile ORDER BY name')
     profiles = list(map(lambda profile: profile[0], cur.fetchall()))
 
     con.close()
@@ -228,11 +226,11 @@ class DBHandler():
     grade_name = cur.fetchone()[0]
 
     query = ('SELECT name '
-        'FROM subject '
-        'INNER JOIN profile_subject '
-        'ON subject.id = profile_subject.subject_id '
-        'WHERE profile_subject.profile_id = ? '
-        'ORDER BY name')
+      'FROM subject '
+      'INNER JOIN profile_subject '
+      'ON subject.id = profile_subject.subject_id '
+      'WHERE profile_subject.profile_id = ? '
+      'ORDER BY name')
 
     cur.execute(query, (profile_id,))
     profile_subjects = list(map(lambda word: word[0], cur.fetchall()))
@@ -266,9 +264,6 @@ class DBHandler():
   @staticmethod
   def remove_profile_subjects(grade_id, profile_id, subjects):
     con, cur = DBHandler.connect_to_database()
-
-    # query = 'DELETE FROM profile_subjects WHERE id IN ({})'.format(', '.join('?' * len(subjects)))
-    # cur.execute(query, subjects)
 
     for subject in subjects:
       cur.execute('DELETE FROM profile_subject WHERE profile_id = ? AND subject_id = ?', (profile_id, DBHandler.get_subject_id(grade_id, subject)))
@@ -421,10 +416,10 @@ class DBHandler():
   def get_candidate_words(grade_id):
     con, cur = DBHandler.connect_to_database()
     query = ('SELECT word '
-        'FROM ' + DBHandler.get_grade_table_name(grade_id) + ' ' +
-        'INNER JOIN candidate '
-        'ON ' + DBHandler.get_grade_table_name(grade_id) + '.id = candidate.word_id '
-        'WHERE candidate.grade_id = ?')
+      'FROM ' + DBHandler.get_grade_table_name(grade_id) + ' ' +
+      'INNER JOIN candidate '
+      'ON ' + DBHandler.get_grade_table_name(grade_id) + '.id = candidate.word_id '
+      'WHERE candidate.grade_id = ?')
 
     cur.execute(query, (grade_id,))
     words = list(map(lambda word: word[0], cur.fetchall()))
@@ -486,7 +481,7 @@ class DBHandler():
         'ON ' + DBHandler.get_grade_table_name(grade) + '.id = recent_search.word_id '
         'WHERE recent_search.profile_id = ? '
         'AND recent_search.student_id = ? '
-        'ORDER BY recent_search.searched_at ')
+        'ORDER BY recent_search.searched_at')
     else:
       extra_info = (DBHandler.get_subject_id(grade, subject_name), profile_id, student_id)
       query = ('SELECT word '
@@ -496,7 +491,7 @@ class DBHandler():
         'WHERE recent_search.subject_id = ? '
         'AND recent_search.profile_id = ? '
         'AND recent_search.student_id = ? '
-        'ORDER BY recent_search.searched_at ')
+        'ORDER BY recent_search.searched_at')
 
     con, cur = DBHandler.connect_to_database()
 
@@ -530,7 +525,9 @@ class DBHandler():
     con, cur = DBHandler.connect_to_database()
 
     cur.execute('SELECT COUNT(*) FROM starred_word WHERE word_id = ? AND profile_id = ? AND student_id = ?', (word_id, profile_id, student_id))
-    return cur.fetchone()[0] > 0
+    starred_word_exists = cur.fetchone()[0] > 0
+    con.close()
+    return starred_word_exists
 
   @staticmethod
   def remove_starred_word(word):
@@ -553,22 +550,22 @@ class DBHandler():
     if subject_name == -1:
       extra_info = (profile_id, student_id)
       query = ('SELECT word '
-          'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
-          'INNER JOIN starred_word '
-          'ON ' + DBHandler.get_grade_table_name(grade) + '.id = starred_word.word_id '
-          'WHERE starred_word.profile_id = ? '
-          'AND starred_word.student_id = ? '
-          'ORDER BY ' + DBHandler.get_grade_table_name(grade) + '.id DESC')
+        'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
+        'INNER JOIN starred_word '
+        'ON ' + DBHandler.get_grade_table_name(grade) + '.id = starred_word.word_id '
+        'WHERE starred_word.profile_id = ? '
+        'AND starred_word.student_id = ? '
+        'ORDER BY ' + DBHandler.get_grade_table_name(grade) + '.id DESC')
     else:
       extra_info = (DBHandler.get_subject_id(grade, subject_name), profile_id, student_id)
       query = ('SELECT word '
-          'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
-          'INNER JOIN starred_word '
-          'ON ' + DBHandler.get_grade_table_name(grade) + '.id = starred_word.word_id '
-          'WHERE starred_word.subject_id = ? '
-          'AND starred_word.profile_id = ? '
-          'AND starred_word.student_id = ? '
-          'ORDER BY ' + DBHandler.get_grade_table_name(grade) + '.id DESC')
+        'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
+        'INNER JOIN starred_word '
+        'ON ' + DBHandler.get_grade_table_name(grade) + '.id = starred_word.word_id '
+        'WHERE starred_word.subject_id = ? '
+        'AND starred_word.profile_id = ? '
+        'AND starred_word.student_id = ? '
+        'ORDER BY ' + DBHandler.get_grade_table_name(grade) + '.id DESC')
 
     cur.execute(query, extra_info)
     starred_words = list(map(lambda starredWord: starredWord[0], cur.fetchall()))
@@ -627,12 +624,13 @@ class DBHandler():
 
   @staticmethod
   def remove_word_from_grade(cur, grade, word):
-    if DBHandler.word_exists(cur, grade, word):
-      word_id = DBHandler.get_word_id(cur, word)
-      cur.execute('DELETE FROM ' + DBHandler.get_grade_table_name(grade) + ' WHERE id = ?', (word_id,))
-      cur.execute('DELETE FROM subject_word WHERE word_id = ?', (word_id,))
-      cur.execute('DELETE FROM recent_search WHERE word_id = ?', (word_id,))
-      cur.execute('DELETE FROM starred_word WHERE word_id = ?', (word_id,))
+    if not DBHandler.word_exists(cur, grade, word): return
+
+    word_id = DBHandler.get_word_id(cur, word)
+    cur.execute('DELETE FROM ' + DBHandler.get_grade_table_name(grade) + ' WHERE id = ?', (word_id,))
+    cur.execute('DELETE FROM subject_word WHERE word_id = ?', (word_id,))
+    cur.execute('DELETE FROM recent_search WHERE word_id = ?', (word_id,))
+    cur.execute('DELETE FROM starred_word WHERE word_id = ?', (word_id,))
 
   @staticmethod
   def word_exists(cur, grade, word):
