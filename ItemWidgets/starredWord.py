@@ -28,7 +28,7 @@ class StarredWord(QWidget):
     self.reload_button.setFixedWidth(30)
 
     self.star_button = QPushButton()
-    self.star_button.clicked.connect(self.toggle_starred)
+    self.star_button.clicked.connect(self.toggle_starred_state)
     self.star_button.setFixedWidth(30)
     self.star_button.setIcon(QIcon('Resources/starred.svg'))
 
@@ -51,19 +51,26 @@ class StarredWord(QWidget):
     from Common.styles import Styles
     self.setStyleSheet(Styles.item_widgets_style)
 
-  def toggle_starred(self):
+  def toggle_starred_state(self):
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget
     word = self.word.text()
     DBHandler.remove_starred_word(word)
-    RecentSearchesWidget.toggle_starred_upper(word)
-    self.removeWord()
+    RecentSearchesWidget.toggle_recent_search_starred_icon(word)
+    self.remove_word()
 
-  def removeWord(self):
+  def remove_word(self):
     from SideWidgets.starredWordsWidget import StarredWordsWidget
     self.hide()
     StarredWordsWidget.remove_starred_word(self)
     self.deleteLater()
 
   def reload_word(self):
+    word = self.word.text()
     from MainWidget.mainWidget import MainWidget
-    MainWidget.add_word(self.word.text())
+    from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+    MainWidget.add_word(word)
+    recent_search_exists = DBHandler.add_recent_search(word)
+    if recent_search_exists:
+      RecentSearchesWidget.remove_and_add_recent_search(word)
+    else:
+      RecentSearchesWidget.add_recent_search(word, False)

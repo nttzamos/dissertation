@@ -35,10 +35,11 @@ class Result(QWidget):
     self.search_button.setFixedWidth(30)
 
     self.star_button = QPushButton()
-    self.star_button.clicked.connect(self.notify_starred)
+    self.star_button.clicked.connect(self.toggle_starred_state)
     self.star_button.setFixedWidth(30)
     from Common.databaseHandler import DBHandler
     if (not initial) and DBHandler.starred_word_exists(word):
+      print(self.word_label.text())
       self.star_button.setIcon(QIcon('Resources/starred.svg'))
       self.is_starred = True
     else:
@@ -49,7 +50,7 @@ class Result(QWidget):
     self.buttons_widget.layout.addWidget(self.star_button)
 
     data_widget.layout.addWidget(self.word_label)
-    data_widget.layout.addWidget(self.buttons_widget)
+    # data_widget.layout.addWidget(self.buttons_widget)
 
     self.layout.addWidget(data_widget)
 
@@ -73,24 +74,20 @@ class Result(QWidget):
     else:
       RecentSearchesWidget.add_recent_search(word, False)
 
-  def notify_starred(self):
+  def toggle_starred_state(self):
     from SideWidgets.starredWordsWidget import StarredWordsWidget
+    from SideWidgets.recentSearchesWidget import RecentSearchesWidget
     from Common.databaseHandler import DBHandler
     word = self.word_label.text()
 
-    if DBHandler.starred_word_exists(word):
-      DBHandler.remove_starred_word(word)
-      StarredWordsWidget.toggle_starred_bottom(word)
-    else:
-      DBHandler.add_starred_word(word)
-      StarredWordsWidget.add_starred_word(word)
-
-    self.toggle_starred_icon()
-
-  def toggle_starred_icon(self):
+    RecentSearchesWidget.toggle_recent_search_starred_icon(word)
     if self.is_starred:
       self.is_starred = False
       self.star_button.setIcon(QIcon('Resources/unstarred.svg'))
+      DBHandler.remove_starred_word(word)
+      StarredWordsWidget.toggle_starred_word_starred_state(word)
     else:
       self.is_starred = True
       self.star_button.setIcon(QIcon('Resources/starred.svg'))
+      DBHandler.add_starred_word(word)
+      StarredWordsWidget.add_starred_word(word)

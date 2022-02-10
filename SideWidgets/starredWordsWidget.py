@@ -98,7 +98,7 @@ class StarredWordsWidget(QWidget):
       StarredWordsWidget.show_placeholder(text = 'You do not have any Starred Words')
 
   @staticmethod
-  def toggle_starred_bottom(word):
+  def toggle_starred_word_starred_state(word):
     for obj in StarredWordsWidget.widget_list:
       if word==obj.word.text():
         obj.remove_word()

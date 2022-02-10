@@ -102,9 +102,9 @@ class RecentSearchesWidget(QWidget):
         return
 
   @staticmethod
-  def toggle_starred_upper(word):
+  def toggle_recent_search_starred_icon(word):
     for obj in RecentSearchesWidget.widget_list:
-      if word==obj.word.text():
+      if word == obj.word.text():
         obj.toggle_starred_icon()
         return
 

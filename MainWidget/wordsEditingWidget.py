@@ -222,7 +222,7 @@ class WordsEditingWidget(QDialog):
     return grades
 
   def update_dictionary_words(self, oldWord, new_word=None):
-    if not (new_word == None or new_word in self.dictionary_words):
+    if not (new_word == None or new_word in self.dictionary_words or self.show_candidates.isChecked()):
       self.dictionary_words.append(new_word)
 
     self.dictionary_words.remove(oldWord)

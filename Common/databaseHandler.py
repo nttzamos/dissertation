@@ -283,7 +283,7 @@ class DBHandler():
     con.close()
 
   @staticmethod
-  def get_profile_subjects(profile_id):
+  def get_profile_subject_ids(profile_id):
     con, cur = DBHandler.connect_to_database()
     cur.execute('SELECT subject_id FROM profile_subject WHERE profile_id = ?', (profile_id,))
 
@@ -448,7 +448,7 @@ class DBHandler():
   @staticmethod
   def get_words_with_family(profile_id, grade_id, subject_name):
     if subject_name == 'All Subjects':
-      subject_ids = DBHandler.get_profile_subjects(profile_id)
+      subject_ids = DBHandler.get_profile_subject_ids(profile_id)
     else:
       subject_ids = [DBHandler.get_subject_id(grade_id, subject_name)]
 
@@ -495,7 +495,7 @@ class DBHandler():
   @staticmethod
   def get_words(profile_id, grade_id, subject_name):
     if subject_name == 'All Subjects':
-      subject_ids = DBHandler.get_profile_subjects(profile_id)
+      subject_ids = DBHandler.get_profile_subject_ids(profile_id)
     else:
       subject_ids = [DBHandler.get_subject_id(grade_id, subject_name)]
 
@@ -546,25 +546,28 @@ class DBHandler():
   @staticmethod
   def add_recent_search(word):
     from MainWidget.currentSearch import CurrentSearch
-    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
+    student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
     if subject_name == 'All Subjects':
-      return
+      subject_ids = DBHandler.get_profile_subject_ids(profile_id)
+    else:
+      subject_ids = [DBHandler.get_subject_id(grade_id, subject_name)]
 
-    subject_id = DBHandler.get_subject_id(grade, subject_name)
-
-    word_id = DBHandler.get_word_id(grade, word)
-    recent_search_exists = DBHandler.recent_search_exists(word_id, profile_id, student_id, subject_id)
-    date_time_now = datetime.datetime.now()
+    word_id = DBHandler.get_word_id(grade_id, word)
     con, cur = DBHandler.connect_to_database()
 
-    if recent_search_exists:
-      query = ('UPDATE recent_search SET searched_at = ? '
-        'WHERE word_id = ? AND profile_id = ? '
-        'AND student_id = ? AND subject_id = ?')
-      cur.execute(query, (date_time_now, word_id, profile_id, student_id, subject_id))
-    else:
-      values = (word_id, profile_id, student_id, subject_id, date_time_now)
-      cur.execute('INSERT INTO recent_search VALUES (null, ?, ?, ?, ?, ?)', values)
+    for subject_id in subject_ids:
+      if DBHandler.word_exists_in_subject(word_id, subject_id, grade_id, cur):
+        recent_search_exists = DBHandler.recent_search_exists(word_id, profile_id, student_id, subject_id)
+        date_time_now = datetime.datetime.now()
+        if recent_search_exists:
+          values = (word_id, profile_id, student_id, subject_id)
+          query = ('UPDATE recent_search SET searched_at = ? '
+            'WHERE word_id = ? AND profile_id = ? '
+            'AND student_id = ? AND subject_id = ?')
+          cur.execute(query, (date_time_now, word_id, profile_id, student_id, subject_id))
+        else:
+          values = (word_id, profile_id, student_id, subject_id, date_time_now)
+          cur.execute('INSERT INTO recent_search VALUES (null, ?, ?, ?, ?, ?)', values)
 
     con.commit()
     con.close()
@@ -583,15 +586,20 @@ class DBHandler():
   @staticmethod
   def remove_recent_search(word):
     from MainWidget.currentSearch import CurrentSearch
-    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
+    student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
+    if subject_name == 'All Subjects':
+      subject_ids = DBHandler.get_profile_subject_ids(profile_id)
+    else:
+      subject_ids = [DBHandler.get_subject_id(grade_id, subject_name)]
 
-    subject_id = DBHandler.get_subject_id(grade, subject_name)
-    word_id = DBHandler.get_word_id(grade, word)
+    word_id = DBHandler.get_word_id(grade_id, word)
     con, cur = DBHandler.connect_to_database()
+    for subject_id in subject_ids:
+      if DBHandler.word_exists_in_subject(word_id, subject_id, grade_id, cur):
+        query = ('DELETE FROM recent_search WHERE word_id = ? '
+          'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+        cur.execute(query, (word_id, profile_id, student_id, subject_id))
 
-    query = ('DELETE FROM recent_search WHERE word_id = ? '
-      'AND profile_id = ? AND student_id = ? AND subject_id = ?')
-    cur.execute(query, (word_id, profile_id, student_id, subject_id))
     con.commit()
     con.close()
 
@@ -601,7 +609,7 @@ class DBHandler():
     student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
     if subject_name == 'All Subjects':
       values = (profile_id, student_id)
-      query = ('SELECT word '
+      query = ('SELECT DISTINCT word '
         'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
         'INNER JOIN recent_search '
         'ON ' + DBHandler.get_grade_table_name(grade) + '.id = recent_search.word_id '
@@ -629,47 +637,63 @@ class DBHandler():
   @staticmethod
   def add_starred_word(word):
     from MainWidget.currentSearch import CurrentSearch
-    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
+    student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
     if subject_name == 'All Subjects':
-      return
+      subject_ids = DBHandler.get_profile_subject_ids(profile_id)
+    else:
+      subject_ids = [DBHandler.get_subject_id(grade_id, subject_name)]
 
-    subject_id = DBHandler.get_subject_id(grade, subject_name)
-    word_id = DBHandler.get_word_id(grade, word)
+    word_id = DBHandler.get_word_id(grade_id, word)
     con, cur = DBHandler.connect_to_database()
 
-    values = (word_id, profile_id, student_id, subject_id)
-    cur.execute('INSERT INTO starred_word VALUES (null, ?, ?, ?, ?)', values)
+    for subject_id in subject_ids:
+      if DBHandler.word_exists_in_subject(word_id, subject_id, grade_id, cur):
+        values = (word_id, profile_id, student_id, subject_id)
+        cur.execute('INSERT INTO starred_word VALUES (null, ?, ?, ?, ?)', values)
     con.commit()
     con.close()
 
   @staticmethod
   def starred_word_exists(word):
     from MainWidget.currentSearch import CurrentSearch
-    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
+    student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
+    if subject_name == 'All Subjects':
+      subject_ids = DBHandler.get_profile_subject_ids(profile_id)
+    else:
+      subject_ids = [DBHandler.get_subject_id(grade_id, subject_name)]
 
-    subject_id = DBHandler.get_subject_id(grade, subject_name)
-    word_id = DBHandler.get_word_id(grade, word)
     con, cur = DBHandler.connect_to_database()
+    word_id = DBHandler.get_word_id(grade_id, word)
 
-    query = ('SELECT COUNT(*) FROM starred_word WHERE word_id = ? '
-      'AND profile_id = ? AND student_id = ? AND subject_id = ?')
-    cur.execute(query, (word_id, profile_id, student_id, subject_id))
-    starred_word_exists = cur.fetchone()[0] > 0
+    for subject_id in subject_ids:
+      if DBHandler.word_exists_in_subject(word_id, subject_id, grade_id, cur):
+        query = ('SELECT COUNT(*) FROM starred_word WHERE word_id = ? '
+          'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+        cur.execute(query, (word_id, profile_id, student_id, subject_id))
+        if cur.fetchone()[0] > 0:
+          con.close()
+          return True
+
     con.close()
-    return starred_word_exists
+    return False
 
   @staticmethod
   def remove_starred_word(word):
     from MainWidget.currentSearch import CurrentSearch
-    student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
+    student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
+    if subject_name == 'All Subjects':
+      subject_ids = DBHandler.get_profile_subject_ids(profile_id)
+    else:
+      subject_ids = [DBHandler.get_subject_id(grade_id, subject_name)]
 
-    subject_id = DBHandler.get_subject_id(grade, subject_name)
-    word_id = DBHandler.get_word_id(grade, word)
+    word_id = DBHandler.get_word_id(grade_id, word)
     con, cur = DBHandler.connect_to_database()
+    for subject_id in subject_ids:
+      if DBHandler.word_exists_in_subject(word_id, subject_id, grade_id, cur):
+        query = ('DELETE FROM starred_word WHERE word_id = ? '
+          'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+        cur.execute(query, (word_id, profile_id, student_id, subject_id))
 
-    query = ('DELETE FROM starred_word WHERE word_id = ? '
-      'AND profile_id = ? AND student_id = ? AND subject_id = ?')
-    cur.execute(query, (word_id, profile_id, student_id, subject_id))
     con.commit()
     con.close()
 
@@ -682,7 +706,7 @@ class DBHandler():
 
     if subject_name == 'All Subjects':
       values = (profile_id, student_id)
-      query = ('SELECT word '
+      query = ('SELECT DISTINCT word '
         'FROM ' + DBHandler.get_grade_table_name(grade) + ' ' +
         'INNER JOIN starred_word '
         'ON ' + DBHandler.get_grade_table_name(grade) + '.id = starred_word.word_id '
@@ -770,6 +794,14 @@ class DBHandler():
   @staticmethod
   def word_exists(cur, grade, word):
     cur.execute('SELECT COUNT(*) FROM ' + DBHandler.get_grade_table_name(grade) + ' WHERE word = ?', (word,))
+    return cur.fetchone()[0] > 0
+
+  @staticmethod
+  def word_exists_in_subject(word_id, subject_id, grade_id, cur):
+    query = ('SELECT COUNT(*) FROM '
+      '' + DBHandler.get_subject_table_name(grade_id) + ' '
+      'WHERE word_id = ? AND subject_id = ?')
+    cur.execute(query, (word_id, subject_id))
     return cur.fetchone()[0] > 0
 
   @staticmethod
