@@ -5,6 +5,10 @@ import sys
 app = QApplication(sys.argv)
 
 # Imports must be below here
+# from Common.pdfParser import PdfParser
+# for grade in range(1, 7):
+#   PdfParser.convert_books_to_text_files(grade)
+
 from Common.databaseHandler import DBHandler
 DBHandler.initialize_databases()
 

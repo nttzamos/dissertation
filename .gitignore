@@ -3,6 +3,9 @@ tempCodeRunnerFile.py
 *.pdf
 Databases/*
 Databases_practice/*
+LemmaTesting/*
+Processed/*
+Unprocessed/*
 Databases_nlp/*
 Databases_nlp_double/*
 *.DS_Store

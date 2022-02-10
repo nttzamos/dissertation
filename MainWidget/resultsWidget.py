@@ -46,7 +46,7 @@ class ResultsWidget(QWidget):
     ResultsWidget.hide_placeholder()
     ResultsWidget.clear_previous_results()
     ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-    results_words = ResultsWidget.getResults(word)
+    results_words = ResultsWidget.get_results(word)
 
     for i in range(len(results_words)):
       row = i // ResultsWidget.grid_columns
@@ -56,33 +56,15 @@ class ResultsWidget(QWidget):
       ResultsWidget.grid_layout.addWidget(result, row, column)
 
   @staticmethod
-  def getResults(word):
-    from MainWidget.searchingWidget import SearchingWidget
-    dictionary_words = SearchingWidget.dictionary_words
-    maximum_size = Settings.get_maximum_results() + 1
-
-    queue = PriorityQueue()
-    for i in range(len(dictionary_words)):
-      # distance = enchant.utils.levenshtein(word, dictionary_words[i]) * -1
-      distance = 5
-      if queue.qsize() < maximum_size:
-        queue.put((distance, dictionary_words[i]))
-      else:
-        tmp = queue.get()
-        if tmp[0] < distance:
-          queue.put((distance, dictionary_words[i]))
-        else:
-          queue.put(tmp)
-
-    results_words = []
-    for i in range(maximum_size):
-      results_words.append(queue.get()[1])
-
-    if word in results_words:
-      results_words.remove(word)
-
-    results_words.sort()
-    return results_words
+  def get_results(word):
+    from MainWidget.currentSearch import CurrentSearch
+    grade_id = CurrentSearch.grade_id
+    from Common.databaseHandler import DBHandler
+    word_id = DBHandler.get_word_id(grade_id, word)
+    family_id = DBHandler.get_family_id(grade_id, word_id)
+    family_words = DBHandler.get_family_words(grade_id, family_id)
+    family_words.remove(word)
+    return family_words
 
   @staticmethod
   def clear_previous_results():

@@ -19,13 +19,29 @@ class PdfParser():
 
   @staticmethod
   def get_grade_subjects_names(grade):
-    return list(map(
-      lambda subject_file: subject_file.replace('.pdf', ''), PdfParser.get_grade_subjects_files(grade)
-    ))
+    subjects_names = list(map(lambda subject_file: subject_file.replace('.pdf', ''), PdfParser.get_grade_subjects_files(grade)))
+    subjects_names.sort()
+    return subjects_names
 
   @staticmethod
   def get_grade_subjects_files(grade):
     return listdir(PdfParser.grades_subjects_directory_path + str(grade))
+
+  @staticmethod
+  def convert_books_to_text_files(grade):
+    subject_names = PdfParser.get_grade_subjects_names(grade)
+    subject_files = PdfParser.get_grade_subjects_files(grade)
+    file_name = './Unprocessed/subjects' + str(grade) + '.txt'
+    f = open(file_name, 'w')
+
+    print(len(subject_names))
+    print(len(subject_files))
+    print()
+    for i in range(len(subject_names)):
+      text = PdfParser.read_subject_words(grade, subject_files[i], raw_text=True)
+      f.write('HERE_LIES_THE_START_OF_A_SUBJECT')
+      f.write(text)
+    f.close()
 
   @staticmethod
   def read_subject_words(grade, subject_file, raw_text=False):

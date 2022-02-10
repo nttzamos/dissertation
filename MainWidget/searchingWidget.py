@@ -138,7 +138,8 @@ class SearchingWidget(QWidget):
 
   @staticmethod
   def update_dictionary_words(profile_id, grade_id, subject_name):
-    SearchingWidget.dictionary_words = DBHandler.get_words(profile_id, grade_id, subject_name)
+    SearchingWidget.dictionary_words = DBHandler.get_words_with_family(profile_id, grade_id, subject_name)
+    # SearchingWidget.dictionary_words = DBHandler.get_words(profile_id, grade_id, subject_name)
     model = QStringListModel(SearchingWidget.dictionary_words, SearchingWidget.completer)
     SearchingWidget.completer.setModel(model)
 
