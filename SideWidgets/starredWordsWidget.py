@@ -47,7 +47,7 @@ class StarredWordsWidget(QWidget):
     self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
     self.layout.addWidget(self.scroll_area)
 
-    self.setMinimumWidth(Settings.get_left_widget_width())
+    self.setMinimumWidth(Settings.get_setting('left_widget_width'))
 
     self.style()
 

@@ -16,7 +16,7 @@ class ResultsWidget(QWidget):
   show_placeholder_label = True
   placeholder_label = QLabel('The results of your search will be displayed here.')
   grid_columns = Settings.get_results_widget_columns()
-  single_result_width = Settings.get_single_result_width()
+  single_result_width = Settings.get_setting('single_result_width')
 
   def __init__(self):
     super().__init__()

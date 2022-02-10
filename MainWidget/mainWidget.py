@@ -20,7 +20,7 @@ class MainWidget(QWidget):
     self.layout.addWidget(MainWidget.current_search)
     self.layout.addWidget(MainWidget.results_widget)
 
-    self.setMinimumWidth(Settings.get_right_widget_width())
+    self.setMinimumWidth(Settings.get_setting('right_widget_width'))
 
   @staticmethod
   def add_word(word):

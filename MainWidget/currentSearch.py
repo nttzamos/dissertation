@@ -71,7 +71,7 @@ class CurrentSearch(QWidget):
 
     CurrentSearch.initialize_selected_student = False
     remember_last_student_picked = Settings.get_boolean_setting('remember_last_student_picked')
-    last_student_picked = Settings.get_last_student_picked()
+    last_student_picked = Settings.get_setting('last_student_picked')
     if remember_last_student_picked and last_student_picked in students:
       CurrentSearch.student_selector.setCurrentText(last_student_picked)
       CurrentSearch.initialize_selected_student = True
@@ -119,7 +119,7 @@ class CurrentSearch(QWidget):
     CurrentSearch.initialize_selected_student = False
 
     CurrentSearch.last_student_picked = CurrentSearch.student_selector.currentText()
-    Settings.set_last_student_picked(CurrentSearch.last_student_picked)
+    Settings.set_setting('last_student_picked', CurrentSearch.last_student_picked)
 
     student_name = CurrentSearch.student_selector.currentText()
     CurrentSearch.profile_selector.clear()

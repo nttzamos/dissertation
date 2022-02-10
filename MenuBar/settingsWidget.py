@@ -21,7 +21,7 @@ class SettingsWidget(QDialog):
     self.maximum_results_spin_box = QSpinBox()
     self.maximum_results_spin_box.setFont(spin_box_font)
     self.maximum_results_spin_box.valueChanged.connect(self.maximum_results_changed)
-    self.maximum_results_spin_box.setValue(Settings.get_maximum_results())
+    self.maximum_results_spin_box.setValue(Settings.get_setting('maximum_results'))
     self.maximum_results_spin_box.setMinimum(1)
     self.maximum_results_spin_box.setMaximum(50)
 
@@ -53,7 +53,7 @@ class SettingsWidget(QDialog):
     general_settings_widget.layout.addWidget(self.ask_before_actions)
     general_settings_widget.layout.addWidget(self.show_edit_dict_words_button)
 
-    theme_selection_widget = QGroupBox('Theme Section')
+    theme_selection_widget = QGroupBox('Theme Selection')
     theme_selection_widget.setFont(section_label_font)
     theme_selection_widget.layout = QHBoxLayout(theme_selection_widget)
     self.light_theme_button = QRadioButton('Light Theme')
@@ -61,7 +61,7 @@ class SettingsWidget(QDialog):
     self.dark_theme_button = QRadioButton('Dark Theme')
     self.dark_theme_button.toggled.connect(self.dark_theme_button_clicked)
 
-    if Settings.get_theme() == 'light':
+    if Settings.get_setting('theme') == 'light':
       self.light_theme_button.setChecked(True)
     else:
       self.dark_theme_button.setChecked(True)
@@ -70,6 +70,23 @@ class SettingsWidget(QDialog):
     theme_selection_widget.layout.addWidget(self.light_theme_button, alignment=Qt.AlignmentFlag.AlignLeft)
     theme_selection_widget.layout.addWidget(self.dark_theme_button, alignment=Qt.AlignmentFlag.AlignLeft)
 
+    word_family_discovery_widget = QGroupBox('Word Family Discovery')
+    word_family_discovery_widget.setFont(section_label_font)
+    word_family_discovery_widget.layout = QHBoxLayout(word_family_discovery_widget)
+    self.online_wiktionary_button = QRadioButton('Online Wiktionary')
+    self.online_wiktionary_button.toggled.connect(self.online_wiktionary_button_clicked)
+    self.offline_database_button = QRadioButton('Offline Database')
+    self.offline_database_button.toggled.connect(self.offline_database_button_clicked)
+
+    if Settings.get_setting('word_family_discovery') == 'online_wiktionary':
+      self.online_wiktionary_button.setChecked(True)
+    else:
+      self.offline_database_button.setChecked(True)
+
+    word_family_discovery_widget.layout.setContentsMargins(10, 0, 0, 0)
+    word_family_discovery_widget.layout.addWidget(self.online_wiktionary_button, alignment=Qt.AlignmentFlag.AlignLeft)
+    word_family_discovery_widget.layout.addWidget(self.offline_database_button, alignment=Qt.AlignmentFlag.AlignLeft)
+
     self.default_editing_action_widget = QWidget()
     self.default_editing_action_widget.layout = QHBoxLayout(self.default_editing_action_widget)
     self.update_button = QRadioButton('Update')
@@ -77,7 +94,7 @@ class SettingsWidget(QDialog):
     self.delete_button = QRadioButton('Delete')
     self.delete_button.toggled.connect(self.delete_button_clicked)
 
-    if Settings.get_default_editing_action() == 'update':
+    if Settings.get_setting('default_editing_action') == 'update':
       self.update_button.setChecked(True)
     else:
       self.delete_button.setChecked(True)
@@ -89,7 +106,8 @@ class SettingsWidget(QDialog):
     self.layout.addWidget(maximum_results_selection_widget)
     self.layout.addWidget(general_settings_widget)
     self.layout.addWidget(theme_selection_widget)
-    # self.layout.addWidget(self.default_editing_action_widget)
+    self.layout.addWidget(word_family_discovery_widget)
+    self.layout.addWidget(self.default_editing_action_widget)
 
     self.style()
 
@@ -98,7 +116,7 @@ class SettingsWidget(QDialog):
     self.setStyleSheet(Styles.settings_widget_style)
 
   def maximum_results_changed(self):
-    Settings.set_maximum_results(self.maximum_results_spin_box.value())
+    Settings.set_setting('maximum_results', self.maximum_results_spin_box.value())
 
   def toggle_setting(self, setting_name):
     setting_check_box = self.findChild(QCheckBox, setting_name)
@@ -111,16 +129,24 @@ class SettingsWidget(QDialog):
 
   def light_theme_button_clicked(self):
     if self.light_theme_button.isChecked():
-      Settings.set_theme('light')
+      Settings.set_setting('theme', 'light')
 
   def dark_theme_button_clicked(self):
     if self.dark_theme_button.isChecked():
-      Settings.set_theme('dark')
+      Settings.set_setting('theme', 'dark')
+
+  def online_wiktionary_button_clicked(self):
+    if self.online_wiktionary_button.isChecked():
+      Settings.set_setting('word_family_discovery', 'online_wiktionary')
+
+  def offline_database_button_clicked(self):
+    if self.offline_database_button.isChecked():
+      Settings.set_setting('word_family_discovery', 'offline_database')
 
   def update_button_clicked(self):
     if self.update_button.isChecked():
-      Settings.set_default_editing_action('update')
+      Settings.set_setting('default_editing_action', 'update')
 
   def delete_button_clicked(self):
     if self.delete_button.isChecked():
-      Settings.set_default_editing_action('delete')
+      Settings.set_setting('default_editing_action', 'delete')

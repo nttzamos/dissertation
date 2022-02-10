@@ -39,7 +39,7 @@ class WordsEditingWidget(QDialog):
     self.update_selection_button.setFont(radio_button_font)
     self.deletion_selection_button = QRadioButton('Delete Word')
     self.deletion_selection_button.setFont(radio_button_font)
-    if Settings.get_default_editing_action() == 'update':
+    if Settings.get_setting('default_editing_action') == 'update':
       self.update_selection_button.setChecked(True)
     else:
       self.deletion_selection_button.setChecked(True)
