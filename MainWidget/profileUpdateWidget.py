@@ -2,8 +2,10 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLin
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from Common.databaseHandler import DBHandler
+from Common.database_handler import get_grades, get_grade_subjects
 from MenuBar.settings import Settings
+
+from models.profile import *
 
 class ProfileUpdateWidget(QWidget):
   def __init__(self):
@@ -23,7 +25,7 @@ class ProfileUpdateWidget(QWidget):
     profile_selection_widget.layout = QHBoxLayout(profile_selection_widget)
     profile_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    profiles = DBHandler.get_profiles()
+    profiles = get_profiles()
 
     ProfileUpdateWidget.profile_selector = QComboBox()
     ProfileUpdateWidget.profile_selector.setFont(combo_box_font)
@@ -127,10 +129,10 @@ class ProfileUpdateWidget(QWidget):
 
   def profile_selector_activated(self, index):
     profile_name = ProfileUpdateWidget.profile_selector.currentText()
-    self.profile_id, self.grade_id, grade_name, self.profile_subjects = DBHandler.get_profile_details(profile_name)
+    self.profile_id, self.grade_id, grade_name, self.profile_subjects = get_profile_details(profile_name)
     ProfileUpdateWidget.grade_label.setText(grade_name)
     self.name_line_edit.setText(profile_name)
-    grade_subjects = DBHandler.get_grade_subjects(self.grade_id)
+    grade_subjects = get_grade_subjects(self.grade_id)
 
     for check_box in self.check_boxes:
       self.subjects_selection_widget.layout.removeWidget(check_box)
@@ -148,7 +150,7 @@ class ProfileUpdateWidget(QWidget):
       self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
 
   def update_profile(self):
-    if self.profile_selector.currentText() in DBHandler.get_grades():
+    if self.profile_selector.currentText() in get_grades():
       is_invalid, text = True, 'Grade profiles can not be updated.'
     else:
       is_invalid, text = self.profile_is_invalid()
@@ -172,7 +174,7 @@ class ProfileUpdateWidget(QWidget):
     StudentUpdateWidget.update_profile(old_profile_name, new_profile_name)
 
     self.profile_selector.setItemText(self.profile_selector.currentIndex(), new_profile_name)
-    DBHandler.update_profile_name(self.profile_id, new_profile_name)
+    update_profile_name(self.profile_id, new_profile_name)
 
     subjects_names = []
     for check_box in self.check_boxes:
@@ -182,22 +184,22 @@ class ProfileUpdateWidget(QWidget):
     subjects_to_remove = list(set(self.profile_subjects) - set(subjects_names))
     subjects_to_add = list(set(subjects_names) - set(self.profile_subjects))
     self.profile_subjects = subjects_names
-    DBHandler.add_profile_subjects(self.grade_id, self.profile_id, subjects_to_add)
-    DBHandler.remove_profile_subjects(self.grade_id, self.profile_id, subjects_to_remove)
+    add_profile_subjects(self.grade_id, self.profile_id, subjects_to_add)
+    remove_profile_subjects(self.grade_id, self.profile_id, subjects_to_remove)
 
     if CurrentSearch.profile_selector.currentText() == new_profile_name:
       CurrentSearch.add_subjects(subjects_to_add)
       CurrentSearch.remove_subjects(subjects_to_remove)
 
   def delete_profile(self):
-    if self.profile_selector.currentText() in DBHandler.get_grades():
+    if self.profile_selector.currentText() in get_grades():
       title = 'Error Deleting Profile'
       text = 'Grade profiles can not be deleted.'
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
 
-    DBHandler.remove_profile(self.profile_id)
+    destroy_profile(self.profile_id)
     for check_box in self.check_boxes:
       self.subjects_selection_widget.layout.removeWidget(check_box)
 
@@ -227,7 +229,7 @@ class ProfileUpdateWidget(QWidget):
     if len(profile_name) == 0:
       return True, 'Profile can not be updated because the profile name is empty.'
 
-    if ProfileUpdateWidget.profile_selector.currentText() != profile_name and DBHandler.profile_name_exists(profile_name):
+    if ProfileUpdateWidget.profile_selector.currentText() != profile_name and profile_name_exists(profile_name):
       return True, 'Profile can not be updated as this name is already used for another profile.'
 
     for check_box in self.check_boxes:

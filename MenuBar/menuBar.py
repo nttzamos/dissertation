@@ -25,12 +25,14 @@ class MenuBar(QWidget):
     self.title.setFont(font)
 
     self.settings_button = QPushButton()
+    self.settings_button.setToolTip('Settings')
     self.settings_button.setIcon(QIcon('Resources/settings.png'))
     self.settings_button.setFixedHeight(30)
     self.settings_button.setFixedWidth(30)
     self.settings_button.clicked.connect(self.open_settings)
 
     self.minimize_window_button = QPushButton()
+    self.minimize_window_button.setToolTip('Minimize Application')
     self.minimize_window_button.setIcon(QIcon('Resources/minimizeWindow.png'))
     self.minimize_window_button.setFixedHeight(30)
     self.minimize_window_button.setFixedWidth(30)
@@ -43,6 +45,7 @@ class MenuBar(QWidget):
     self.restore_down_window_button.clicked.connect(self.restore_down_window)
 
     self.close_window_button = QPushButton()
+    self.close_window_button.setToolTip('Exit Application')
     self.close_window_button.setIcon(QIcon('Resources/closeWindow.png'))
     self.close_window_button.setFixedHeight(30)
     self.close_window_button.setFixedWidth(30)
@@ -53,7 +56,7 @@ class MenuBar(QWidget):
     self.layout.addWidget(self.title)
     self.layout.addWidget(self.settings_button, alignment=Qt.AlignmentFlag.AlignTop)
     self.layout.addWidget(self.minimize_window_button, alignment=Qt.AlignmentFlag.AlignTop)
-    self.layout.addWidget(self.restore_down_window_button, alignment=Qt.AlignmentFlag.AlignTop)
+    # self.layout.addWidget(self.restore_down_window_button, alignment=Qt.AlignmentFlag.AlignTop)
     self.layout.addWidget(self.close_window_button, alignment=Qt.AlignmentFlag.AlignTop)
 
     self.style()

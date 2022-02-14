@@ -34,13 +34,12 @@ class PdfParser():
     file_name = './Unprocessed/subjects' + str(grade) + '.txt'
     f = open(file_name, 'w')
 
-    print(len(subject_names))
-    print(len(subject_files))
-    print()
     for i in range(len(subject_names)):
       text = PdfParser.read_subject_words(grade, subject_files[i], raw_text=True)
-      f.write('HERE_LIES_THE_START_OF_A_SUBJECT')
+      text = text.replace(' ', '')
+      text = text.replace(' ', '')
       f.write(text)
+      f.write('YOU_HAVE_REACHED_THE_END_OF_A_SUBJECT')
     f.close()
 
   @staticmethod

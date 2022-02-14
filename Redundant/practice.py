@@ -1,4 +1,4 @@
-from Common.pdfParser import PdfParser
+from Common.pdf_parser import PdfParser
 from os import listdir
 import re
 import sqlite3
@@ -132,8 +132,8 @@ else:
 
       words_list = PdfParser.clean_words(list(words_set))
 
-      from Common.databaseHandler import DBHandler
-      words_list = DBHandler.sort_words_alphabetically(words_list)
+      from Common.database_handler import sort_words_alphabetically
+      words_list = sort_words_alphabetically(words_list)
       words = list(zip(list(range(1, len(words_list) + 1)), words_list))
       cur.executemany('INSERT INTO ' + grade_table_name + ' VALUES (?, ?)', words)
       con.commit()

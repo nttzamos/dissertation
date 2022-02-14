@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import QApplication, QWidget, QGridLayout, QHBoxLayout, QVB
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 from PyQt6.QtGui import QFont
 
-from Common.databaseHandler import DBHandler
 from MenuBar.settings import Settings
 
 import sqlite3
@@ -60,7 +59,7 @@ class MainWindow(QWidget):
   def show_word(self):
     self.active_word.setText(self.line_edit.text())
     QTimer.singleShot(0, self.line_edit.clear)
-    self.calculateResults()
+    self.calculate_results()
 
   def grade_selector_activated(self, index):
     model = QStringListModel(self.get_words(index + 1), self.completer)
@@ -121,7 +120,7 @@ class MainWindow(QWidget):
     con.close()
     return family_words
 
-  def calculateResults(self):
+  def calculate_results(self):
     if len(self.words_list) > 0:
       for result in self.words_list:
         result.hide()
@@ -132,7 +131,6 @@ class MainWindow(QWidget):
     word = self.line_edit.text()
     word_id = self.get_word_id(word)
     family_id = self.get_family_id(word_id)
-    print(family_id)
     if family_id == -1: return
 
     family_words = self.get_family_words(family_id)

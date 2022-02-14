@@ -7,6 +7,7 @@ from SideWidgets.recentSearchesWidget import RecentSearchesWidget
 from SideWidgets.starredWordsWidget import StarredWordsWidget
 from MenuBar.menuBar import MenuBar
 
+from models.profile import get_profile_name
 class MainWindow(QWidget):
   recent_searches_widget = RecentSearchesWidget()
   starred_words_widget = StarredWordsWidget()
@@ -68,9 +69,8 @@ class MainWindow(QWidget):
     from MainWidget.searchingWidget import SearchingWidget
     SearchingWidget.update_dictionary_words(profile_id, grade_id, subject_name)
 
-    from Common.databaseHandler import DBHandler
     if subject_name == 'All Subjects':
-      SearchingWidget.modify_error_message(DBHandler.get_profile_name(profile_id), False)
+      SearchingWidget.modify_error_message(get_profile_name(profile_id), False)
     else:
       SearchingWidget.modify_error_message(subject_name, True)
 
@@ -83,14 +83,15 @@ class MainWindow(QWidget):
 
   @staticmethod
   def clear_previous_subject_details():
-    if not MainWidget.current_search.subject_selector_active: return
+    from MainWidget.currentSearch import CurrentSearch
+    if not CurrentSearch.subject_selector_active: return
 
     from MainWidget.searchingWidget import SearchingWidget
     SearchingWidget.set_initial_error_message()
 
     from MainWidget.resultsWidget import ResultsWidget
     ResultsWidget.show_placeholder()
-    MainWidget.current_search.subject_selector_active = False
+    CurrentSearch.subject_selector_active = False
 
     RecentSearchesWidget.clear_previous_recent_searches()
     StarredWordsWidget.clear_previous_starred_words()

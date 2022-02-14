@@ -2,8 +2,10 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLab
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from Common.databaseHandler import DBHandler
 from MenuBar.settings import Settings
+
+from models.student import *
+from models.profile import get_profiles
 
 class StudentUpdateWidget(QWidget):
   def __init__(self):
@@ -21,7 +23,7 @@ class StudentUpdateWidget(QWidget):
     student_selection_widget.layout = QHBoxLayout(student_selection_widget)
     student_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    students = DBHandler.get_students()
+    students = get_students()
 
     StudentUpdateWidget.student_selector = QComboBox()
     StudentUpdateWidget.student_selector.setFont(combo_box_font)
@@ -114,9 +116,9 @@ class StudentUpdateWidget(QWidget):
 
   def student_selector_activated(self, index):
     student_name = StudentUpdateWidget.student_selector.currentText()
-    self.student_id, self.student_profiles = DBHandler.get_student_details(student_name)
+    self.student_id, self.student_profiles = get_student_details(student_name)
     self.name_line_edit.setText(student_name)
-    profiles = DBHandler.get_profiles()
+    profiles = get_profiles()
 
     for check_box in StudentUpdateWidget.check_boxes:
       StudentUpdateWidget.profiles_selection_widget.layout.removeWidget(check_box)
@@ -147,7 +149,7 @@ class StudentUpdateWidget(QWidget):
     from MainWidget.currentSearch import CurrentSearch
     CurrentSearch.update_student(StudentUpdateWidget.student_selector.currentText(), new_student_name)
     self.student_selector.setItemText(self.student_selector.currentIndex(), new_student_name)
-    DBHandler.update_student_name(self.student_id, new_student_name)
+    update_student_name(self.student_id, new_student_name)
 
     profile_names = []
     for check_box in StudentUpdateWidget.check_boxes:
@@ -157,15 +159,15 @@ class StudentUpdateWidget(QWidget):
     profiles_to_remove = list(set(self.student_profiles) - set(profile_names))
     profiles_to_add = list(set(profile_names) - set(self.student_profiles))
     self.student_profiles = profile_names
-    DBHandler.add_student_profiles(self.student_id, profiles_to_add)
-    DBHandler.remove_student_profiles(self.student_id, profiles_to_remove)
+    add_student_profiles(self.student_id, profiles_to_add)
+    remove_student_profiles(self.student_id, profiles_to_remove)
 
     if CurrentSearch.student_selector.currentText() == new_student_name:
       CurrentSearch.add_profiles(profiles_to_add)
       CurrentSearch.remove_profiles(profiles_to_remove)
 
   def delete_student(self):
-    DBHandler.remove_student(self.student_id)
+    destroy_student(self.student_id)
     for check_box in StudentUpdateWidget.check_boxes:
       StudentUpdateWidget.profiles_selection_widget.layout.removeWidget(check_box)
 
@@ -188,7 +190,7 @@ class StudentUpdateWidget(QWidget):
     if len(student_name) == 0:
       return True, 'Student can not be saved because the profile name is empty.'
 
-    if StudentUpdateWidget.student_selector.currentText() != student_name and  DBHandler.student_name_exists(student_name):
+    if StudentUpdateWidget.student_selector.currentText() != student_name and  student_name_exists(student_name):
       return True, 'Student can not be saved as this name is already used for another profile.'
 
     for check_box in StudentUpdateWidget.check_boxes:

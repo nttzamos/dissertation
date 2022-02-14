@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
 from PyQt6.QtGui import QFont, QIcon
 
-from Common.databaseHandler import DBHandler
+from models.recent_search import create_recent_search
+from models.starred_word import destroy_starred_word
 
 class StarredWord(QWidget):
   def __init__(self, word):
@@ -54,7 +55,7 @@ class StarredWord(QWidget):
   def toggle_starred_state(self):
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget
     word = self.word.text()
-    DBHandler.remove_starred_word(word)
+    destroy_starred_word(word)
     RecentSearchesWidget.toggle_recent_search_starred_icon(word)
     self.remove_word()
 
@@ -69,8 +70,8 @@ class StarredWord(QWidget):
     from MainWidget.mainWidget import MainWidget
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget
     MainWidget.add_word(word)
-    recent_search_exists = DBHandler.add_recent_search(word)
+    recent_search_exists = create_recent_search(word)
     if recent_search_exists:
       RecentSearchesWidget.remove_and_add_recent_search(word)
     else:
-      RecentSearchesWidget.add_recent_search(word, False)
+      RecentSearchesWidget.add_recent_search(word)

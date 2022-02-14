@@ -2,8 +2,10 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLin
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QFont
 
-from Common.databaseHandler import DBHandler
 from MenuBar.settings import Settings
+
+from models.student import create_student, student_name_exists
+from models.profile import get_profiles
 
 class StudentAdditionWidget(QWidget):
   last_index_used = -1
@@ -40,7 +42,7 @@ class StudentAdditionWidget(QWidget):
     scroll_area.setWidget(StudentAdditionWidget.profiles_selection_widget)
     scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
 
-    profiles = DBHandler.get_profiles()
+    profiles = get_profiles()
 
     StudentAdditionWidget.check_boxes = []
     for i in range(len(profiles)):
@@ -92,7 +94,7 @@ class StudentAdditionWidget(QWidget):
         checked_profiles.append(check_box.text())
         check_box.setChecked(False)
 
-    DBHandler.add_student(student_name, checked_profiles)
+    create_student(student_name, checked_profiles)
 
     from MainWidget.studentUpdateWidget import StudentUpdateWidget
     StudentUpdateWidget.add_student(student_name)
@@ -105,7 +107,7 @@ class StudentAdditionWidget(QWidget):
     if len(student_name) == 0:
       return True, 'Student can not be saved because the profile name is empty.'
 
-    if DBHandler.student_name_exists(student_name):
+    if student_name_exists(student_name):
       return True, 'Student can not be saved as this name is already used for another profile.'
 
     for check_box in StudentAdditionWidget.check_boxes:

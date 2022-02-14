@@ -5,6 +5,8 @@ from PyQt6.QtGui import QFont
 from ItemWidgets.starredWord import StarredWord
 from MenuBar.settings import Settings
 
+from models.starred_word import get_starred_words
+
 class StarredWordsWidget(QWidget):
   scroll_area_widget_contents = QWidget()
   grid_layout = QGridLayout(scroll_area_widget_contents)
@@ -65,8 +67,7 @@ class StarredWordsWidget(QWidget):
   def populate():
     StarredWordsWidget.clear_previous_starred_words()
 
-    from Common.databaseHandler import DBHandler
-    starred_words = DBHandler.get_starred_words()
+    starred_words = get_starred_words()
 
     if len(starred_words) == 0:
       StarredWordsWidget.show_placeholder(text = 'You do not have any Starred Words')

@@ -24,6 +24,5 @@ class MainWidget(QWidget):
 
   @staticmethod
   def add_word(word):
-    if (word != MainWidget.current_search.get_current_word()):
-      MainWidget.current_search.searched_word.setText(word)
-      ResultsWidget.show_results(word)
+    CurrentSearch.searched_word.setText(word)
+    ResultsWidget.show_results(word)

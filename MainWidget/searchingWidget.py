@@ -3,18 +3,19 @@ from PyQt6.QtWidgets import QCompleter, QHBoxLayout, QLabel, QLineEdit, QPushBut
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 
 from SideWidgets.recentSearchesWidget import RecentSearchesWidget
-from MainWidget.wordsEditingWidget import WordsEditingWidget
 from MenuBar.settings import Settings
-from Common.databaseHandler import DBHandler
+from Common.database_handler import get_grades, get_words
 from Common.styles import Styles
+
+from models.recent_search import create_recent_search
+from models.family import get_words_with_family
 
 class SearchingWidget(QWidget):
   dictionary_words = []
 
   line_edit = QLineEdit()
 
-  from Common.databaseHandler import DBHandler
-  grades = DBHandler.get_grades()
+  grades = get_grades()
   grades_mapping = {}
   for i in range(len(grades)):
     grades_mapping[i + 1] = grades[i]
@@ -76,6 +77,7 @@ class SearchingWidget(QWidget):
 
     edit_words_button_font = QFont(Settings.font, 14)
     SearchingWidget.edit_words_button = QPushButton('Edit Dictionary Words')
+    SearchingWidget.edit_words_button.setToolTip('You can edit the words of each grade here. You can also edit their families.')
     SearchingWidget.edit_words_button.setFont(edit_words_button_font)
     SearchingWidget.edit_words_button.clicked.connect(self.open_words_editing_widget)
     SearchingWidget.edit_words_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
@@ -138,8 +140,8 @@ class SearchingWidget(QWidget):
 
   @staticmethod
   def update_dictionary_words(profile_id, grade_id, subject_name):
-    SearchingWidget.dictionary_words = DBHandler.get_words_with_family(profile_id, grade_id, subject_name)
-    # SearchingWidget.dictionary_words = DBHandler.get_words(profile_id, grade_id, subject_name)
+    SearchingWidget.dictionary_words = get_words_with_family(profile_id, grade_id, subject_name)
+    # SearchingWidget.dictionary_words = get_words(profile_id, grade_id, subject_name)
     model = QStringListModel(SearchingWidget.dictionary_words, SearchingWidget.completer)
     SearchingWidget.completer.setModel(model)
 
@@ -181,16 +183,17 @@ class SearchingWidget(QWidget):
     from MainWidget.mainWidget import MainWidget
     MainWidget.add_word(word)
 
-    recent_search_exists = DBHandler.add_recent_search(word)
+    recent_search_exists = create_recent_search(word)
     if recent_search_exists:
       RecentSearchesWidget.remove_and_add_recent_search(word)
     else:
-      RecentSearchesWidget.add_recent_search(word, False)
+      RecentSearchesWidget.add_recent_search(word)
 
   @staticmethod
   def set_focus_to_search_bar():
     SearchingWidget.line_edit.setFocus()
 
   def open_words_editing_widget(self):
-    words_editing_dialog = WordsEditingWidget()
-    words_editing_dialog.exec()
+    from MainWidget.wordEditingWidget import WordEditingWidget
+    students_editing_dialog = WordEditingWidget()
+    students_editing_dialog.exec()

@@ -1,9 +1,11 @@
 from PyQt6.QtWidgets import QComboBox, QHBoxLayout, QLabel, QSizePolicy, QVBoxLayout, QWidget, QPushButton
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from Common.databaseHandler import DBHandler
 
 from MenuBar.settings import Settings
+
+from models.student import get_students, get_student_details
+from models.profile import get_profile_details
 
 class CurrentSearch(QWidget):
   subject_selector_active = False
@@ -18,18 +20,21 @@ class CurrentSearch(QWidget):
     searched_word_font = QFont(Settings.font, 20)
     combo_box_font = QFont(Settings.font, 14)
 
-    self.searched_word = QLabel('Enter a word.')
-    self.searched_word.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    self.searched_word.setMaximumHeight(100)
-    self.searched_word.setFont(searched_word_font)
+    CurrentSearch.searched_word = QLabel('Enter a word.')
+    CurrentSearch.searched_word.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    CurrentSearch.searched_word.setMaximumHeight(100)
+    CurrentSearch.searched_word.setFont(searched_word_font)
 
     self.search_details = QWidget()
     self.search_details.layout = QVBoxLayout(self.search_details)
 
-    self.open_student_data_widget_button = QPushButton('Edit students/profiles list')
-    self.open_student_data_widget_button.setFont(combo_box_font)
-    self.open_student_data_widget_button.clicked.connect(self.open_student_data_widget)
-    self.open_student_data_widget_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+    self.open_data_editing_widget_button = QPushButton('Edit Data')
+    self.open_data_editing_widget_button.setToolTip(
+      'You can create/update the students as well as their profiles.')
+
+    self.open_data_editing_widget_button.setFont(combo_box_font)
+    self.open_data_editing_widget_button.clicked.connect(self.open_data_editing_widget)
+    self.open_data_editing_widget_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
     CurrentSearch.student_selector = QComboBox()
     CurrentSearch.student_selector.setFont(combo_box_font)
@@ -53,17 +58,17 @@ class CurrentSearch(QWidget):
     CurrentSearch.profile_selector.setDisabled(True)
     CurrentSearch.subject_selector.setDisabled(True)
 
-    self.search_details.layout.addWidget(self.open_student_data_widget_button, alignment=Qt.AlignmentFlag.AlignRight)
+    self.search_details.layout.addWidget(self.open_data_editing_widget_button, alignment=Qt.AlignmentFlag.AlignRight)
     self.search_details.layout.addWidget(CurrentSearch.student_selector)
     self.search_details.layout.addWidget(CurrentSearch.profile_selector)
     self.search_details.layout.addWidget(CurrentSearch.subject_selector)
 
-    self.layout.addWidget(self.searched_word)
+    self.layout.addWidget(CurrentSearch.searched_word)
     self.layout.addSpacing(100)
     self.layout.addWidget(self.search_details)
 
     self.search_details.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-    self.searched_word.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+    CurrentSearch.searched_word.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
     CurrentSearch.student_selector.activated.connect(self.student_selector_activated_initial)
     CurrentSearch.profile_selector.activated.connect(CurrentSearch.profile_selector_activated_initial)
@@ -82,19 +87,15 @@ class CurrentSearch(QWidget):
   def style(self):
     from Common.styles import Styles
     self.setStyleSheet(Styles.current_search_style)
-    self.searched_word.setStyleSheet(Styles.searched_word_style)
+    CurrentSearch.searched_word.setStyleSheet(Styles.searched_word_style)
 
-  def get_current_word(self): # got to change
-    return self.searched_word.text()
-
-  def open_student_data_widget(self):
-    from MainWidget.studentsDataEditingWidget import StudentsDataEditingWidget
-    students_editing_dialog = StudentsDataEditingWidget()
+  def open_data_editing_widget(self):
+    from MainWidget.dataEditingWidget import DataEditingWidget
+    students_editing_dialog = DataEditingWidget()
     students_editing_dialog.exec()
 
   def get_available_students(self):
-    from Common.databaseHandler import DBHandler
-    students = DBHandler.get_students()
+    students = get_students()
     return students
 
   @staticmethod
@@ -123,8 +124,7 @@ class CurrentSearch(QWidget):
 
     student_name = CurrentSearch.student_selector.currentText()
     CurrentSearch.profile_selector.clear()
-    from Common.databaseHandler import DBHandler
-    CurrentSearch.student_id, student_profiles = DBHandler.get_student_details(student_name)
+    CurrentSearch.student_id, student_profiles = get_student_details(student_name)
     if len(student_profiles) == 0:
       CurrentSearch.profile_selector.addItem('This student has no profiles.')
       CurrentSearch.profile_selector.setDisabled(True)
@@ -157,7 +157,7 @@ class CurrentSearch(QWidget):
 
     from MainWidget.mainWindow import MainWindow
     MainWindow.clear_previous_subject_details()
-    CurrentSearch.profile_id, CurrentSearch.grade_id, grade_name, profile_subjects = DBHandler.get_profile_details(CurrentSearch.profile_selector.currentText())
+    CurrentSearch.profile_id, CurrentSearch.grade_id, grade_name, profile_subjects = get_profile_details(CurrentSearch.profile_selector.currentText())
     CurrentSearch.subject_selector.clear()
     CurrentSearch.subject_selector.addItem('Please select a subject...')
     CurrentSearch.subject_selector.addItems(profile_subjects)

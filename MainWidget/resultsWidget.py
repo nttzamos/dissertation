@@ -1,12 +1,13 @@
+from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget, QMessageBox
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
 
 from MainWidget.result import Result
 from MenuBar.settings import Settings
 
-# import enchant
-from queue import PriorityQueue
+from models.family import get_family_id, get_family_words
+from models.word import get_word_id, word_exists
+from Common.wiktionary_parser import fetch_word_details
 
 class ResultsWidget(QWidget):
   scroll_area_widget_contents = QWidget()
@@ -46,25 +47,65 @@ class ResultsWidget(QWidget):
     ResultsWidget.hide_placeholder()
     ResultsWidget.clear_previous_results()
     ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-    results_words = ResultsWidget.get_results(word)
+    offline_result_words, online_saved_result_words, online_result_words, show_error = ResultsWidget.get_results(word)
 
-    for i in range(len(results_words)):
+    i = 0
+    for word in offline_result_words:
       row = i // ResultsWidget.grid_columns
       column = i % ResultsWidget.grid_columns
-      result = Result(results_words[i], widget_width=ResultsWidget.single_result_width)
+      result = Result(word, widget_width=ResultsWidget.single_result_width, state = 1)
       ResultsWidget.widget_list.append(result)
       ResultsWidget.grid_layout.addWidget(result, row, column)
+      i += 1
+
+    for word in online_saved_result_words:
+      row = i // ResultsWidget.grid_columns
+      column = i % ResultsWidget.grid_columns
+      result = Result(word, widget_width=ResultsWidget.single_result_width, state = 2)
+      ResultsWidget.widget_list.append(result)
+      ResultsWidget.grid_layout.addWidget(result, row, column)
+      i += 1
+
+    for word in online_result_words:
+      row = i // ResultsWidget.grid_columns
+      column = i % ResultsWidget.grid_columns
+      result = Result(word, widget_width = ResultsWidget.single_result_width, state = 3)
+      ResultsWidget.widget_list.append(result)
+      ResultsWidget.grid_layout.addWidget(result, row, column)
+      i += 1
+
+    if show_error:
+      ResultsWidget.show_no_internet_message()
 
   @staticmethod
   def get_results(word):
     from MainWidget.currentSearch import CurrentSearch
     grade_id = CurrentSearch.grade_id
-    from Common.databaseHandler import DBHandler
-    word_id = DBHandler.get_word_id(grade_id, word)
-    family_id = DBHandler.get_family_id(grade_id, word_id)
-    family_words = DBHandler.get_family_words(grade_id, family_id)
-    family_words.remove(word)
-    return family_words
+    word_id = get_word_id(grade_id, word)
+    family_id = get_family_id(grade_id, word_id)
+    offline_result_words = get_family_words(grade_id, family_id)
+    offline_result_words.remove(word)
+    offline_result_words.sort()
+
+    if Settings.get_setting('word_family_discovery') == 'online_wiktionary':
+      try:
+        online_family_words, unused = fetch_word_details(word)
+      except RuntimeError:
+        return offline_result_words, [], [], True
+
+      online_family_words = list(set(online_family_words) - set(offline_result_words))
+      online_saved_family_words = []
+      for online_word in online_family_words:
+        if word_exists(grade_id, online_word):
+          online_saved_family_words.append(online_word)
+
+      online_family_words = list(set(online_family_words) - set(online_saved_family_words))
+      online_family_words.sort()
+      online_saved_family_words.sort()
+
+      return offline_result_words, online_saved_family_words, online_family_words, False
+    else:
+      return offline_result_words, [], [], False
 
   @staticmethod
   def clear_previous_results():
@@ -86,3 +127,11 @@ class ResultsWidget(QWidget):
     if ResultsWidget.show_placeholder_label:
       ResultsWidget.show_placeholder_label = False
       ResultsWidget.placeholder_label.hide()
+
+  @staticmethod
+  def show_no_internet_message():
+    title = 'No Internet Connection'
+    text = 'The online wiktionary setting is enabled but you have no internet connection.'
+    answer = QMessageBox.critical(None, title, text, QMessageBox.StandardButton.Ok)
+    if answer == QMessageBox.StandardButton.Ok:
+      return

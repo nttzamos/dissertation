@@ -4,7 +4,8 @@ from PyQt6.QtGui import QFont
 
 from ItemWidgets.recentSearch import RecentSearch
 from MenuBar.settings import Settings
-from Common.databaseHandler import DBHandler
+from models.recent_search import get_recent_searches
+from models.starred_word import starred_word_exists, get_starred_words
 
 class RecentSearchesWidget(QWidget):
   scroll_area_widget_contents = QWidget()
@@ -66,8 +67,8 @@ class RecentSearchesWidget(QWidget):
   def populate():
     RecentSearchesWidget.clear_previous_recent_searches()
 
-    recent_searches = DBHandler.get_recent_searches()
-    starred_words = DBHandler.get_starred_words()
+    recent_searches = get_recent_searches()
+    starred_words = get_starred_words()
 
     if len(recent_searches) == 0:
       RecentSearchesWidget.show_placeholder(text = 'You do not have any Recent Searches')
@@ -82,14 +83,13 @@ class RecentSearchesWidget(QWidget):
       RecentSearchesWidget.counter -= 1
 
   @staticmethod
-  def add_recent_search(word, condition):
+  def add_recent_search(word):
     if RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.hide_placeholder()
 
-    condition = DBHandler.starred_word_exists(word)
-    widget = RecentSearch(word, condition)
-    RecentSearchesWidget.widget_list.append(widget)
-    RecentSearchesWidget.grid_layout.addWidget(widget, RecentSearchesWidget.counter, 0)
+    recent_search = RecentSearch(word, starred_word_exists(word))
+    RecentSearchesWidget.widget_list.append(recent_search)
+    RecentSearchesWidget.grid_layout.addWidget(recent_search, RecentSearchesWidget.counter, 0)
     RecentSearchesWidget.counter -= 1
 
   @staticmethod

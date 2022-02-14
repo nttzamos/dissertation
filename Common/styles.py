@@ -187,9 +187,9 @@ class Styles():
       # QDialog { background-color: #5C3D2E }
 
   if theme == 'light':
-    error_message_labelStyle = """QLabel { color: red }"""
+    error_message_label_style = """QLabel { color: red }"""
   else:
-    error_message_labelStyle = """QLabel { color: red }"""
+    error_message_label_style = """QLabel { color: red }"""
 
   if theme == 'light':
     current_search_style = """
@@ -271,6 +271,34 @@ class Styles():
       QComboBox { color: black }"""
 
   if theme == 'light':
+    word_addition_style = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }"""
+  else:
+    word_addition_style = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }
+      QComboBox { color: black }"""
+
+  if theme == 'light':
+    word_update_style = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }"""
+  else:
+    word_update_style = """
+      QWidget { background-color: none }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { color: black }
+      QPushButton:hover { background-color: grey }
+      QComboBox { color: black }"""
+
+  if theme == 'light':
     results_widget_style = """
       QWidget { background-color: #DEDEDE }
       QLabel { color: black }
@@ -283,7 +311,7 @@ class Styles():
       # QWidget { background-color: #2D2424 }
 
   if theme == 'light':
-    result_style = """
+    offline_result_style = """
       QWidget { background-color: white; border-radius: 10px}
       QPushButton { background-color: white }
       QPushButton:hover { background-color: grey }
@@ -293,7 +321,7 @@ class Styles():
       QPushButton { padding-top: 5px }
       QLabel { color: black }"""
   else:
-    result_style = """
+    offline_result_style = """
       QWidget { background-color: black; border-radius: 10px}
       QPushButton { background-color: white }
       QPushButton:hover { background-color: grey }
@@ -302,3 +330,64 @@ class Styles():
       QPushButton { padding-bottom: 5px }
       QPushButton { padding-top: 5px }
       QLabel { color: white }"""
+
+  if theme == 'light':
+    online_saved_result_style = """
+      QWidget { background-color: white; border-radius: 10px; border: 2px solid blue }
+      QPushButton { background-color: white }
+      QPushButton:hover { background-color: grey }
+      QPushButton { border-radius: 12px }
+      QPushButton { border: 1px solid black }
+      QPushButton { padding-bottom: 5px }
+      QPushButton { padding-top: 5px }
+      QLabel { color: black; border-radius: none; border: none; background-color: none }"""
+  else:
+    online_saved_result_style = """
+      QWidget { background-color: white; border-radius: 10px; border: 2px solid red }
+      QPushButton { background-color: white }
+      QPushButton:hover { background-color: grey }
+      QPushButton { border-radius: 12px }
+      QPushButton { border: 1px solid black }
+      QPushButton { padding-bottom: 5px }
+      QPushButton { padding-top: 5px }
+      QLabel { color: black; border-radius: none; border: none; background-color: none }"""
+
+  if theme == 'light':
+    online_result_style = """
+      QWidget { background-color: white; border-radius: 10px; border: 2px solid red }
+      QPushButton { background-color: white }
+      QPushButton:hover { background-color: grey }
+      QPushButton { border-radius: 12px }
+      QPushButton { border: 1px solid black }
+      QPushButton { padding-bottom: 5px }
+      QPushButton { padding-top: 5px }
+      QLabel { color: black; border-radius: none; border: none; background-color: none }"""
+  else:
+    online_result_style = """
+      QWidget { background-color: white; border-radius: 10px; border: 2px solid red }
+      QPushButton { background-color: white }
+      QPushButton:hover { background-color: grey }
+      QPushButton { border-radius: 12px }
+      QPushButton { border: 1px solid black }
+      QPushButton { padding-bottom: 5px }
+      QPushButton { padding-top: 5px }
+      QLabel { color: black; border-radius: none; border: none; background-color: none }"""
+
+  if theme == 'light':
+    result_buttons_style = """
+      QWidget { background-color: none; border-radius: none; border: none }
+      QPushButton { background-color: white }
+      QPushButton:hover { background-color: grey }
+      QPushButton { border-radius: 12px }
+      QPushButton { border: 1px solid black }
+      QPushButton { padding-bottom: 5px }
+      QPushButton { padding-top: 5px }"""
+  else:
+    result_buttons_style = """
+      QWidget { background-color: none; border-radius: none; border: none }
+      QPushButton { background-color: white }
+      QPushButton:hover { background-color: grey }
+      QPushButton { border-radius: 12px }
+      QPushButton { border: 1px solid black }
+      QPushButton { padding-bottom: 5px }
+      QPushButton { padding-top: 5px }"""

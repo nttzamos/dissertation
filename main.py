@@ -5,12 +5,12 @@ import sys
 app = QApplication(sys.argv)
 
 # Imports must be below here
-# from Common.pdfParser import PdfParser
-# for grade in range(1, 7):
+# from Common.pdf_parser import PdfParser
+# for grade in range(1, 2):
 #   PdfParser.convert_books_to_text_files(grade)
 
-from Common.databaseHandler import DBHandler
-DBHandler.initialize_databases()
+from Common.database_handler import initialize_databases
+initialize_databases()
 
 from MenuBar.settings import Settings
 screen_width = app.primaryScreen().size().width()

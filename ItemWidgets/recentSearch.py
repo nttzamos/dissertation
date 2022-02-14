@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
 from PyQt6.QtGui import QFont, QIcon
 
-from Common.databaseHandler import DBHandler
+from models.recent_search import create_recent_search, destroy_recent_search
+from models.starred_word import create_starred_word, destroy_starred_word
 
 class RecentSearch(QWidget):
   def __init__(self, word, is_starred):
@@ -67,7 +68,7 @@ class RecentSearch(QWidget):
     from MainWidget.mainWidget import MainWidget
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget
     MainWidget.add_word(word)
-    DBHandler.add_recent_search(word)
+    create_recent_search(word)
     RecentSearchesWidget.remove_and_add_recent_search(word)
 
   def toggle_starred_state(self):
@@ -75,10 +76,10 @@ class RecentSearch(QWidget):
     word = self.word.text()
 
     if self.is_starred:
-      DBHandler.remove_starred_word(word)
+      destroy_starred_word(word)
       StarredWordsWidget.toggle_starred_word_starred_state(word)
     else:
-      DBHandler.add_starred_word(word)
+      create_starred_word(word)
       StarredWordsWidget.add_starred_word(word)
 
     self.toggle_starred_icon()
@@ -93,7 +94,7 @@ class RecentSearch(QWidget):
 
   def remove_word(self):
     from SideWidgets.recentSearchesWidget import RecentSearchesWidget
-    DBHandler.remove_recent_search(self.word.text())
+    destroy_recent_search(self.word.text())
     self.hide()
     RecentSearchesWidget.remove_recent_search(self)
     self.deleteLater()

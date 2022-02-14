@@ -3,8 +3,9 @@ from PyQt6.QtCore import QStringListModel, QTimer, Qt
 from PyQt6.QtGui import QFont, QIcon
 
 from MenuBar.settings import Settings
-from Common.databaseHandler import DBHandler
+from Common.database_handler import get_grades, get_grade_words, get_candidate_words
 
+from models.word import update_word, destroy_word
 class WordsEditingWidget(QDialog):
   def __init__(self):
     super().__init__()
@@ -27,7 +28,7 @@ class WordsEditingWidget(QDialog):
     self.grade_selector = QComboBox()
     self.grade_selector.activated.connect(self.update_words_list)
     self.grade_selector.setFont(combo_box_font)
-    self.grade_selector.addItems(DBHandler.get_grades())
+    self.grade_selector.addItems(get_grades())
 
     grade_selection_widget = QGroupBox('Grade Selection')
     grade_selection_widget.setFont(section_label_font)
@@ -78,7 +79,7 @@ class WordsEditingWidget(QDialog):
     self.word_selection_line_edit = QLineEdit()
     self.word_selection_line_edit.setFont(line_edit_font)
     self.word_selection_line_edit.returnPressed.connect(self.word_selected)
-    self.dictionary_words = DBHandler.get_grade_words(1)
+    self.dictionary_words = get_grade_words(1)
     self.completer = QCompleter(self.dictionary_words)
     self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
     self.completer.popup().setFont(completer_font)
@@ -138,7 +139,7 @@ class WordsEditingWidget(QDialog):
   def style(self):
     from Common.styles import Styles
     self.setStyleSheet(Styles.words_editing_widget_style)
-    self.error_message_label.setStyleSheet(Styles.error_message_labelStyle)
+    self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 
   def word_selected(self):
     self.searched_word = self.word_selection_line_edit.text()
@@ -171,16 +172,16 @@ class WordsEditingWidget(QDialog):
 
   def update_words_list(self, unusedVariable):
     if self.show_candidates.isChecked():
-      self.dictionary_words = DBHandler.get_candidate_words(self.grade_selector.currentIndex() + 1)
+      self.dictionary_words = get_candidate_words(self.grade_selector.currentIndex() + 1)
     else:
-      self.dictionary_words = DBHandler.get_grade_words(self.grade_selector.currentIndex() + 1)
+      self.dictionary_words = get_grade_words(self.grade_selector.currentIndex() + 1)
 
     model = QStringListModel(self.dictionary_words, self.completer)
     self.completer.setModel(model)
 
   def update_word(self):
     new_word = self.word_editing_line_edit.text()
-    DBHandler.update_word(self.searched_word, new_word, self.get_grades())
+    update_word(self.searched_word, new_word, self.get_grades())
     self.update_dictionary_words(self.searched_word, new_word)
     QTimer.singleShot(0, self.word_selection_line_edit.clear)
     QTimer.singleShot(0, self.word_editing_line_edit.clear)
@@ -198,7 +199,7 @@ class WordsEditingWidget(QDialog):
       self.delete_word()
 
   def delete_word(self):
-    DBHandler.delete_word(self.searched_word, self.get_grades())
+    destroy_word(self.searched_word, self.get_grades())
     self.update_dictionary_words(self.searched_word)
     QTimer.singleShot(0, self.word_selection_line_edit.clear)
 
@@ -221,10 +222,10 @@ class WordsEditingWidget(QDialog):
 
     return grades
 
-  def update_dictionary_words(self, oldWord, new_word=None):
+  def update_dictionary_words(self, old_word, new_word = None):
     if not (new_word == None or new_word in self.dictionary_words or self.show_candidates.isChecked()):
       self.dictionary_words.append(new_word)
 
-    self.dictionary_words.remove(oldWord)
+    self.dictionary_words.remove(old_word)
     model = QStringListModel(self.dictionary_words, self.completer)
     self.completer.setModel(model)
