@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLin
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtGui import QFont
 
-from Common.database_handler import get_grades, get_grade_subjects
-from MenuBar.settings import Settings
+from shared.database_handler import get_grades, get_grade_subjects
+from menu.settings import Settings
 
 from models.profile import create_profile, profile_name_exists
 
@@ -88,7 +88,7 @@ class ProfileAdditionWIdget(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.profile_addition_style)
 
   def grade_selector_activated(self, index):
@@ -125,13 +125,13 @@ class ProfileAdditionWIdget(QWidget):
 
     create_profile(profile_name, self.grade_selector.currentIndex() + 1, subjects)
 
-    from MainWidget.profileUpdateWidget import ProfileUpdateWidget
+    from central.profileUpdateWidget import ProfileUpdateWidget
     ProfileUpdateWidget.add_profile(profile_name)
 
-    from MainWidget.studentAdditionWidget import StudentAdditionWidget
+    from central.studentAdditionWidget import StudentAdditionWidget
     StudentAdditionWidget.add_profile(profile_name)
 
-    from MainWidget.studentUpdateWidget import StudentUpdateWidget
+    from central.studentUpdateWidget import StudentUpdateWidget
     StudentUpdateWidget.add_profile(profile_name)
 
   def profile_is_invalid(self):

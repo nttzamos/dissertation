@@ -1,10 +1,10 @@
-from Common.database_handler import connect_to_database, get_grade_table_name
+from shared.database_handler import connect_to_database, get_grade_table_name
 from models.profile import get_profile_subject_ids
 from models.subject import get_subject_id
 from models.word import get_word_id, word_exists_in_subject
 
 def create_starred_word(word):
-  from MainWidget.currentSearch import CurrentSearch
+  from central.currentSearch import CurrentSearch
   student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
   if subject_name == 'All Subjects':
     subject_ids = get_profile_subject_ids(profile_id)
@@ -22,7 +22,7 @@ def create_starred_word(word):
   con.close()
 
 def starred_word_exists(word):
-  from MainWidget.currentSearch import CurrentSearch
+  from central.currentSearch import CurrentSearch
   student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
   if subject_name == 'All Subjects':
     subject_ids = get_profile_subject_ids(profile_id)
@@ -45,7 +45,7 @@ def starred_word_exists(word):
   return False
 
 def destroy_starred_word(word):
-  from MainWidget.currentSearch import CurrentSearch
+  from central.currentSearch import CurrentSearch
   student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
   if subject_name == 'All Subjects':
     subject_ids = get_profile_subject_ids(profile_id)
@@ -64,7 +64,7 @@ def destroy_starred_word(word):
   con.close()
 
 def get_starred_words():
-  from MainWidget.currentSearch import CurrentSearch
+  from central.currentSearch import CurrentSearch
   student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
 
   con, cur = connect_to_database()

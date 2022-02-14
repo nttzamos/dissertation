@@ -1,7 +1,7 @@
 import timeit
 
-from Common.wiktionary_parser import fetch_word_details
-from Common.database_handler import connect_to_database, get_family_table_name, get_grade_words, get_subject_table_name, get_grade_table_name
+from shared.wiktionary_parser import fetch_word_details
+from shared.database_handler import connect_to_database, get_family_table_name, get_grade_words, get_subject_table_name, get_grade_table_name
 from models.profile import get_profile_subject_ids
 from models.subject import get_subject_id
 from models.word import get_word_id

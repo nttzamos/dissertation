@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLin
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QFont
 
-from MenuBar.settings import Settings
+from menu.settings import Settings
 
 from models.student import create_student, student_name_exists
 from models.profile import get_profiles
@@ -73,7 +73,7 @@ class StudentAdditionWidget(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.student_addition_style)
 
   def saveStudent(self):
@@ -96,10 +96,10 @@ class StudentAdditionWidget(QWidget):
 
     create_student(student_name, checked_profiles)
 
-    from MainWidget.studentUpdateWidget import StudentUpdateWidget
+    from central.studentUpdateWidget import StudentUpdateWidget
     StudentUpdateWidget.add_student(student_name)
 
-    from MainWidget.currentSearch import CurrentSearch
+    from central.currentSearch import CurrentSearch
     CurrentSearch.add_student(student_name)
 
   def student_is_invalid(self):

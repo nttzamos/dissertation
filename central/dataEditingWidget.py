@@ -1,17 +1,17 @@
 from PyQt6.QtWidgets import QVBoxLayout, QTabWidget, QDialog
 from PyQt6.QtGui import QIcon
 
-from MenuBar.settings import Settings
-from MainWidget.studentAdditionWidget import StudentAdditionWidget
-from MainWidget.studentUpdateWidget import StudentUpdateWidget
-from MainWidget.profileAdditionWIdget import ProfileAdditionWIdget
-from MainWidget.profileUpdateWidget import ProfileUpdateWidget
+from menu.settings import Settings
+from central.studentAdditionWidget import StudentAdditionWidget
+from central.studentUpdateWidget import StudentUpdateWidget
+from central.profileAdditionWIdget import ProfileAdditionWIdget
+from central.profileUpdateWidget import ProfileUpdateWidget
 
 class DataEditingWidget(QDialog):
   def __init__(self):
     super().__init__()
     self.setWindowTitle('Edit Data')
-    self.setWindowIcon(QIcon('Resources/windowIcon.svg'))
+    self.setWindowIcon(QIcon('resources/windowIcon.svg'))
     self.setFixedWidth(Settings.get_setting('screen_width') / 2)
 
     self.layout = QVBoxLayout(self)

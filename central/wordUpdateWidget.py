@@ -2,9 +2,9 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLin
 from PyQt6.QtCore import Qt, QStringListModel
 from PyQt6.QtGui import QFont
 
-from MenuBar.settings import Settings
+from menu.settings import Settings
 
-from Common.database_handler import get_grades, get_grade_words, get_grade_subjects
+from shared.database_handler import get_grades, get_grade_words, get_grade_subjects
 from models.word import get_word_subjects, word_exists, update_word, destroy_word
 
 class WordUpdateWidget(QWidget):
@@ -118,7 +118,7 @@ class WordUpdateWidget(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     # self.setStyleSheet(Styles.words_editing_widget_style)
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 
@@ -194,7 +194,7 @@ class WordUpdateWidget(QWidget):
     grade_id = self.grade_selector.currentIndex() + 1
     if self.searched_word != new_word:
       self.update_dictionary_words(self.searched_word, new_word)
-      from MainWidget.wordFamilyUpdateWidget import WordFamilyUpdateWidget
+      from central.wordFamilyUpdateWidget import WordFamilyUpdateWidget
       WordFamilyUpdateWidget.update_dictionary_words(self.searched_word, new_word)
 
     update_word(self.searched_word, new_word, grade_id, subjects_to_add, subjects_to_remove)
@@ -204,7 +204,7 @@ class WordUpdateWidget(QWidget):
     WordUpdateWidget.dictionary_words.remove(word)
     model = QStringListModel(WordUpdateWidget.dictionary_words, WordUpdateWidget.completer)
     WordUpdateWidget.completer.setModel(model)
-    from MainWidget.wordFamilyUpdateWidget import WordFamilyUpdateWidget
+    from central.wordFamilyUpdateWidget import WordFamilyUpdateWidget
     WordFamilyUpdateWidget.update_dictionary_words(word_to_remove = self.searched_word)
 
     self.word_widget.hide()

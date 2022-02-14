@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidg
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 
-from Common.styles import Styles
-from Common.database_handler import get_grade_subjects
+from shared.styles import Styles
+from shared.database_handler import get_grade_subjects
 from models.recent_search import create_recent_search
 from models.starred_word import create_starred_word, starred_word_exists, destroy_starred_word
 from models.word import create_word, word_exists
@@ -28,7 +28,7 @@ class Result(QWidget):
     # Word
     self.word_label = QLabel(self, text=word)
     self.word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    from MenuBar.settings import Settings
+    from menu.settings import Settings
     font = QFont(Settings.font, 20)
     self.word_label.setFont(font)
 
@@ -39,19 +39,19 @@ class Result(QWidget):
 
     self.add_to_dict_button = QPushButton()
     self.add_to_dict_button.setToolTip('Add this word to the selected subjects.')
-    self.add_to_dict_button.setIcon(QIcon('Resources/book1.png'))
+    self.add_to_dict_button.setIcon(QIcon('resources/book1.png'))
     self.add_to_dict_button.clicked.connect(self.add_word_to_dictionary)
     self.add_to_dict_button.setFixedWidth(30)
 
     self.add_to_family_button = QPushButton()
     self.add_to_family_button.setToolTip('Add this word to the family of the searched word.')
-    self.add_to_family_button.setIcon(QIcon('Resources/plus1.png'))
+    self.add_to_family_button.setIcon(QIcon('resources/plus1.png'))
     self.add_to_family_button.clicked.connect(self.add_word_to_family)
     self.add_to_family_button.setFixedWidth(30)
 
     self.remove_from_family_button = QPushButton()
     self.remove_from_family_button.setToolTip('Remove this word from the family of this word.')
-    self.remove_from_family_button.setIcon(QIcon('Resources/delete2.svg'))
+    self.remove_from_family_button.setIcon(QIcon('resources/delete2.svg'))
     self.remove_from_family_button.clicked.connect(self.remove_word_from_family)
     self.remove_from_family_button.setFixedWidth(30)
 
@@ -82,7 +82,7 @@ class Result(QWidget):
     self.buttons_widget.setStyleSheet(Styles.result_buttons_style)
 
   def add_word_to_dictionary(self):
-    from MainWidget.currentSearch import CurrentSearch
+    from central.currentSearch import CurrentSearch
     word = self.word_label.text()
     x, y, z, subject_names = CurrentSearch.get_current_selection_details()
     subject_names = [subject_names]
@@ -99,7 +99,7 @@ class Result(QWidget):
     if self.state == 3:
       self.add_word_to_dictionary()
 
-    from MainWidget.currentSearch import CurrentSearch
+    from central.currentSearch import CurrentSearch
     word = self.word_label.text()
     update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [word], [])
     self.state = 1
@@ -109,24 +109,24 @@ class Result(QWidget):
     self.buttons_widget.layout.addWidget(self.remove_from_family_button)
 
   def remove_word_from_family(self):
-    from MainWidget.currentSearch import CurrentSearch
+    from central.currentSearch import CurrentSearch
     word = self.word_label.text()
     update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [], [word])
     self.hide()
 
   def toggle_starred_state(self):
-    from SideWidgets.starredWordsWidget import StarredWordsWidget
-    from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+    from side.starredWordsWidget import StarredWordsWidget
+    from side.recentSearchesWidget import RecentSearchesWidget
     word = self.word_label.text()
 
     RecentSearchesWidget.toggle_recent_search_starred_icon(word)
     if self.is_starred:
       self.is_starred = False
-      self.star_button.setIcon(QIcon('Resources/unstarred.svg'))
+      self.star_button.setIcon(QIcon('resources/unstarred.svg'))
       destroy_starred_word(word)
       StarredWordsWidget.toggle_starred_word_starred_state(word)
     else:
       self.is_starred = True
-      self.star_button.setIcon(QIcon('Resources/starred.svg'))
+      self.star_button.setIcon(QIcon('resources/starred.svg'))
       create_starred_word(word)
       StarredWordsWidget.add_starred_word(word)

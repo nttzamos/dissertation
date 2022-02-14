@@ -2,10 +2,10 @@ from PyQt6.QtGui import QFont, QIcon, QKeySequence, QShortcut
 from PyQt6.QtWidgets import QCompleter, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QSizePolicy
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 
-from SideWidgets.recentSearchesWidget import RecentSearchesWidget
-from MenuBar.settings import Settings
-from Common.database_handler import get_grades, get_words
-from Common.styles import Styles
+from side.recentSearchesWidget import RecentSearchesWidget
+from menu.settings import Settings
+from shared.database_handler import get_grades, get_words
+from shared.styles import Styles
 
 from models.recent_search import create_recent_search
 from models.family import get_words_with_family
@@ -52,13 +52,13 @@ class SearchingWidget(QWidget):
     self.search_bar_widget.layout.setContentsMargins(10, 0, 0, 0)
 
     self.clear_search_button = QPushButton()
-    self.clear_search_button.setIcon(QIcon('Resources/clear_search.png'))
+    self.clear_search_button.setIcon(QIcon('resources/clear_search.png'))
     self.clear_search_button.clicked.connect(self.clear_search)
     self.hide_clear_search_button = True
     self.clear_search_button.hide()
 
     self.search_button = QPushButton()
-    self.search_button.setIcon(QIcon('Resources/search.png'))
+    self.search_button.setIcon(QIcon('resources/search.png'))
     self.search_button.clicked.connect(self.search_with_enter)
 
     self.search_bar_widget.layout.setSpacing(0)
@@ -180,7 +180,7 @@ class SearchingWidget(QWidget):
     SearchingWidget.set_focus_to_search_bar()
 
   def add_recent_search(self, word):
-    from MainWidget.mainWidget import MainWidget
+    from central.mainWidget import MainWidget
     MainWidget.add_word(word)
 
     recent_search_exists = create_recent_search(word)
@@ -194,6 +194,6 @@ class SearchingWidget(QWidget):
     SearchingWidget.line_edit.setFocus()
 
   def open_words_editing_widget(self):
-    from MainWidget.wordEditingWidget import WordEditingWidget
+    from central.wordEditingWidget import WordEditingWidget
     students_editing_dialog = WordEditingWidget()
     students_editing_dialog.exec()

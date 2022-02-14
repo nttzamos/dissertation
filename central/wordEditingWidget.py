@@ -1,16 +1,16 @@
 from PyQt6.QtWidgets import QVBoxLayout, QTabWidget, QDialog
 from PyQt6.QtGui import QIcon
 
-from MenuBar.settings import Settings
-from MainWidget.wordAdditionWidget import WordAdditionWIdget
-from MainWidget.wordUpdateWidget import WordUpdateWidget
-from MainWidget.wordFamilyUpdateWidget import WordFamilyUpdateWidget
+from menu.settings import Settings
+from central.wordAdditionWidget import WordAdditionWIdget
+from central.wordUpdateWidget import WordUpdateWidget
+from central.wordFamilyUpdateWidget import WordFamilyUpdateWidget
 
 class WordEditingWidget(QDialog):
   def __init__(self):
     super().__init__()
     self.setWindowTitle('Edit Words')
-    self.setWindowIcon(QIcon('Resources/windowIcon.svg'))
+    self.setWindowIcon(QIcon('resources/windowIcon.svg'))
     self.setFixedWidth(Settings.get_setting('screen_width') / 2)
 
     self.layout = QVBoxLayout(self)

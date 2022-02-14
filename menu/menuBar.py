@@ -2,8 +2,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QWidget
 
-from MenuBar.settings import Settings
-from MenuBar.settingsWidget import SettingsWidget
+from menu.settings import Settings
+from menu.settingsWidget import SettingsWidget
 
 class MenuBar(QWidget):
   def __init__(self, parent):
@@ -16,7 +16,7 @@ class MenuBar(QWidget):
     self.setMaximumHeight(30)
 
     self.application_icon = QPushButton()
-    self.application_icon.setIcon(QIcon('Resources/windowIcon.svg'))
+    self.application_icon.setIcon(QIcon('resources/windowIcon.svg'))
     self.application_icon.setFixedHeight(30)
     self.application_icon.setFixedWidth(30)
 
@@ -26,27 +26,27 @@ class MenuBar(QWidget):
 
     self.settings_button = QPushButton()
     self.settings_button.setToolTip('Settings')
-    self.settings_button.setIcon(QIcon('Resources/settings.png'))
+    self.settings_button.setIcon(QIcon('resources/settings.png'))
     self.settings_button.setFixedHeight(30)
     self.settings_button.setFixedWidth(30)
     self.settings_button.clicked.connect(self.open_settings)
 
     self.minimize_window_button = QPushButton()
     self.minimize_window_button.setToolTip('Minimize Application')
-    self.minimize_window_button.setIcon(QIcon('Resources/minimizeWindow.png'))
+    self.minimize_window_button.setIcon(QIcon('resources/minimizeWindow.png'))
     self.minimize_window_button.setFixedHeight(30)
     self.minimize_window_button.setFixedWidth(30)
     self.minimize_window_button.clicked.connect(self.minimize_window)
 
     self.restore_down_window_button = QPushButton()
-    self.restore_down_window_button.setIcon(QIcon('Resources/restoreDownWindow.png'))
+    self.restore_down_window_button.setIcon(QIcon('resources/restoreDownWindow.png'))
     self.restore_down_window_button.setFixedHeight(30)
     self.restore_down_window_button.setFixedWidth(30)
     self.restore_down_window_button.clicked.connect(self.restore_down_window)
 
     self.close_window_button = QPushButton()
     self.close_window_button.setToolTip('Exit Application')
-    self.close_window_button.setIcon(QIcon('Resources/closeWindow.png'))
+    self.close_window_button.setIcon(QIcon('resources/closeWindow.png'))
     self.close_window_button.setFixedHeight(30)
     self.close_window_button.setFixedWidth(30)
     self.close_window_button.clicked.connect(self.close_window)
@@ -62,7 +62,7 @@ class MenuBar(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.menu_bar_style)
     self.application_icon.setStyleSheet(Styles.application_icon_style)
     self.close_window_button.setStyleSheet(Styles.close_window_button_style)

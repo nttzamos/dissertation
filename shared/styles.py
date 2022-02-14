@@ -1,5 +1,5 @@
 class Styles():
-  from MenuBar.settings import Settings
+  from menu.settings import Settings
   theme = Settings.get_setting('theme')
 
   if theme == 'light':

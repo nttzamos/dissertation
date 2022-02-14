@@ -2,9 +2,9 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLin
 from PyQt6.QtCore import Qt, QTimer, QStringListModel
 from PyQt6.QtGui import QFont
 
-from Common.database_handler import get_grades, get_grade_words
+from shared.database_handler import get_grades, get_grade_words
 from models.family import get_word_id, get_family_id, get_family_words, update_word_family
-from MenuBar.settings import Settings
+from menu.settings import Settings
 
 class WordFamilyUpdateWidget(QWidget):
   def __init__(self):
@@ -94,7 +94,7 @@ class WordFamilyUpdateWidget(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     # self.setStyleSheet(Styles.words_editing_widget_style)
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 

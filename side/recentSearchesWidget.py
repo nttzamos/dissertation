@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidg
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from ItemWidgets.recentSearch import RecentSearch
-from MenuBar.settings import Settings
+from item.recentSearch import RecentSearch
+from menu.settings import Settings
 from models.recent_search import get_recent_searches
 from models.starred_word import starred_word_exists, get_starred_words
 
@@ -54,7 +54,7 @@ class RecentSearchesWidget(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.title_label.setStyleSheet(Styles.side_widgets_title_label_style)
     self.setStyleSheet(Styles.side_widgets_style)
 

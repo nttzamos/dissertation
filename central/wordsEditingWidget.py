@@ -2,15 +2,15 @@ from PyQt6.QtWidgets import QVBoxLayout, QLineEdit, QComboBox, QDialog, QLabel, 
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 from PyQt6.QtGui import QFont, QIcon
 
-from MenuBar.settings import Settings
-from Common.database_handler import get_grades, get_grade_words, get_candidate_words
+from menu.settings import Settings
+from shared.database_handler import get_grades, get_grade_words, get_candidate_words
 
 from models.word import update_word, destroy_word
 class WordsEditingWidget(QDialog):
   def __init__(self):
     super().__init__()
     self.setWindowTitle('Edit Dictionary Words')
-    self.setWindowIcon(QIcon('Resources/windowIcon.svg'))
+    self.setWindowIcon(QIcon('resources/windowIcon.svg'))
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 0, 20, 15)
@@ -137,7 +137,7 @@ class WordsEditingWidget(QDialog):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.words_editing_widget_style)
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 

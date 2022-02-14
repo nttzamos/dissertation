@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QGridLayout, QHBoxLayout, QVB
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 from PyQt6.QtGui import QFont
 
-from MenuBar.settings import Settings
+from menu.settings import Settings
 
 import sqlite3
 

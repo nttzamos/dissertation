@@ -1,11 +1,11 @@
 from PyQt6.QtGui import QFont
 
-from ItemWidgets.recentSearch import RecentSearch
+from item.recentSearch import RecentSearch
 
 import pickledb
 
 class Settings():
-  settings_database_file = 'MenuBar/settings.json'
+  settings_database_file = 'menu/settings.json'
   font = QFont().family()
 
   @staticmethod
@@ -48,7 +48,7 @@ class Settings():
       right_widget_width = screen_width - left_widget_width - 2
       settings_database.set('right_widget_width', right_widget_width)
 
-      from MainWidget.result import Result
+      from central.result import Result
       long_result = Result('WWWWWWWWWW', initial=True) # 10
       single_result_width = long_result.sizeHint().width()
       settings_database.set('single_result_width', single_result_width)

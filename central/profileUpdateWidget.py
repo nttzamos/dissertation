@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLin
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from Common.database_handler import get_grades, get_grade_subjects
-from MenuBar.settings import Settings
+from shared.database_handler import get_grades, get_grade_subjects
+from menu.settings import Settings
 
 from models.profile import *
 
@@ -113,7 +113,7 @@ class ProfileUpdateWidget(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.profile_update_style)
 
   def profile_selector_activated_initial(self, index):
@@ -164,13 +164,13 @@ class ProfileUpdateWidget(QWidget):
     old_profile_name = ProfileUpdateWidget.profile_selector.currentText()
     new_profile_name = self.name_line_edit.text()
 
-    from MainWidget.currentSearch import CurrentSearch
+    from central.currentSearch import CurrentSearch
     CurrentSearch.update_profile(old_profile_name, new_profile_name)
 
-    from MainWidget.studentAdditionWidget import StudentAdditionWidget
+    from central.studentAdditionWidget import StudentAdditionWidget
     StudentAdditionWidget.update_profile(old_profile_name, new_profile_name)
 
-    from MainWidget.studentUpdateWidget import StudentUpdateWidget
+    from central.studentUpdateWidget import StudentUpdateWidget
     StudentUpdateWidget.update_profile(old_profile_name, new_profile_name)
 
     self.profile_selector.setItemText(self.profile_selector.currentIndex(), new_profile_name)
@@ -203,13 +203,13 @@ class ProfileUpdateWidget(QWidget):
     for check_box in self.check_boxes:
       self.subjects_selection_widget.layout.removeWidget(check_box)
 
-    from MainWidget.studentAdditionWidget import StudentAdditionWidget
+    from central.studentAdditionWidget import StudentAdditionWidget
     StudentAdditionWidget.remove_profile(ProfileUpdateWidget.profile_selector.currentText())
 
-    from MainWidget.studentUpdateWidget import StudentUpdateWidget
+    from central.studentUpdateWidget import StudentUpdateWidget
     StudentUpdateWidget.remove_profile(ProfileUpdateWidget.profile_selector.currentText())
 
-    from MainWidget.currentSearch import CurrentSearch
+    from central.currentSearch import CurrentSearch
     CurrentSearch.remove_profiles([ProfileUpdateWidget.profile_selector.currentText()])
 
     ProfileUpdateWidget.profile_selector.removeItem(ProfileUpdateWidget.profile_selector.currentIndex())

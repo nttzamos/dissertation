@@ -2,13 +2,13 @@ from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QWidge
 from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 
-from MenuBar.settings import Settings
+from menu.settings import Settings
 
 class SettingsWidget(QDialog):
   def __init__(self):
     super().__init__()
     self.setWindowTitle('Settings')
-    self.setWindowIcon(QIcon('Resources/windowIcon.svg'))
+    self.setWindowIcon(QIcon('resources/windowIcon.svg'))
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 20, 20, 20)
@@ -112,7 +112,7 @@ class SettingsWidget(QDialog):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.settings_widget_style)
 
   def maximum_results_changed(self):
@@ -124,7 +124,7 @@ class SettingsWidget(QDialog):
     Settings.set_boolean_setting(setting_name, new_value)
 
     if setting_name == 'show_edit_dict_words_button':
-      from MainWidget.searchingWidget import SearchingWidget
+      from central.searchingWidget import SearchingWidget
       SearchingWidget.toggle_edit_words_button_visibility(new_value)
 
   def light_theme_button_clicked(self):

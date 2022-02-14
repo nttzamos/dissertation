@@ -3,7 +3,7 @@ from os import listdir
 import sqlite3
 import re
 
-from Common.pdf_parser import PdfParser
+from shared.pdf_parser import PdfParser
 
 databases_directory_path = 'Databases/'
 database_file = 'database.db'

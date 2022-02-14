@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLab
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from MenuBar.settings import Settings
+from menu.settings import Settings
 
 from models.student import *
 from models.profile import get_profiles
@@ -100,7 +100,7 @@ class StudentUpdateWidget(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.student_update_style)
 
   def student_selector_activated_initial(self, index):
@@ -146,7 +146,7 @@ class StudentUpdateWidget(QWidget):
         return
 
     new_student_name = self.name_line_edit.text()
-    from MainWidget.currentSearch import CurrentSearch
+    from central.currentSearch import CurrentSearch
     CurrentSearch.update_student(StudentUpdateWidget.student_selector.currentText(), new_student_name)
     self.student_selector.setItemText(self.student_selector.currentIndex(), new_student_name)
     update_student_name(self.student_id, new_student_name)
@@ -171,7 +171,7 @@ class StudentUpdateWidget(QWidget):
     for check_box in StudentUpdateWidget.check_boxes:
       StudentUpdateWidget.profiles_selection_widget.layout.removeWidget(check_box)
 
-    from MainWidget.currentSearch import CurrentSearch
+    from central.currentSearch import CurrentSearch
     CurrentSearch.remove_student(StudentUpdateWidget.student_selector.currentText())
 
     StudentUpdateWidget.student_selector.removeItem(StudentUpdateWidget.student_selector.currentIndex())

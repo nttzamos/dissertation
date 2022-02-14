@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QComboBox, QHBoxLayout, QLabel, QSizePolicy, QVBoxLa
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from MenuBar.settings import Settings
+from menu.settings import Settings
 
 from models.student import get_students, get_student_details
 from models.profile import get_profile_details
@@ -85,12 +85,12 @@ class CurrentSearch(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.current_search_style)
     CurrentSearch.searched_word.setStyleSheet(Styles.searched_word_style)
 
   def open_data_editing_widget(self):
-    from MainWidget.dataEditingWidget import DataEditingWidget
+    from central.dataEditingWidget import DataEditingWidget
     students_editing_dialog = DataEditingWidget()
     students_editing_dialog.exec()
 
@@ -114,7 +114,7 @@ class CurrentSearch(QWidget):
     if CurrentSearch.student_selector.currentText() == CurrentSearch.last_student_picked: return
 
     if not CurrentSearch.initialize_selected_student:
-      from MainWidget.mainWindow import MainWindow
+      from central.mainWindow import MainWindow
       MainWindow.clear_previous_subject_details()
 
     CurrentSearch.initialize_selected_student = False
@@ -155,7 +155,7 @@ class CurrentSearch(QWidget):
 
     CurrentSearch.last_profile_picked = CurrentSearch.profile_selector.currentText()
 
-    from MainWidget.mainWindow import MainWindow
+    from central.mainWindow import MainWindow
     MainWindow.clear_previous_subject_details()
     CurrentSearch.profile_id, CurrentSearch.grade_id, grade_name, profile_subjects = get_profile_details(CurrentSearch.profile_selector.currentText())
     CurrentSearch.subject_selector.clear()
@@ -185,7 +185,7 @@ class CurrentSearch(QWidget):
     CurrentSearch.last_subject_picked = CurrentSearch.subject_selector.currentText()
 
     CurrentSearch.subject_selector_active = True
-    from MainWidget.mainWindow import MainWindow
+    from central.mainWindow import MainWindow
     MainWindow.update_widgets(CurrentSearch.profile_id, CurrentSearch.grade_id, CurrentSearch.subject_selector.currentText())
 
   @staticmethod

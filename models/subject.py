@@ -1,4 +1,4 @@
-from Common.database_handler import connect_to_database
+from shared.database_handler import connect_to_database
 
 def get_subject_id(grade, subject):
   con, cur = connect_to_database()

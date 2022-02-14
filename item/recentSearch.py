@@ -19,12 +19,12 @@ class RecentSearch(QWidget):
     self.data_widget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.word = QLabel(word)
-    from MenuBar.settings import Settings
+    from menu.settings import Settings
     font = QFont(Settings.font, 14)
     self.word.setFont(font)
 
     self.reload_button = QPushButton()
-    self.reload_button.setIcon(QIcon('Resources/reload.svg'))
+    self.reload_button.setIcon(QIcon('resources/reload.svg'))
     self.reload_button.clicked.connect(self.reload_word)
     self.reload_button.setFixedWidth(30)
 
@@ -34,12 +34,12 @@ class RecentSearch(QWidget):
 
     self.is_starred = is_starred
     if self.is_starred:
-      self.star_button.setIcon(QIcon('Resources/starred.svg'))
+      self.star_button.setIcon(QIcon('resources/starred.svg'))
     else:
-      self.star_button.setIcon(QIcon('Resources/unstarred.svg'))
+      self.star_button.setIcon(QIcon('resources/unstarred.svg'))
 
     self.delete_button = QPushButton()
-    self.delete_button.setIcon(QIcon('Resources/delete2.svg'))
+    self.delete_button.setIcon(QIcon('resources/delete2.svg'))
     self.delete_button.clicked.connect(self.remove_word)
     self.delete_button.setFixedWidth(30)
 
@@ -60,19 +60,19 @@ class RecentSearch(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.item_widgets_style)
 
   def reload_word(self):
     word = self.word.text()
-    from MainWidget.mainWidget import MainWidget
-    from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+    from central.mainWidget import MainWidget
+    from side.recentSearchesWidget import RecentSearchesWidget
     MainWidget.add_word(word)
     create_recent_search(word)
     RecentSearchesWidget.remove_and_add_recent_search(word)
 
   def toggle_starred_state(self):
-    from SideWidgets.starredWordsWidget import StarredWordsWidget
+    from side.starredWordsWidget import StarredWordsWidget
     word = self.word.text()
 
     if self.is_starred:
@@ -87,13 +87,13 @@ class RecentSearch(QWidget):
   def toggle_starred_icon(self):
     if self.is_starred:
       self.is_starred = False
-      self.star_button.setIcon(QIcon('Resources/unstarred.svg'))
+      self.star_button.setIcon(QIcon('resources/unstarred.svg'))
     else:
       self.is_starred = True
-      self.star_button.setIcon(QIcon('Resources/starred.svg'))
+      self.star_button.setIcon(QIcon('resources/starred.svg'))
 
   def remove_word(self):
-    from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+    from side.recentSearchesWidget import RecentSearchesWidget
     destroy_recent_search(self.word.text())
     self.hide()
     RecentSearchesWidget.remove_recent_search(self)

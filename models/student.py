@@ -1,4 +1,4 @@
-from Common.database_handler import connect_to_database
+from shared.database_handler import connect_to_database
 from models.profile import get_profile_id
 
 def create_student(name, profiles):

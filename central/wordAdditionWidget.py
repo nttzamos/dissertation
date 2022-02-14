@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLin
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtGui import QFont
 
-from Common.database_handler import get_grades, get_grade_subjects
-from MenuBar.settings import Settings
+from shared.database_handler import get_grades, get_grade_subjects
+from menu.settings import Settings
 from models.word import create_word, word_exists
 
 class WordAdditionWIdget(QWidget):
@@ -87,7 +87,7 @@ class WordAdditionWIdget(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.word_addition_style)
 
   def grade_selector_activated(self, index):
@@ -124,9 +124,9 @@ class WordAdditionWIdget(QWidget):
 
     grade_id = self.grade_selector.currentIndex() + 1
     create_word(word, grade_id, subjects)
-    from MainWidget.wordUpdateWidget import WordUpdateWidget
+    from central.wordUpdateWidget import WordUpdateWidget
     WordUpdateWidget.add_word_to_dictionary(grade_id, word)
-    from MainWidget.wordFamilyUpdateWidget import WordFamilyUpdateWidget
+    from central.wordFamilyUpdateWidget import WordFamilyUpdateWidget
     WordFamilyUpdateWidget.update_dictionary_words(word_to_add = word)
 
   def word_is_invalid(self):

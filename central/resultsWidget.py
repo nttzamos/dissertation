@@ -2,12 +2,12 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidg
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from MainWidget.result import Result
-from MenuBar.settings import Settings
+from central.result import Result
+from menu.settings import Settings
 
 from models.family import get_family_id, get_family_words
 from models.word import get_word_id, word_exists
-from Common.wiktionary_parser import fetch_word_details
+from shared.wiktionary_parser import fetch_word_details
 
 class ResultsWidget(QWidget):
   scroll_area_widget_contents = QWidget()
@@ -39,7 +39,7 @@ class ResultsWidget(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.results_widget_style)
 
   @staticmethod
@@ -79,7 +79,7 @@ class ResultsWidget(QWidget):
 
   @staticmethod
   def get_results(word):
-    from MainWidget.currentSearch import CurrentSearch
+    from central.currentSearch import CurrentSearch
     grade_id = CurrentSearch.grade_id
     word_id = get_word_id(grade_id, word)
     family_id = get_family_id(grade_id, word_id)

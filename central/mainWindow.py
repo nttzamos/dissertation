@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QSplitter, QWidget
 from PyQt6.QtCore import Qt
 
-from MainWidget.mainWidget import MainWidget
+from central.mainWidget import MainWidget
 
-from SideWidgets.recentSearchesWidget import RecentSearchesWidget
-from SideWidgets.starredWordsWidget import StarredWordsWidget
-from MenuBar.menuBar import MenuBar
+from side.recentSearchesWidget import RecentSearchesWidget
+from side.starredWordsWidget import StarredWordsWidget
+from menu.menuBar import MenuBar
 
 from models.profile import get_profile_name
 class MainWindow(QWidget):
@@ -60,13 +60,13 @@ class MainWindow(QWidget):
   def style(self):
     self.line.setStyleSheet('QWidget { background-color: none }')
 
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.splitter_left_horizontal.setStyleSheet(Styles.main_window_background_style)
     self.setStyleSheet(Styles.main_window_style)
 
   @staticmethod
   def update_widgets(profile_id, grade_id, subject_name):
-    from MainWidget.searchingWidget import SearchingWidget
+    from central.searchingWidget import SearchingWidget
     SearchingWidget.update_dictionary_words(profile_id, grade_id, subject_name)
 
     if subject_name == 'All Subjects':
@@ -74,7 +74,7 @@ class MainWindow(QWidget):
     else:
       SearchingWidget.modify_error_message(subject_name, True)
 
-    from MainWidget.resultsWidget import ResultsWidget
+    from central.resultsWidget import ResultsWidget
     ResultsWidget.show_placeholder()
     MainWidget.current_search.searched_word.setText('Enter a word.')
 
@@ -83,13 +83,13 @@ class MainWindow(QWidget):
 
   @staticmethod
   def clear_previous_subject_details():
-    from MainWidget.currentSearch import CurrentSearch
+    from central.currentSearch import CurrentSearch
     if not CurrentSearch.subject_selector_active: return
 
-    from MainWidget.searchingWidget import SearchingWidget
+    from central.searchingWidget import SearchingWidget
     SearchingWidget.set_initial_error_message()
 
-    from MainWidget.resultsWidget import ResultsWidget
+    from central.resultsWidget import ResultsWidget
     ResultsWidget.show_placeholder()
     CurrentSearch.subject_selector_active = False
 

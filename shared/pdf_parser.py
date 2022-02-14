@@ -4,7 +4,7 @@ import tika, tika.parser as parser
 import re
 
 class PdfParser():
-  grades_subjects_directory_path = 'Resources/Grades/'
+  grades_subjects_directory_path = 'resources/Grades/'
 
   valid_characters = [
     912, 940, 941, 944, 945, 946, 947, 948, 949, 950, 951, 952, 953, 954, 955,

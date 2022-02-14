@@ -19,19 +19,19 @@ class StarredWord(QWidget):
     self.data_widget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.word = QLabel(word)
-    from MenuBar.settings import Settings
+    from menu.settings import Settings
     font = QFont(Settings.font, 14)
     self.word.setFont(font)
 
     self.reload_button = QPushButton()
-    self.reload_button.setIcon(QIcon('Resources/reload.svg'))
+    self.reload_button.setIcon(QIcon('resources/reload.svg'))
     self.reload_button.clicked.connect(self.reload_word)
     self.reload_button.setFixedWidth(30)
 
     self.star_button = QPushButton()
     self.star_button.clicked.connect(self.toggle_starred_state)
     self.star_button.setFixedWidth(30)
-    self.star_button.setIcon(QIcon('Resources/starred.svg'))
+    self.star_button.setIcon(QIcon('resources/starred.svg'))
 
     self.line = QFrame()
     self.line.setFrameShape(QFrame.Shape.HLine)
@@ -49,26 +49,26 @@ class StarredWord(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.setStyleSheet(Styles.item_widgets_style)
 
   def toggle_starred_state(self):
-    from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+    from side.recentSearchesWidget import RecentSearchesWidget
     word = self.word.text()
     destroy_starred_word(word)
     RecentSearchesWidget.toggle_recent_search_starred_icon(word)
     self.remove_word()
 
   def remove_word(self):
-    from SideWidgets.starredWordsWidget import StarredWordsWidget
+    from side.starredWordsWidget import StarredWordsWidget
     self.hide()
     StarredWordsWidget.remove_starred_word(self)
     self.deleteLater()
 
   def reload_word(self):
     word = self.word.text()
-    from MainWidget.mainWidget import MainWidget
-    from SideWidgets.recentSearchesWidget import RecentSearchesWidget
+    from central.mainWidget import MainWidget
+    from side.recentSearchesWidget import RecentSearchesWidget
     MainWidget.add_word(word)
     recent_search_exists = create_recent_search(word)
     if recent_search_exists:

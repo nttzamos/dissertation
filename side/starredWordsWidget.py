@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidg
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from ItemWidgets.starredWord import StarredWord
-from MenuBar.settings import Settings
+from item.starredWord import StarredWord
+from menu.settings import Settings
 
 from models.starred_word import get_starred_words
 
@@ -54,7 +54,7 @@ class StarredWordsWidget(QWidget):
     self.style()
 
   def style(self):
-    from Common.styles import Styles
+    from shared.styles import Styles
     self.title_label.setStyleSheet(Styles.side_widgets_title_label_style)
     self.setStyleSheet(Styles.side_widgets_style)
 
