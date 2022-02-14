@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidg
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from item.recentSearch import RecentSearch
+from item.recent_search import RecentSearch
 from menu.settings import Settings
 from models.recent_search import get_recent_searches
 from models.starred_word import starred_word_exists, get_starred_words

@@ -4,9 +4,10 @@ from PyQt6.QtGui import QFont
 
 from shared.database_handler import get_grades, get_grade_subjects
 from menu.settings import Settings
-from models.word import create_word, word_exists
 
-class WordAdditionWIdget(QWidget):
+from models.profile import create_profile, profile_name_exists
+
+class ProfileAdditionWIdget(QWidget):
   def __init__(self):
     super().__init__()
 
@@ -19,14 +20,14 @@ class WordAdditionWIdget(QWidget):
     check_box_font = QFont(Settings.font, 14)
     line_edit_font = QFont(Settings.font, 14)
 
-    word_widget = QGroupBox('Word')
-    word_widget.setFont(section_label_font)
-    word_widget.layout = QHBoxLayout(word_widget)
-    word_widget.layout.setContentsMargins(10, 5, 10, 10)
+    name_widget = QGroupBox('Profile Name')
+    name_widget.setFont(section_label_font)
+    name_widget.layout = QHBoxLayout(name_widget)
+    name_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    self.word_line_edit = QLineEdit()
-    self.word_line_edit.setFont(line_edit_font)
-    word_widget.layout.addWidget(self.word_line_edit)
+    self.name_line_edit = QLineEdit()
+    self.name_line_edit.setFont(line_edit_font)
+    name_widget.layout.addWidget(self.name_line_edit)
 
     grade_selection_widget = QGroupBox('Grade Selection')
     grade_selection_widget.setFont(section_label_font)
@@ -75,10 +76,10 @@ class WordAdditionWIdget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    self.save_button = QPushButton('Save New Word')
-    self.save_button.pressed.connect(self.save_word)
+    self.save_button = QPushButton('Save New Profile')
+    self.save_button.pressed.connect(self.save_profile)
 
-    self.layout.addWidget(word_widget)
+    self.layout.addWidget(name_widget)
     self.layout.addWidget(grade_selection_widget)
     self.layout.addWidget(subjects_widget)
     self.layout.addSpacing(15)
@@ -88,7 +89,7 @@ class WordAdditionWIdget(QWidget):
 
   def style(self):
     from shared.styles import Styles
-    self.setStyleSheet(Styles.word_addition_style)
+    self.setStyleSheet(Styles.profile_addition_style)
 
   def grade_selector_activated(self, index):
     for check_box in self.check_boxes:
@@ -104,17 +105,17 @@ class WordAdditionWIdget(QWidget):
       self.check_boxes.append(check_box)
       self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
 
-  def save_word(self):
-    is_invalid, text = self.word_is_invalid()
+  def save_profile(self):
+    is_invalid, text = self.profile_is_invalid()
 
     if is_invalid:
-      title = 'Error Saving Word'
+      title = 'Error Saving Profile'
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
 
-    word = self.word_line_edit.text()
-    QTimer.singleShot(0, self.word_line_edit.clear)
+    profile_name = self.name_line_edit.text()
+    QTimer.singleShot(0, self.name_line_edit.clear)
 
     subjects = []
     for check_box in self.check_boxes:
@@ -122,23 +123,27 @@ class WordAdditionWIdget(QWidget):
         subjects.append(check_box.text())
         check_box.setChecked(False)
 
-    grade_id = self.grade_selector.currentIndex() + 1
-    create_word(word, grade_id, subjects)
-    from central.wordUpdateWidget import WordUpdateWidget
-    WordUpdateWidget.add_word_to_dictionary(grade_id, word)
-    from central.wordFamilyUpdateWidget import WordFamilyUpdateWidget
-    WordFamilyUpdateWidget.update_dictionary_words(word_to_add = word)
+    create_profile(profile_name, self.grade_selector.currentIndex() + 1, subjects)
 
-  def word_is_invalid(self):
-    word = self.word_line_edit.text()
-    if len(word) == 0:
-      return True, 'Word can not be saved because it is empty.'
+    from central.profile_update_widget import ProfileUpdateWidget
+    ProfileUpdateWidget.add_profile(profile_name)
 
-    if word_exists(self.grade_selector.currentIndex() + 1, word):
-      return True, 'Word can not be saved as it already exists.'
+    from central.student_addition_widget import StudentAdditionWidget
+    StudentAdditionWidget.add_profile(profile_name)
+
+    from central.student_update_widget import StudentUpdateWidget
+    StudentUpdateWidget.add_profile(profile_name)
+
+  def profile_is_invalid(self):
+    profile_name = self.name_line_edit.text()
+    if len(profile_name) == 0:
+      return True, 'Profile can not be saved because the profile name is empty.'
+
+    if profile_name_exists(profile_name):
+      return True, 'Profile can not be saved as this name is already used for another profile.'
 
     for check_box in self.check_boxes:
       if check_box.isChecked():
         return False, ''
 
-    return True, 'Word can not be saved because none of the grade subjects have been selected.'
+    return True, 'Profile can not be saved because none of the grade subjects have been selected.'

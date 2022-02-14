@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QSplitter, QWidget
 from PyQt6.QtCore import Qt
 
-from central.mainWidget import MainWidget
+from central.main_widget import MainWidget
 
-from side.recentSearchesWidget import RecentSearchesWidget
-from side.starredWordsWidget import StarredWordsWidget
-from menu.menuBar import MenuBar
+from side.recent_searches_widget import RecentSearchesWidget
+from side.starred_words_widget import StarredWordsWidget
+from menu.menu_bar import MenuBar
 
 from models.profile import get_profile_name
 class MainWindow(QWidget):
@@ -66,7 +66,7 @@ class MainWindow(QWidget):
 
   @staticmethod
   def update_widgets(profile_id, grade_id, subject_name):
-    from central.searchingWidget import SearchingWidget
+    from central.searching_widget import SearchingWidget
     SearchingWidget.update_dictionary_words(profile_id, grade_id, subject_name)
 
     if subject_name == 'All Subjects':
@@ -74,7 +74,7 @@ class MainWindow(QWidget):
     else:
       SearchingWidget.modify_error_message(subject_name, True)
 
-    from central.resultsWidget import ResultsWidget
+    from central.results_widget import ResultsWidget
     ResultsWidget.show_placeholder()
     MainWidget.current_search.searched_word.setText('Enter a word.')
 
@@ -83,13 +83,13 @@ class MainWindow(QWidget):
 
   @staticmethod
   def clear_previous_subject_details():
-    from central.currentSearch import CurrentSearch
+    from central.current_search import CurrentSearch
     if not CurrentSearch.subject_selector_active: return
 
-    from central.searchingWidget import SearchingWidget
+    from central.searching_widget import SearchingWidget
     SearchingWidget.set_initial_error_message()
 
-    from central.resultsWidget import ResultsWidget
+    from central.results_widget import ResultsWidget
     ResultsWidget.show_placeholder()
     CurrentSearch.subject_selector_active = False
 

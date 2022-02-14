@@ -2,9 +2,9 @@ from PyQt6.QtWidgets import QVBoxLayout, QTabWidget, QDialog
 from PyQt6.QtGui import QIcon
 
 from menu.settings import Settings
-from central.wordAdditionWidget import WordAdditionWIdget
-from central.wordUpdateWidget import WordUpdateWidget
-from central.wordFamilyUpdateWidget import WordFamilyUpdateWidget
+from central.word_addition_widget import WordAdditionWIdget
+from central.word_update_widget import WordUpdateWidget
+from central.word_family_update_widget import WordFamilyUpdateWidget
 
 class WordEditingWidget(QDialog):
   def __init__(self):

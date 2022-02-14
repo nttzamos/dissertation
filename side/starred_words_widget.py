@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidg
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from item.starredWord import StarredWord
+from item.starred_word import StarredWord
 from menu.settings import Settings
 
 from models.starred_word import get_starred_words

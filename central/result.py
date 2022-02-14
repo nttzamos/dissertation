@@ -82,7 +82,7 @@ class Result(QWidget):
     self.buttons_widget.setStyleSheet(Styles.result_buttons_style)
 
   def add_word_to_dictionary(self):
-    from central.currentSearch import CurrentSearch
+    from central.current_search import CurrentSearch
     word = self.word_label.text()
     x, y, z, subject_names = CurrentSearch.get_current_selection_details()
     subject_names = [subject_names]
@@ -99,7 +99,7 @@ class Result(QWidget):
     if self.state == 3:
       self.add_word_to_dictionary()
 
-    from central.currentSearch import CurrentSearch
+    from central.current_search import CurrentSearch
     word = self.word_label.text()
     update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [word], [])
     self.state = 1
@@ -109,14 +109,14 @@ class Result(QWidget):
     self.buttons_widget.layout.addWidget(self.remove_from_family_button)
 
   def remove_word_from_family(self):
-    from central.currentSearch import CurrentSearch
+    from central.current_search import CurrentSearch
     word = self.word_label.text()
     update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [], [word])
     self.hide()
 
   def toggle_starred_state(self):
-    from side.starredWordsWidget import StarredWordsWidget
-    from side.recentSearchesWidget import RecentSearchesWidget
+    from side.starred_words_widget import StarredWordsWidget
+    from side.recent_searches_widget import RecentSearchesWidget
     word = self.word_label.text()
 
     RecentSearchesWidget.toggle_recent_search_starred_icon(word)

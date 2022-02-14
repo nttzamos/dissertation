@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 
-from central.currentSearch import CurrentSearch
-from central.searchingWidget import SearchingWidget
-from central.resultsWidget import ResultsWidget
+from central.current_search import CurrentSearch
+from central.searching_widget import SearchingWidget
+from central.results_widget import ResultsWidget
 from menu.settings import Settings
 
 class MainWidget(QWidget):

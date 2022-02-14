@@ -2,7 +2,7 @@ from PyQt6.QtGui import QFont, QIcon, QKeySequence, QShortcut
 from PyQt6.QtWidgets import QCompleter, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QSizePolicy
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 
-from side.recentSearchesWidget import RecentSearchesWidget
+from side.recent_searches_widget import RecentSearchesWidget
 from menu.settings import Settings
 from shared.database_handler import get_grades, get_words
 from shared.styles import Styles
@@ -180,7 +180,7 @@ class SearchingWidget(QWidget):
     SearchingWidget.set_focus_to_search_bar()
 
   def add_recent_search(self, word):
-    from central.mainWidget import MainWidget
+    from central.main_widget import MainWidget
     MainWidget.add_word(word)
 
     recent_search_exists = create_recent_search(word)
@@ -194,6 +194,6 @@ class SearchingWidget(QWidget):
     SearchingWidget.line_edit.setFocus()
 
   def open_words_editing_widget(self):
-    from central.wordEditingWidget import WordEditingWidget
+    from central.word_editing_widget import WordEditingWidget
     students_editing_dialog = WordEditingWidget()
     students_editing_dialog.exec()

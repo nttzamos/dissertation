@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QFont
 
-from item.recentSearch import RecentSearch
+from item.recent_search import RecentSearch
 
 import pickledb
 

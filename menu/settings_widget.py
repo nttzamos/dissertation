@@ -124,7 +124,7 @@ class SettingsWidget(QDialog):
     Settings.set_boolean_setting(setting_name, new_value)
 
     if setting_name == 'show_edit_dict_words_button':
-      from central.searchingWidget import SearchingWidget
+      from central.searching_widget import SearchingWidget
       SearchingWidget.toggle_edit_words_button_visibility(new_value)
 
   def light_theme_button_clicked(self):

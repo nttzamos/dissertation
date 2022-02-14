@@ -79,7 +79,7 @@ class ResultsWidget(QWidget):
 
   @staticmethod
   def get_results(word):
-    from central.currentSearch import CurrentSearch
+    from central.current_search import CurrentSearch
     grade_id = CurrentSearch.grade_id
     word_id = get_word_id(grade_id, word)
     family_id = get_family_id(grade_id, word_id)

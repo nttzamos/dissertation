@@ -17,8 +17,8 @@ screen_width = app.primaryScreen().size().width()
 screen_height = app.primaryScreen().size().height()
 Settings.initialize_settings_database(screen_width, screen_height)
 
-from central.mainWindow import MainWindow
-from central.searchingWidget import SearchingWidget
+from central.main_window import MainWindow
+from central.searching_widget import SearchingWidget
 
 window = MainWindow()
 window.showMaximized()

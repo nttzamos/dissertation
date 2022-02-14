@@ -96,10 +96,10 @@ class StudentAdditionWidget(QWidget):
 
     create_student(student_name, checked_profiles)
 
-    from central.studentUpdateWidget import StudentUpdateWidget
+    from central.student_update_widget import StudentUpdateWidget
     StudentUpdateWidget.add_student(student_name)
 
-    from central.currentSearch import CurrentSearch
+    from central.current_search import CurrentSearch
     CurrentSearch.add_student(student_name)
 
   def student_is_invalid(self):

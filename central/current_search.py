@@ -90,7 +90,7 @@ class CurrentSearch(QWidget):
     CurrentSearch.searched_word.setStyleSheet(Styles.searched_word_style)
 
   def open_data_editing_widget(self):
-    from central.dataEditingWidget import DataEditingWidget
+    from central.data_editing_widget import DataEditingWidget
     students_editing_dialog = DataEditingWidget()
     students_editing_dialog.exec()
 
@@ -114,7 +114,7 @@ class CurrentSearch(QWidget):
     if CurrentSearch.student_selector.currentText() == CurrentSearch.last_student_picked: return
 
     if not CurrentSearch.initialize_selected_student:
-      from central.mainWindow import MainWindow
+      from central.main_window import MainWindow
       MainWindow.clear_previous_subject_details()
 
     CurrentSearch.initialize_selected_student = False
@@ -155,7 +155,7 @@ class CurrentSearch(QWidget):
 
     CurrentSearch.last_profile_picked = CurrentSearch.profile_selector.currentText()
 
-    from central.mainWindow import MainWindow
+    from central.main_window import MainWindow
     MainWindow.clear_previous_subject_details()
     CurrentSearch.profile_id, CurrentSearch.grade_id, grade_name, profile_subjects = get_profile_details(CurrentSearch.profile_selector.currentText())
     CurrentSearch.subject_selector.clear()
@@ -185,7 +185,7 @@ class CurrentSearch(QWidget):
     CurrentSearch.last_subject_picked = CurrentSearch.subject_selector.currentText()
 
     CurrentSearch.subject_selector_active = True
-    from central.mainWindow import MainWindow
+    from central.main_window import MainWindow
     MainWindow.update_widgets(CurrentSearch.profile_id, CurrentSearch.grade_id, CurrentSearch.subject_selector.currentText())
 
   @staticmethod

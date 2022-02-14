@@ -194,7 +194,7 @@ class WordUpdateWidget(QWidget):
     grade_id = self.grade_selector.currentIndex() + 1
     if self.searched_word != new_word:
       self.update_dictionary_words(self.searched_word, new_word)
-      from central.wordFamilyUpdateWidget import WordFamilyUpdateWidget
+      from central.word_family_update_widget import WordFamilyUpdateWidget
       WordFamilyUpdateWidget.update_dictionary_words(self.searched_word, new_word)
 
     update_word(self.searched_word, new_word, grade_id, subjects_to_add, subjects_to_remove)
@@ -204,7 +204,7 @@ class WordUpdateWidget(QWidget):
     WordUpdateWidget.dictionary_words.remove(word)
     model = QStringListModel(WordUpdateWidget.dictionary_words, WordUpdateWidget.completer)
     WordUpdateWidget.completer.setModel(model)
-    from central.wordFamilyUpdateWidget import WordFamilyUpdateWidget
+    from central.word_family_update_widget import WordFamilyUpdateWidget
     WordFamilyUpdateWidget.update_dictionary_words(word_to_remove = self.searched_word)
 
     self.word_widget.hide()
