@@ -10,7 +10,7 @@ def fetch_word_details(word):
 
   response = session.get(url.format(word))
   if response.status_code == 404:
-    return [], [], True
+    return [], True
 
   soup = BeautifulSoup(response.text.replace('>\n<', '><'), 'html.parser')
 
@@ -52,8 +52,12 @@ def item_is_valid(item):
   return True
 
 def clean_word(word):
-  forbidden_characters = [',', '(']
+  forbidden_characters = [',', '(', ' και']
   for character in forbidden_characters:
-    word = word.split(character)[0]
+    new_word = word.split(character)[0]
+    if character == '(' and not new_word:
+      new_word = word.split(')')[1]
+
+    word = new_word
 
   return word.strip()

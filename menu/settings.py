@@ -5,7 +5,7 @@ from item.recent_search import RecentSearch
 import pickledb
 
 class Settings():
-  settings_database_file = 'menu/settings.json'
+  settings_database_file = 'resources/settings.json'
   font = QFont().family()
 
   @staticmethod

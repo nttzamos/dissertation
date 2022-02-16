@@ -2,10 +2,11 @@ from os import path
 from os import listdir
 import sqlite3
 import re
+import sys
 
 from shared.pdf_parser import PdfParser
 
-databases_directory_path = 'Databases/'
+databases_directory_path = 'resources/'
 database_file = 'database.db'
 
 def initialize_databases():
