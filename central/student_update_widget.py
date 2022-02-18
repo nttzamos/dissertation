@@ -57,12 +57,12 @@ class StudentUpdateWidget(QWidget):
     StudentUpdateWidget.profiles_selection_widget = QWidget()
     StudentUpdateWidget.profiles_selection_widget.layout = QGridLayout(StudentUpdateWidget.profiles_selection_widget)
     StudentUpdateWidget.profiles_selection_widget.setDisabled(True)
+    StudentUpdateWidget.profiles_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
 
     scroll_area = QScrollArea()
     scroll_area.setWidgetResizable(True)
     scroll_area.setWidget(StudentUpdateWidget.profiles_selection_widget)
     scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-    StudentUpdateWidget.profiles_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
 
     StudentUpdateWidget.check_boxes = []
 

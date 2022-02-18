@@ -2,7 +2,6 @@ from os import path
 from os import listdir
 import sqlite3
 import re
-import sys
 
 from shared.pdf_parser import PdfParser
 
@@ -18,13 +17,7 @@ def initialize_databases():
     initialize_grade_database(grade)
 
 def initialize_common_database():
-  database_file_path = databases_directory_path + database_file
-
-  if path.isfile(database_file_path):
-    return
-
-  con = sqlite3.connect(database_file_path)
-  cur = con.cursor()
+  con, cur = connect_to_database()
   grade_names = ["Α' Δημοτικού", "Β' Δημοτικού", "Γ' Δημοτικού", "Δ' Δημοτικού", "Ε' Δημοτικού", "ΣΤ' Δημοτικού"]
 
   cur.execute('CREATE TABLE grade (id INTEGER PRIMARY KEY, name TEXT)')

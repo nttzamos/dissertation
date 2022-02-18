@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QScrollArea, QListWidget, QPushButton, QComboBox, QCompleter, QAbstractItemView
+from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QListWidget, QPushButton, QComboBox, QCompleter, QAbstractItemView
 from PyQt6.QtCore import Qt, QTimer, QStringListModel
 from PyQt6.QtGui import QFont
 
@@ -80,6 +80,7 @@ class WordFamilyUpdateWidget(QWidget):
     word_family_selection_widget.layout.addSpacing(5)
     word_family_selection_widget.layout.addWidget(self.remove_words_button, alignment=Qt.AlignmentFlag.AlignRight)
 
+
     self.save_button = QPushButton('Save Family')
     self.save_button.pressed.connect(self.update_family)
     self.save_button.setDisabled(True)
@@ -108,18 +109,23 @@ class WordFamilyUpdateWidget(QWidget):
   def word_selected(self):
     self.searched_word = self.word_selection_line_edit.text()
     if self.searched_word in WordFamilyUpdateWidget.dictionary_words:
-      self.related_word_selection_line_edit.show()
-      self.related_word_selection_line_edit.setFocus()
       QTimer.singleShot(0, self.related_word_selection_line_edit.clear)
-      self.save_button.setEnabled(True)
+
       grade_id = WordFamilyUpdateWidget.grade_selector.currentIndex() + 1
       word_id = get_word_id(grade_id, self.searched_word)
       family_id = get_family_id(grade_id, word_id)
+
       self.family_words = get_family_words(grade_id, family_id)
       self.famiy_list = get_family_words(grade_id, family_id)
+
       if len(self.famiy_list) > 0:
         self.family_words.remove(self.searched_word)
         self.famiy_list.remove(self.searched_word)
+        self.related_word_selection_line_edit.show()
+        self.related_word_selection_line_edit.setFocus()
+        self.save_button.setEnabled(True)
+      else:
+        self.save_button.setDisabled(True)
 
       self.word_family_list.clear()
       self.word_family_list.addItems(self.family_words)

@@ -11,7 +11,7 @@ class DataEditingWidget(QDialog):
   def __init__(self):
     super().__init__()
     self.setWindowTitle('Edit Data')
-    self.setWindowIcon(QIcon('resources/windowIcon.svg'))
+    self.setWindowIcon(QIcon('resources/window_icon.svg'))
     self.setFixedWidth(Settings.get_setting('screen_width') / 2)
 
     self.layout = QVBoxLayout(self)

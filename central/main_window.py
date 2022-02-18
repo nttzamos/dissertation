@@ -65,9 +65,9 @@ class MainWindow(QWidget):
     self.setStyleSheet(Styles.main_window_style)
 
   @staticmethod
-  def update_widgets(profile_id, grade_id, subject_name):
+  def update_widgets(profile_id, subject_name):
     from central.searching_widget import SearchingWidget
-    SearchingWidget.update_dictionary_words(profile_id, grade_id, subject_name)
+    SearchingWidget.update_selected_dictionary()
 
     if subject_name == 'All Subjects':
       SearchingWidget.modify_error_message(get_profile_name(profile_id), False)

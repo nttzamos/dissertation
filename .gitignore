@@ -4,4 +4,7 @@ tempCodeRunnerFile.py
 databases/*
 processed/*
 unprocessed/*
+build/*
+dist/*
+main.spec
 *.DS_Store

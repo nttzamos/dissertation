@@ -186,7 +186,7 @@ class CurrentSearch(QWidget):
 
     CurrentSearch.subject_selector_active = True
     from central.main_window import MainWindow
-    MainWindow.update_widgets(CurrentSearch.profile_id, CurrentSearch.grade_id, CurrentSearch.subject_selector.currentText())
+    MainWindow.update_widgets(CurrentSearch.profile_id, CurrentSearch.subject_selector.currentText())
 
   @staticmethod
   def get_current_selection_details():

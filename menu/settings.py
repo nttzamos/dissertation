@@ -21,7 +21,8 @@ class Settings():
     boolean_settings_default_values = {
       'remember_last_student_picked': 0,
       'ask_before_actions': 1,
-      'show_edit_dict_words_button': 1
+      'show_edit_dict_words_button': 1,
+      'only_show_words_with_family': 0
     }
 
     for key, value in settings_default_values.items():

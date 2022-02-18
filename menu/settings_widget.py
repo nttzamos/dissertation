@@ -8,7 +8,7 @@ class SettingsWidget(QDialog):
   def __init__(self):
     super().__init__()
     self.setWindowTitle('Settings')
-    self.setWindowIcon(QIcon('resources/windowIcon.svg'))
+    self.setWindowIcon(QIcon('resources/window_icon.svg'))
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 20, 20, 20)
@@ -49,9 +49,14 @@ class SettingsWidget(QDialog):
     self.show_edit_dict_words_button.clicked.connect(lambda: self.toggle_setting('show_edit_dict_words_button'))
     self.show_edit_dict_words_button.setChecked(Settings.get_boolean_setting('show_edit_dict_words_button'))
 
+    self.only_show_words_with_family = QCheckBox("Only show words that have a family in the dictionary?", objectName='only_show_words_with_family')
+    self.only_show_words_with_family.clicked.connect(lambda: self.toggle_setting('only_show_words_with_family'))
+    self.only_show_words_with_family.setChecked(Settings.get_boolean_setting('only_show_words_with_family'))
+
     general_settings_widget.layout.addWidget(self.remember_last_student_picked)
     general_settings_widget.layout.addWidget(self.ask_before_actions)
     general_settings_widget.layout.addWidget(self.show_edit_dict_words_button)
+    general_settings_widget.layout.addWidget(self.only_show_words_with_family)
 
     theme_selection_widget = QGroupBox('Theme Selection')
     theme_selection_widget.setFont(section_label_font)
@@ -126,6 +131,10 @@ class SettingsWidget(QDialog):
     if setting_name == 'show_edit_dict_words_button':
       from central.searching_widget import SearchingWidget
       SearchingWidget.toggle_edit_words_button_visibility(new_value)
+
+    if setting_name == 'only_show_words_with_family':
+      from central.searching_widget import SearchingWidget
+      SearchingWidget.update_selected_dictionary()
 
   def light_theme_button_clicked(self):
     if self.light_theme_button.isChecked():

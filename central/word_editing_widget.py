@@ -10,7 +10,7 @@ class WordEditingWidget(QDialog):
   def __init__(self):
     super().__init__()
     self.setWindowTitle('Edit Words')
-    self.setWindowIcon(QIcon('resources/windowIcon.svg'))
+    self.setWindowIcon(QIcon('resources/window_icon.svg'))
     self.setFixedWidth(Settings.get_setting('screen_width') / 2)
 
     self.layout = QVBoxLayout(self)
@@ -32,3 +32,11 @@ class WordEditingWidget(QDialog):
     tab_widget.addTab(edit_word_family_widget, 'Update family of existing word')
 
     self.layout.addWidget(tab_widget)
+
+  def closeEvent(self, event):
+    from central.searching_widget import SearchingWidget
+    SearchingWidget.update_selected_dictionary()
+
+  def hideEvent(self, event):
+    from central.searching_widget import SearchingWidget
+    SearchingWidget.update_selected_dictionary()

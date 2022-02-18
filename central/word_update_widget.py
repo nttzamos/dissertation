@@ -74,12 +74,12 @@ class WordUpdateWidget(QWidget):
 
     self.subjects_selection_widget = QWidget()
     self.subjects_selection_widget.layout = QGridLayout(self.subjects_selection_widget)
+    self.subjects_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
 
     scroll_area = QScrollArea()
     scroll_area.setWidgetResizable(True)
     scroll_area.setWidget(self.subjects_selection_widget)
     scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-    self.subjects_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
 
     self.check_boxes = []
 

@@ -39,7 +39,7 @@ class RecentSearch(QWidget):
       self.star_button.setIcon(QIcon('resources/unstarred.svg'))
 
     self.delete_button = QPushButton()
-    self.delete_button.setIcon(QIcon('resources/delete2.svg'))
+    self.delete_button.setIcon(QIcon('resources/delete.svg'))
     self.delete_button.clicked.connect(self.remove_word)
     self.delete_button.setFixedWidth(30)
 

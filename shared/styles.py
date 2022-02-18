@@ -312,14 +312,14 @@ class Styles():
 
   if theme == 'light':
     offline_result_style = """
-      QWidget { background-color: white; border-radius: 10px}
+      QWidget { background-color: white; border-radius: 10px; border: 2px solid black }
       QPushButton { background-color: white }
       QPushButton:hover { background-color: grey }
       QPushButton { border-radius: 12px }
       QPushButton { border: 1px solid black }
       QPushButton { padding-bottom: 5px }
       QPushButton { padding-top: 5px }
-      QLabel { color: black }"""
+      QLabel { color: black; border-radius: none; border: none; background-color: none }"""
   else:
     offline_result_style = """
       QWidget { background-color: black; border-radius: 10px}

@@ -6,7 +6,7 @@ app = QApplication(sys.argv)
 
 # Imports must be below here
 # from shared.pdf_parser import PdfParser
-# for grade in range(1, 2):
+# for grade in range(1, 7):
 #   PdfParser.convert_books_to_text_files(grade)
 
 from shared.database_handler import initialize_databases

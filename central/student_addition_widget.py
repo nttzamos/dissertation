@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QScrollArea, QCheckBox, QPushButton, QMessageBox
+from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QScrollArea, QCheckBox, QPushButton, QMessageBox, QSizePolicy
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QFont
 
@@ -36,6 +36,7 @@ class StudentAdditionWidget(QWidget):
 
     StudentAdditionWidget.profiles_selection_widget = QWidget()
     StudentAdditionWidget.profiles_selection_widget.layout = QGridLayout(StudentAdditionWidget.profiles_selection_widget)
+    StudentAdditionWidget.profiles_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
 
     scroll_area = QScrollArea()
     scroll_area.setWidgetResizable(True)

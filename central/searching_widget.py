@@ -139,9 +139,28 @@ class SearchingWidget(QWidget):
     SearchingWidget.edit_words_button.show() if new_visibility_status else SearchingWidget.edit_words_button.hide()
 
   @staticmethod
-  def update_dictionary_words(profile_id, grade_id, subject_name):
-    SearchingWidget.dictionary_words = get_words_with_family(profile_id, grade_id, subject_name)
-    # SearchingWidget.dictionary_words = get_words(profile_id, grade_id, subject_name)
+  def update_selected_dictionary():
+    from central.current_search import CurrentSearch
+    if CurrentSearch.subject_selector_active:
+      subject_name = CurrentSearch.subject_selector.currentText()
+
+      if Settings.get_boolean_setting('only_show_words_with_family'):
+        SearchingWidget.dictionary_words = get_words_with_family(CurrentSearch.profile_id, CurrentSearch.grade_id, subject_name)
+      else:
+        SearchingWidget.dictionary_words = get_words(CurrentSearch.profile_id, CurrentSearch.grade_id, subject_name)
+
+      model = QStringListModel(SearchingWidget.dictionary_words, SearchingWidget.completer)
+      SearchingWidget.completer.setModel(model)
+
+  @staticmethod
+  def add_or_remove_dictionary_words(words_to_add, words_to_remove):
+    if len(words_to_add) > 0:
+      SearchingWidget.dictionary_words.extend(words_to_add)
+
+    if len(words_to_remove) > 0:
+      for word in words_to_remove:
+        SearchingWidget.dictionary_words.remove(word)
+
     model = QStringListModel(SearchingWidget.dictionary_words, SearchingWidget.completer)
     SearchingWidget.completer.setModel(model)
 

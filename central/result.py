@@ -39,19 +39,19 @@ class Result(QWidget):
 
     self.add_to_dict_button = QPushButton()
     self.add_to_dict_button.setToolTip('Add this word to the selected subjects.')
-    self.add_to_dict_button.setIcon(QIcon('resources/book1.png'))
+    self.add_to_dict_button.setIcon(QIcon('resources/book.png'))
     self.add_to_dict_button.clicked.connect(self.add_word_to_dictionary)
     self.add_to_dict_button.setFixedWidth(30)
 
     self.add_to_family_button = QPushButton()
     self.add_to_family_button.setToolTip('Add this word to the family of the searched word.')
-    self.add_to_family_button.setIcon(QIcon('resources/plus1.png'))
+    self.add_to_family_button.setIcon(QIcon('resources/plus.png'))
     self.add_to_family_button.clicked.connect(self.add_word_to_family)
     self.add_to_family_button.setFixedWidth(30)
 
     self.remove_from_family_button = QPushButton()
     self.remove_from_family_button.setToolTip('Remove this word from the family of this word.')
-    self.remove_from_family_button.setIcon(QIcon('resources/delete2.svg'))
+    self.remove_from_family_button.setIcon(QIcon('resources/delete.svg'))
     self.remove_from_family_button.clicked.connect(self.remove_word_from_family)
     self.remove_from_family_button.setFixedWidth(30)
 
@@ -62,6 +62,7 @@ class Result(QWidget):
     else:
       self.buttons_widget.layout.addWidget(self.add_to_dict_button)
       self.buttons_widget.layout.addWidget(self.add_to_family_button)
+      self.add_to_family_button.setToolTip('Add this word to the family of the searched word. Also adds this word to the selected subjects.')
 
     data_widget.layout.addWidget(self.word_label)
     data_widget.layout.addSpacing(5)
@@ -90,10 +91,14 @@ class Result(QWidget):
     if subject_names[0] == 'All Subjects':
       subject_names = get_grade_subjects(CurrentSearch.grade_id)
     create_word(word, CurrentSearch.grade_id, subject_names)
+
     self.state = 2
     self.setStyleSheet(Styles.online_saved_result_style)
     self.add_to_dict_button.hide()
     self.add_to_dict_button.deleteLater()
+
+    from central.searching_widget import SearchingWidget
+    SearchingWidget.add_or_remove_dictionary_words([word], [])
 
   def add_word_to_family(self):
     if self.state == 3:

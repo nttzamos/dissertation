@@ -16,7 +16,7 @@ class MenuBar(QWidget):
     self.setMaximumHeight(30)
 
     self.application_icon = QPushButton()
-    self.application_icon.setIcon(QIcon('resources/windowIcon.svg'))
+    self.application_icon.setIcon(QIcon('resources/window_icon.svg'))
     self.application_icon.setFixedHeight(30)
     self.application_icon.setFixedWidth(30)
 
@@ -33,20 +33,14 @@ class MenuBar(QWidget):
 
     self.minimize_window_button = QPushButton()
     self.minimize_window_button.setToolTip('Minimize Application')
-    self.minimize_window_button.setIcon(QIcon('resources/minimizeWindow.png'))
+    self.minimize_window_button.setIcon(QIcon('resources/minimize_window.png'))
     self.minimize_window_button.setFixedHeight(30)
     self.minimize_window_button.setFixedWidth(30)
     self.minimize_window_button.clicked.connect(self.minimize_window)
 
-    self.restore_down_window_button = QPushButton()
-    self.restore_down_window_button.setIcon(QIcon('resources/restoreDownWindow.png'))
-    self.restore_down_window_button.setFixedHeight(30)
-    self.restore_down_window_button.setFixedWidth(30)
-    self.restore_down_window_button.clicked.connect(self.restore_down_window)
-
     self.close_window_button = QPushButton()
     self.close_window_button.setToolTip('Exit Application')
-    self.close_window_button.setIcon(QIcon('resources/closeWindow.png'))
+    self.close_window_button.setIcon(QIcon('resources/close_window.png'))
     self.close_window_button.setFixedHeight(30)
     self.close_window_button.setFixedWidth(30)
     self.close_window_button.clicked.connect(self.close_window)
@@ -56,7 +50,6 @@ class MenuBar(QWidget):
     self.layout.addWidget(self.title)
     self.layout.addWidget(self.settings_button, alignment=Qt.AlignmentFlag.AlignTop)
     self.layout.addWidget(self.minimize_window_button, alignment=Qt.AlignmentFlag.AlignTop)
-    # self.layout.addWidget(self.restore_down_window_button, alignment=Qt.AlignmentFlag.AlignTop)
     self.layout.addWidget(self.close_window_button, alignment=Qt.AlignmentFlag.AlignTop)
 
     self.style()
@@ -73,9 +66,6 @@ class MenuBar(QWidget):
 
   def minimize_window(self):
     self.parent.showMinimized()
-
-  def restore_down_window(self):
-    pass
 
   def close_window(self):
     self.parent.close()

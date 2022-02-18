@@ -26,7 +26,7 @@ class ResultsWidget(QWidget):
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    font = QFont(Settings.font, 14)
+    font = QFont(Settings.font, 18)
     ResultsWidget.placeholder_label.setFont(font)
     ResultsWidget.grid_layout.addWidget(ResultsWidget.placeholder_label)
 
@@ -34,6 +34,7 @@ class ResultsWidget(QWidget):
     self.scroll_area = QScrollArea()
     self.scroll_area.setWidgetResizable(True)
     self.scroll_area.setWidget(ResultsWidget.scroll_area_widget_contents)
+
     self.layout.addWidget(self.scroll_area)
 
     self.style()
@@ -76,6 +77,8 @@ class ResultsWidget(QWidget):
 
     if show_error:
       ResultsWidget.show_no_internet_message()
+    elif i == 0:
+      ResultsWidget.show_placeholder('This search returned no results.')
 
   @staticmethod
   def get_results(word):
@@ -84,7 +87,8 @@ class ResultsWidget(QWidget):
     word_id = get_word_id(grade_id, word)
     family_id = get_family_id(grade_id, word_id)
     offline_result_words = get_family_words(grade_id, family_id)
-    offline_result_words.remove(word)
+    if word in offline_result_words:
+      offline_result_words.remove(word)
     offline_result_words.sort()
 
     if Settings.get_setting('word_family_discovery') == 'online_wiktionary':
@@ -115,7 +119,8 @@ class ResultsWidget(QWidget):
     ResultsWidget.widget_list = []
 
   @staticmethod
-  def show_placeholder():
+  def show_placeholder(text = 'The results of your search will be displayed here.'):
+    ResultsWidget.placeholder_label.setText(text)
     ResultsWidget.clear_previous_results()
     if not ResultsWidget.show_placeholder_label:
       ResultsWidget.show_placeholder_label = True
