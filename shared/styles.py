@@ -332,7 +332,7 @@ class Styles():
       QLabel { color: white }"""
 
   if theme == 'light':
-    online_saved_result_style = """
+    online_result_style = """
       QWidget { background-color: white; border-radius: 10px; border: 2px solid blue }
       QPushButton { background-color: white }
       QPushButton:hover { background-color: grey }
@@ -342,29 +342,8 @@ class Styles():
       QPushButton { padding-top: 5px }
       QLabel { color: black; border-radius: none; border: none; background-color: none }"""
   else:
-    online_saved_result_style = """
-      QWidget { background-color: white; border-radius: 10px; border: 2px solid red }
-      QPushButton { background-color: white }
-      QPushButton:hover { background-color: grey }
-      QPushButton { border-radius: 12px }
-      QPushButton { border: 1px solid black }
-      QPushButton { padding-bottom: 5px }
-      QPushButton { padding-top: 5px }
-      QLabel { color: black; border-radius: none; border: none; background-color: none }"""
-
-  if theme == 'light':
     online_result_style = """
-      QWidget { background-color: white; border-radius: 10px; border: 2px solid red }
-      QPushButton { background-color: white }
-      QPushButton:hover { background-color: grey }
-      QPushButton { border-radius: 12px }
-      QPushButton { border: 1px solid black }
-      QPushButton { padding-bottom: 5px }
-      QPushButton { padding-top: 5px }
-      QLabel { color: black; border-radius: none; border: none; background-color: none }"""
-  else:
-    online_result_style = """
-      QWidget { background-color: white; border-radius: 10px; border: 2px solid red }
+      QWidget { background-color: white; border-radius: 10px; border: 2px solid blue }
       QPushButton { background-color: white }
       QPushButton:hover { background-color: grey }
       QPushButton { border-radius: 12px }
@@ -391,3 +370,12 @@ class Styles():
       QPushButton { border: 1px solid black }
       QPushButton { padding-bottom: 5px }
       QPushButton { padding-top: 5px }"""
+
+  if theme == 'light':
+    tutorial_widget_style = """
+      QLabel { padding-bottom: 5px }
+      QLabel { padding-top: 5px }"""
+  else:
+    tutorial_widget_style = """
+      QLabel { padding-bottom: 5px }
+      QLabel { padding-top: 5px }"""

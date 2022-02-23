@@ -22,8 +22,11 @@ class Settings():
       'remember_last_student_picked': 0,
       'ask_before_actions': 1,
       'show_edit_dict_words_button': 1,
-      'only_show_words_with_family': 0
+      'only_show_words_with_family': 0,
+      'show_tutorial_on_startup': 1
     }
+
+    Settings.set_setting('show_no_internet_message', 1)
 
     for key, value in settings_default_values.items():
       if not Settings.get_setting(key):
@@ -81,14 +84,3 @@ class Settings():
     settings_database = pickledb.load(Settings.settings_database_file, False)
 
     return settings_database.get(setting_name)
-
-    # Fun Experiment
-    # chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    # print(len(chars)); max = 0; max_char = 'a'; sizes = []
-    # for char in chars:
-    #   str = ''
-    #   for i in range(10): str = str + char; size = Result(str).sizeHint().width()
-    #   if size > max: max = size; max_char = char
-    #   sizes.append(size)
-
-    # print(max); print(max_char); print(sizes)

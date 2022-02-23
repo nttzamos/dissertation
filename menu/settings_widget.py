@@ -1,14 +1,16 @@
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QWidget, QRadioButton, QSpinBox, QLabel, QGroupBox
-from PyQt6.QtGui import QIcon, QFont
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QRadioButton, QSpinBox, QLabel, QGroupBox, QPushButton, QMessageBox
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon, QFont
 
 from menu.settings import Settings
+import os
+import shutil
 
 class SettingsWidget(QDialog):
   def __init__(self):
     super().__init__()
     self.setWindowTitle('Settings')
-    self.setWindowIcon(QIcon('resources/window_icon.svg'))
+    self.setWindowIcon(QIcon('resources/window_icon.png'))
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 20, 20, 20)
@@ -49,14 +51,19 @@ class SettingsWidget(QDialog):
     self.show_edit_dict_words_button.clicked.connect(lambda: self.toggle_setting('show_edit_dict_words_button'))
     self.show_edit_dict_words_button.setChecked(Settings.get_boolean_setting('show_edit_dict_words_button'))
 
-    self.only_show_words_with_family = QCheckBox("Only show words that have a family in the dictionary?", objectName='only_show_words_with_family')
+    self.only_show_words_with_family = QCheckBox('Only show words that have a family in the dictionary?', objectName='only_show_words_with_family')
     self.only_show_words_with_family.clicked.connect(lambda: self.toggle_setting('only_show_words_with_family'))
     self.only_show_words_with_family.setChecked(Settings.get_boolean_setting('only_show_words_with_family'))
+
+    self.show_tutorial_on_startup = QCheckBox('Show tutorial on startup?', objectName='show_tutorial_on_startup')
+    self.show_tutorial_on_startup.clicked.connect(lambda: self.toggle_setting('show_tutorial_on_startup'))
+    self.show_tutorial_on_startup.setChecked(Settings.get_boolean_setting('show_tutorial_on_startup'))
 
     general_settings_widget.layout.addWidget(self.remember_last_student_picked)
     general_settings_widget.layout.addWidget(self.ask_before_actions)
     general_settings_widget.layout.addWidget(self.show_edit_dict_words_button)
     general_settings_widget.layout.addWidget(self.only_show_words_with_family)
+    general_settings_widget.layout.addWidget(self.show_tutorial_on_startup)
 
     theme_selection_widget = QGroupBox('Theme Selection')
     theme_selection_widget.setFont(section_label_font)
@@ -92,27 +99,20 @@ class SettingsWidget(QDialog):
     word_family_discovery_widget.layout.addWidget(self.online_wiktionary_button, alignment=Qt.AlignmentFlag.AlignLeft)
     word_family_discovery_widget.layout.addWidget(self.offline_database_button, alignment=Qt.AlignmentFlag.AlignLeft)
 
-    self.default_editing_action_widget = QWidget()
-    self.default_editing_action_widget.layout = QHBoxLayout(self.default_editing_action_widget)
-    self.update_button = QRadioButton('Update')
-    self.update_button.toggled.connect(self.update_button_clicked)
-    self.delete_button = QRadioButton('Delete')
-    self.delete_button.toggled.connect(self.delete_button_clicked)
+    restore_database_button = QPushButton('Restore to defaults')
+    restore_database_button.pressed.connect(self.restore_database)
 
-    if Settings.get_setting('default_editing_action') == 'update':
-      self.update_button.setChecked(True)
-    else:
-      self.delete_button.setChecked(True)
-
-    self.default_editing_action_widget.layout.setContentsMargins(30, 0, 0, 0)
-    self.default_editing_action_widget.layout.addWidget(self.update_button, alignment=Qt.AlignmentFlag.AlignLeft)
-    self.default_editing_action_widget.layout.addWidget(self.delete_button, alignment=Qt.AlignmentFlag.AlignLeft)
+    restore_database_widget = QGroupBox('Restore Database')
+    restore_database_widget.setFont(section_label_font)
+    restore_database_widget.layout = QHBoxLayout(restore_database_widget)
+    restore_database_widget.layout.setContentsMargins(50, 10, 50, 10)
+    restore_database_widget.layout.addWidget(restore_database_button)
 
     self.layout.addWidget(maximum_results_selection_widget)
     self.layout.addWidget(general_settings_widget)
     self.layout.addWidget(theme_selection_widget)
     self.layout.addWidget(word_family_discovery_widget)
-    self.layout.addWidget(self.default_editing_action_widget)
+    self.layout.addWidget(restore_database_widget)
 
     self.style()
 
@@ -152,10 +152,14 @@ class SettingsWidget(QDialog):
     if self.offline_database_button.isChecked():
       Settings.set_setting('word_family_discovery', 'offline_database')
 
-  def update_button_clicked(self):
-    if self.update_button.isChecked():
-      Settings.set_setting('default_editing_action', 'update')
-
-  def delete_button_clicked(self):
-    if self.delete_button.isChecked():
-      Settings.set_setting('default_editing_action', 'delete')
+  def restore_database(self):
+    title = 'Restore Database'
+    question = 'Are you sure you want to restore the database to its defaults?'
+    answer = QMessageBox.question(self, title, question, QMessageBox.StandardButton.Cancel | QMessageBox.StandardButton.Yes)
+    if answer == QMessageBox.StandardButton.Yes:
+      os.remove('resources/database.db')
+      shutil.copyfile('resources/database_backup.db', 'resources/database.db')
+      from central.main_window import MainWindow
+      MainWindow.clear_previous_subject_details()
+      from central.current_search import CurrentSearch
+      CurrentSearch.clear_current_search_details()

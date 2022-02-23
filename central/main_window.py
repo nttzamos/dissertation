@@ -1,13 +1,14 @@
-from PyQt6.QtWidgets import QFrame, QGridLayout, QHBoxLayout, QSplitter, QWidget
+from PyQt6.QtWidgets import QFrame, QGridLayout, QSplitter, QWidget
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon
 
 from central.main_widget import MainWidget
-
 from side.recent_searches_widget import RecentSearchesWidget
 from side.starred_words_widget import StarredWordsWidget
 from menu.menu_bar import MenuBar
 
 from models.profile import get_profile_name
+
 class MainWindow(QWidget):
   recent_searches_widget = RecentSearchesWidget()
   starred_words_widget = StarredWordsWidget()
@@ -15,6 +16,7 @@ class MainWindow(QWidget):
 
   def __init__(self):
     super().__init__()
+    self.setWindowIcon(QIcon('resources/window_icon.png'))
 
     self.layout = QGridLayout(self)
     self.layout.setContentsMargins(0, 0, 0, 0)

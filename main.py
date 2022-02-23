@@ -25,4 +25,9 @@ window.showMaximized()
 
 SearchingWidget.set_focus_to_search_bar()
 
+if Settings.get_boolean_setting('show_tutorial_on_startup'):
+  from tutorial_widget import TutorialWidget
+  tutorial_widget = TutorialWidget()
+  tutorial_widget.exec()
+
 sys.exit(app.exec())

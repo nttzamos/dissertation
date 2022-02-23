@@ -125,9 +125,12 @@ def initialize_grade_database(grade):
   con.close()
   print('Subject words for grade ' + str(grade) + ' were created.')
 
-  from models.family import create_families
-  create_families(grade)
-  print('Families for grade ' + str(grade) + ' were created.')
+  try:
+    from models.family import create_families
+    create_families(grade)
+    print('Families for grade ' + str(grade) + ' were created.')
+  except Exception as e:
+    print('Some exception occurred.')
 
 def sort_words_alphabetically(words):
   translation_table = {

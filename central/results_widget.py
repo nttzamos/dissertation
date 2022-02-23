@@ -1,11 +1,11 @@
-from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget, QMessageBox
+from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget, QMessageBox, QCheckBox
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
 from central.result import Result
 from menu.settings import Settings
 
-from models.family import get_family_id, get_family_words
+from models.family import get_family_id, get_family_words, update_word_family
 from models.word import get_word_id, word_exists
 from shared.wiktionary_parser import fetch_word_details
 
@@ -48,21 +48,13 @@ class ResultsWidget(QWidget):
     ResultsWidget.hide_placeholder()
     ResultsWidget.clear_previous_results()
     ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-    offline_result_words, online_saved_result_words, online_result_words, show_error = ResultsWidget.get_results(word)
+    offline_result_words, online_result_words, show_error = ResultsWidget.get_results(word)
 
     i = 0
     for word in offline_result_words:
       row = i // ResultsWidget.grid_columns
       column = i % ResultsWidget.grid_columns
-      result = Result(word, widget_width=ResultsWidget.single_result_width, state = 1)
-      ResultsWidget.widget_list.append(result)
-      ResultsWidget.grid_layout.addWidget(result, row, column)
-      i += 1
-
-    for word in online_saved_result_words:
-      row = i // ResultsWidget.grid_columns
-      column = i % ResultsWidget.grid_columns
-      result = Result(word, widget_width=ResultsWidget.single_result_width, state = 2)
+      result = Result(word, widget_width = ResultsWidget.single_result_width, saved = True)
       ResultsWidget.widget_list.append(result)
       ResultsWidget.grid_layout.addWidget(result, row, column)
       i += 1
@@ -70,14 +62,15 @@ class ResultsWidget(QWidget):
     for word in online_result_words:
       row = i // ResultsWidget.grid_columns
       column = i % ResultsWidget.grid_columns
-      result = Result(word, widget_width = ResultsWidget.single_result_width, state = 3)
+      result = Result(word, widget_width = ResultsWidget.single_result_width, saved = False)
       ResultsWidget.widget_list.append(result)
       ResultsWidget.grid_layout.addWidget(result, row, column)
       i += 1
 
-    if show_error:
+    if show_error and Settings.get_boolean_setting('show_no_internet_message'):
       ResultsWidget.show_no_internet_message()
-    elif i == 0:
+
+    if i == 0:
       ResultsWidget.show_placeholder('This search returned no results.')
 
   @staticmethod
@@ -95,21 +88,21 @@ class ResultsWidget(QWidget):
       try:
         online_family_words, unused = fetch_word_details(word)
       except RuntimeError:
-        return offline_result_words, [], [], True
+        return offline_result_words, [], True
 
       online_family_words = list(set(online_family_words) - set(offline_result_words))
-      online_saved_family_words = []
       for online_word in online_family_words:
         if word_exists(grade_id, online_word):
-          online_saved_family_words.append(online_word)
+          update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [online_word], [])
+          offline_result_words.append(online_word)
 
-      online_family_words = list(set(online_family_words) - set(online_saved_family_words))
+      online_family_words = list(set(online_family_words) - set(offline_result_words))
       online_family_words.sort()
-      online_saved_family_words.sort()
+      offline_result_words.sort()
 
-      return offline_result_words, online_saved_family_words, online_family_words, False
+      return offline_result_words, online_family_words, False
     else:
-      return offline_result_words, [], [], False
+      return offline_result_words, [], False
 
   @staticmethod
   def clear_previous_results():
@@ -137,6 +130,19 @@ class ResultsWidget(QWidget):
   def show_no_internet_message():
     title = 'No Internet Connection'
     text = 'The online wiktionary setting is enabled but you have no internet connection.'
-    answer = QMessageBox.critical(None, title, text, QMessageBox.StandardButton.Ok)
-    if answer == QMessageBox.StandardButton.Ok:
-      return
+    answer = QMessageBox()
+    answer.setIcon(QMessageBox.Icon.Critical)
+    answer.setText(text)
+    answer.setWindowTitle(title)
+    answer.setStandardButtons(QMessageBox.StandardButton.Ok)
+
+    check_box = QCheckBox("Don't show this message again, until closing the app")
+    check_box.clicked.connect(ResultsWidget.toggle_message_setting)
+    check_box.setChecked(True)
+
+    answer.setCheckBox(check_box)
+    answer.exec()
+
+  @staticmethod
+  def toggle_message_setting(value):
+    Settings.set_boolean_setting('show_no_internet_message', value)

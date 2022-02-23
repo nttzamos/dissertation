@@ -6,10 +6,15 @@ def fetch_word_details(word):
   url = 'https://el.wiktionary.org/wiki/{}'
   session = requests.Session()
   # session.mount('http://', requests.adapters.HTTPAdapter(max_retries = 2))
-  session.mount('https://', requests.adapters.HTTPAdapter(max_retries = 1))
+  try:
+    session.mount('https://', requests.adapters.HTTPAdapter(max_retries = 2))
+  except Exception as e:
+    print('Retries did not work.')
 
   response = session.get(url.format(word))
-  if response.status_code == 404:
+  if response.status_code != 200:
+    if response.status_code != 404:
+      print('Wrong Status')
     return [], True
 
   soup = BeautifulSoup(response.text.replace('>\n<', '><'), 'html.parser')
@@ -56,7 +61,10 @@ def clean_word(word):
   for character in forbidden_characters:
     new_word = word.split(character)[0]
     if character == '(' and not new_word:
-      new_word = word.split(')')[1]
+      try:
+        new_word = word.split(')')[1]
+      except Exception as e:
+        print(word)
 
     word = new_word
 

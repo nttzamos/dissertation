@@ -39,7 +39,7 @@ class CurrentSearch(QWidget):
     CurrentSearch.student_selector = QComboBox()
     CurrentSearch.student_selector.setFont(combo_box_font)
 
-    students = self.get_available_students()
+    students = get_students()
     if len(students) > 0:
       students[0:0] = ['Please select a student...']
       CurrentSearch.student_selector.addItems(students)
@@ -94,9 +94,21 @@ class CurrentSearch(QWidget):
     students_editing_dialog = DataEditingWidget()
     students_editing_dialog.exec()
 
-  def get_available_students(self):
-    students = get_students()
-    return students
+  @staticmethod
+  def clear_current_search_details():
+    CurrentSearch.searched_word.setText('Enter a word.')
+
+    CurrentSearch.student_selector.clear()
+    CurrentSearch.student_selector.addItem('There are no students.')
+    CurrentSearch.student_selector.setDisabled(True)
+
+    CurrentSearch.profile_selector.clear()
+    CurrentSearch.profile_selector.addItem('You have to select a student.')
+    CurrentSearch.profile_selector.setDisabled(True)
+
+    CurrentSearch.subject_selector.clear()
+    CurrentSearch.subject_selector.addItem('You have to select a student and a profile.')
+    CurrentSearch.subject_selector.setDisabled(True)
 
   @staticmethod
   def student_selector_activated_initial(index):
