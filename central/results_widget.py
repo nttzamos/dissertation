@@ -4,7 +4,6 @@ from PyQt6.QtGui import QFont
 
 from item.result import Result
 from menu.settings import Settings
-
 from models.family import get_family_id, get_family_words, update_word_family
 from models.word import get_word_id, word_exists
 from shared.wiktionary_parser import fetch_word_details

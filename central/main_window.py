@@ -3,11 +3,10 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 
 from central.main_widget import MainWidget
+from menu.menu_bar import MenuBar
+from models.profile import get_profile_name
 from side.recent_searches_widget import RecentSearchesWidget
 from side.starred_words_widget import StarredWordsWidget
-from menu.menu_bar import MenuBar
-
-from models.profile import get_profile_name
 
 class MainWindow(QWidget):
   recent_searches_widget = RecentSearchesWidget()

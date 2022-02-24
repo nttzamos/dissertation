@@ -1,7 +1,7 @@
-from shared.database_handler import connect_to_database, get_grade_table_name
 from models.profile import get_profile_subject_ids
 from models.subject import get_subject_id
 from models.word import get_word_id, word_exists_in_subject
+from shared.database_handler import connect_to_database, get_grade_table_name
 
 def create_starred_word(word):
   from search.current_search import CurrentSearch

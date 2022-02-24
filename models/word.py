@@ -1,9 +1,8 @@
-from shared.database_handler import connect_to_database, get_grade_table_name, get_subject_table_name, get_family_table_name
 from models.subject import get_subject_id, get_subject_name
+from shared.database_handler import connect_to_database, get_grade_table_name, get_subject_table_name, get_family_table_name
 
 def create_word(word, grade_id, subject_names):
   if word_exists(grade_id, word):
-    print(word)
     return
 
   con, cur = connect_to_database()

@@ -3,9 +3,8 @@ from PyQt6.QtCore import Qt, QStringListModel
 from PyQt6.QtGui import QFont
 
 from menu.settings import Settings
-
-from shared.database_handler import get_grades, get_grade_words, get_grade_subjects
 from models.word import get_word_subjects, word_exists, update_word, destroy_word
+from shared.database_handler import get_grades, get_grade_words, get_grade_subjects
 
 class WordUpdateWidget(QWidget):
   def __init__(self):

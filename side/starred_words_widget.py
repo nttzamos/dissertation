@@ -4,7 +4,6 @@ from PyQt6.QtGui import QFont
 
 from item.starred_word import StarredWord
 from menu.settings import Settings
-
 from models.starred_word import get_starred_words
 
 class StarredWordsWidget(QWidget):

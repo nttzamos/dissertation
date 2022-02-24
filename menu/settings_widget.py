@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon, QFont
 
 from menu.settings import Settings
+
 import os
 import shutil
 

@@ -3,9 +3,8 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QFont
 
 from menu.settings import Settings
-
-from models.student import create_student, student_name_exists
 from models.profile import get_profiles
+from models.student import create_student, student_name_exists
 
 class StudentAdditionWidget(QWidget):
   last_index_used = -1

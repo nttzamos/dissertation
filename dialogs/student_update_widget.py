@@ -3,9 +3,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
 from menu.settings import Settings
-
-from models.student import *
 from models.profile import get_profiles
+from models.student import *
 
 class StudentUpdateWidget(QWidget):
   def __init__(self):

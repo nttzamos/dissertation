@@ -1,9 +1,10 @@
+from shared.pdf_parser import PdfParser
+
 from os import path
 from os import listdir
+
 import sqlite3
 import re
-
-from shared.pdf_parser import PdfParser
 
 databases_directory_path = 'resources/'
 database_file = 'database.db'

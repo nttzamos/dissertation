@@ -3,9 +3,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
 from menu.settings import Settings
-
-from models.student import get_students, get_student_details
 from models.profile import get_profile_details
+from models.student import get_students, get_student_details
 
 class CurrentSearch(QWidget):
   subject_selector_active = False

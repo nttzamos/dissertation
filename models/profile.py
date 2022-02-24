@@ -1,5 +1,5 @@
-from shared.database_handler import get_grades, get_grade_subjects, connect_to_database
 from models.subject import get_subject_id
+from shared.database_handler import get_grades, get_grade_subjects, connect_to_database
 
 def create_default_grade_profiles():
   grade_names = get_grades()

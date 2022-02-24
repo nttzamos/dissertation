@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+
 import requests
 
 def fetch_word_details(word):

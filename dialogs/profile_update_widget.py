@@ -2,10 +2,9 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLin
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from shared.database_handler import get_grades, get_grade_subjects
 from menu.settings import Settings
-
 from models.profile import *
+from shared.database_handler import get_grades, get_grade_subjects
 
 class ProfileUpdateWidget(QWidget):
   def __init__(self):

@@ -2,11 +2,11 @@ from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidg
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 
-from shared.styles import Styles
-from shared.database_handler import get_grade_subjects
+from models.family import update_word_family
 from models.starred_word import create_starred_word, destroy_starred_word
 from models.word import create_word
-from models.family import update_word_family
+from shared.database_handler import get_grade_subjects
+from shared.styles import Styles
 
 class Result(QWidget):
   def __init__(self, word, widget_width = None, initial = False, saved = True):

@@ -1,14 +1,13 @@
-from PyQt6.QtGui import QFont, QIcon, QKeySequence, QShortcut
 from PyQt6.QtWidgets import QCompleter, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QSizePolicy
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
+from PyQt6.QtGui import QFont, QIcon, QKeySequence, QShortcut
 
-from side.recent_searches_widget import RecentSearchesWidget
 from menu.settings import Settings
+from models.family import get_words_with_family
+from models.recent_search import create_recent_search
 from shared.database_handler import get_grades, get_words
 from shared.styles import Styles
-
-from models.recent_search import create_recent_search
-from models.family import get_words_with_family
+from side.recent_searches_widget import RecentSearchesWidget
 
 class SearchingWidget(QWidget):
   dictionary_words = []

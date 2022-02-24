@@ -1,10 +1,10 @@
-from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QListWidget, QPushButton, QComboBox, QCompleter, QAbstractItemView
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QListWidget, QPushButton, QComboBox, QCompleter, QAbstractItemView
 from PyQt6.QtCore import Qt, QTimer, QStringListModel
 from PyQt6.QtGui import QFont
 
-from shared.database_handler import get_grades, get_grade_words
-from models.family import get_word_id, get_family_id, get_family_words, update_word_family
 from menu.settings import Settings
+from models.family import get_word_id, get_family_id, get_family_words, update_word_family
+from shared.database_handler import get_grades, get_grade_words
 
 class WordFamilyUpdateWidget(QWidget):
   def __init__(self):

@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 
-from search.current_search import CurrentSearch
-from search.searching_widget import SearchingWidget
 from central.results_widget import ResultsWidget
 from menu.settings import Settings
+from search.current_search import CurrentSearch
+from search.searching_widget import SearchingWidget
 
 class MainWidget(QWidget):
   searching_widget = SearchingWidget()

@@ -2,9 +2,9 @@ from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLin
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtGui import QFont
 
-from shared.database_handler import get_grades, get_grade_subjects
 from menu.settings import Settings
 from models.word import create_word, word_exists
+from shared.database_handler import get_grades, get_grade_subjects
 
 class WordAdditionWIdget(QWidget):
   def __init__(self):
