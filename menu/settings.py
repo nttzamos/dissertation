@@ -52,7 +52,7 @@ class Settings():
       right_widget_width = screen_width - left_widget_width - 2
       settings_database.set('right_widget_width', right_widget_width)
 
-      from central.result import Result
+      from item.result import Result
       long_result = Result('WWWWWWWWWW', initial=True) # 10
       single_result_width = long_result.sizeHint().width()
       settings_database.set('single_result_width', single_result_width)

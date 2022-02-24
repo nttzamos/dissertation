@@ -18,7 +18,7 @@ screen_height = app.primaryScreen().size().height()
 Settings.initialize_settings_database(screen_width, screen_height)
 
 from central.main_window import MainWindow
-from central.searching_widget import SearchingWidget
+from search.searching_widget import SearchingWidget
 
 window = MainWindow()
 window.showMaximized()
@@ -26,7 +26,7 @@ window.showMaximized()
 SearchingWidget.set_focus_to_search_bar()
 
 if Settings.get_boolean_setting('show_tutorial_on_startup'):
-  from tutorial_widget import TutorialWidget
+  from dialogs.tutorial_widget import TutorialWidget
   tutorial_widget = TutorialWidget()
   tutorial_widget.exec()
 

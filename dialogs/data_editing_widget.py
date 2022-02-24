@@ -2,10 +2,10 @@ from PyQt6.QtWidgets import QVBoxLayout, QTabWidget, QDialog
 from PyQt6.QtGui import QIcon
 
 from menu.settings import Settings
-from central.student_addition_widget import StudentAdditionWidget
-from central.student_update_widget import StudentUpdateWidget
-from central.profile_addition_widget import ProfileAdditionWIdget
-from central.profile_update_widget import ProfileUpdateWidget
+from dialogs.student_addition_widget import StudentAdditionWidget
+from dialogs.student_update_widget import StudentUpdateWidget
+from dialogs.profile_addition_widget import ProfileAdditionWIdget
+from dialogs.profile_update_widget import ProfileUpdateWidget
 
 class DataEditingWidget(QDialog):
   def __init__(self):

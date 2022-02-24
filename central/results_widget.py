@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidg
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
-from central.result import Result
+from item.result import Result
 from menu.settings import Settings
 
 from models.family import get_family_id, get_family_words, update_word_family
@@ -75,7 +75,7 @@ class ResultsWidget(QWidget):
 
   @staticmethod
   def get_results(word):
-    from central.current_search import CurrentSearch
+    from search.current_search import CurrentSearch
     grade_id = CurrentSearch.grade_id
     word_id = get_word_id(grade_id, word)
     family_id = get_family_id(grade_id, word_id)

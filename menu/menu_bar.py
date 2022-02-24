@@ -73,7 +73,7 @@ class MenuBar(QWidget):
     settings_dialog.exec()
 
   def open_tutorial(self):
-    from tutorial_widget import TutorialWidget
+    from dialogs.tutorial_widget import TutorialWidget
     tutorial_widget = TutorialWidget()
     tutorial_widget.exec()
 

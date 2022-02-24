@@ -140,7 +140,7 @@ class SearchingWidget(QWidget):
 
   @staticmethod
   def update_selected_dictionary():
-    from central.current_search import CurrentSearch
+    from search.current_search import CurrentSearch
     if CurrentSearch.subject_selector_active:
       subject_name = CurrentSearch.subject_selector.currentText()
 
@@ -213,6 +213,6 @@ class SearchingWidget(QWidget):
     SearchingWidget.line_edit.setFocus()
 
   def open_words_editing_widget(self):
-    from central.word_editing_widget import WordEditingWidget
+    from dialogs.word_editing_widget import WordEditingWidget
     students_editing_dialog = WordEditingWidget()
     students_editing_dialog.exec()

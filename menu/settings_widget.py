@@ -129,11 +129,11 @@ class SettingsWidget(QDialog):
     Settings.set_boolean_setting(setting_name, new_value)
 
     if setting_name == 'show_edit_dict_words_button':
-      from central.searching_widget import SearchingWidget
+      from search.searching_widget import SearchingWidget
       SearchingWidget.toggle_edit_words_button_visibility(new_value)
 
     if setting_name == 'only_show_words_with_family':
-      from central.searching_widget import SearchingWidget
+      from search.searching_widget import SearchingWidget
       SearchingWidget.update_selected_dictionary()
 
   def light_theme_button_clicked(self):
@@ -161,5 +161,5 @@ class SettingsWidget(QDialog):
       shutil.copyfile('resources/database_backup.db', 'resources/database.db')
       from central.main_window import MainWindow
       MainWindow.clear_previous_subject_details()
-      from central.current_search import CurrentSearch
+      from search.current_search import CurrentSearch
       CurrentSearch.clear_current_search_details()

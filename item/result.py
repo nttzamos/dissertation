@@ -69,7 +69,7 @@ class Result(QWidget):
     self.buttons_widget.setStyleSheet(Styles.result_buttons_style)
 
   def add_word_to_family(self):
-    from central.current_search import CurrentSearch
+    from search.current_search import CurrentSearch
     word = self.word_label.text()
     x, y, z, subject_names = CurrentSearch.get_current_selection_details()
     subject_names = [subject_names]
@@ -78,7 +78,7 @@ class Result(QWidget):
       subject_names = get_grade_subjects(CurrentSearch.grade_id)
     create_word(word, CurrentSearch.grade_id, subject_names)
 
-    from central.searching_widget import SearchingWidget
+    from search.searching_widget import SearchingWidget
     SearchingWidget.add_or_remove_dictionary_words([word], [])
 
     update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [word], [])
@@ -89,7 +89,7 @@ class Result(QWidget):
     self.buttons_widget.layout.addWidget(self.remove_from_family_button)
 
   def remove_word_from_family(self):
-    from central.current_search import CurrentSearch
+    from search.current_search import CurrentSearch
     word = self.word_label.text()
     update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [], [word])
     self.hide()

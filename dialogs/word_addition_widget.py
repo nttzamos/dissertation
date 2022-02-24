@@ -124,9 +124,9 @@ class WordAdditionWIdget(QWidget):
 
     grade_id = self.grade_selector.currentIndex() + 1
     create_word(word, grade_id, subjects)
-    from central.word_update_widget import WordUpdateWidget
+    from dialogs.word_update_widget import WordUpdateWidget
     WordUpdateWidget.add_word_to_dictionary(grade_id, word)
-    from central.word_family_update_widget import WordFamilyUpdateWidget
+    from dialogs.word_family_update_widget import WordFamilyUpdateWidget
     WordFamilyUpdateWidget.update_dictionary_words(word_to_add = word)
 
   def word_is_invalid(self):

@@ -146,7 +146,7 @@ class StudentUpdateWidget(QWidget):
         return
 
     new_student_name = self.name_line_edit.text()
-    from central.current_search import CurrentSearch
+    from search.current_search import CurrentSearch
     CurrentSearch.update_student(StudentUpdateWidget.student_selector.currentText(), new_student_name)
     self.student_selector.setItemText(self.student_selector.currentIndex(), new_student_name)
     update_student_name(self.student_id, new_student_name)
@@ -171,7 +171,7 @@ class StudentUpdateWidget(QWidget):
     for check_box in StudentUpdateWidget.check_boxes:
       StudentUpdateWidget.profiles_selection_widget.layout.removeWidget(check_box)
 
-    from central.current_search import CurrentSearch
+    from search.current_search import CurrentSearch
     CurrentSearch.remove_student(StudentUpdateWidget.student_selector.currentText())
 
     StudentUpdateWidget.student_selector.removeItem(StudentUpdateWidget.student_selector.currentIndex())

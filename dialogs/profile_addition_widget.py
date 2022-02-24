@@ -125,13 +125,13 @@ class ProfileAdditionWIdget(QWidget):
 
     create_profile(profile_name, self.grade_selector.currentIndex() + 1, subjects)
 
-    from central.profile_update_widget import ProfileUpdateWidget
+    from dialogs.profile_update_widget import ProfileUpdateWidget
     ProfileUpdateWidget.add_profile(profile_name)
 
-    from central.student_addition_widget import StudentAdditionWidget
+    from dialogs.student_addition_widget import StudentAdditionWidget
     StudentAdditionWidget.add_profile(profile_name)
 
-    from central.student_update_widget import StudentUpdateWidget
+    from dialogs.student_update_widget import StudentUpdateWidget
     StudentUpdateWidget.add_profile(profile_name)
 
   def profile_is_invalid(self):

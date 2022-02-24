@@ -6,7 +6,7 @@ from models.subject import get_subject_id
 from models.word import get_word_id, word_exists_in_subject
 
 def create_recent_search(word):
-  from central.current_search import CurrentSearch
+  from search.current_search import CurrentSearch
   student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
   if subject_name == 'All Subjects':
     subject_ids = get_profile_subject_ids(profile_id)
@@ -42,7 +42,7 @@ def create_recent_search(word):
   return recent_search_exists
 
 def destroy_recent_search(word):
-  from central.current_search import CurrentSearch
+  from search.current_search import CurrentSearch
   student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
   if subject_name == 'All Subjects':
     subject_ids = get_profile_subject_ids(profile_id)
@@ -61,7 +61,7 @@ def destroy_recent_search(word):
   con.close()
 
 def get_recent_searches():
-  from central.current_search import CurrentSearch
+  from search.current_search import CurrentSearch
   student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
   if subject_name == 'All Subjects':
     values = (profile_id, student_id)

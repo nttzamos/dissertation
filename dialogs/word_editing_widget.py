@@ -2,9 +2,9 @@ from PyQt6.QtWidgets import QVBoxLayout, QTabWidget, QDialog
 from PyQt6.QtGui import QIcon
 
 from menu.settings import Settings
-from central.word_addition_widget import WordAdditionWIdget
-from central.word_update_widget import WordUpdateWidget
-from central.word_family_update_widget import WordFamilyUpdateWidget
+from dialogs.word_addition_widget import WordAdditionWIdget
+from dialogs.word_update_widget import WordUpdateWidget
+from dialogs.word_family_update_widget import WordFamilyUpdateWidget
 
 class WordEditingWidget(QDialog):
   def __init__(self):
@@ -34,9 +34,9 @@ class WordEditingWidget(QDialog):
     self.layout.addWidget(tab_widget)
 
   def closeEvent(self, event):
-    from central.searching_widget import SearchingWidget
+    from search.searching_widget import SearchingWidget
     SearchingWidget.update_selected_dictionary()
 
   def hideEvent(self, event):
-    from central.searching_widget import SearchingWidget
+    from search.searching_widget import SearchingWidget
     SearchingWidget.update_selected_dictionary()

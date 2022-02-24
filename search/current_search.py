@@ -90,7 +90,7 @@ class CurrentSearch(QWidget):
     CurrentSearch.searched_word.setStyleSheet(Styles.searched_word_style)
 
   def open_data_editing_widget(self):
-    from central.data_editing_widget import DataEditingWidget
+    from dialogs.data_editing_widget import DataEditingWidget
     students_editing_dialog = DataEditingWidget()
     students_editing_dialog.exec()
 

@@ -68,7 +68,7 @@ class MainWindow(QWidget):
 
   @staticmethod
   def update_widgets(profile_id, subject_name):
-    from central.searching_widget import SearchingWidget
+    from search.searching_widget import SearchingWidget
     SearchingWidget.update_selected_dictionary()
 
     if subject_name == 'All Subjects':
@@ -85,10 +85,10 @@ class MainWindow(QWidget):
 
   @staticmethod
   def clear_previous_subject_details():
-    from central.current_search import CurrentSearch
+    from search.current_search import CurrentSearch
     if not CurrentSearch.subject_selector_active: return
 
-    from central.searching_widget import SearchingWidget
+    from search.searching_widget import SearchingWidget
     SearchingWidget.set_initial_error_message()
 
     from central.results_widget import ResultsWidget
