@@ -58,7 +58,7 @@ def item_is_valid(item):
   return True
 
 def clean_word(word):
-  forbidden_characters = [',', '(', ' και']
+  forbidden_characters = [',', '(', ' και', '/']
   for character in forbidden_characters:
     new_word = word.split(character)[0]
     if character == '(' and not new_word:

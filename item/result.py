@@ -15,6 +15,9 @@ class Result(QWidget):
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(0, 0, 10, 10)
 
+    from menu.settings import Settings
+    font = QFont(Settings.font, 20)
+
     self.saved = saved
 
     if widget_width != None:
@@ -26,8 +29,6 @@ class Result(QWidget):
 
     self.word_label = QLabel(self, text=word)
     self.word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    from menu.settings import Settings
-    font = QFont(Settings.font, 20)
     self.word_label.setFont(font)
 
     self.buttons_widget = QWidget()

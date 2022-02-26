@@ -56,15 +56,15 @@ class SearchingWidget(QWidget):
     self.hide_clear_search_button = True
     self.clear_search_button.hide()
 
-    self.search_button = QPushButton()
-    self.search_button.setIcon(QIcon('resources/search.png'))
-    self.search_button.clicked.connect(self.search_with_enter)
+    search_button = QPushButton()
+    search_button.setIcon(QIcon('resources/search.png'))
+    search_button.clicked.connect(self.search_with_enter)
 
     self.search_bar_widget.layout.setSpacing(0)
-    self.search_bar_widget.layout.addWidget(self.line_edit)
+    self.search_bar_widget.layout.addWidget(SearchingWidget.line_edit)
     self.search_bar_widget.layout.addWidget(self.clear_search_button)
     self.search_bar_widget.layout.addSpacing(5)
-    self.search_bar_widget.layout.addWidget(self.search_button)
+    self.search_bar_widget.layout.addWidget(search_button)
     self.search_bar_widget.layout.addSpacing(10)
 
     SearchingWidget.error_message = QLabel(SearchingWidget.uninitialized_state_text, self)

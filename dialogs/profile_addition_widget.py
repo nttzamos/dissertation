@@ -33,11 +33,9 @@ class ProfileAdditionWIdget(QWidget):
     grade_selection_widget.layout = QHBoxLayout(grade_selection_widget)
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    grades = get_grades()
-
     self.grade_selector = QComboBox()
     self.grade_selector.setFont(combo_box_font)
-    self.grade_selector.addItems(grades)
+    self.grade_selector.addItems(get_grades())
     self.grade_selector.activated.connect(self.grade_selector_activated)
 
     grade_selection_widget.layout.addWidget(self.grade_selector)

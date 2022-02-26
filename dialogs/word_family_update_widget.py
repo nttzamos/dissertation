@@ -25,11 +25,9 @@ class WordFamilyUpdateWidget(QWidget):
     grade_selection_widget.layout = QHBoxLayout(grade_selection_widget)
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    grades = get_grades()
-
     WordFamilyUpdateWidget.grade_selector = QComboBox()
     WordFamilyUpdateWidget.grade_selector.setFont(combo_box_font)
-    WordFamilyUpdateWidget.grade_selector.addItems(grades)
+    WordFamilyUpdateWidget.grade_selector.addItems(get_grades())
     WordFamilyUpdateWidget.grade_selector.activated.connect(self.grade_selector_activated)
 
     grade_selection_widget.layout.addWidget(WordFamilyUpdateWidget.grade_selector)

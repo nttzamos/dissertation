@@ -24,19 +24,20 @@ class StarredWordsWidget(QWidget):
     super().__init__()
 
     self.layout = QVBoxLayout(self)
-    self.title_label = QLabel('Starred Words')
-    self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    font = QFont(Settings.font, 18)
-    self.title_label.setFont(font)
-    self.layout.addWidget(self.title_label)
-    self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
+    self.layout.setContentsMargins(0, 0, 0, 0)
+
+    font = QFont(Settings.font, 18)
+    invisible_font = QFont(Settings.font, 1)
+
+    self.title_label = QLabel('Starred Words')
+    self.title_label.setFont(font)
+    self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     StarredWordsWidget.placeholder_label.setFont(font)
     StarredWordsWidget.placeholder_label.setWordWrap(True)
     StarredWordsWidget.placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-    invisible_font = QFont(Settings.font, 1)
     StarredWordsWidget.vspacer.setFont(invisible_font)
     size_policy = StarredWordsWidget.vspacer.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
@@ -46,6 +47,8 @@ class StarredWordsWidget(QWidget):
     self.scroll_area.setWidgetResizable(True)
     self.scroll_area.setWidget(StarredWordsWidget.scroll_area_widget_contents)
     self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+
+    self.layout.addWidget(self.title_label)
     self.layout.addWidget(self.scroll_area)
 
     self.setMinimumWidth(Settings.get_setting('left_widget_width'))

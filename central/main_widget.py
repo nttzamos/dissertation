@@ -12,10 +12,10 @@ class MainWidget(QWidget):
 
   def __init__(self):
     super().__init__()
+
     self.layout = QVBoxLayout(self)
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
-
     self.layout.addWidget(MainWidget.searching_widget)
     self.layout.addWidget(MainWidget.current_search)
     self.layout.addWidget(MainWidget.results_widget)

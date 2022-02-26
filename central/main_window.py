@@ -15,15 +15,14 @@ class MainWindow(QWidget):
 
   def __init__(self):
     super().__init__()
+
     self.setWindowIcon(QIcon('resources/window_icon.png'))
+    self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
 
     self.layout = QGridLayout(self)
+    self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    # Margin between the title bar and the rest of the application
-    self.layout.setSpacing(0)
-
-    self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
     self.menuBar = MenuBar(self)
 
     # Left Horizontal Splitter
@@ -68,17 +67,16 @@ class MainWindow(QWidget):
   @staticmethod
   def update_widgets(profile_id, subject_name):
     from search.searching_widget import SearchingWidget
-    SearchingWidget.update_selected_dictionary()
+    from central.results_widget import ResultsWidget
 
     if subject_name == 'All Subjects':
       SearchingWidget.modify_error_message(get_profile_name(profile_id), False)
     else:
       SearchingWidget.modify_error_message(subject_name, True)
 
-    from central.results_widget import ResultsWidget
+    SearchingWidget.update_selected_dictionary()
     ResultsWidget.show_placeholder()
     MainWidget.current_search.searched_word.setText('Enter a word.')
-
     RecentSearchesWidget.populate()
     StarredWordsWidget.populate()
 
@@ -88,11 +86,10 @@ class MainWindow(QWidget):
     if not CurrentSearch.subject_selector_active: return
 
     from search.searching_widget import SearchingWidget
-    SearchingWidget.set_initial_error_message()
-
     from central.results_widget import ResultsWidget
+
+    SearchingWidget.set_initial_error_message()
     ResultsWidget.show_placeholder()
     CurrentSearch.subject_selector_active = False
-
     RecentSearchesWidget.clear_previous_recent_searches()
     StarredWordsWidget.clear_previous_starred_words()

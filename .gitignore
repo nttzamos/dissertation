@@ -8,3 +8,5 @@ build/*
 dist/*
 main.spec
 *.DS_Store
+Wordinary.app/*
+Wordinary.spec

@@ -17,13 +17,8 @@ class WordEditingWidget(QDialog):
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
-    # Add a new word
     add_word_widget = WordAdditionWIdget()
-
-    # Edit existing words widget
     edit_word_widget = WordUpdateWidget()
-
-    # Edit existing word family widget
     edit_word_family_widget = WordFamilyUpdateWidget()
 
     tab_widget = QTabWidget()

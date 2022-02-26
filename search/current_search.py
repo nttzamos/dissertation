@@ -24,16 +24,16 @@ class CurrentSearch(QWidget):
     CurrentSearch.searched_word.setMaximumHeight(100)
     CurrentSearch.searched_word.setFont(searched_word_font)
 
-    self.search_details = QWidget()
-    self.search_details.layout = QVBoxLayout(self.search_details)
+    search_details = QWidget()
+    search_details.layout = QVBoxLayout(search_details)
 
-    self.open_data_editing_widget_button = QPushButton('Edit Data')
-    self.open_data_editing_widget_button.setToolTip(
+    open_data_editing_widget_button = QPushButton('Edit Data')
+    open_data_editing_widget_button.setToolTip(
       'You can create/update the students as well as their profiles.')
 
-    self.open_data_editing_widget_button.setFont(combo_box_font)
-    self.open_data_editing_widget_button.clicked.connect(self.open_data_editing_widget)
-    self.open_data_editing_widget_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+    open_data_editing_widget_button.setFont(combo_box_font)
+    open_data_editing_widget_button.clicked.connect(self.open_data_editing_widget)
+    open_data_editing_widget_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
     CurrentSearch.student_selector = QComboBox()
     CurrentSearch.student_selector.setFont(combo_box_font)
@@ -57,16 +57,16 @@ class CurrentSearch(QWidget):
     CurrentSearch.profile_selector.setDisabled(True)
     CurrentSearch.subject_selector.setDisabled(True)
 
-    self.search_details.layout.addWidget(self.open_data_editing_widget_button, alignment=Qt.AlignmentFlag.AlignRight)
-    self.search_details.layout.addWidget(CurrentSearch.student_selector)
-    self.search_details.layout.addWidget(CurrentSearch.profile_selector)
-    self.search_details.layout.addWidget(CurrentSearch.subject_selector)
+    search_details.layout.addWidget(open_data_editing_widget_button, alignment=Qt.AlignmentFlag.AlignRight)
+    search_details.layout.addWidget(CurrentSearch.student_selector)
+    search_details.layout.addWidget(CurrentSearch.profile_selector)
+    search_details.layout.addWidget(CurrentSearch.subject_selector)
 
     self.layout.addWidget(CurrentSearch.searched_word)
     self.layout.addSpacing(100)
-    self.layout.addWidget(self.search_details)
+    self.layout.addWidget(search_details)
 
-    self.search_details.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+    search_details.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
     CurrentSearch.searched_word.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
     CurrentSearch.student_selector.activated.connect(self.student_selector_activated_initial)

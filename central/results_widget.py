@@ -26,10 +26,11 @@ class ResultsWidget(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
 
     font = QFont(Settings.font, 18)
+
     ResultsWidget.placeholder_label.setFont(font)
     ResultsWidget.grid_layout.addWidget(ResultsWidget.placeholder_label)
-
     ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
     self.scroll_area = QScrollArea()
     self.scroll_area.setWidgetResizable(True)
     self.scroll_area.setWidget(ResultsWidget.scroll_area_widget_contents)

@@ -33,11 +33,9 @@ class WordAdditionWIdget(QWidget):
     grade_selection_widget.layout = QHBoxLayout(grade_selection_widget)
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    grades = get_grades()
-
     self.grade_selector = QComboBox()
     self.grade_selector.setFont(combo_box_font)
-    self.grade_selector.addItems(grades)
+    self.grade_selector.addItems(get_grades())
     self.grade_selector.activated.connect(self.grade_selector_activated)
 
     grade_selection_widget.layout.addWidget(self.grade_selector)
@@ -75,14 +73,14 @@ class WordAdditionWIdget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    self.save_button = QPushButton('Save New Word')
-    self.save_button.pressed.connect(self.save_word)
+    save_button = QPushButton('Save New Word')
+    save_button.pressed.connect(self.save_word)
 
     self.layout.addWidget(word_widget)
     self.layout.addWidget(grade_selection_widget)
     self.layout.addWidget(subjects_widget)
     self.layout.addSpacing(15)
-    self.layout.addWidget(self.save_button, alignment=Qt.AlignmentFlag.AlignRight)
+    self.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.style()
 

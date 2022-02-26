@@ -14,19 +14,20 @@ class RecentSearch(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
-    self.data_widget = QWidget()
-    self.data_widget.layout = QHBoxLayout(self.data_widget)
-    self.data_widget.layout.setContentsMargins(0, 0, 0, 0)
-
-    self.word = QLabel(word)
     from menu.settings import Settings
     font = QFont(Settings.font, 14)
+
+    data_widget = QWidget()
+    data_widget.layout = QHBoxLayout(data_widget)
+    data_widget.layout.setContentsMargins(0, 0, 0, 0)
+
+    self.word = QLabel(word)
     self.word.setFont(font)
 
-    self.reload_button = QPushButton()
-    self.reload_button.setIcon(QIcon('resources/reload.svg'))
-    self.reload_button.clicked.connect(self.reload_word)
-    self.reload_button.setFixedWidth(30)
+    reload_button = QPushButton()
+    reload_button.setIcon(QIcon('resources/reload.svg'))
+    reload_button.clicked.connect(self.reload_word)
+    reload_button.setFixedWidth(30)
 
     self.star_button = QPushButton()
     self.star_button.clicked.connect(self.toggle_starred_state)
@@ -38,24 +39,24 @@ class RecentSearch(QWidget):
     else:
       self.star_button.setIcon(QIcon('resources/unstarred.svg'))
 
-    self.delete_button = QPushButton()
-    self.delete_button.setIcon(QIcon('resources/delete.svg'))
-    self.delete_button.clicked.connect(self.remove_word)
-    self.delete_button.setFixedWidth(30)
+    delete_button = QPushButton()
+    delete_button.setIcon(QIcon('resources/delete.svg'))
+    delete_button.clicked.connect(self.remove_word)
+    delete_button.setFixedWidth(30)
 
-    self.line = QFrame()
-    self.line.setFrameShape(QFrame.Shape.HLine)
-    self.line.setFrameShadow(QFrame.Shadow.Plain)
+    line = QFrame()
+    line.setFrameShape(QFrame.Shape.HLine)
+    line.setFrameShadow(QFrame.Shadow.Plain)
 
-    self.data_widget.layout.addSpacing(5)
-    self.data_widget.layout.addWidget(self.word)
-    self.data_widget.layout.addWidget(self.reload_button)
-    self.data_widget.layout.addWidget(self.star_button)
-    self.data_widget.layout.addWidget(self.delete_button)
-    self.data_widget.layout.addSpacing(5)
+    data_widget.layout.addSpacing(5)
+    data_widget.layout.addWidget(self.word)
+    data_widget.layout.addWidget(reload_button)
+    data_widget.layout.addWidget(self.star_button)
+    data_widget.layout.addWidget(delete_button)
+    data_widget.layout.addSpacing(5)
 
-    self.layout.addWidget(self.data_widget)
-    self.layout.addWidget(self.line)
+    self.layout.addWidget(data_widget)
+    self.layout.addWidget(line)
 
     self.style()
 
