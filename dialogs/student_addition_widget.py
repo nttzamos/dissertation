@@ -7,6 +7,17 @@ from models.profile import get_profiles
 from models.student import create_student, student_name_exists
 
 class StudentAdditionWidget(QWidget):
+  STUDENT_NAME_TEXT = 'Όνομα Μαθητή'
+  PROFILE_SELECTION_TEXT = 'Επιλογή Προφίλ'
+  SAVE_STUDENT_BUTTON_TEXT = 'Αποθήκευση Μαθητή'
+  ERROR_SAVING_STUDENT_TEXT = 'Αδυναμία αποθήκευσης μαθητή'
+  STUDENT_NAME_EMPTY_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
+                             'έχετε συμπληρώσει το όνομα του')
+  STUDENT_NAME_EXISTS_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς '
+                              'υπάρχει ήδη άλλος μαθητής με το ίδιο όνομα')
+  NO_PROFILE_SELECTED_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
+                              'έχετε επιλέξει κάποιο προφίλ για αυτόν')
+
   last_index_used = -1
 
   def __init__(self):
@@ -19,7 +30,7 @@ class StudentAdditionWidget(QWidget):
     check_box_font = QFont(Settings.font, 14)
     line_edit_font = QFont(Settings.font, 14)
 
-    name_widget = QGroupBox('Student Name')
+    name_widget = QGroupBox(StudentAdditionWidget.STUDENT_NAME_TEXT)
     name_widget.setFont(section_label_font)
     name_widget.layout = QHBoxLayout(name_widget)
     name_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -28,7 +39,7 @@ class StudentAdditionWidget(QWidget):
     self.name_line_edit.setFont(line_edit_font)
     name_widget.layout.addWidget(self.name_line_edit)
 
-    profiles_widget = QGroupBox('Profile Selection')
+    profiles_widget = QGroupBox(StudentAdditionWidget.PROFILE_SELECTION_TEXT)
     profiles_widget.setFont(section_label_font)
     profiles_widget.layout = QHBoxLayout(profiles_widget)
     profiles_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -62,7 +73,7 @@ class StudentAdditionWidget(QWidget):
 
     profiles_widget.layout.addWidget(scroll_area)
 
-    save_button = QPushButton('Save New Student')
+    save_button = QPushButton(StudentAdditionWidget.SAVE_STUDENT_BUTTON_TEXT)
     save_button.pressed.connect(self.saveStudent)
 
     self.layout.addWidget(name_widget)
@@ -80,7 +91,7 @@ class StudentAdditionWidget(QWidget):
     is_invalid, text = self.student_is_invalid()
 
     if is_invalid:
-      title = 'Error Saving Student'
+      title = StudentAdditionWidget.ERROR_SAVING_STUDENT_TEXT
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -105,16 +116,16 @@ class StudentAdditionWidget(QWidget):
   def student_is_invalid(self):
     student_name = self.name_line_edit.text()
     if len(student_name) == 0:
-      return True, 'Student can not be saved because the profile name is empty.'
+      return True, StudentAdditionWidget.STUDENT_NAME_EMPTY_TEXT
 
     if student_name_exists(student_name):
-      return True, 'Student can not be saved as this name is already used for another profile.'
+      return True, StudentAdditionWidget.STUDENT_NAME_EXISTS_TEXT
 
     for check_box in StudentAdditionWidget.check_boxes:
       if check_box.isChecked():
         return False, ''
 
-    return True, 'Student can not be saved because none of the profiles have been selected.'
+    return True, StudentAdditionWidget.NO_PROFILE_SELECTED_TEXT
 
   @staticmethod
   def add_profile(profile_name):

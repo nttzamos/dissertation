@@ -143,7 +143,8 @@ def sort_words_alphabetically(words):
   return [word for _, word in sorted(zip(normalized_words, words))]
 
 def get_words(profile_id, grade_id, subject_name):
-  if subject_name == 'All Subjects':
+  from search.current_search import CurrentSearch
+  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     from models.profile import get_profile_subject_ids
     subject_ids = get_profile_subject_ids(profile_id)
   else:

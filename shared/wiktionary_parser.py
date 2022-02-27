@@ -6,7 +6,6 @@ def fetch_word_details(word):
   if not active_internet_connection_exists(): raise RuntimeError
   url = 'https://el.wiktionary.org/wiki/{}'
   session = requests.Session()
-  # session.mount('http://', requests.adapters.HTTPAdapter(max_retries = 2))
   try:
     session.mount('https://', requests.adapters.HTTPAdapter(max_retries = 2))
   except Exception as e:
@@ -40,7 +39,7 @@ def fetch_word_details(word):
 
 def active_internet_connection_exists():
   try:
-    requests.get(url = "https://www.google.com", timeout = 1)
+    requests.get(url = 'https://www.google.com', timeout = 1)
   except (requests.ConnectionError, requests.Timeout) as exception:
     return False
 

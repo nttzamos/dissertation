@@ -7,6 +7,10 @@ from menu.settings import Settings
 from models.starred_word import get_starred_words
 
 class StarredWordsWidget(QWidget):
+  TITLE = 'Αγαπημένες Λέξεις'
+  NO_STARRED_WORDS_TEXT = 'Δεν έχετε αγαπημένες λέξεις'
+  SELECT_A_SUBJECT_TEXT = 'Επιλέξτε κάποιο μάθημα πρώτα.'
+
   scroll_area_widget_contents = QWidget()
   grid_layout = QGridLayout(scroll_area_widget_contents)
   grid_layout.setSpacing(0)
@@ -30,7 +34,7 @@ class StarredWordsWidget(QWidget):
     font = QFont(Settings.font, 18)
     invisible_font = QFont(Settings.font, 1)
 
-    self.title_label = QLabel('Starred Words')
+    self.title_label = QLabel(StarredWordsWidget.TITLE)
     self.title_label.setFont(font)
     self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -72,7 +76,7 @@ class StarredWordsWidget(QWidget):
     starred_words = get_starred_words()
 
     if len(starred_words) == 0:
-      StarredWordsWidget.show_placeholder(text = 'You do not have any Starred Words')
+      StarredWordsWidget.show_placeholder(text = StarredWordsWidget.NO_STARRED_WORDS_TEXT)
       return
     else:
       StarredWordsWidget.hide_placeholder()
@@ -98,7 +102,7 @@ class StarredWordsWidget(QWidget):
   def remove_starred_word(obj):
     StarredWordsWidget.widget_list.remove(obj)
     if len(StarredWordsWidget.widget_list)==0:
-      StarredWordsWidget.show_placeholder(text = 'You do not have any Starred Words')
+      StarredWordsWidget.show_placeholder(text = StarredWordsWidget.NO_STARRED_WORDS_TEXT)
 
   @staticmethod
   def toggle_starred_word_starred_state(word):
@@ -118,7 +122,8 @@ class StarredWordsWidget(QWidget):
     StarredWordsWidget.show_placeholder()
 
   @staticmethod
-  def show_placeholder(text = 'Please select a subject first.'):
+  def show_placeholder(text = None):
+    if text == None: text = StarredWordsWidget.SELECT_A_SUBJECT_TEXT
     StarredWordsWidget.placeholder_label.setText(text)
     if not StarredWordsWidget.show_placeholder_label:
       StarredWordsWidget.show_placeholder_label = True

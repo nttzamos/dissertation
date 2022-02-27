@@ -6,52 +6,57 @@ from menu.settings import Settings
 
 class TutorialWidget(QDialog):
   TITLES = [
-    'Application Introduction', 'Students', 'Profiles', 'Subjects', 'Results'
+    'Εισαγωγή στο Wordinary', 'Μαθητές', 'Προφίλ', 'Μαθήματα', 'Αποτελέσματα'
   ]
 
   APPLICATION_INTRODUCTION = (
-    'Welcome to Wordinary! This is an application that helps young elementary '
-    'students learn the word family of words included in their school books.\n'
-    '\nIn order to use the app you have to a choose student, a specific profil'
-    'e of this student and one or all of the subjects of the specific profile.'
-    '\n\nThis application uses Wiktionary to identify words that belong to the'
-    ' word family of words you search for.\n\nThe results of your search will '
-    'appear in the bottom part of the application.'
-
+    'Καλώς ήρθατε στο Wordinary! Μια εφαρμογή που βοηθά μαθητές Δημοτικού να '
+    'μάθουν ευκολότερα τις συγγενικές λέξεις των λέξεων που ανήκουν στα βιβλία '
+    'τους.\n\nΓια να χρησιμοποιήσετε την εφαρμογή, πρέπει να επιλέξετε έναν μαθητή, '
+    'ένα προφίλ του συγκεκριμένου μαθητή και ένα ή όλα τα μαθήματα του συγκεκριμένου '
+    'προφίλ.\n\nΗ εφαρμογή χρησιμοποιεί το Wiktionary (https://el.wiktionary.org/) '
+    'προκειμένουν να εντοπίσει τις συγγενικές λέξεις των λέξεων που αναζητά ο χρήστης.'
+    '\n\nΤα αποτελέσματα της αναζήτησης εμφανίζονται στο κάτω μέρος της εφαρμογής.'
   )
 
   STUDENT_EXPLANATION = (
-    'You can create students which correspond to your actual students in order'
-    ' to differentiate their details such as profiles, recent searches and sta'
-    'rred words.'
+    'Μπορείτε να δημιουργήσετε μαθητές, οι οποίοι αντιστοιχούν ουσιαστικά στους '
+    'πραγματικούς σας μαθητές, έτσι ώστε να διαφοροποιήσετε δεδομένα τους, όπως '
+    'τα προφίλ τους, τις αναζητήσεις αλλά και τις αγαπημένες τους λέξεις.\n\n'
+    'Μπορείτε να δημιουργήσετε νέους μαθητές ή να επεξεργαστείτε τους υπάρχοντες '
+    'πατώντας το κουμπί "Επεξεργασία Δεδομένων" που βρίσκεται στο δεξί μέρος της '
+    'εφαρμογής.'
   )
 
   PROFILE_EXPLANATION = (
-    'Profiles belong to a specific grade and contain a set of subjects of that'
-    ' grade.\n\nThere are 6 default profiles (one for each grade), which conta'
-    'in all the subjects of each grade and which can not be edited or deleted.'
-    '\n\nYou can create new profiles or edit/delete existing ones by pressing '
-    'the "Edit Data" button.'
+    'Τα προφίλ ανήκουν σε μια συγκεκριμένη τάξη και περιέχουν ένα σύνολο των '
+    'μαθημάτων αυτής της τάξης.\n\nΥπάρχουν 6 προκαθορισμένα προφίλ (ένα για κάθε '
+    'τάξη του δημοτικού) που περιέχουν όλα τα μαθήματα της εκάστοτε τάξης, και τα '
+    'οποία δεν μπορούν να μεταβληθούν ή να διαγραφούν.\n\nΜπορείτε να δημιουργήσετε '
+    'νέα προφίλ ή να επεξεργαστείτε τα υπάρχοντα πατώντας το κουμπί "Επεξεργασία '
+    'Δεδομένων" που βρίσκεται στο δεξί μέρος της εφαρμογής.'
   )
 
   SUBJECT_EXPLANATION = (
-    'As you have already learned, the profiles consist of multiple subjects.\n'
-    '\nThe subject(s) you select define(s) the dictionary of words which you c'
-    'an search from in the search bar located in the upper area, as well as yo'
-    'ur recent searches and starred words located in the leftmost area of the '
-    'application.\n\nThe subject selection does not in any way limit the words'
-    ' that are going to appear in your search results. These are only limited '
-    'by the grade to which these subjects belong.\n\nAll in all, selecting a s'
-    'ubject does not mean that results from other subjects will not appear in '
-    'your search results.'
+    'Όπως έχετε καταλάβει ήδη, κάθε προφίλ αποτελείται από πολλαπλά μαθήματα.\n\n'
+    'Τα μάθηματα που επιλέγετε ορίζουν το σύνολο λέξεων από το οποίο μπορείτε να '
+    'αναζητήσετε μια λέξη από την μπάρα αναζήτησης που βρίσκεται στο πάνω μέρος '
+    'της εφαρμογής. Επίσης, οι πρόσφατες αναζητήσεις και οι αγαπημένες λέξεις '
+    'αντιστοιχούν στην εκάστοτε επιλεγμένη τάξη.\n\nΗ επιλογή μαθήματος δεν '
+    'περιορίζει ωστόσο τα αποτελέσματα που θα εμφανιστούν. Τα αποτελέσματα '
+    'περιορίζονται μόνο από την τάξη στην οποία ανήκει το επιλεγμένο μάθημα '
+    '(ή μαθήματα).\n\nΔηλαδή, η επιλογή ενός συγκεκριμένου μαθήματος δεν '
+    'περιορίζει το γεγονός, πως στα αποτελέσματα θα ανήκουν λέξεις από όλα '
+    'τα μαθήματα της εκάστοτε τάξης του μαθήματος.'
   )
 
   RESULT_EXPLANATION = (
-    'Results are displayed in the bottom part of the application, after search'
-    'ing for a word.\n\nWords that belong to the grade of the selected subject'
-    ' are displayed without a frame.\n\nWords that Wiktionary believes belong '
-    'to the family of the selected word but do not belong to any of the subjec'
-    'ts of the profile grade, are displayed within a blue frame.'
+    'Τα αποτελέσματα της αναζήτησης του χρήστη εμφανίζονται στο κάτω μέρος της '
+    'εφαρμογής.\n\nΟι συγγενικές λέξεις που ανήκουν σε κάποιο βιβλίο της τάξης '
+    'του επιλεγμένου βιβλίου εμφανίζονται χωρίς πλάισιο. Λέξεις τις οποίες '
+    'επιστρέφει το Wiktionary ως συγγενικές της λέξης που αναζητήθηκε μόλις, '
+    'αλλά οι οποίες δεν υπάρχουν σε κάποιο βιβλίο της τάξης του επιλεγμένου '
+    'μαθήματος, παρουσιάζονται μέσα σε ένα μπλε πλαίσιο.'
   )
 
   TEXTS = [
@@ -59,9 +64,15 @@ class TutorialWidget(QDialog):
     SUBJECT_EXPLANATION, RESULT_EXPLANATION
   ]
 
+  DIALOG_TITLE = 'Οδηγίες'
+  CHECK_BOX_TEXT = 'Εμφανισή οδηγιών κατά την εκκίνηση'
+  CLOSE_BUTTON_TEXT = 'Κλείσιμο'
+  PREVIOUS_BUTTON_TEXT = 'Προηγούμενο'
+  NEXT_BUTTON_TEXT = 'Επόμενο'
+
   def __init__(self):
     super().__init__()
-    self.setWindowTitle('Tutorial')
+    self.setWindowTitle(TutorialWidget.DIALOG_TITLE)
     self.setWindowIcon(QIcon('resources/window_icon.png'))
 
     self.layout = QVBoxLayout(self)
@@ -91,21 +102,21 @@ class TutorialWidget(QDialog):
     buttons_widget.layout = QHBoxLayout(buttons_widget)
     buttons_widget.layout.setSpacing(5)
 
-    self.setting_check_box = QCheckBox('Show tutorial on startup')
+    self.setting_check_box = QCheckBox(TutorialWidget.CHECK_BOX_TEXT)
     self.setting_check_box.clicked.connect(self.toggle_tutorial_setting)
     if Settings.get_setting('show_tutorial_on_startup'):
       self.setting_check_box.setChecked(True)
 
-    self.next_tutorial_button = QPushButton('Next')
+    self.next_tutorial_button = QPushButton(TutorialWidget.NEXT_BUTTON_TEXT)
     self.next_tutorial_button.adjustSize()
     self.next_tutorial_button.pressed.connect(self.next_tutorial)
 
-    self.previous_tutorial_button = QPushButton('Previous')
+    self.previous_tutorial_button = QPushButton(TutorialWidget.PREVIOUS_BUTTON_TEXT)
     self.previous_tutorial_button.adjustSize()
     self.previous_tutorial_button.pressed.connect(self.previous_tutorial)
     self.previous_tutorial_button.setDisabled(True)
 
-    self.close_tutorial_button = QPushButton('Close')
+    self.close_tutorial_button = QPushButton(TutorialWidget.CLOSE_BUTTON_TEXT)
     self.close_tutorial_button.adjustSize()
     self.close_tutorial_button.pressed.connect(self.close)
 

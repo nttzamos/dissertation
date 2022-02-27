@@ -7,6 +7,20 @@ from models.word import get_word_subjects, word_exists, update_word, destroy_wor
 from shared.database_handler import get_grades, get_grade_words, get_grade_subjects
 
 class WordUpdateWidget(QWidget):
+  GRADE_SELECTION_TEXT = 'Επιλογή Τάξης'
+  SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
+  WORD_SELECTION_TEXT = 'Επιλογή Λέξης'
+  UPDATE_WORD_BUTTON_TEXT = 'Αποθήκευση Λέξης'
+  DELETE_WORD_BUTTON_TEXT = 'Διαγραφή Λέξης'
+  ERROR_SAVING_WORD_TEXT = 'Αδυναμία αποθήκευσης λέξης'
+  PLEASE_ENTER_WORD_TEXT = 'Παρακαλώ εισάγετε μια λέξη.'
+  PLEASE_ENTER_ANOTHER_WORD_TEXT = 'Παρακαλώ εισάγετε μια διαφορετική λέξη.'
+  WORD_TEXT = 'Λέξη'
+  WORD_EMPTY_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς είναι κενή'
+  WORD_EXISTS_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη'
+  NO_SUBJECT_SELECTED_TEXT = ('Η λέξη δεν μπορεί να αποθηκευτεί καθώς δεν '
+                              'έχετε επιλέξει κανένα μάθημα στο οποίο θα ανήκει')
+
   def __init__(self):
     super().__init__()
 
@@ -20,7 +34,7 @@ class WordUpdateWidget(QWidget):
     completer_font = QFont(Settings.font, 12)
     error_message_font = QFont(Settings.font, 10)
 
-    grade_selection_widget = QGroupBox('Grade Selection')
+    grade_selection_widget = QGroupBox(WordUpdateWidget.GRADE_SELECTION_TEXT)
     grade_selection_widget.setFont(section_label_font)
     grade_selection_widget.layout = QHBoxLayout(grade_selection_widget)
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -32,7 +46,7 @@ class WordUpdateWidget(QWidget):
 
     grade_selection_widget.layout.addWidget(WordUpdateWidget.grade_selector)
 
-    word_selection_widget = QGroupBox('Word Selection')
+    word_selection_widget = QGroupBox(WordUpdateWidget.WORD_SELECTION_TEXT)
     word_selection_widget.setFont(section_label_font)
     word_selection_widget.layout = QVBoxLayout(word_selection_widget)
     word_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -45,8 +59,8 @@ class WordUpdateWidget(QWidget):
     WordUpdateWidget.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
     WordUpdateWidget.completer.popup().setFont(completer_font)
     self.word_selection_line_edit.setCompleter(WordUpdateWidget.completer)
-    self.word_selection_line_edit.setPlaceholderText('Please enter a word.')
-    self.error_message_label = QLabel('Please search for another word', self)
+    self.word_selection_line_edit.setPlaceholderText(WordUpdateWidget.PLEASE_ENTER_WORD_TEXT)
+    self.error_message_label = QLabel(WordUpdateWidget.PLEASE_ENTER_ANOTHER_WORD_TEXT, self)
     self.error_message_label.setFont(error_message_font)
     self.word_selection_line_edit.textChanged.connect(self.error_message_label.hide)
     self.error_message_label.hide()
@@ -54,7 +68,7 @@ class WordUpdateWidget(QWidget):
     word_selection_widget.layout.addWidget(self.word_selection_line_edit)
     word_selection_widget.layout.addWidget(self.error_message_label)
 
-    self.word_widget = QGroupBox('Word')
+    self.word_widget = QGroupBox(WordUpdateWidget.WORD_TEXT)
     self.word_widget.setFont(section_label_font)
     self.word_widget.layout = QHBoxLayout(self.word_widget)
     self.word_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -64,7 +78,7 @@ class WordUpdateWidget(QWidget):
     self.word_widget.layout.addWidget(self.word_line_edit)
     self.word_widget.hide()
 
-    subjects_widget = QGroupBox('Subject Selection')
+    subjects_widget = QGroupBox(WordUpdateWidget.SUBJECT_SELECTION_TEXT)
     subjects_widget.setFont(section_label_font)
     subjects_widget.layout = QHBoxLayout(subjects_widget)
     subjects_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -90,11 +104,11 @@ class WordUpdateWidget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    self.save_button = QPushButton('Update Existing Word')
+    self.save_button = QPushButton(WordUpdateWidget.UPDATE_WORD_BUTTON_TEXT)
     self.save_button.pressed.connect(self.update_word)
     self.save_button.setDisabled(True)
 
-    self.delete_button = QPushButton('Delete Word')
+    self.delete_button = QPushButton(WordUpdateWidget.DELETE_WORD_BUTTON_TEXT)
     self.delete_button.pressed.connect(self.delete_word)
     self.delete_button.setDisabled(True)
 
@@ -173,7 +187,7 @@ class WordUpdateWidget(QWidget):
     is_invalid, text = self.word_is_invalid()
 
     if is_invalid:
-      title = 'Error Updating Word'
+      title = WordUpdateWidget.ERROR_SAVING_WORD_TEXT
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -214,13 +228,13 @@ class WordUpdateWidget(QWidget):
   def word_is_invalid(self):
     word = self.word_line_edit.text()
     if len(word) == 0:
-      return True, 'Word can not be saved because it is empty.'
+      return True, WordUpdateWidget.WORD_EMPTY_TEXT
 
     if self.searched_word != word and word_exists(self.grade_selector.currentIndex() + 1, word):
-      return True, 'Word can not be saved as it already exists.'
+      return True, WordUpdateWidget.WORD_EXISTS_TEXT
 
     for check_box in self.check_boxes:
       if check_box.isChecked():
         return False, ''
 
-    return True, 'Word can not be saved because none of the grade subjects have been selected.'
+    return True, WordUpdateWidget.NO_SUBJECT_SELECTED_TEXT

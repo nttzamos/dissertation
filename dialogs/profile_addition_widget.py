@@ -7,6 +7,18 @@ from models.profile import create_profile, profile_name_exists
 from shared.database_handler import get_grades, get_grade_subjects
 
 class ProfileAdditionWIdget(QWidget):
+  PROFILE_NAME_TEXT = 'Όνομα Προφίλ'
+  GRADE_SELECTION_TEXT = 'Επιλογή Τάξης'
+  SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
+  SAVE_PROFILE_BUTTON_TEXT = 'Αποθήκευση Προφίλ'
+  ERROR_SAVING_PROFILE_TEXT = 'Αδυναμία αποθήκευσης προφίλ'
+  PROFILE_NAME_EMPTY_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
+                             'έχετε συμπληρώσει το όνομα του')
+  PROFILE_NAME_EXISTS_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς '
+                              'υπάρχει ήδη άλλο προφίλ με το ίδιο όνομα')
+  NO_SUBJECT_SELECTED_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
+                              'έχετε επιλέξει κάποια μαθήματα για αυτό')
+
   def __init__(self):
     super().__init__()
 
@@ -19,7 +31,7 @@ class ProfileAdditionWIdget(QWidget):
     check_box_font = QFont(Settings.font, 14)
     line_edit_font = QFont(Settings.font, 14)
 
-    name_widget = QGroupBox('Profile Name')
+    name_widget = QGroupBox(ProfileAdditionWIdget.PROFILE_NAME_TEXT)
     name_widget.setFont(section_label_font)
     name_widget.layout = QHBoxLayout(name_widget)
     name_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -28,7 +40,7 @@ class ProfileAdditionWIdget(QWidget):
     self.name_line_edit.setFont(line_edit_font)
     name_widget.layout.addWidget(self.name_line_edit)
 
-    grade_selection_widget = QGroupBox('Grade Selection')
+    grade_selection_widget = QGroupBox(ProfileAdditionWIdget.GRADE_SELECTION_TEXT)
     grade_selection_widget.setFont(section_label_font)
     grade_selection_widget.layout = QHBoxLayout(grade_selection_widget)
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -40,7 +52,7 @@ class ProfileAdditionWIdget(QWidget):
 
     grade_selection_widget.layout.addWidget(self.grade_selector)
 
-    subjects_widget = QGroupBox('Subject Selection')
+    subjects_widget = QGroupBox(ProfileAdditionWIdget.SUBJECT_SELECTION_TEXT)
     subjects_widget.setFont(section_label_font)
     subjects_widget.layout = QHBoxLayout(subjects_widget)
     subjects_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -73,7 +85,7 @@ class ProfileAdditionWIdget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    self.save_button = QPushButton('Save New Profile')
+    self.save_button = QPushButton(ProfileAdditionWIdget.SAVE_PROFILE_BUTTON_TEXT)
     self.save_button.pressed.connect(self.save_profile)
 
     self.layout.addWidget(name_widget)
@@ -106,7 +118,7 @@ class ProfileAdditionWIdget(QWidget):
     is_invalid, text = self.profile_is_invalid()
 
     if is_invalid:
-      title = 'Error Saving Profile'
+      title = ProfileAdditionWIdget.ERROR_SAVING_PROFILE_TEXT
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -134,13 +146,13 @@ class ProfileAdditionWIdget(QWidget):
   def profile_is_invalid(self):
     profile_name = self.name_line_edit.text()
     if len(profile_name) == 0:
-      return True, 'Profile can not be saved because the profile name is empty.'
+      return True, ProfileAdditionWIdget.PROFILE_NAME_EMPTY_TEXT
 
     if profile_name_exists(profile_name):
-      return True, 'Profile can not be saved as this name is already used for another profile.'
+      return True, ProfileAdditionWIdget.PROFILE_NAME_EXISTS_TEXT
 
     for check_box in self.check_boxes:
       if check_box.isChecked():
         return False, ''
 
-    return True, 'Profile can not be saved because none of the grade subjects have been selected.'
+    return True, ProfileAdditionWIdget.NO_SUBJECT_SELECTED_TEXT

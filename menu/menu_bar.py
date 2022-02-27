@@ -6,6 +6,11 @@ from menu.settings import Settings
 from menu.settings_widget import SettingsWidget
 
 class MenuBar(QWidget):
+  SETTINGS_TEXT = 'Ρυθμίσεις'
+  TUTORIAL_TEXT = 'Οδηγίες'
+  MINIMIZE_APPLICATION_TEXT = 'Ελαχιστοποίηση εφαρμογής'
+  EXIT_APPLICATION_TEXT = 'Κλείσιμο εφαρμογής'
+
   def __init__(self, parent):
     super().__init__()
     self.parent = parent
@@ -25,28 +30,28 @@ class MenuBar(QWidget):
     self.title.setFont(font)
 
     self.settings_button = QPushButton()
-    self.settings_button.setToolTip('Settings')
+    self.settings_button.setToolTip(MenuBar.SETTINGS_TEXT)
     self.settings_button.setIcon(QIcon('resources/settings.png'))
     self.settings_button.setFixedHeight(30)
     self.settings_button.setFixedWidth(30)
     self.settings_button.clicked.connect(self.open_settings)
 
     self.tutorial_button = QPushButton()
-    self.tutorial_button.setToolTip('Tutorial')
+    self.tutorial_button.setToolTip(MenuBar.TUTORIAL_TEXT)
     self.tutorial_button.setIcon(QIcon('resources/question.png'))
     self.tutorial_button.setFixedHeight(30)
     self.tutorial_button.setFixedWidth(30)
     self.tutorial_button.clicked.connect(self.open_tutorial)
 
     self.minimize_window_button = QPushButton()
-    self.minimize_window_button.setToolTip('Minimize Application')
+    self.minimize_window_button.setToolTip(MenuBar.MINIMIZE_APPLICATION_TEXT)
     self.minimize_window_button.setIcon(QIcon('resources/minimize_window.png'))
     self.minimize_window_button.setFixedHeight(30)
     self.minimize_window_button.setFixedWidth(30)
     self.minimize_window_button.clicked.connect(self.minimize_window)
 
     self.close_window_button = QPushButton()
-    self.close_window_button.setToolTip('Exit Application')
+    self.close_window_button.setToolTip(MenuBar.EXIT_APPLICATION_TEXT)
     self.close_window_button.setIcon(QIcon('resources/close_window.png'))
     self.close_window_button.setFixedHeight(30)
     self.close_window_button.setFixedWidth(30)

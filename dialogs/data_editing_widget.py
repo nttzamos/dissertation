@@ -8,9 +8,15 @@ from dialogs.student_update_widget import StudentUpdateWidget
 from menu.settings import Settings
 
 class DataEditingWidget(QDialog):
+  EDIT_DATA_TEXT = 'Επεξεργασία Δεδομένων'
+  ADD_STUDENT_TEXT = 'Προσθήκη Μαθητή'
+  EDIT_STUDENT_TEXT = 'Επεξεργασία Μαθητή'
+  ADD_PROFILE_TEXT = 'Προσθήκη Προφίλ'
+  EDIT_PROFILE_TEXT = 'Επεξεργασία Προφίλ'
+
   def __init__(self):
     super().__init__()
-    self.setWindowTitle('Edit Data')
+    self.setWindowTitle(DataEditingWidget.EDIT_DATA_TEXT)
     self.setWindowIcon(QIcon('resources/window_icon.png'))
     self.setFixedWidth(Settings.get_setting('screen_width') / 2)
 
@@ -24,9 +30,9 @@ class DataEditingWidget(QDialog):
     edit_profiles_widget = ProfileUpdateWidget()
 
     tab_widget = QTabWidget()
-    tab_widget.addTab(add_student_widget, 'Add a new student')
-    tab_widget.addTab(edit_student_widget, 'Update existing student')
-    tab_widget.addTab(add_profile_widget, 'Add a new profile')
-    tab_widget.addTab(edit_profiles_widget, 'Update existing profile')
+    tab_widget.addTab(add_student_widget, DataEditingWidget.ADD_STUDENT_TEXT)
+    tab_widget.addTab(edit_student_widget, DataEditingWidget.EDIT_STUDENT_TEXT)
+    tab_widget.addTab(add_profile_widget, DataEditingWidget.ADD_PROFILE_TEXT)
+    tab_widget.addTab(edit_profiles_widget, DataEditingWidget.EDIT_PROFILE_TEXT)
 
     self.layout.addWidget(tab_widget)

@@ -7,6 +7,15 @@ from models.family import get_word_id, get_family_id, get_family_words, update_w
 from shared.database_handler import get_grades, get_grade_words
 
 class WordFamilyUpdateWidget(QWidget):
+  GRADE_SELECTION_TEXT = 'Επιλογή Τάξης'
+  WORD_SELECTION_TEXT = 'Επιλογή Λέξης'
+  FAMILY_SELECTION_TEXT = 'Επεξεργασία συγγενικών λέξεων'
+  SAVE_FAMILY_BUTTON_TEXT = 'Αποθήκευση συγγενικών λέξεων'
+  PLEASE_ENTER_WORD_TEXT = 'Παρακαλώ εισάγετε μια λέξη.'
+  PLEASE_ENTER_ANOTHER_WORD_TEXT = 'Παρακαλώ εισάγετε μια διαφορετική λέξη.'
+  SELECT_WORD_TO_BE_ADDED_TEXT = 'Επιλέξτε μια λέξη που θα προστεθεί στις συγγενικές λέξεις'
+  REMOVE_SELECTED_WORDS_TEXT = 'Αφαίρεση επιλεγμένων λέξεων'
+
   def __init__(self):
     super().__init__()
 
@@ -20,7 +29,7 @@ class WordFamilyUpdateWidget(QWidget):
     completer_font = QFont(Settings.font, 12)
     error_message_font = QFont(Settings.font, 10)
 
-    grade_selection_widget = QGroupBox('Grade Selection')
+    grade_selection_widget = QGroupBox(WordFamilyUpdateWidget.GRADE_SELECTION_TEXT)
     grade_selection_widget.setFont(section_label_font)
     grade_selection_widget.layout = QHBoxLayout(grade_selection_widget)
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -32,7 +41,7 @@ class WordFamilyUpdateWidget(QWidget):
 
     grade_selection_widget.layout.addWidget(WordFamilyUpdateWidget.grade_selector)
 
-    word_selection_widget = QGroupBox('Word Selection')
+    word_selection_widget = QGroupBox(WordFamilyUpdateWidget.WORD_SELECTION_TEXT)
     word_selection_widget.setFont(section_label_font)
     word_selection_widget.layout = QVBoxLayout(word_selection_widget)
     word_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -45,8 +54,8 @@ class WordFamilyUpdateWidget(QWidget):
     WordFamilyUpdateWidget.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
     WordFamilyUpdateWidget.completer.popup().setFont(completer_font)
     self.word_selection_line_edit.setCompleter(WordFamilyUpdateWidget.completer)
-    self.word_selection_line_edit.setPlaceholderText('Please enter a word.')
-    self.error_message_label = QLabel('Please search for another word', self)
+    self.word_selection_line_edit.setPlaceholderText(WordFamilyUpdateWidget.PLEASE_ENTER_WORD_TEXT)
+    self.error_message_label = QLabel(WordFamilyUpdateWidget.PLEASE_ENTER_ANOTHER_WORD_TEXT, self)
     self.error_message_label.setFont(error_message_font)
     self.word_selection_line_edit.textChanged.connect(self.error_message_label.hide)
     self.error_message_label.hide()
@@ -54,7 +63,7 @@ class WordFamilyUpdateWidget(QWidget):
     word_selection_widget.layout.addWidget(self.word_selection_line_edit)
     word_selection_widget.layout.addWidget(self.error_message_label)
 
-    word_family_selection_widget = QGroupBox('Family Selection')
+    word_family_selection_widget = QGroupBox(WordFamilyUpdateWidget.FAMILY_SELECTION_TEXT)
     word_family_selection_widget.setFont(section_label_font)
     word_family_selection_widget.layout = QVBoxLayout(word_family_selection_widget)
     word_family_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -63,13 +72,13 @@ class WordFamilyUpdateWidget(QWidget):
     self.related_word_selection_line_edit.setFont(line_edit_font)
     self.related_word_selection_line_edit.returnPressed.connect(self.related_word_selected)
     self.related_word_selection_line_edit.setCompleter(WordFamilyUpdateWidget.completer)
-    self.related_word_selection_line_edit.setPlaceholderText('Select a word to be added.')
+    self.related_word_selection_line_edit.setPlaceholderText(WordFamilyUpdateWidget.SELECT_WORD_TO_BE_ADDED_TEXT)
     self.related_word_selection_line_edit.hide()
 
     self.word_family_list = QListWidget()
     self.word_family_list.setSelectionMode(QAbstractItemView.SelectionMode.MultiSelection)
 
-    self.remove_words_button = QPushButton('Remove Selected Words')
+    self.remove_words_button = QPushButton(WordFamilyUpdateWidget.REMOVE_SELECTED_WORDS_TEXT)
     self.remove_words_button.pressed.connect(self.remove_selected_words)
 
     word_family_selection_widget.layout.addWidget(self.related_word_selection_line_edit)
@@ -79,7 +88,7 @@ class WordFamilyUpdateWidget(QWidget):
     word_family_selection_widget.layout.addWidget(self.remove_words_button, alignment=Qt.AlignmentFlag.AlignRight)
 
 
-    self.save_button = QPushButton('Save Family')
+    self.save_button = QPushButton(WordFamilyUpdateWidget.SAVE_FAMILY_BUTTON_TEXT)
     self.save_button.pressed.connect(self.update_family)
     self.save_button.setDisabled(True)
 

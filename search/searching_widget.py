@@ -10,6 +10,14 @@ from shared.styles import Styles
 from side.recent_searches_widget import RecentSearchesWidget
 
 class SearchingWidget(QWidget):
+  SEARCH_TEXT = 'Αναζήτηση'
+  CLEAR_SEARCH_TEXT = 'Καθαρισμός αναζήτησης'
+  UNINITIALIZED_STATE_TEXT = 'Πρέπει να επιλέξετε κάποιο μάθημα πρώτα.'
+  PLEASE_ENTER_WORD_TEXT = 'Παρακαλώ εισάγετε μια λέξη.'
+  EDIT_WORDS_BUTTON_TEXT = 'Επεξεργασία Λέξεων'
+  EDIT_WORDS_TOOLTIP_TEXT = ('Μπορείτε να επεξεργαστείτε τις λέξεις κάθε τάξης, '
+                             'καθώς και τις συγγενικές τους λέξεις')
+
   dictionary_words = []
 
   line_edit = QLineEdit()
@@ -19,7 +27,6 @@ class SearchingWidget(QWidget):
   for i in range(len(grades)):
     grades_mapping[i + 1] = grades[i]
 
-  uninitialized_state_text = 'You have to select a subject first.'
   most_recently_searched_word = ''
 
   def __init__(self):
@@ -44,19 +51,21 @@ class SearchingWidget(QWidget):
     SearchingWidget.completer.activated.connect(self.search_with_click)
     SearchingWidget.completer.popup().setFont(completer_font)
     SearchingWidget.line_edit.setCompleter(SearchingWidget.completer)
-    SearchingWidget.line_edit.setPlaceholderText('Please enter a word.')
+    SearchingWidget.line_edit.setPlaceholderText(SearchingWidget.PLEASE_ENTER_WORD_TEXT)
 
     self.search_bar_widget = QWidget()
     self.search_bar_widget.layout = QHBoxLayout(self.search_bar_widget)
     self.search_bar_widget.layout.setContentsMargins(10, 0, 0, 0)
 
     self.clear_search_button = QPushButton()
+    self.clear_search_button.setToolTip(SearchingWidget.CLEAR_SEARCH_TEXT)
     self.clear_search_button.setIcon(QIcon('resources/clear_search.png'))
     self.clear_search_button.clicked.connect(self.clear_search)
     self.hide_clear_search_button = True
     self.clear_search_button.hide()
 
     search_button = QPushButton()
+    search_button.setToolTip(SearchingWidget.SEARCH_TEXT)
     search_button.setIcon(QIcon('resources/search.png'))
     search_button.clicked.connect(self.search_with_enter)
 
@@ -67,7 +76,7 @@ class SearchingWidget(QWidget):
     self.search_bar_widget.layout.addWidget(search_button)
     self.search_bar_widget.layout.addSpacing(10)
 
-    SearchingWidget.error_message = QLabel(SearchingWidget.uninitialized_state_text, self)
+    SearchingWidget.error_message = QLabel(SearchingWidget.UNINITIALIZED_STATE_TEXT, self)
     SearchingWidget.error_message.setFont(error_message_font)
     size_policy = SearchingWidget.error_message.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
@@ -75,8 +84,8 @@ class SearchingWidget(QWidget):
     SearchingWidget.error_message.hide()
 
     edit_words_button_font = QFont(Settings.font, 14)
-    SearchingWidget.edit_words_button = QPushButton('Edit Dictionary Words')
-    SearchingWidget.edit_words_button.setToolTip('You can edit the words of each grade here. You can also edit their families.')
+    SearchingWidget.edit_words_button = QPushButton(SearchingWidget.EDIT_WORDS_BUTTON_TEXT)
+    SearchingWidget.edit_words_button.setToolTip(SearchingWidget.EDIT_WORDS_TOOLTIP_TEXT)
     SearchingWidget.edit_words_button.setFont(edit_words_button_font)
     SearchingWidget.edit_words_button.clicked.connect(self.open_words_editing_widget)
     SearchingWidget.edit_words_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
@@ -118,7 +127,7 @@ class SearchingWidget(QWidget):
 
   @staticmethod
   def set_initial_error_message():
-    SearchingWidget.error_message.setText(SearchingWidget.uninitialized_state_text)
+    SearchingWidget.error_message.setText(SearchingWidget.UNINITIALIZED_STATE_TEXT)
 
   @staticmethod
   def modify_error_message(text, single):
@@ -127,11 +136,11 @@ class SearchingWidget(QWidget):
   @staticmethod
   def unknown_word_message(text, single):
     if single:
-      return 'This word is not contained in the book ' + \
-        text + '. Please search for another word.'
+      return 'Αυτή η λέξη δεν περιλαμβάνεται στις λέξεις του βιβλίου ' + \
+        text + '. Παρακαλώ αναζητήστε μια διαφορετική λέξη.'
     else:
-      return "This word is not contained in the books of the profile '" + \
-        text + "'. Please search for another word."
+      return 'Αυτή η λέξη δεν περιλαμβάνεται στα βιβλία του προφίλ ' + \
+        text + '. Παρακαλώ αναζητήστε μια διαφορετική λέξη.'
 
   @staticmethod
   def toggle_edit_words_button_visibility(new_visibility_status):

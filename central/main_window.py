@@ -69,14 +69,14 @@ class MainWindow(QWidget):
     from search.searching_widget import SearchingWidget
     from central.results_widget import ResultsWidget
 
-    if subject_name == 'All Subjects':
+    if subject_name == MainWidget.current_search.ALL_SUBJECTS_TEXT:
       SearchingWidget.modify_error_message(get_profile_name(profile_id), False)
     else:
       SearchingWidget.modify_error_message(subject_name, True)
 
     SearchingWidget.update_selected_dictionary()
     ResultsWidget.show_placeholder()
-    MainWidget.current_search.searched_word.setText('Enter a word.')
+    MainWidget.current_search.searched_word.setText(MainWidget.current_search.ENTER_WORD_TEXT)
     RecentSearchesWidget.populate()
     StarredWordsWidget.populate()
 
@@ -89,6 +89,7 @@ class MainWindow(QWidget):
     from central.results_widget import ResultsWidget
 
     SearchingWidget.set_initial_error_message()
+    SearchingWidget.line_edit.setCompleter(None)
     ResultsWidget.show_placeholder()
     CurrentSearch.subject_selector_active = False
     RecentSearchesWidget.clear_previous_recent_searches()

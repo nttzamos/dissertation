@@ -87,7 +87,8 @@ def get_family_words(grade, family_id):
   return family_words
 
 def get_words_with_family(profile_id, grade_id, subject_name):
-  if subject_name == 'All Subjects':
+  from search.current_search import CurrentSearch
+  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     subject_ids = get_profile_subject_ids(profile_id)
   else:
     subject_ids = [get_subject_id(grade_id, subject_name)]

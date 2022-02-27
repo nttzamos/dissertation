@@ -7,6 +7,21 @@ from models.profile import get_profiles
 from models.student import *
 
 class StudentUpdateWidget(QWidget):
+  STUDENT_SELECTION_TEXT = 'Επιλογή Μαθητή'
+  STUDENT_NAME_TEXT = 'Όνομα Μαθητή'
+  PROFILE_SELECTION_TEXT = 'Επιλογή Προφίλ'
+  UPDATE_STUDENT_BUTTON_TEXT = 'Αποθήκευση Μαθητή'
+  DELETE_STUDENT_BUTTON_TEXT = 'Διαγραφή Μαθητή'
+  ERROR_SAVING_STUDENT_TEXT = 'Αδυναμία αποθήκευσης μαθητή'
+  SELECT_STUDENT_TEXT = 'Επιλέξτε έναν μαθητή...'
+  NO_STUDENTS_TEXT = 'Δεν υπάρχουν μαθητές'
+  STUDENT_NAME_EMPTY_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
+                             'έχετε συμπληρώσει το όνομα του')
+  STUDENT_NAME_EXISTS_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς '
+                              'υπάρχει ήδη άλλος μαθητής με το ίδιο όνομα')
+  NO_PROFILE_SELECTED_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
+                              'έχετε επιλέξει κάποιο προφίλ για αυτόν')
+
   def __init__(self):
     super().__init__()
     self.layout = QVBoxLayout(self)
@@ -17,7 +32,7 @@ class StudentUpdateWidget(QWidget):
     combo_box_font = QFont(Settings.font, 14)
     line_edit_font = QFont(Settings.font, 14)
 
-    student_selection_widget = QGroupBox('Student Selection')
+    student_selection_widget = QGroupBox(StudentUpdateWidget.STUDENT_SELECTION_TEXT)
     student_selection_widget.setFont(section_label_font)
     student_selection_widget.layout = QHBoxLayout(student_selection_widget)
     student_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -28,17 +43,17 @@ class StudentUpdateWidget(QWidget):
     StudentUpdateWidget.student_selector.setFont(combo_box_font)
 
     if len(students) == 0:
-      StudentUpdateWidget.student_selector.addItem('There are no students')
+      StudentUpdateWidget.student_selector.addItem(StudentUpdateWidget.NO_STUDENTS_TEXT)
       StudentUpdateWidget.student_selector.setDisabled(True)
     else:
-      students[0:0] = ['Please select a student...']
+      students[0:0] = [StudentUpdateWidget.SELECT_STUDENT_TEXT]
       StudentUpdateWidget.student_selector.addItems(students)
 
     StudentUpdateWidget.student_selector.activated.connect(self.student_selector_activated_initial)
 
     student_selection_widget.layout.addWidget(StudentUpdateWidget.student_selector)
 
-    self.name_widget = QGroupBox('Student Name')
+    self.name_widget = QGroupBox(StudentUpdateWidget.STUDENT_NAME_TEXT)
     self.name_widget.setFont(section_label_font)
     self.name_widget.layout = QHBoxLayout(self.name_widget)
     self.name_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -48,7 +63,7 @@ class StudentUpdateWidget(QWidget):
     self.name_line_edit.setFont(line_edit_font)
     self.name_widget.layout.addWidget(self.name_line_edit)
 
-    profiles_widget = QGroupBox('Profile Selection')
+    profiles_widget = QGroupBox(StudentUpdateWidget.PROFILE_SELECTION_TEXT)
     profiles_widget.setFont(section_label_font)
     profiles_widget.layout = QHBoxLayout(profiles_widget)
     profiles_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -75,11 +90,11 @@ class StudentUpdateWidget(QWidget):
 
     profiles_widget.layout.addWidget(scroll_area)
 
-    self.save_button = QPushButton('Update Student')
+    self.save_button = QPushButton(StudentUpdateWidget.UPDATE_STUDENT_BUTTON_TEXT)
     self.save_button.pressed.connect(self.update_student)
     self.save_button.setDisabled(True)
 
-    self.delete_button = QPushButton('Delete Student')
+    self.delete_button = QPushButton(StudentUpdateWidget.DELETE_STUDENT_BUTTON_TEXT)
     self.delete_button.pressed.connect(self.delete_student)
     self.delete_button.setDisabled(True)
 
@@ -139,7 +154,7 @@ class StudentUpdateWidget(QWidget):
     is_invalid, text = self.student_is_invalid()
 
     if is_invalid:
-      title = 'Error Saving Student'
+      title = StudentUpdateWidget.ERROR_SAVING_STUDENT_TEXT
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -187,31 +202,31 @@ class StudentUpdateWidget(QWidget):
   def student_is_invalid(self):
     student_name = self.name_line_edit.text()
     if len(student_name) == 0:
-      return True, 'Student can not be saved because the profile name is empty.'
+      return True, StudentUpdateWidget.STUDENT_NAME_EMPTY_TEXT
 
     if StudentUpdateWidget.student_selector.currentText() != student_name and  student_name_exists(student_name):
-      return True, 'Student can not be saved as this name is already used for another profile.'
+      return True, StudentUpdateWidget.STUDENT_NAME_EXISTS_TEXT
 
     for check_box in StudentUpdateWidget.check_boxes:
       if check_box.isChecked():
         return False, ''
 
-    return True, 'Student can not be saved because none of the profiles have been selected.'
+    return True, StudentUpdateWidget.NO_PROFILE_SELECTED_TEXT
 
   @staticmethod
   def add_student(student_name):
-    if StudentUpdateWidget.student_selector.currentText() == 'There are no students':
-      StudentUpdateWidget.student_selector.setItemText(0, 'Please select a student...')
+    if StudentUpdateWidget.student_selector.currentText() == StudentUpdateWidget.NO_STUDENTS_TEXT:
+      StudentUpdateWidget.student_selector.setItemText(0, StudentUpdateWidget.SELECT_STUDENT_TEXT)
       StudentUpdateWidget.student_selector.setEnabled(True)
 
     StudentUpdateWidget.student_selector.addItem(student_name)
 
   @staticmethod
   def add_profile(profile_name):
-    if StudentUpdateWidget.student_selector.currentText() == 'There are no students':
+    if StudentUpdateWidget.student_selector.currentText() == StudentUpdateWidget.NO_STUDENTS_TEXT:
       return
 
-    if StudentUpdateWidget.student_selector.currentText() == 'Please select a student...':
+    if StudentUpdateWidget.student_selector.currentText() == StudentUpdateWidget.SELECT_STUDENT_TEXT:
       return
 
     check_box = QCheckBox(profile_name)

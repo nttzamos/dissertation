@@ -8,6 +8,10 @@ from models.recent_search import get_recent_searches
 from models.starred_word import starred_word_exists, get_starred_words
 
 class RecentSearchesWidget(QWidget):
+  TITLE = 'Πρόσφατες Αναζητήσεις'
+  NO_RECENT_SEARCHES_TEXT = 'Δεν έχετε πρόσφατες αναζητήσεις'
+  SELECT_A_SUBJECT_TEXT = 'Επιλέξτε κάποιο μάθημα πρώτα.'
+
   scroll_area_widget_contents = QWidget()
   grid_layout = QGridLayout(scroll_area_widget_contents)
   grid_layout.setSpacing(0)
@@ -31,7 +35,7 @@ class RecentSearchesWidget(QWidget):
     font = QFont(Settings.font, 18)
     invisible_font = QFont(Settings.font, 1)
 
-    self.title_label = QLabel('Recent Searches')
+    self.title_label = QLabel(RecentSearchesWidget.TITLE)
     self.title_label.setFont(font)
     self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -74,7 +78,7 @@ class RecentSearchesWidget(QWidget):
     starred_words = get_starred_words()
 
     if len(recent_searches) == 0:
-      RecentSearchesWidget.show_placeholder(text = 'You do not have any Recent Searches')
+      RecentSearchesWidget.show_placeholder(text = RecentSearchesWidget.NO_RECENT_SEARCHES_TEXT)
       return
     else:
       RecentSearchesWidget.hide_placeholder()
@@ -115,7 +119,7 @@ class RecentSearchesWidget(QWidget):
   def remove_recent_search(obj):
     RecentSearchesWidget.widget_list.remove(obj)
     if len(RecentSearchesWidget.widget_list)==0:
-      RecentSearchesWidget.show_placeholder(text = 'You do not have any Recent Searches')
+      RecentSearchesWidget.show_placeholder(text = RecentSearchesWidget.NO_RECENT_SEARCHES_TEXT)
 
   @staticmethod
   def clear_previous_recent_searches():
@@ -128,7 +132,8 @@ class RecentSearchesWidget(QWidget):
     RecentSearchesWidget.show_placeholder()
 
   @staticmethod
-  def show_placeholder(text = 'Please select a subject first.'):
+  def show_placeholder(text = None):
+    if text == None: text = RecentSearchesWidget.SELECT_A_SUBJECT_TEXT
     RecentSearchesWidget.placeholder_label.setText(text)
     if not RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.show_placeholder_label = True

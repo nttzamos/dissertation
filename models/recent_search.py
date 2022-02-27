@@ -8,7 +8,7 @@ import datetime
 def create_recent_search(word):
   from search.current_search import CurrentSearch
   student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
-  if subject_name == 'All Subjects':
+  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     subject_ids = get_profile_subject_ids(profile_id)
   else:
     subject_ids = [get_subject_id(grade_id, subject_name)]
@@ -44,7 +44,7 @@ def create_recent_search(word):
 def destroy_recent_search(word):
   from search.current_search import CurrentSearch
   student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
-  if subject_name == 'All Subjects':
+  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     subject_ids = get_profile_subject_ids(profile_id)
   else:
     subject_ids = [get_subject_id(grade_id, subject_name)]
@@ -63,7 +63,7 @@ def destroy_recent_search(word):
 def get_recent_searches():
   from search.current_search import CurrentSearch
   student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
-  if subject_name == 'All Subjects':
+  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     values = (profile_id, student_id)
     query = ('SELECT DISTINCT word '
       'FROM ' + get_grade_table_name(grade) + ' ' +

@@ -7,6 +7,16 @@ from models.word import create_word, word_exists
 from shared.database_handler import get_grades, get_grade_subjects
 
 class WordAdditionWIdget(QWidget):
+  WORD_TEXT = 'Λέξη'
+  GRADE_SELECTION_TEXT = 'Επιλογή Τάξης'
+  SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
+  SAVE_WORD_BUTTON_TEXT = 'Αποθήκευση λέξης'
+  ERROR_SAVING_WORD_TEXT = 'Αδυναμία αποθήκευσης λέξης'
+  WORD_EMPTY_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς είναι κενή'
+  WORD_EXISTS_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη'
+  NO_SUBJECT_SELECTED_TEXT = ('Η λέξη δεν μπορεί να αποθηκευτεί καθώς δεν '
+                              'έχετε επιλέξει κανένα μάθημα στο οποίο θα ανήκει')
+
   def __init__(self):
     super().__init__()
 
@@ -19,7 +29,7 @@ class WordAdditionWIdget(QWidget):
     check_box_font = QFont(Settings.font, 14)
     line_edit_font = QFont(Settings.font, 14)
 
-    word_widget = QGroupBox('Word')
+    word_widget = QGroupBox(WordAdditionWIdget.WORD_TEXT)
     word_widget.setFont(section_label_font)
     word_widget.layout = QHBoxLayout(word_widget)
     word_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -28,7 +38,7 @@ class WordAdditionWIdget(QWidget):
     self.word_line_edit.setFont(line_edit_font)
     word_widget.layout.addWidget(self.word_line_edit)
 
-    grade_selection_widget = QGroupBox('Grade Selection')
+    grade_selection_widget = QGroupBox(WordAdditionWIdget.GRADE_SELECTION_TEXT)
     grade_selection_widget.setFont(section_label_font)
     grade_selection_widget.layout = QHBoxLayout(grade_selection_widget)
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -40,7 +50,7 @@ class WordAdditionWIdget(QWidget):
 
     grade_selection_widget.layout.addWidget(self.grade_selector)
 
-    subjects_widget = QGroupBox('Subject Selection')
+    subjects_widget = QGroupBox(WordAdditionWIdget.SUBJECT_SELECTION_TEXT)
     subjects_widget.setFont(section_label_font)
     subjects_widget.layout = QHBoxLayout(subjects_widget)
     subjects_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -73,7 +83,7 @@ class WordAdditionWIdget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    save_button = QPushButton('Save New Word')
+    save_button = QPushButton(WordAdditionWIdget.SAVE_WORD_BUTTON_TEXT)
     save_button.pressed.connect(self.save_word)
 
     self.layout.addWidget(word_widget)
@@ -106,7 +116,7 @@ class WordAdditionWIdget(QWidget):
     is_invalid, text = self.word_is_invalid()
 
     if is_invalid:
-      title = 'Error Saving Word'
+      title = WordAdditionWIdget.ERROR_SAVING_WORD_TEXT
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -130,13 +140,13 @@ class WordAdditionWIdget(QWidget):
   def word_is_invalid(self):
     word = self.word_line_edit.text()
     if len(word) == 0:
-      return True, 'Word can not be saved because it is empty.'
+      return True, WordAdditionWIdget.WORD_EMPTY_TEXT
 
     if word_exists(self.grade_selector.currentIndex() + 1, word):
-      return True, 'Word can not be saved as it already exists.'
+      return True, WordAdditionWIdget.WORD_EXISTS_TEXT
 
     for check_box in self.check_boxes:
       if check_box.isChecked():
         return False, ''
 
-    return True, 'Word can not be saved because none of the grade subjects have been selected.'
+    return True, WordAdditionWIdget.NO_SUBJECT_SELECTED_TEXT

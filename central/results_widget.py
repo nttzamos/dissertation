@@ -9,12 +9,15 @@ from models.word import get_word_id, word_exists
 from shared.wiktionary_parser import fetch_word_details
 
 class ResultsWidget(QWidget):
+  RESULT_DISPLAY_TEXT = 'Τα αποτελέσματα της αναζήτησης σας θα εμφανιστούν εδώ.'
+  NO_RESULTS_TEXT = 'Δεν βρέθηκαν αποτέλεσματα για την αναζήτηση σας.'
+
   scroll_area_widget_contents = QWidget()
   grid_layout = QGridLayout(scroll_area_widget_contents)
   widget_list = []
   counter = 1000000
   show_placeholder_label = True
-  placeholder_label = QLabel('The results of your search will be displayed here.')
+  placeholder_label = QLabel(RESULT_DISPLAY_TEXT)
   grid_columns = Settings.get_results_widget_columns()
   single_result_width = Settings.get_setting('single_result_width')
 
@@ -50,8 +53,11 @@ class ResultsWidget(QWidget):
     ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
     offline_result_words, online_result_words, show_error = ResultsWidget.get_results(word)
 
+    maximum_results = Settings.get_setting('maximum_results')
+
     i = 0
     for word in offline_result_words:
+      if i == maximum_results: break
       row = i // ResultsWidget.grid_columns
       column = i % ResultsWidget.grid_columns
       result = Result(word, widget_width = ResultsWidget.single_result_width, saved = True)
@@ -60,6 +66,7 @@ class ResultsWidget(QWidget):
       i += 1
 
     for word in online_result_words:
+      if i == maximum_results: break
       row = i // ResultsWidget.grid_columns
       column = i % ResultsWidget.grid_columns
       result = Result(word, widget_width = ResultsWidget.single_result_width, saved = False)
@@ -71,7 +78,7 @@ class ResultsWidget(QWidget):
       ResultsWidget.show_no_internet_message()
 
     if i == 0:
-      ResultsWidget.show_placeholder('This search returned no results.')
+      ResultsWidget.show_placeholder(ResultsWidget.NO_RESULTS_TEXT)
 
   @staticmethod
   def get_results(word):
@@ -112,7 +119,8 @@ class ResultsWidget(QWidget):
     ResultsWidget.widget_list = []
 
   @staticmethod
-  def show_placeholder(text = 'The results of your search will be displayed here.'):
+  def show_placeholder(text = None):
+    if text == None: text = ResultsWidget.RESULT_DISPLAY_TEXT
     ResultsWidget.placeholder_label.setText(text)
     ResultsWidget.clear_previous_results()
     if not ResultsWidget.show_placeholder_label:
@@ -128,15 +136,16 @@ class ResultsWidget(QWidget):
 
   @staticmethod
   def show_no_internet_message():
-    title = 'No Internet Connection'
-    text = 'The online wiktionary setting is enabled but you have no internet connection.'
+    title = 'Αδυναμία σύνδεσης στο Διαδίκτυο'
+    text = ('Η ρύθμιση για την online χρήση του Wiktionary είναι ενεργοποιημένη,'
+            'ωστόσο δεν έχετε ενεργή σύνδεση στο Διαδίκτυο.')
     answer = QMessageBox()
     answer.setIcon(QMessageBox.Icon.Critical)
     answer.setText(text)
     answer.setWindowTitle(title)
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
 
-    check_box = QCheckBox("Don't show this message again, until closing the app")
+    check_box = QCheckBox('Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή')
     check_box.clicked.connect(ResultsWidget.toggle_message_setting)
     check_box.setChecked(True)
 

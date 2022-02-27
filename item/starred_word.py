@@ -5,6 +5,9 @@ from models.recent_search import create_recent_search
 from models.starred_word import destroy_starred_word
 
 class StarredWord(QWidget):
+  RELOAD_TEXT = 'Αναζήτηση'
+  STAR_TEXT = 'Αφαίρεση από τα Αγαπημένα'
+
   def __init__(self, word):
     super().__init__()
 
@@ -26,10 +29,12 @@ class StarredWord(QWidget):
 
     reload_button = QPushButton()
     reload_button.setIcon(QIcon('resources/reload.svg'))
+    reload_button.setToolTip(StarredWord.RELOAD_TEXT)
     reload_button.clicked.connect(self.reload_word)
     reload_button.setFixedWidth(30)
 
     self.star_button = QPushButton()
+    self.star_button.setToolTip(StarredWord.STAR_TEXT)
     self.star_button.clicked.connect(self.toggle_starred_state)
     self.star_button.setFixedWidth(30)
     self.star_button.setIcon(QIcon('resources/starred.svg'))

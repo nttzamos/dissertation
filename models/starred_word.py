@@ -6,7 +6,7 @@ from shared.database_handler import connect_to_database, get_grade_table_name
 def create_starred_word(word):
   from search.current_search import CurrentSearch
   student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
-  if subject_name == 'All Subjects':
+  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     subject_ids = get_profile_subject_ids(profile_id)
   else:
     subject_ids = [get_subject_id(grade_id, subject_name)]
@@ -24,7 +24,7 @@ def create_starred_word(word):
 def starred_word_exists(word):
   from search.current_search import CurrentSearch
   student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
-  if subject_name == 'All Subjects':
+  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     subject_ids = get_profile_subject_ids(profile_id)
   else:
     subject_ids = [get_subject_id(grade_id, subject_name)]
@@ -47,7 +47,7 @@ def starred_word_exists(word):
 def destroy_starred_word(word):
   from search.current_search import CurrentSearch
   student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
-  if subject_name == 'All Subjects':
+  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     subject_ids = get_profile_subject_ids(profile_id)
   else:
     subject_ids = [get_subject_id(grade_id, subject_name)]
@@ -70,7 +70,7 @@ def get_starred_words():
   con, cur = connect_to_database()
 
   grade_table_name = get_grade_table_name(grade_id)
-  if subject_name == 'All Subjects':
+  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     values = (profile_id, student_id)
     query = ('SELECT DISTINCT word '
       'FROM ' + grade_table_name + ' ' +

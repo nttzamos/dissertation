@@ -7,6 +7,26 @@ from models.profile import *
 from shared.database_handler import get_grades, get_grade_subjects
 
 class ProfileUpdateWidget(QWidget):
+  PROFILE_SELECTION_TEXT = 'Επιλογή Προφίλ'
+  SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
+  PROFILE_NAME_TEXT = 'Όνομα Προφίλ'
+  PROFILE_GRADE_TEXT = 'Τάξη Προφίλ'
+  UPDATE_PROFILE_BUTTON_TEXT = 'Αποθήκευση Προφίλ'
+  DELETE_PROFILE_BUTTON_TEXT = 'Διαγραφή Προφίλ'
+  ERROR_SAVING_PROFILE_TEXT = 'Αδυναμία αποθήκευσης προφίλ'
+  ERROR_DELETING_PROFILE_TEXT = 'Αδυναμία διαγραφή προφίλ'
+  SELECT_PROFILE_TEXT = 'Επιλέξτε ένα προφίλ...'
+  NO_PROFILES_TEXT = 'Δεν υπάρχουν προφίλ'
+  MUST_SELECT_PROFILE_TEXT = 'Πρέπει να επιλέξετε ένα προφίλ'
+  GRADE_PROFILE_UPDATE_ERROR_TEXT = 'Τα προφίλ των τάξεων δεν μπορούν να μεταβληθούν'
+  GRADE_PROFILE_DELETE_ERROR_TEXT = 'Τα προφίλ των τάξεων δεν μπορούν να διαγραφούν'
+  PROFILE_NAME_EMPTY_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
+                             'έχετε συμπληρώσει το όνομα του')
+  PROFILE_NAME_EXISTS_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς '
+                              'υπάρχει ήδη άλλο προφίλ με το ίδιο όνομα')
+  NO_SUBJECT_SELECTED_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
+                              'έχετε επιλέξει κάποια μαθήματα για αυτό')
+
   def __init__(self):
     super().__init__()
 
@@ -19,7 +39,7 @@ class ProfileUpdateWidget(QWidget):
     label_font = QFont(Settings.font, 14)
     line_edit_font = QFont(Settings.font, 14)
 
-    profile_selection_widget = QGroupBox('Profile Selection')
+    profile_selection_widget = QGroupBox(ProfileUpdateWidget.PROFILE_SELECTION_TEXT)
     profile_selection_widget.setFont(section_label_font)
     profile_selection_widget.layout = QHBoxLayout(profile_selection_widget)
     profile_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -30,17 +50,17 @@ class ProfileUpdateWidget(QWidget):
     ProfileUpdateWidget.profile_selector.setFont(combo_box_font)
 
     if len(profiles) == 0:
-      ProfileUpdateWidget.profile_selector.addItem('There are no profiles')
+      ProfileUpdateWidget.profile_selector.addItem(ProfileUpdateWidget.NO_PROFILES_TEXT)
       ProfileUpdateWidget.profile_selector.setDisabled(True)
     else:
-      profiles[0:0] = ['Please select a profile...']
+      profiles[0:0] = [ProfileUpdateWidget.SELECT_PROFILE_TEXT]
       ProfileUpdateWidget.profile_selector.addItems(profiles)
 
     ProfileUpdateWidget.profile_selector.activated.connect(self.profile_selector_activated_initial)
 
     profile_selection_widget.layout.addWidget(ProfileUpdateWidget.profile_selector)
 
-    self.name_widget = QGroupBox('Profile Name')
+    self.name_widget = QGroupBox(ProfileUpdateWidget.PROFILE_NAME_TEXT)
     self.name_widget.setFont(section_label_font)
     self.name_widget.layout = QHBoxLayout(self.name_widget)
     self.name_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -50,17 +70,17 @@ class ProfileUpdateWidget(QWidget):
     self.name_widget.layout.addWidget(self.name_line_edit)
     self.name_widget.hide()
 
-    grade_label_widget = QGroupBox('Profile Grade')
+    grade_label_widget = QGroupBox(ProfileUpdateWidget.PROFILE_GRADE_TEXT)
     grade_label_widget.setFont(section_label_font)
     grade_label_widget.layout = QHBoxLayout(grade_label_widget)
     grade_label_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    ProfileUpdateWidget.grade_label = QLabel('Please select a profile...')
+    ProfileUpdateWidget.grade_label = QLabel(ProfileUpdateWidget.MUST_SELECT_PROFILE_TEXT)
     ProfileUpdateWidget.grade_label.setFont(label_font)
 
     grade_label_widget.layout.addWidget(ProfileUpdateWidget.grade_label)
 
-    subjects_widget = QGroupBox('Subject Selection')
+    subjects_widget = QGroupBox(ProfileUpdateWidget.SUBJECT_SELECTION_TEXT)
     subjects_widget.setFont(section_label_font)
     subjects_widget.layout = QHBoxLayout(subjects_widget)
     subjects_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -87,11 +107,11 @@ class ProfileUpdateWidget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    self.save_button = QPushButton('Update Existing Profile')
+    self.save_button = QPushButton(ProfileUpdateWidget.UPDATE_PROFILE_BUTTON_TEXT)
     self.save_button.pressed.connect(self.update_profile)
     self.save_button.setDisabled(True)
 
-    self.delete_button = QPushButton('Delete Profile')
+    self.delete_button = QPushButton(ProfileUpdateWidget.DELETE_PROFILE_BUTTON_TEXT)
     self.delete_button.pressed.connect(self.delete_profile)
     self.delete_button.setDisabled(True)
 
@@ -150,12 +170,12 @@ class ProfileUpdateWidget(QWidget):
 
   def update_profile(self):
     if self.profile_selector.currentText() in get_grades():
-      is_invalid, text = True, 'Grade profiles can not be updated.'
+      is_invalid, text = True, ProfileUpdateWidget.GRADE_PROFILE_UPDATE_ERROR_TEXT
     else:
       is_invalid, text = self.profile_is_invalid()
 
     if is_invalid:
-      title = 'Error Updating Profile'
+      title = ProfileUpdateWidget.ERROR_SAVING_PROFILE_TEXT
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -192,8 +212,8 @@ class ProfileUpdateWidget(QWidget):
 
   def delete_profile(self):
     if self.profile_selector.currentText() in get_grades():
-      title = 'Error Deleting Profile'
-      text = 'Grade profiles can not be deleted.'
+      title = ProfileUpdateWidget.ERROR_DELETING_PROFILE_TEXT
+      text = ProfileUpdateWidget.GRADE_PROFILE_DELETE_ERROR_TEXT
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -213,11 +233,11 @@ class ProfileUpdateWidget(QWidget):
 
     ProfileUpdateWidget.profile_selector.removeItem(ProfileUpdateWidget.profile_selector.currentIndex())
     if ProfileUpdateWidget.profile_selector.count() == 0:
-      ProfileUpdateWidget.profile_selector.addItem('There are no profiles')
+      ProfileUpdateWidget.profile_selector.addItem(ProfileUpdateWidget.NO_PROFILES_TEXT)
       ProfileUpdateWidget.profile_selector.setDisabled(True)
       ProfileUpdateWidget.profile_selector.activated.disconnect()
       ProfileUpdateWidget.profile_selector.activated.connect(self.profile_selector_activated_initial)
-      ProfileUpdateWidget.grade_label.setText('You have to add a profile...')
+      ProfileUpdateWidget.grade_label.setText(ProfileUpdateWidget.MUST_SELECT_PROFILE_TEXT)
       self.name_widget.hide()
       return
 
@@ -226,22 +246,22 @@ class ProfileUpdateWidget(QWidget):
   def profile_is_invalid(self):
     profile_name = self.name_line_edit.text()
     if len(profile_name) == 0:
-      return True, 'Profile can not be updated because the profile name is empty.'
+      return True, ProfileUpdateWidget.PROFILE_NAME_EMPTY_TEXT
 
     if ProfileUpdateWidget.profile_selector.currentText() != profile_name and profile_name_exists(profile_name):
-      return True, 'Profile can not be updated as this name is already used for another profile.'
+      return True, ProfileUpdateWidget.PROFILE_NAME_EXISTS_TEXT
 
     for check_box in self.check_boxes:
       if check_box.isChecked():
         return False, ''
 
-    return True, 'Profile can not be updated because none of the grade subjects have been selected.'
+    return True, ProfileUpdateWidget.NO_SUBJECT_SELECTED_TEXT
 
   @staticmethod
   def add_profile(profile_name):
-    if ProfileUpdateWidget.profile_selector.currentText() == 'There are no profiles':
-      ProfileUpdateWidget.profile_selector.setItemText(0, 'Please select a profile...')
-      ProfileUpdateWidget.grade_label.setText('Please select a profile...')
+    if ProfileUpdateWidget.profile_selector.currentText() == ProfileUpdateWidget.NO_PROFILES_TEXT:
+      ProfileUpdateWidget.profile_selector.setItemText(0, ProfileUpdateWidget.SELECT_PROFILE_TEXT)
+      ProfileUpdateWidget.grade_label.setText(ProfileUpdateWidget.SELECT_PROFILE_TEXT)
       ProfileUpdateWidget.profile_selector.setEnabled(True)
 
     ProfileUpdateWidget.profile_selector.addItem(profile_name)

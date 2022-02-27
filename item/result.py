@@ -9,6 +9,9 @@ from shared.database_handler import get_grade_subjects
 from shared.styles import Styles
 
 class Result(QWidget):
+  ADD_BUTTON_TEXT = 'Προσθήκη στις λέξεις των επιλεγμένων μαθήματων'
+  REMOVE_BUTTON_TEXT = 'Αφαίρεση από τις συγγενικές λέξεις'
+
   def __init__(self, word, widget_width = None, initial = False, saved = True):
     super().__init__()
 
@@ -36,14 +39,13 @@ class Result(QWidget):
     self.buttons_widget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.add_to_family_button = QPushButton()
-    self.add_to_family_button.setToolTip('Add this word to the family of the '
-      'searched word. Also adds this word to the selected subjects.')
+    self.add_to_family_button.setToolTip(Result.ADD_BUTTON_TEXT)
     self.add_to_family_button.setIcon(QIcon('resources/plus.png'))
     self.add_to_family_button.clicked.connect(self.add_word_to_family)
     self.add_to_family_button.setFixedWidth(30)
 
     self.remove_from_family_button = QPushButton()
-    self.remove_from_family_button.setToolTip('Remove this word from the family of this word.')
+    self.remove_from_family_button.setToolTip(Result.REMOVE_BUTTON_TEXT)
     self.remove_from_family_button.setIcon(QIcon('resources/delete.svg'))
     self.remove_from_family_button.clicked.connect(self.remove_word_from_family)
     self.remove_from_family_button.setFixedWidth(30)
@@ -75,7 +77,7 @@ class Result(QWidget):
     x, y, z, subject_names = CurrentSearch.get_current_selection_details()
     subject_names = [subject_names]
 
-    if subject_names[0] == 'All Subjects':
+    if subject_names[0] == CurrentSearch.ALL_SUBJECTS_TEXT:
       subject_names = get_grade_subjects(CurrentSearch.grade_id)
     create_word(word, CurrentSearch.grade_id, subject_names)
 
