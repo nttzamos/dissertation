@@ -26,7 +26,9 @@ class Settings():
       'show_tutorial_on_startup': 1
     }
 
-    Settings.set_setting('show_no_internet_message', 1)
+    boolean_settings_about_hiding_messages = [
+      'hide_no_internet_message', 'hide_theme_change_effect_message'
+    ]
 
     for key, value in settings_default_values.items():
       if not Settings.get_setting(key):
@@ -35,6 +37,9 @@ class Settings():
     for key, value in boolean_settings_default_values.items():
       if isinstance(Settings.get_setting(key), bool):
         Settings.set_setting(key, value)
+
+    for key in boolean_settings_about_hiding_messages:
+      Settings.set_setting(key, 0)
 
     Settings.calculate_size_settings(screen_width, screen_height)
 

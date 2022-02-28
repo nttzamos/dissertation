@@ -88,6 +88,7 @@ class SettingsWidget(QDialog):
     self.light_theme_button.toggled.connect(self.light_theme_button_clicked)
     self.dark_theme_button = QRadioButton(SettingsWidget.DARK_THEME_TEXT)
     self.dark_theme_button.toggled.connect(self.dark_theme_button_clicked)
+    self.initial_toggle = True
 
     if Settings.get_setting('theme') == 'light':
       self.light_theme_button.setChecked(True)
@@ -154,12 +155,44 @@ class SettingsWidget(QDialog):
       SearchingWidget.update_selected_dictionary()
 
   def light_theme_button_clicked(self):
+    if self.initial_toggle:
+      self.initial_toggle = False
+      return
+
     if self.light_theme_button.isChecked():
       Settings.set_setting('theme', 'light')
+      self.show_theme_change_effect_message()
 
   def dark_theme_button_clicked(self):
+    if self.initial_toggle:
+      self.initial_toggle = False
+      return
+
     if self.dark_theme_button.isChecked():
       Settings.set_setting('theme', 'dark')
+      self.show_theme_change_effect_message()
+
+  def show_theme_change_effect_message(self):
+    if Settings.get_boolean_setting('hide_theme_change_effect_message'): return
+
+    title = 'Ανανέωση Θέματος'
+    text = 'Η αλλαγή του θέματος θα εφαρμοστεί όταν γίνει επανεκκίνηση της εφαρμογής'
+    answer = QMessageBox()
+    answer.setIcon(QMessageBox.Icon.Information)
+    answer.setText(text)
+    answer.setWindowTitle(title)
+    answer.setStandardButtons(QMessageBox.StandardButton.Ok)
+
+    check_box = QCheckBox('Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή')
+    check_box.clicked.connect(self.toggle_message_setting)
+    check_box.setChecked(False)
+
+    answer.setCheckBox(check_box)
+    answer.exec()
+
+  @staticmethod
+  def toggle_message_setting(value):
+    Settings.set_boolean_setting('hide_theme_change_effect_message', value)
 
   def online_wiktionary_button_clicked(self):
     if self.online_wiktionary_button.isChecked():

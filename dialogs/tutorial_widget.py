@@ -104,7 +104,7 @@ class TutorialWidget(QDialog):
 
     self.setting_check_box = QCheckBox(TutorialWidget.CHECK_BOX_TEXT)
     self.setting_check_box.clicked.connect(self.toggle_tutorial_setting)
-    if Settings.get_setting('show_tutorial_on_startup'):
+    if Settings.get_boolean_setting('show_tutorial_on_startup'):
       self.setting_check_box.setChecked(True)
 
     self.next_tutorial_button = QPushButton(TutorialWidget.NEXT_BUTTON_TEXT)

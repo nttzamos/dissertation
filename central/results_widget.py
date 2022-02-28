@@ -74,7 +74,7 @@ class ResultsWidget(QWidget):
       ResultsWidget.grid_layout.addWidget(result, row, column)
       i += 1
 
-    if show_error and Settings.get_boolean_setting('show_no_internet_message'):
+    if show_error and not Settings.get_boolean_setting('hide_no_internet_message'):
       ResultsWidget.show_no_internet_message()
 
     if i == 0:
@@ -147,11 +147,11 @@ class ResultsWidget(QWidget):
 
     check_box = QCheckBox('Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή')
     check_box.clicked.connect(ResultsWidget.toggle_message_setting)
-    check_box.setChecked(True)
+    check_box.setChecked(False)
 
     answer.setCheckBox(check_box)
     answer.exec()
 
   @staticmethod
   def toggle_message_setting(value):
-    Settings.set_boolean_setting('show_no_internet_message', value)
+    Settings.set_boolean_setting('hide_no_internet_message', value)
