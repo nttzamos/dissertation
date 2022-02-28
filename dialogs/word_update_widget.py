@@ -216,7 +216,9 @@ class WordUpdateWidget(QWidget):
     model = QStringListModel(WordUpdateWidget.dictionary_words, WordUpdateWidget.completer)
     WordUpdateWidget.completer.setModel(model)
     from dialogs.word_family_update_widget import WordFamilyUpdateWidget
-    WordFamilyUpdateWidget.update_dictionary_words(word_to_remove = self.searched_word)
+    WordFamilyUpdateWidget.update_dictionary_words(
+      word_to_remove = self.searched_word, grade_id = self.grade_selector.currentIndex()
+    )
 
     self.word_widget.hide()
     for check_box in self.check_boxes:
