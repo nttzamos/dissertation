@@ -110,15 +110,18 @@ class TutorialWidget(QDialog):
     self.next_tutorial_button = QPushButton(TutorialWidget.NEXT_BUTTON_TEXT)
     self.next_tutorial_button.adjustSize()
     self.next_tutorial_button.pressed.connect(self.next_tutorial)
+    self.next_tutorial_button.setAutoDefault(False)
 
     self.previous_tutorial_button = QPushButton(TutorialWidget.PREVIOUS_BUTTON_TEXT)
     self.previous_tutorial_button.adjustSize()
     self.previous_tutorial_button.pressed.connect(self.previous_tutorial)
     self.previous_tutorial_button.setDisabled(True)
+    self.previous_tutorial_button.setAutoDefault(False)
 
     self.close_tutorial_button = QPushButton(TutorialWidget.CLOSE_BUTTON_TEXT)
     self.close_tutorial_button.adjustSize()
     self.close_tutorial_button.pressed.connect(self.close)
+    self.close_tutorial_button.setAutoDefault(False)
 
     buttons_widget.layout.addWidget(self.setting_check_box, alignment=Qt.AlignmentFlag.AlignLeft)
     buttons_widget.layout.addWidget(self.close_tutorial_button, alignment=Qt.AlignmentFlag.AlignRight)

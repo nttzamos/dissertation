@@ -85,6 +85,7 @@ class WordAdditionWIdget(QWidget):
 
     save_button = QPushButton(WordAdditionWIdget.SAVE_WORD_BUTTON_TEXT)
     save_button.pressed.connect(self.save_word)
+    save_button.setAutoDefault(False)
 
     self.layout.addWidget(word_widget)
     self.layout.addWidget(grade_selection_widget)
@@ -93,10 +94,6 @@ class WordAdditionWIdget(QWidget):
     self.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.style()
-
-  def style(self):
-    from shared.styles import Styles
-    self.setStyleSheet(Styles.word_addition_style)
 
   def grade_selector_activated(self, index):
     for check_box in self.check_boxes:

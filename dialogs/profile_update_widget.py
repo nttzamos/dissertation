@@ -110,10 +110,12 @@ class ProfileUpdateWidget(QWidget):
     self.save_button = QPushButton(ProfileUpdateWidget.UPDATE_PROFILE_BUTTON_TEXT)
     self.save_button.pressed.connect(self.update_profile)
     self.save_button.setDisabled(True)
+    self.save_button.setAutoDefault(False)
 
     self.delete_button = QPushButton(ProfileUpdateWidget.DELETE_PROFILE_BUTTON_TEXT)
     self.delete_button.pressed.connect(self.delete_profile)
     self.delete_button.setDisabled(True)
+    self.delete_button.setAutoDefault(False)
 
     buttons_widget = QWidget()
     buttons_widget.layout = QHBoxLayout(buttons_widget)
@@ -128,12 +130,6 @@ class ProfileUpdateWidget(QWidget):
     self.layout.addWidget(subjects_widget)
     self.layout.addSpacing(15)
     self.layout.addWidget(buttons_widget, alignment=Qt.AlignmentFlag.AlignRight)
-
-    self.style()
-
-  def style(self):
-    from shared.styles import Styles
-    self.setStyleSheet(Styles.profile_update_style)
 
   def profile_selector_activated_initial(self, index):
     if index != 0:

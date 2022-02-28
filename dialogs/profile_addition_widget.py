@@ -87,18 +87,13 @@ class ProfileAdditionWIdget(QWidget):
 
     self.save_button = QPushButton(ProfileAdditionWIdget.SAVE_PROFILE_BUTTON_TEXT)
     self.save_button.pressed.connect(self.save_profile)
+    self.save_button.setAutoDefault(False)
 
     self.layout.addWidget(name_widget)
     self.layout.addWidget(grade_selection_widget)
     self.layout.addWidget(subjects_widget)
     self.layout.addSpacing(15)
     self.layout.addWidget(self.save_button, alignment=Qt.AlignmentFlag.AlignRight)
-
-    self.style()
-
-  def style(self):
-    from shared.styles import Styles
-    self.setStyleSheet(Styles.profile_addition_style)
 
   def grade_selector_activated(self, index):
     for check_box in self.check_boxes:

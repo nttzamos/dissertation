@@ -93,10 +93,12 @@ class StudentUpdateWidget(QWidget):
     self.save_button = QPushButton(StudentUpdateWidget.UPDATE_STUDENT_BUTTON_TEXT)
     self.save_button.pressed.connect(self.update_student)
     self.save_button.setDisabled(True)
+    self.save_button.setAutoDefault(False)
 
     self.delete_button = QPushButton(StudentUpdateWidget.DELETE_STUDENT_BUTTON_TEXT)
     self.delete_button.pressed.connect(self.delete_student)
     self.delete_button.setDisabled(True)
+    self.delete_button.setAutoDefault(False)
 
     buttons_widget = QWidget()
     buttons_widget.layout = QHBoxLayout(buttons_widget)
@@ -110,12 +112,6 @@ class StudentUpdateWidget(QWidget):
     self.layout.addWidget(profiles_widget)
     self.layout.addSpacing(15)
     self.layout.addWidget(buttons_widget, alignment=Qt.AlignmentFlag.AlignRight)
-
-    self.style()
-
-  def style(self):
-    from shared.styles import Styles
-    self.setStyleSheet(Styles.student_update_style)
 
   def student_selector_activated_initial(self, index):
     if index != 0:

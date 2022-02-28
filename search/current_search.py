@@ -7,7 +7,7 @@ from models.profile import get_profile_details
 from models.student import get_students, get_student_details
 
 class CurrentSearch(QWidget):
-  ENTER_WORD_TEXT = 'Αναζητήστε μια λέξη.'
+  ENTER_WORD_TEXT = 'Πρέπει να αναζητήσετε μια λέξη.'
   EDIT_DATA_BUTTON_TEXT = 'Επεξεργασία Δεδομένων'
   EDIT_DATA_TOOLTIP_TEXT = 'Μπορείτε να δημιουργήσετε/επεξεργαστείτε μαθητές, καθώς και τα προφίλ τους.'
   SELECT_STUDENT_TEXT = 'Επιλέξτε έναν μαθητή...'

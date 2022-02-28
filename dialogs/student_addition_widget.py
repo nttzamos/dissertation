@@ -75,17 +75,12 @@ class StudentAdditionWidget(QWidget):
 
     save_button = QPushButton(StudentAdditionWidget.SAVE_STUDENT_BUTTON_TEXT)
     save_button.pressed.connect(self.saveStudent)
+    save_button.setAutoDefault(False)
 
     self.layout.addWidget(name_widget)
     self.layout.addWidget(profiles_widget)
     self.layout.addSpacing(15)
     self.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
-
-    self.style()
-
-  def style(self):
-    from shared.styles import Styles
-    self.setStyleSheet(Styles.student_addition_style)
 
   def saveStudent(self):
     is_invalid, text = self.student_is_invalid()

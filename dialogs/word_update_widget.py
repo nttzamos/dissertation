@@ -107,10 +107,12 @@ class WordUpdateWidget(QWidget):
     self.save_button = QPushButton(WordUpdateWidget.UPDATE_WORD_BUTTON_TEXT)
     self.save_button.pressed.connect(self.update_word)
     self.save_button.setDisabled(True)
+    self.save_button.setAutoDefault(False)
 
     self.delete_button = QPushButton(WordUpdateWidget.DELETE_WORD_BUTTON_TEXT)
     self.delete_button.pressed.connect(self.delete_word)
     self.delete_button.setDisabled(True)
+    self.delete_button.setAutoDefault(False)
 
     buttons_widget = QWidget()
     buttons_widget.layout = QHBoxLayout(buttons_widget)
@@ -130,7 +132,6 @@ class WordUpdateWidget(QWidget):
 
   def style(self):
     from shared.styles import Styles
-    # self.setStyleSheet(Styles.words_editing_widget_style)
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 
   def word_selected(self):

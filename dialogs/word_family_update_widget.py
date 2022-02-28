@@ -87,7 +87,6 @@ class WordFamilyUpdateWidget(QWidget):
     word_family_selection_widget.layout.addSpacing(5)
     word_family_selection_widget.layout.addWidget(self.remove_words_button, alignment=Qt.AlignmentFlag.AlignRight)
 
-
     self.save_button = QPushButton(WordFamilyUpdateWidget.SAVE_FAMILY_BUTTON_TEXT)
     self.save_button.pressed.connect(self.update_family)
     self.save_button.setDisabled(True)
@@ -103,7 +102,6 @@ class WordFamilyUpdateWidget(QWidget):
 
   def style(self):
     from shared.styles import Styles
-    # self.setStyleSheet(Styles.words_editing_widget_style)
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 
   def grade_selector_activated(self, index):
