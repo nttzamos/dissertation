@@ -177,6 +177,10 @@ class StudentUpdateWidget(QWidget):
       CurrentSearch.remove_profiles(profiles_to_remove)
 
   def delete_student(self):
+    if not Settings.get_boolean_setting('hide_delete_student_message'):
+      if not self.get_permission_to_delete():
+        return
+
     destroy_student(self.student_id)
     for check_box in StudentUpdateWidget.check_boxes:
       StudentUpdateWidget.profiles_selection_widget.layout.removeWidget(check_box)
@@ -252,3 +256,36 @@ class StudentUpdateWidget(QWidget):
         StudentUpdateWidget.profiles_selection_widget.layout.removeWidget(check_box)
         StudentUpdateWidget.check_boxes.remove(check_box)
         return
+
+  def get_permission_to_delete(self):
+    title = 'Διαγραφή Προφίλ'
+    question = ('Είστε σίγουροι ότι θέλετε να διαγράψετε το επιλεγμένο προφίλ; '
+                'Τα δεδομένα των μαθητών για το προφίλ αυτό θα διαγραφούν. '
+                'Επίσης, μαθητές που έχουν μόνο το συγκεκριμένο προφίλ θα '
+                'μείνουν χωρίς προφίλ.')
+
+    answer = QMessageBox(self)
+    answer.setIcon(QMessageBox.Icon.Critical)
+    answer.setText(question)
+    answer.setWindowTitle(title)
+
+    yes_button = answer.addButton('Ναι', QMessageBox.ButtonRole.YesRole)
+    cancel_button = answer.addButton('Ακύρωση', QMessageBox.ButtonRole.RejectRole)
+
+    answer.setDefaultButton(cancel_button)
+
+    check_box = QCheckBox('Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή')
+    check_box.clicked.connect(self.toggle_message_setting)
+    check_box.setChecked(False)
+
+    answer.setCheckBox(check_box)
+    answer.exec()
+
+    if answer.clickedButton() == yes_button:
+      return True
+
+    return False
+
+  @staticmethod
+  def toggle_message_setting(value):
+    Settings.set_boolean_setting('hide_delete_student_message', value)

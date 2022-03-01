@@ -228,6 +228,10 @@ class WordUpdateWidget(QWidget):
     update_word(self.searched_word, new_word, grade_id, subjects_to_add, subjects_to_remove)
 
   def delete_word(self):
+    if not Settings.get_boolean_setting('hide_delete_word_message'):
+      if not self.get_permission_to_delete():
+        return
+
     word = self.word_line_edit.text()
     WordUpdateWidget.dictionary_words.remove(word)
     model = QStringListModel(WordUpdateWidget.dictionary_words, WordUpdateWidget.completer)
@@ -257,3 +261,36 @@ class WordUpdateWidget(QWidget):
         return False, ''
 
     return True, WordUpdateWidget.NO_SUBJECT_SELECTED_TEXT
+
+  def get_permission_to_delete(self):
+    title = 'Διαγραφή Προφίλ'
+    question = ('Είστε σίγουροι ότι θέλετε να διαγράψετε το επιλεγμένο προφίλ; '
+                'Τα δεδομένα των μαθητών για το προφίλ αυτό θα διαγραφούν. '
+                'Επίσης, μαθητές που έχουν μόνο το συγκεκριμένο προφίλ θα '
+                'μείνουν χωρίς προφίλ.')
+
+    answer = QMessageBox(self)
+    answer.setIcon(QMessageBox.Icon.Critical)
+    answer.setText(question)
+    answer.setWindowTitle(title)
+
+    yes_button = answer.addButton('Ναι', QMessageBox.ButtonRole.YesRole)
+    cancel_button = answer.addButton('Ακύρωση', QMessageBox.ButtonRole.RejectRole)
+
+    answer.setDefaultButton(cancel_button)
+
+    check_box = QCheckBox('Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή')
+    check_box.clicked.connect(self.toggle_message_setting)
+    check_box.setChecked(False)
+
+    answer.setCheckBox(check_box)
+    answer.exec()
+
+    if answer.clickedButton() == yes_button:
+      return True
+
+    return False
+
+  @staticmethod
+  def toggle_message_setting(value):
+    Settings.set_boolean_setting('hide_delete_word_message', value)
