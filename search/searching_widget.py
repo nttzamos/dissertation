@@ -27,7 +27,7 @@ class SearchingWidget(QWidget):
   for i in range(len(grades)):
     grades_mapping[i + 1] = grades[i]
 
-  most_recently_searched_word = ''
+  just_searched_with_enter = False
 
   def __init__(self):
     super().__init__()
@@ -67,7 +67,7 @@ class SearchingWidget(QWidget):
     search_button = QPushButton()
     search_button.setToolTip(SearchingWidget.SEARCH_TEXT)
     search_button.setIcon(QIcon('resources/search.png'))
-    search_button.clicked.connect(self.search_with_enter)
+    search_button.clicked.connect(self.search_with_button)
 
     self.search_bar_widget.layout.setSpacing(0)
     self.search_bar_widget.layout.addWidget(SearchingWidget.line_edit)
@@ -186,7 +186,7 @@ class SearchingWidget(QWidget):
       SearchingWidget.error_message.hide()
 
   def search_with_enter(self):
-    SearchingWidget.most_recently_searched_word = SearchingWidget.line_edit.text()
+    SearchingWidget.just_searched_with_enter = True
 
     if SearchingWidget.line_edit.text() in SearchingWidget.dictionary_words:
       self.add_recent_search(SearchingWidget.line_edit.text())
@@ -196,10 +196,21 @@ class SearchingWidget(QWidget):
       self.set_error_style_sheet()
       SearchingWidget.set_focus_to_search_bar()
 
-  def search_with_click(self, text):
-    if not text == SearchingWidget.most_recently_searched_word:
-      self.add_recent_search(text)
+  def search_with_button(self):
+    if SearchingWidget.line_edit.text() in SearchingWidget.dictionary_words:
+      self.add_recent_search(SearchingWidget.line_edit.text())
+      self.clear_search()
+    else:
+      self.show_error_message = True
+      self.set_error_style_sheet()
+      SearchingWidget.set_focus_to_search_bar()
 
+  def search_with_click(self, text):
+    if SearchingWidget.just_searched_with_enter:
+      SearchingWidget.just_searched_with_enter = False
+      return
+
+    self.add_recent_search(text)
     self.clear_search()
 
   def clear_search(self):

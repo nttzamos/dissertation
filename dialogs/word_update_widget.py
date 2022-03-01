@@ -34,6 +34,8 @@ class WordUpdateWidget(QWidget):
     completer_font = QFont(Settings.font, 12)
     error_message_font = QFont(Settings.font, 10)
 
+    WordUpdateWidget.just_searched_with_enter = False
+
     grade_selection_widget = QGroupBox(WordUpdateWidget.GRADE_SELECTION_TEXT)
     grade_selection_widget.setFont(section_label_font)
     grade_selection_widget.layout = QHBoxLayout(grade_selection_widget)
@@ -53,10 +55,11 @@ class WordUpdateWidget(QWidget):
 
     self.word_selection_line_edit = QLineEdit()
     self.word_selection_line_edit.setFont(line_edit_font)
-    self.word_selection_line_edit.returnPressed.connect(self.word_selected)
+    self.word_selection_line_edit.returnPressed.connect(self.search_with_enter)
     WordUpdateWidget.dictionary_words = get_grade_words(1)
     WordUpdateWidget.completer = QCompleter(WordUpdateWidget.dictionary_words)
     WordUpdateWidget.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+    WordUpdateWidget.completer.activated.connect(self.search_with_click)
     WordUpdateWidget.completer.popup().setFont(completer_font)
     self.word_selection_line_edit.setCompleter(WordUpdateWidget.completer)
     self.word_selection_line_edit.setPlaceholderText(WordUpdateWidget.PLEASE_ENTER_WORD_TEXT)
@@ -134,32 +137,45 @@ class WordUpdateWidget(QWidget):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 
-  def word_selected(self):
+  def search_with_enter(self):
+    WordUpdateWidget.just_searched_with_enter = True
+
     self.searched_word = self.word_selection_line_edit.text()
     if self.searched_word in WordUpdateWidget.dictionary_words:
-      self.word_widget.show()
-      self.word_line_edit.setText(self.searched_word)
-      self.word_line_edit.setFocus()
-      self.save_button.setEnabled(True)
-      self.delete_button.setEnabled(True)
-
-      for check_box in self.check_boxes:
-        self.subjects_selection_widget.layout.removeWidget(check_box)
-
-      grade_subjects = get_grade_subjects(WordUpdateWidget.grade_selector.currentIndex() + 1)
-      self.word_subjects = get_word_subjects(WordUpdateWidget.grade_selector.currentIndex() + 1, self.searched_word)
-
-      check_box_font = QFont(Settings.font, 14)
-      self.check_boxes = []
-      for i in range(len(grade_subjects)):
-        check_box = QCheckBox(grade_subjects[i])
-        check_box.setFont(check_box_font)
-        if grade_subjects[i] in self.word_subjects: check_box.setChecked(True)
-
-        self.check_boxes.append(check_box)
-        self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
+      self.search_valid_word_details()
     else:
       self.error_message_label.show()
+
+  def search_with_click(self, text):
+    if WordUpdateWidget.just_searched_with_enter:
+      WordUpdateWidget.just_searched_with_enter = False
+      return
+
+    self.searched_word = text
+    self.search_valid_word_details()
+
+  def search_valid_word_details(self):
+    self.word_widget.show()
+    self.word_line_edit.setText(self.searched_word)
+    self.word_line_edit.setFocus()
+    self.save_button.setEnabled(True)
+    self.delete_button.setEnabled(True)
+
+    for check_box in self.check_boxes:
+      self.subjects_selection_widget.layout.removeWidget(check_box)
+
+    grade_subjects = get_grade_subjects(WordUpdateWidget.grade_selector.currentIndex() + 1)
+    self.word_subjects = get_word_subjects(WordUpdateWidget.grade_selector.currentIndex() + 1, self.searched_word)
+
+    check_box_font = QFont(Settings.font, 14)
+    self.check_boxes = []
+    for i in range(len(grade_subjects)):
+      check_box = QCheckBox(grade_subjects[i])
+      check_box.setFont(check_box_font)
+      if grade_subjects[i] in self.word_subjects: check_box.setChecked(True)
+
+      self.check_boxes.append(check_box)
+      self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
 
   def grade_selector_activated(self, index):
     WordUpdateWidget.dictionary_words = get_grade_words(index + 1)
