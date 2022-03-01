@@ -206,8 +206,19 @@ class SettingsWidget(QDialog):
     title = 'Επαναφορά Δεδομένων'
     question = ('Είστε σίγουροι ότι θέλετε να επαναφέρετε την βάση δεδομένων '
                 'στην αρχική της κατάσταση; Όλα τα δεδομένα σας θα διαγραφούν.')
-    answer = QMessageBox.question(self, title, question, QMessageBox.StandardButton.Cancel | QMessageBox.StandardButton.Yes)
-    if answer == QMessageBox.StandardButton.Yes:
+
+    answer = QMessageBox(self)
+    answer.setIcon(QMessageBox.Icon.Question)
+    answer.setText(question)
+    answer.setWindowTitle(title)
+
+    yes_button = answer.addButton('Ναι', QMessageBox.ButtonRole.YesRole)
+    cancel_button = answer.addButton('Ακύρωση', QMessageBox.ButtonRole.RejectRole)
+
+    answer.setDefaultButton(cancel_button)
+    answer.exec()
+
+    if answer.clickedButton() == yes_button:
       os.remove('resources/database.db')
       shutil.copyfile('resources/database_backup.db', 'resources/database.db')
       from central.main_window import MainWindow
