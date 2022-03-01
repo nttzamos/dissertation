@@ -4,7 +4,7 @@ from PyQt6.QtGui import QFont
 
 from item.result import Result
 from menu.settings import Settings
-from models.family import get_family_id, get_family_words, update_word_family
+from models.family import get_family_id, get_family_words, update_word_family, non_related_word_exists
 from models.word import get_word_id, word_exists
 from shared.wiktionary_parser import fetch_word_details
 
@@ -99,7 +99,7 @@ class ResultsWidget(QWidget):
 
       online_family_words = list(set(online_family_words) - set(offline_result_words))
       for online_word in online_family_words:
-        if word_exists(grade_id, online_word):
+        if word_exists(grade_id, online_word) and not non_related_word_exists(word, online_word, grade_id):
           update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [online_word], [])
           offline_result_words.append(online_word)
 

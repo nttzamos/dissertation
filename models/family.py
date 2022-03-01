@@ -131,13 +131,64 @@ def update_word_family(grade_id, word, words_to_add, words_to_remove):
   for family_word in words_to_add:
     words_ids_to_add.append(get_word_id(grade_id, family_word))
 
+    if non_related_word_exists(word, family_word, grade_id):
+      destroy_non_related_word(word, family_word, grade_id)
+
   family_words = list(zip(words_ids_to_add, [family_id] * len(words_ids_to_add)))
   query = 'INSERT INTO ' + get_family_table_name(grade_id) + ' VALUES (null, ?, ?)'
   cur.executemany(query, family_words)
+  con.commit()
 
   for family_word in words_to_remove:
     query = 'DELETE FROM ' + get_family_table_name(grade_id) + ' WHERE word_id = ? AND family_id = ?'
     cur.execute(query, (get_word_id(grade_id, family_word), family_id))
+    con.commit()
+    create_non_related_word(word, family_word, grade_id)
+
+  con.close()
+
+def create_non_related_word(word, non_related_word, grade_id):
+  word_id = get_word_id(grade_id, word)
+  non_related_word_id = get_word_id(grade_id, non_related_word)
+  con, cur = connect_to_database()
+  query = 'INSERT INTO non_related_word VALUES (null, ?, ?, ?)'
+  cur.execute(query, (word_id, non_related_word_id, grade_id))
+
+  con.commit()
+  con.close()
+
+def get_non_related_words(word, grade_id):
+  word_id = get_word_id(grade_id, word)
+  grade_table_name = get_grade_table_name(grade_id)
+  con, cur = connect_to_database()
+  query = ('SELECT word FROM ' + grade_table_name + ' '
+    'INNER JOIN non_related_word ON ' + grade_table_name + '.id = '
+    'non_related_word.word_id WHERE word_id = ? AND grade_id = ?')
+  cur.execute(query, (word_id, grade_id))
+  non_related_words = list(map(lambda non_related_word: non_related_word[0], cur.fetchall()))
+  con.close()
+  return non_related_words
+
+def non_related_word_exists(word, non_related_word, grade_id):
+  word_id = get_word_id(grade_id, word)
+  non_related_word_id = get_word_id(grade_id, non_related_word)
+  con, cur = connect_to_database()
+  query = ('SELECT COUNT(*) FROM non_related_word WHERE word_id = ?'
+           'AND non_related_word_id = ? AND grade_id = ?')
+
+  cur.execute(query, (word_id, non_related_word_id, grade_id))
+  non_related_word_exists = cur.fetchone()[0] > 0
+  con.close()
+  return non_related_word_exists
+
+def destroy_non_related_word(word, non_related_word, grade_id):
+  word_id = get_word_id(grade_id, word)
+  non_related_word_id = get_word_id(grade_id, non_related_word)
+  con, cur = connect_to_database()
+  query = ('DELETE FROM non_related_word WHERE word_id = ?'
+           'AND non_related_word_id = ? AND grade_id = ?')
+
+  cur.execute(query, (word_id, non_related_word_id, grade_id))
 
   con.commit()
   con.close()

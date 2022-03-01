@@ -160,6 +160,7 @@ class WordFamilyUpdateWidget(QWidget):
     if len(self.famiy_list) > 1:
       self.family_words.remove(self.searched_word)
       self.famiy_list.remove(self.searched_word)
+      self.family_words.sort()
       self.word_family_list.addItems(self.family_words)
     else:
       self.word_family_list.addItem(WordFamilyUpdateWidget.NO_FAMILY_WORDS_TEXT)
