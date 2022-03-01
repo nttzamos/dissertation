@@ -7,6 +7,11 @@ from models.word import create_word, word_exists
 from shared.database_handler import get_grades, get_grade_subjects
 
 class WordAdditionWIdget(QWidget):
+  GREEK_CHARACTERS = [
+    'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο',
+    'π', 'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'ς', 'ά', 'έ', 'ί', 'ή', 'ύ', 'ό',
+    'ώ', 'ϊ', 'ϋ']
+
   WORD_TEXT = 'Λέξη'
   GRADE_SELECTION_TEXT = 'Επιλογή Τάξης'
   SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
@@ -14,6 +19,7 @@ class WordAdditionWIdget(QWidget):
   ERROR_SAVING_WORD_TEXT = 'Αδυναμία αποθήκευσης λέξης'
   WORD_EMPTY_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς είναι κενή'
   WORD_EXISTS_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη'
+  ONLY_GREEK_CHARACTERS_ALLOWED_TEXT = 'Η λέξη σας πρέπει να περιέχει μόνο ελληνικούς χαρακτήρες'
   NO_SUBJECT_SELECTED_TEXT = ('Η λέξη δεν μπορεί να αποθηκευτεί καθώς δεν '
                               'έχετε επιλέξει κανένα μάθημα στο οποίο θα ανήκει')
 
@@ -93,8 +99,6 @@ class WordAdditionWIdget(QWidget):
     self.layout.addSpacing(15)
     self.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
-    self.style()
-
   def grade_selector_activated(self, index):
     for check_box in self.check_boxes:
       self.subjects_selection_widget.layout.removeWidget(check_box)
@@ -118,7 +122,7 @@ class WordAdditionWIdget(QWidget):
       if answer == QMessageBox.StandardButton.Ok:
         return
 
-    word = self.word_line_edit.text()
+    word = self.word_line_edit.text().strip()
     QTimer.singleShot(0, self.word_line_edit.clear)
 
     subjects = []
@@ -135,12 +139,16 @@ class WordAdditionWIdget(QWidget):
     WordFamilyUpdateWidget.update_dictionary_words(word_to_add = word)
 
   def word_is_invalid(self):
-    word = self.word_line_edit.text()
+    word = self.word_line_edit.text().strip()
     if len(word) == 0:
       return True, WordAdditionWIdget.WORD_EMPTY_TEXT
 
     if word_exists(self.grade_selector.currentIndex() + 1, word):
       return True, WordAdditionWIdget.WORD_EXISTS_TEXT
+
+    for character in word:
+      if not character in WordAdditionWIdget.GREEK_CHARACTERS:
+        return True, WordAdditionWIdget.ONLY_GREEK_CHARACTERS_ALLOWED_TEXT
 
     for check_box in self.check_boxes:
       if check_box.isChecked():
