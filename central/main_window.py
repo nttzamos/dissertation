@@ -89,7 +89,7 @@ class MainWindow(QWidget):
     from central.results_widget import ResultsWidget
 
     SearchingWidget.set_initial_error_message()
-    SearchingWidget.line_edit.setCompleter(None)
+    SearchingWidget.completer.setModel(None)
     ResultsWidget.show_placeholder()
     CurrentSearch.subject_selector_active = False
     RecentSearchesWidget.clear_previous_recent_searches()

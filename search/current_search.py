@@ -139,6 +139,7 @@ class CurrentSearch(QWidget):
     if not CurrentSearch.initialize_selected_student:
       from central.main_window import MainWindow
       MainWindow.clear_previous_subject_details()
+      CurrentSearch.searched_word.setText(CurrentSearch.ENTER_WORD_TEXT)
 
     CurrentSearch.initialize_selected_student = False
 
@@ -180,6 +181,7 @@ class CurrentSearch(QWidget):
 
     from central.main_window import MainWindow
     MainWindow.clear_previous_subject_details()
+    CurrentSearch.searched_word.setText(CurrentSearch.ENTER_WORD_TEXT)
     CurrentSearch.profile_id, CurrentSearch.grade_id, grade_name, profile_subjects = get_profile_details(CurrentSearch.profile_selector.currentText())
     CurrentSearch.subject_selector.clear()
     CurrentSearch.subject_selector.addItem(CurrentSearch.SELECT_SUBJECT_TEXT)
