@@ -3,7 +3,6 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 
 from models.family import update_word_family
-from models.starred_word import create_starred_word, destroy_starred_word
 from models.word import create_word
 from shared.database_handler import get_grade_subjects
 from shared.styles import Styles
@@ -97,19 +96,8 @@ class Result(QWidget):
     update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [], [word])
     self.hide()
 
-  def toggle_starred_state(self):
-    from side.starred_words_widget import StarredWordsWidget
-    from side.recent_searches_widget import RecentSearchesWidget
-    word = self.word_label.text()
+    from central.results_widget import ResultsWidget
+    ResultsWidget.remove_result(self)
 
-    RecentSearchesWidget.toggle_recent_search_starred_icon(word)
-    if self.is_starred:
-      self.is_starred = False
-      self.star_button.setIcon(QIcon('resources/unstarred.svg'))
-      destroy_starred_word(word)
-      StarredWordsWidget.toggle_starred_word_starred_state(word)
-    else:
-      self.is_starred = True
-      self.star_button.setIcon(QIcon('resources/starred.svg'))
-      create_starred_word(word)
-      StarredWordsWidget.add_starred_word(word)
+  def update_word(self, new_word):
+    self.word_label.setText(new_word)

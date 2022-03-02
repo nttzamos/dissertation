@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QScrollArea, QCheckBox, QPushButton, QComboBox, QSizePolicy, QMessageBox, QCompleter
-from PyQt6.QtCore import Qt, QStringListModel
+from PyQt6.QtCore import Qt, QStringListModel, QTimer
 from PyQt6.QtGui import QFont
 
 from menu.settings import Settings
@@ -181,7 +181,12 @@ class WordUpdateWidget(QWidget):
     WordUpdateWidget.dictionary_words = get_grade_words(index + 1)
     model = QStringListModel(WordUpdateWidget.dictionary_words, WordUpdateWidget.completer)
     WordUpdateWidget.completer.setModel(model)
+
+    QTimer.singleShot(0, self.word_selection_line_edit.clear)
+    self.word_selection_line_edit.setFocus()
+
     self.word_widget.hide()
+
     for check_box in self.check_boxes:
       self.subjects_selection_widget.layout.removeWidget(check_box)
 
@@ -220,12 +225,29 @@ class WordUpdateWidget(QWidget):
 
     new_word = self.word_line_edit.text()
     grade_id = self.grade_selector.currentIndex() + 1
+
+    update_word(self.searched_word, new_word, grade_id, subjects_to_add, subjects_to_remove)
+
     if self.searched_word != new_word:
+      from search.current_search import CurrentSearch
+      if grade_id == CurrentSearch.grade_id:
+        CurrentSearch.update_searched_word(self.searched_word, new_word)
+
+        from side.recent_searches_widget import RecentSearchesWidget
+        RecentSearchesWidget.update_word(self.searched_word, new_word)
+
+        from side.starred_words_widget import StarredWordsWidget
+        StarredWordsWidget.update_word(self.searched_word, new_word)
+
+        from central.results_widget import ResultsWidget
+        ResultsWidget.update_word(self.searched_word, new_word)
+
+      self.word_selection_line_edit.setText(new_word)
+      self.searched_word = new_word
+
       self.update_dictionary_words(self.searched_word, new_word)
       from dialogs.word_family_update_widget import WordFamilyUpdateWidget
       WordFamilyUpdateWidget.update_dictionary_words(self.searched_word, new_word)
-
-    update_word(self.searched_word, new_word, grade_id, subjects_to_add, subjects_to_remove)
 
   def delete_word(self):
     if not Settings.get_boolean_setting('hide_delete_word_message'):
@@ -233,7 +255,7 @@ class WordUpdateWidget(QWidget):
         return
 
     word = self.word_line_edit.text()
-    WordUpdateWidget.dictionary_words.remove(word)
+    WordUpdateWidget.dictionary_words.remove(self.searched_word)
     model = QStringListModel(WordUpdateWidget.dictionary_words, WordUpdateWidget.completer)
     WordUpdateWidget.completer.setModel(model)
     from dialogs.word_family_update_widget import WordFamilyUpdateWidget
@@ -241,12 +263,29 @@ class WordUpdateWidget(QWidget):
       word_to_remove = self.searched_word, grade_id = self.grade_selector.currentIndex()
     )
 
+    grade_id = self.grade_selector.currentIndex() + 1
+    from search.current_search import CurrentSearch
+    if grade_id == CurrentSearch.grade_id:
+      CurrentSearch.remove_searched_word(self.searched_word)
+
+      from side.recent_searches_widget import RecentSearchesWidget
+      RecentSearchesWidget.delete_word(self.searched_word)
+
+      from side.starred_words_widget import StarredWordsWidget
+      StarredWordsWidget.delete_word(self.searched_word)
+
+      from central.results_widget import ResultsWidget
+      ResultsWidget.delete_word(self.searched_word)
+
     self.word_widget.hide()
     for check_box in self.check_boxes:
       self.subjects_selection_widget.layout.removeWidget(check_box)
 
     self.check_boxes = []
-    destroy_word(word, [self.grade_selector.currentIndex() + 1])
+    destroy_word(self.searched_word, [self.grade_selector.currentIndex() + 1])
+
+    QTimer.singleShot(0, self.word_selection_line_edit.clear)
+    self.word_selection_line_edit.setFocus()
 
   def word_is_invalid(self):
     word = self.word_line_edit.text()

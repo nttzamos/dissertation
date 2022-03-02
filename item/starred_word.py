@@ -81,3 +81,6 @@ class StarredWord(QWidget):
       RecentSearchesWidget.remove_and_add_recent_search(word)
     else:
       RecentSearchesWidget.add_recent_search(word)
+
+  def update_word(self, new_word):
+    self.word.setText(new_word)

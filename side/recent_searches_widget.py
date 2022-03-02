@@ -101,23 +101,23 @@ class RecentSearchesWidget(QWidget):
 
   @staticmethod
   def remove_and_add_recent_search(word):
-    for obj in RecentSearchesWidget.widget_list:
-      if obj.word.text()==word:
-        RecentSearchesWidget.grid_layout.removeWidget(obj)
-        RecentSearchesWidget.grid_layout.addWidget(obj, RecentSearchesWidget.counter, 0)
+    for recent_search in RecentSearchesWidget.widget_list:
+      if recent_search.word.text()==word:
+        RecentSearchesWidget.grid_layout.removeWidget(recent_search)
+        RecentSearchesWidget.grid_layout.addWidget(recent_search, RecentSearchesWidget.counter, 0)
         RecentSearchesWidget.counter -=1
         return
 
   @staticmethod
   def toggle_recent_search_starred_icon(word):
-    for obj in RecentSearchesWidget.widget_list:
-      if word == obj.word.text():
-        obj.toggle_starred_icon()
+    for recent_search in RecentSearchesWidget.widget_list:
+      if word == recent_search.word.text():
+        recent_search.toggle_starred_icon()
         return
 
   @staticmethod
-  def remove_recent_search(obj):
-    RecentSearchesWidget.widget_list.remove(obj)
+  def remove_recent_search(recent_search):
+    RecentSearchesWidget.widget_list.remove(recent_search)
     if len(RecentSearchesWidget.widget_list)==0:
       RecentSearchesWidget.show_placeholder(text = RecentSearchesWidget.NO_RECENT_SEARCHES_TEXT)
 
@@ -147,3 +147,19 @@ class RecentSearchesWidget(QWidget):
       RecentSearchesWidget.show_placeholder_label = False
       RecentSearchesWidget.grid_layout.addWidget(RecentSearchesWidget.vspacer, 1000001, 0, 1, -1)
       RecentSearchesWidget.placeholder_label.hide()
+
+  @staticmethod
+  def update_word(word, new_word):
+    for recent_search in RecentSearchesWidget.widget_list:
+      if word == recent_search.word.text():
+        recent_search.update_word(new_word)
+        return
+
+  @staticmethod
+  def delete_word(word):
+    for recent_search in RecentSearchesWidget.widget_list:
+      if word == recent_search.word.text():
+        recent_search.hide()
+        recent_search.deleteLater()
+        RecentSearchesWidget.remove_recent_search(recent_search)
+        return

@@ -106,3 +106,6 @@ class RecentSearch(QWidget):
     self.hide()
     RecentSearchesWidget.remove_recent_search(self)
     self.deleteLater()
+
+  def update_word(self, new_word):
+    self.word.setText(new_word)

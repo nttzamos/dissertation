@@ -99,16 +99,16 @@ class StarredWordsWidget(QWidget):
     StarredWordsWidget.counter -= 1
 
   @staticmethod
-  def remove_starred_word(obj):
-    StarredWordsWidget.widget_list.remove(obj)
+  def remove_starred_word(starred_word):
+    StarredWordsWidget.widget_list.remove(starred_word)
     if len(StarredWordsWidget.widget_list)==0:
       StarredWordsWidget.show_placeholder(text = StarredWordsWidget.NO_STARRED_WORDS_TEXT)
 
   @staticmethod
   def toggle_starred_word_starred_state(word):
-    for obj in StarredWordsWidget.widget_list:
-      if word==obj.word.text():
-        obj.remove_word()
+    for starred_word in StarredWordsWidget.widget_list:
+      if word == starred_word.word.text():
+        starred_word.remove_word()
         return
 
   @staticmethod
@@ -137,3 +137,19 @@ class StarredWordsWidget(QWidget):
       StarredWordsWidget.show_placeholder_label = False
       StarredWordsWidget.grid_layout.addWidget(StarredWordsWidget.vspacer, 1000001, 0, 1, -1)
       StarredWordsWidget.placeholder_label.hide()
+
+  @staticmethod
+  def update_word(word, new_word):
+    for starred_word in StarredWordsWidget.widget_list:
+      if word == starred_word.word.text():
+        starred_word.update_word(new_word)
+        return
+
+  @staticmethod
+  def delete_word(word):
+    for starred_word in StarredWordsWidget.widget_list:
+      if word == starred_word.word.text():
+        starred_word.hide()
+        starred_word.deleteLater()
+        StarredWordsWidget.remove_starred_word(starred_word)
+        return

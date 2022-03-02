@@ -21,6 +21,7 @@ class CurrentSearch(QWidget):
   ALL_SUBJECTS_TEXT = 'Όλα τα μαθήματα'
 
   subject_selector_active = False
+  grade_id = -1
 
   def __init__(self):
     super().__init__()
@@ -212,6 +213,18 @@ class CurrentSearch(QWidget):
     CurrentSearch.subject_selector_active = True
     from central.main_window import MainWindow
     MainWindow.update_widgets(CurrentSearch.profile_id, CurrentSearch.subject_selector.currentText())
+
+  @staticmethod
+  def update_searched_word(word, new_word):
+    if CurrentSearch.searched_word.text() == word:
+      CurrentSearch.searched_word.setText(new_word)
+
+  @staticmethod
+  def remove_searched_word(word):
+    if CurrentSearch.searched_word.text() == word:
+      CurrentSearch.searched_word.setText(CurrentSearch.ENTER_WORD_TEXT)
+      from central.results_widget import ResultsWidget
+      ResultsWidget.show_placeholder()
 
   @staticmethod
   def get_current_selection_details():

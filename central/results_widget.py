@@ -135,6 +135,12 @@ class ResultsWidget(QWidget):
       ResultsWidget.placeholder_label.hide()
 
   @staticmethod
+  def remove_result(result):
+    ResultsWidget.widget_list.remove(result)
+    if len(ResultsWidget.widget_list)==0:
+      ResultsWidget.show_placeholder(ResultsWidget.NO_RESULTS_TEXT)
+
+  @staticmethod
   def show_no_internet_message():
     title = 'Αδυναμία σύνδεσης στο Διαδίκτυο'
     text = ('Η ρύθμιση για την online χρήση του Wiktionary είναι ενεργοποιημένη,'
@@ -155,3 +161,19 @@ class ResultsWidget(QWidget):
   @staticmethod
   def toggle_message_setting(value):
     Settings.set_boolean_setting('hide_no_internet_message', value)
+
+  @staticmethod
+  def update_word(word, new_word):
+    for result in ResultsWidget.widget_list:
+      if result.saved and word == result.word_label.text():
+        result.update_word(new_word)
+        return
+
+  @staticmethod
+  def delete_word(word):
+    for result in ResultsWidget.widget_list:
+      if result.saved and word == result.word_label.text():
+        result.hide()
+        result.deleteLater()
+        ResultsWidget.remove_result(result)
+        return
