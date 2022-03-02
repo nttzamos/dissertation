@@ -39,6 +39,8 @@ class ProfileUpdateWidget(QWidget):
     label_font = QFont(Settings.font, 14)
     line_edit_font = QFont(Settings.font, 14)
 
+    self.check_boxes_modified = []
+
     profile_selection_widget = QGroupBox(ProfileUpdateWidget.PROFILE_SELECTION_TEXT)
     profile_selection_widget.setFont(section_label_font)
     profile_selection_widget.layout = QHBoxLayout(profile_selection_widget)
@@ -67,6 +69,7 @@ class ProfileUpdateWidget(QWidget):
 
     self.name_line_edit = QLineEdit()
     self.name_line_edit.setFont(line_edit_font)
+    self.name_line_edit.textChanged.connect(self.profile_name_changed)
     self.name_widget.layout.addWidget(self.name_line_edit)
     self.name_widget.hide()
 
@@ -137,7 +140,6 @@ class ProfileUpdateWidget(QWidget):
       ProfileUpdateWidget.profile_selector.activated.disconnect()
       ProfileUpdateWidget.profile_selector.activated.connect(self.profile_selector_activated)
       self.profile_selector_activated(index - 1)
-      self.save_button.setEnabled(True)
       self.delete_button.setEnabled(True)
       self.subjects_selection_widget.setEnabled(True)
       self.name_widget.show()
@@ -147,6 +149,8 @@ class ProfileUpdateWidget(QWidget):
     self.profile_id, self.grade_id, grade_name, self.profile_subjects = get_profile_details(profile_name)
     ProfileUpdateWidget.grade_label.setText(grade_name)
     self.name_line_edit.setText(profile_name)
+    self.save_button.setDisabled(True)
+
     grade_subjects = get_grade_subjects(self.grade_id)
 
     for check_box in self.check_boxes:
@@ -154,8 +158,10 @@ class ProfileUpdateWidget(QWidget):
 
     check_box_font = QFont(Settings.font, 14)
     self.check_boxes = []
+    self.check_boxes_modified = []
     for i in range(len(grade_subjects)):
       check_box = QCheckBox(grade_subjects[i])
+      check_box.clicked.connect(lambda ch, i=i: self.check_box_modified(grade_subjects[i]))
       check_box.setFont(check_box_font)
       self.check_boxes.append(check_box)
 
@@ -175,6 +181,9 @@ class ProfileUpdateWidget(QWidget):
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
+
+    self.check_boxes_modified = []
+    self.save_button.setDisabled(True)
 
     old_profile_name = ProfileUpdateWidget.profile_selector.currentText()
     new_profile_name = self.name_line_edit.text()
@@ -242,6 +251,23 @@ class ProfileUpdateWidget(QWidget):
       return
 
     self.profile_selector_activated(0)
+
+  def profile_name_changed(self):
+    if self.name_line_edit.text() != self.profile_selector.currentText():
+      self.save_button.setEnabled(True)
+    elif len(self.check_boxes_modified) == 0:
+      self.save_button.setDisabled(True)
+
+  def check_box_modified(self, text):
+    if text in self.check_boxes_modified:
+      self.check_boxes_modified.remove(text)
+    else:
+      self.check_boxes_modified.append(text)
+
+    if len(self.check_boxes_modified) > 0:
+      self.save_button.setEnabled(True)
+    elif self.name_line_edit.text() == self.profile_selector.currentText():
+      self.save_button.setDisabled(True)
 
   def profile_is_invalid(self):
     profile_name = self.name_line_edit.text()

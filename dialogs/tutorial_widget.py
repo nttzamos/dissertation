@@ -93,6 +93,7 @@ class TutorialWidget(QDialog):
     self.group_box_widget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.explanation = QLabel()
+    self.explanation.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
     self.explanation.setWordWrap(True)
     self.explanation.setFont(text_font)
 

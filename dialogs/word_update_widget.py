@@ -8,7 +8,7 @@ from shared.database_handler import get_grades, get_grade_words, get_grade_subje
 
 class WordUpdateWidget(QWidget):
   GRADE_SELECTION_TEXT = 'Επιλογή Τάξης'
-  SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
+  SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων (μαθήματα στα οποία ανήκει η λέξη)'
   WORD_SELECTION_TEXT = 'Επιλογή Λέξης'
   UPDATE_WORD_BUTTON_TEXT = 'Αποθήκευση Λέξης'
   DELETE_WORD_BUTTON_TEXT = 'Διαγραφή Λέξης'
@@ -33,6 +33,8 @@ class WordUpdateWidget(QWidget):
     line_edit_font = QFont(Settings.font, 14)
     completer_font = QFont(Settings.font, 12)
     error_message_font = QFont(Settings.font, 10)
+
+    self.check_boxes_modified = []
 
     WordUpdateWidget.just_searched_with_enter = False
 
@@ -78,6 +80,7 @@ class WordUpdateWidget(QWidget):
 
     self.word_line_edit = QLineEdit()
     self.word_line_edit.setFont(line_edit_font)
+    self.word_line_edit.textChanged.connect(self.word_changed)
     self.word_widget.layout.addWidget(self.word_line_edit)
     self.word_widget.hide()
 
@@ -158,7 +161,7 @@ class WordUpdateWidget(QWidget):
     self.word_widget.show()
     self.word_line_edit.setText(self.searched_word)
     self.word_line_edit.setFocus()
-    self.save_button.setEnabled(True)
+    self.save_button.setDisabled(True)
     self.delete_button.setEnabled(True)
 
     for check_box in self.check_boxes:
@@ -169,8 +172,10 @@ class WordUpdateWidget(QWidget):
 
     check_box_font = QFont(Settings.font, 14)
     self.check_boxes = []
+    self.check_boxes_modified = []
     for i in range(len(grade_subjects)):
       check_box = QCheckBox(grade_subjects[i])
+      check_box.clicked.connect(lambda ch, i=i: self.check_box_modified(grade_subjects[i]))
       check_box.setFont(check_box_font)
       if grade_subjects[i] in self.word_subjects: check_box.setChecked(True)
 
@@ -185,6 +190,7 @@ class WordUpdateWidget(QWidget):
     QTimer.singleShot(0, self.word_selection_line_edit.clear)
     self.word_selection_line_edit.setFocus()
 
+    self.save_button.setDisabled(True)
     self.word_widget.hide()
 
     for check_box in self.check_boxes:
@@ -213,6 +219,9 @@ class WordUpdateWidget(QWidget):
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
+
+    self.check_boxes_modified = []
+    self.save_button.setDisabled(True)
 
     subjects_names = []
     for check_box in self.check_boxes:
@@ -254,7 +263,8 @@ class WordUpdateWidget(QWidget):
       if not self.get_permission_to_delete():
         return
 
-    word = self.word_line_edit.text()
+    self.save_button.setDisabled(True)
+
     WordUpdateWidget.dictionary_words.remove(self.searched_word)
     model = QStringListModel(WordUpdateWidget.dictionary_words, WordUpdateWidget.completer)
     WordUpdateWidget.completer.setModel(model)
@@ -286,6 +296,23 @@ class WordUpdateWidget(QWidget):
 
     QTimer.singleShot(0, self.word_selection_line_edit.clear)
     self.word_selection_line_edit.setFocus()
+
+  def word_changed(self):
+    if self.word_line_edit.text() != self.searched_word:
+      self.save_button.setEnabled(True)
+    elif len(self.check_boxes_modified) == 0:
+      self.save_button.setDisabled(True)
+
+  def check_box_modified(self, text):
+    if text in self.check_boxes_modified:
+      self.check_boxes_modified.remove(text)
+    else:
+      self.check_boxes_modified.append(text)
+
+    if len(self.check_boxes_modified) > 0:
+      self.save_button.setEnabled(True)
+    elif self.word_line_edit.text() == self.searched_word:
+      self.save_button.setDisabled(True)
 
   def word_is_invalid(self):
     word = self.word_line_edit.text()

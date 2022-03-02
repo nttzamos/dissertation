@@ -32,6 +32,8 @@ class StudentUpdateWidget(QWidget):
     combo_box_font = QFont(Settings.font, 14)
     line_edit_font = QFont(Settings.font, 14)
 
+    self.check_boxes_modified = []
+
     student_selection_widget = QGroupBox(StudentUpdateWidget.STUDENT_SELECTION_TEXT)
     student_selection_widget.setFont(section_label_font)
     student_selection_widget.layout = QHBoxLayout(student_selection_widget)
@@ -61,6 +63,7 @@ class StudentUpdateWidget(QWidget):
 
     self.name_line_edit = QLineEdit()
     self.name_line_edit.setFont(line_edit_font)
+    self.name_line_edit.textChanged.connect(self.student_name_changed)
     self.name_widget.layout.addWidget(self.name_line_edit)
 
     profiles_widget = QGroupBox(StudentUpdateWidget.PROFILE_SELECTION_TEXT)
@@ -119,7 +122,6 @@ class StudentUpdateWidget(QWidget):
       StudentUpdateWidget.student_selector.activated.disconnect()
       StudentUpdateWidget.student_selector.activated.connect(self.student_selector_activated)
       self.student_selector_activated(index - 1)
-      self.save_button.setEnabled(True)
       self.delete_button.setEnabled(True)
       StudentUpdateWidget.profiles_selection_widget.setEnabled(True)
       self.name_widget.show()
@@ -128,6 +130,8 @@ class StudentUpdateWidget(QWidget):
     student_name = StudentUpdateWidget.student_selector.currentText()
     self.student_id, self.student_profiles = get_student_details(student_name)
     self.name_line_edit.setText(student_name)
+    self.save_button.setDisabled(True)
+
     profiles = get_profiles()
 
     for check_box in StudentUpdateWidget.check_boxes:
@@ -135,8 +139,10 @@ class StudentUpdateWidget(QWidget):
 
     check_box_font = QFont(Settings.font, 14)
     StudentUpdateWidget.check_boxes = []
+    self.check_boxes_modified = []
     for i in range(len(profiles)):
       check_box = QCheckBox(profiles[i])
+      check_box.clicked.connect(lambda ch, i=i: self.check_box_modified(profiles[i]))
       check_box.setFont(check_box_font)
       StudentUpdateWidget.check_boxes.append(check_box)
 
@@ -154,6 +160,9 @@ class StudentUpdateWidget(QWidget):
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
+
+    self.check_boxes_modified = []
+    self.save_button.setDisabled(True)
 
     new_student_name = self.name_line_edit.text()
     from search.current_search import CurrentSearch
@@ -198,6 +207,23 @@ class StudentUpdateWidget(QWidget):
       return
 
     self.student_selector_activated(0)
+
+  def student_name_changed(self):
+    if self.name_line_edit.text() != self.student_selector.currentText():
+      self.save_button.setEnabled(True)
+    elif len(self.check_boxes_modified) == 0:
+      self.save_button.setDisabled(True)
+
+  def check_box_modified(self, text):
+    if text in self.check_boxes_modified:
+      self.check_boxes_modified.remove(text)
+    else:
+      self.check_boxes_modified.append(text)
+
+    if len(self.check_boxes_modified) > 0:
+      self.save_button.setEnabled(True)
+    elif self.name_line_edit.text() == self.student_selector.currentText():
+      self.save_button.setDisabled(True)
 
   def student_is_invalid(self):
     student_name = self.name_line_edit.text()
