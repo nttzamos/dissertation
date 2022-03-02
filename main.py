@@ -5,6 +5,9 @@ import sys
 app = QApplication(sys.argv)
 
 # Imports must be below here
+from shared.resources_manager import ResourcesManager
+ResourcesManager()
+
 from menu.settings import Settings
 screen_width = app.primaryScreen().size().width()
 screen_height = app.primaryScreen().size().height()
