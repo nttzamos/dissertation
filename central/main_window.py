@@ -90,6 +90,7 @@ class MainWindow(QWidget):
 
     SearchingWidget.set_initial_error_message()
     SearchingWidget.completer.setModel(None)
+    SearchingWidget.dictionary_words = []
     ResultsWidget.show_placeholder()
     CurrentSearch.subject_selector_active = False
     RecentSearchesWidget.clear_previous_recent_searches()
