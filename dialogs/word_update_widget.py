@@ -252,11 +252,15 @@ class WordUpdateWidget(QWidget):
         ResultsWidget.update_word(self.searched_word, new_word)
 
       self.word_selection_line_edit.setText(new_word)
-      self.searched_word = new_word
 
       self.update_dictionary_words(self.searched_word, new_word)
+
       from dialogs.word_family_update_widget import WordFamilyUpdateWidget
-      WordFamilyUpdateWidget.update_dictionary_words(self.searched_word, new_word)
+      WordFamilyUpdateWidget.update_dictionary_words(
+        word_to_remove = self.searched_word, word_to_add = new_word, grade_id = grade_id
+      )
+
+      self.searched_word = new_word
 
   def delete_word(self):
     if not Settings.get_boolean_setting('hide_delete_word_message'):
@@ -265,15 +269,16 @@ class WordUpdateWidget(QWidget):
 
     self.save_button.setDisabled(True)
 
+    grade_id = self.grade_selector.currentIndex() + 1
+
     WordUpdateWidget.dictionary_words.remove(self.searched_word)
     model = QStringListModel(WordUpdateWidget.dictionary_words, WordUpdateWidget.completer)
     WordUpdateWidget.completer.setModel(model)
     from dialogs.word_family_update_widget import WordFamilyUpdateWidget
     WordFamilyUpdateWidget.update_dictionary_words(
-      word_to_remove = self.searched_word, grade_id = self.grade_selector.currentIndex()
+      word_to_remove = self.searched_word, grade_id = grade_id
     )
 
-    grade_id = self.grade_selector.currentIndex() + 1
     from search.current_search import CurrentSearch
     if grade_id == CurrentSearch.grade_id:
       CurrentSearch.remove_searched_word(self.searched_word)

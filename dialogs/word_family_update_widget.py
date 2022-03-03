@@ -230,7 +230,7 @@ class WordFamilyUpdateWidget(QWidget):
 
   @staticmethod
   def update_dictionary_words(word_to_remove = None, word_to_add = None, grade_id = None):
-    if grade_id != WordFamilyUpdateWidget.grade_selector.currentIndex(): return
+    if grade_id != WordFamilyUpdateWidget.grade_selector.currentIndex() + 1: return
 
     if word_to_add != None:
       WordFamilyUpdateWidget.dictionary_words.append(word_to_add)

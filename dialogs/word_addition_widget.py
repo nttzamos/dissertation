@@ -146,7 +146,7 @@ class WordAdditionWIdget(QWidget):
     from dialogs.word_update_widget import WordUpdateWidget
     WordUpdateWidget.add_word_to_dictionary(grade_id, word)
     from dialogs.word_family_update_widget import WordFamilyUpdateWidget
-    WordFamilyUpdateWidget.update_dictionary_words(word_to_add = word)
+    WordFamilyUpdateWidget.update_dictionary_words(word_to_add = word, grade_id = grade_id)
 
   def select_all(self):
     for check_box in self.check_boxes:
