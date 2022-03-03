@@ -17,6 +17,7 @@ class WordAdditionWIdget(QWidget):
   SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
   SAVE_WORD_BUTTON_TEXT = 'Αποθήκευση λέξης'
   ERROR_SAVING_WORD_TEXT = 'Αδυναμία αποθήκευσης λέξης'
+  SELECT_ALL_TEXT = 'Επιλογή όλων των μαθημάτων'
   WORD_EMPTY_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς είναι κενή'
   WORD_EXISTS_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη'
   ONLY_GREEK_CHARACTERS_ALLOWED_TEXT = 'Η λέξη σας πρέπει να περιέχει μόνο ελληνικούς χαρακτήρες'
@@ -93,11 +94,20 @@ class WordAdditionWIdget(QWidget):
     save_button.pressed.connect(self.save_word)
     save_button.setAutoDefault(False)
 
+    select_all_button = QPushButton(WordAdditionWIdget.SELECT_ALL_TEXT)
+    select_all_button.pressed.connect(self.select_all)
+    select_all_button.setAutoDefault(False)
+
+    buttons_widget = QWidget()
+    buttons_widget.layout = QHBoxLayout(buttons_widget)
+    buttons_widget.layout.addWidget(select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
+    buttons_widget.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
+
     self.layout.addWidget(word_widget)
     self.layout.addWidget(grade_selection_widget)
     self.layout.addWidget(subjects_widget)
-    self.layout.addSpacing(15)
-    self.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
+    self.layout.addSpacing(10)
+    self.layout.addWidget(buttons_widget)
 
   def grade_selector_activated(self, index):
     for check_box in self.check_boxes:
@@ -137,6 +147,10 @@ class WordAdditionWIdget(QWidget):
     WordUpdateWidget.add_word_to_dictionary(grade_id, word)
     from dialogs.word_family_update_widget import WordFamilyUpdateWidget
     WordFamilyUpdateWidget.update_dictionary_words(word_to_add = word)
+
+  def select_all(self):
+    for check_box in self.check_boxes:
+      check_box.setChecked(True)
 
   def word_is_invalid(self):
     word = self.word_line_edit.text().strip()

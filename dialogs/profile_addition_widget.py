@@ -12,6 +12,7 @@ class ProfileAdditionWIdget(QWidget):
   SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
   SAVE_PROFILE_BUTTON_TEXT = 'Αποθήκευση Προφίλ'
   ERROR_SAVING_PROFILE_TEXT = 'Αδυναμία αποθήκευσης προφίλ'
+  SELECT_ALL_TEXT = 'Επιλογή όλων των μαθημάτων'
   PROFILE_NAME_EMPTY_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
                              'έχετε συμπληρώσει το όνομα του')
   PROFILE_NAME_EXISTS_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς '
@@ -85,15 +86,24 @@ class ProfileAdditionWIdget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    self.save_button = QPushButton(ProfileAdditionWIdget.SAVE_PROFILE_BUTTON_TEXT)
-    self.save_button.pressed.connect(self.save_profile)
-    self.save_button.setAutoDefault(False)
+    save_button = QPushButton(ProfileAdditionWIdget.SAVE_PROFILE_BUTTON_TEXT)
+    save_button.pressed.connect(self.save_profile)
+    save_button.setAutoDefault(False)
+
+    select_all_button = QPushButton(ProfileAdditionWIdget.SELECT_ALL_TEXT)
+    select_all_button.pressed.connect(self.select_all)
+    select_all_button.setAutoDefault(False)
+
+    buttons_widget = QWidget()
+    buttons_widget.layout = QHBoxLayout(buttons_widget)
+    buttons_widget.layout.addWidget(select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
+    buttons_widget.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.layout.addWidget(name_widget)
     self.layout.addWidget(grade_selection_widget)
     self.layout.addWidget(subjects_widget)
-    self.layout.addSpacing(15)
-    self.layout.addWidget(self.save_button, alignment=Qt.AlignmentFlag.AlignRight)
+    self.layout.addSpacing(10)
+    self.layout.addWidget(buttons_widget)
 
   def grade_selector_activated(self, index):
     for check_box in self.check_boxes:
@@ -137,6 +147,10 @@ class ProfileAdditionWIdget(QWidget):
 
     from dialogs.student_update_widget import StudentUpdateWidget
     StudentUpdateWidget.add_profile(profile_name)
+
+  def select_all(self):
+    for check_box in self.check_boxes:
+      check_box.setChecked(True)
 
   def profile_is_invalid(self):
     profile_name = self.name_line_edit.text()

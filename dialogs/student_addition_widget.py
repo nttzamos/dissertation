@@ -11,6 +11,7 @@ class StudentAdditionWidget(QWidget):
   PROFILE_SELECTION_TEXT = 'Επιλογή Προφίλ'
   SAVE_STUDENT_BUTTON_TEXT = 'Αποθήκευση Μαθητή'
   ERROR_SAVING_STUDENT_TEXT = 'Αδυναμία αποθήκευσης μαθητή'
+  SELECT_ALL_TEXT = 'Επιλογή όλων των προφίλ'
   STUDENT_NAME_EMPTY_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
                              'έχετε συμπληρώσει το όνομα του')
   STUDENT_NAME_EXISTS_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς '
@@ -77,10 +78,19 @@ class StudentAdditionWidget(QWidget):
     save_button.pressed.connect(self.saveStudent)
     save_button.setAutoDefault(False)
 
+    select_all_button = QPushButton(StudentAdditionWidget.SELECT_ALL_TEXT)
+    select_all_button.pressed.connect(self.select_all)
+    select_all_button.setAutoDefault(False)
+
+    buttons_widget = QWidget()
+    buttons_widget.layout = QHBoxLayout(buttons_widget)
+    buttons_widget.layout.addWidget(select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
+    buttons_widget.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
+
     self.layout.addWidget(name_widget)
     self.layout.addWidget(profiles_widget)
-    self.layout.addSpacing(15)
-    self.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
+    self.layout.addSpacing(10)
+    self.layout.addWidget(buttons_widget)
 
   def saveStudent(self):
     is_invalid, text = self.student_is_invalid()
@@ -107,6 +117,10 @@ class StudentAdditionWidget(QWidget):
 
     from search.current_search import CurrentSearch
     CurrentSearch.add_student(student_name)
+
+  def select_all(self):
+    for check_box in StudentAdditionWidget.check_boxes:
+      check_box.setChecked(True)
 
   def student_is_invalid(self):
     student_name = self.name_line_edit.text()
