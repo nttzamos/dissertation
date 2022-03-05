@@ -288,6 +288,15 @@ class Styles():
       QPushButton { padding-top: 5px }"""
 
   if theme == 'light':
+    legend_button_style = """
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 5px }
+      QPushButton:hover { background-color: grey }"""
+  else:
+    legend_button_style = """
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 5px }
+      QPushButton:hover { background-color: grey }"""
+
+  if theme == 'light':
     tutorial_widget_style = """
       QLabel { padding-bottom: 5px }
       QLabel { padding-top: 5px }"""

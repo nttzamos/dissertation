@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget, QMessageBox, QCheckBox
+from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget, QMessageBox, QCheckBox, QPushButton
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QIcon
 
 from item.result import Result
 from menu.settings import Settings
@@ -10,7 +10,7 @@ from shared.wiktionary_parser import fetch_word_details
 
 class ResultsWidget(QWidget):
   RESULT_DISPLAY_TEXT = 'Τα αποτελέσματα της αναζήτησης σας θα εμφανιστούν εδώ.'
-  NO_RESULTS_TEXT = 'Δεν βρέθηκαν αποτέλεσματα για την αναζήτηση σας.'
+  NO_RESULTS_TEXT = 'Δεν βρέθηκαν συγγενικές λέξεις για την λέξη που αναζητήσατε.'
 
   scroll_area_widget_contents = QWidget()
   grid_layout = QGridLayout(scroll_area_widget_contents)
@@ -38,6 +38,16 @@ class ResultsWidget(QWidget):
     self.scroll_area.setWidgetResizable(True)
     self.scroll_area.setWidget(ResultsWidget.scroll_area_widget_contents)
 
+    ResultsWidget.legend_button = QPushButton()
+    ResultsWidget.legend_button.setIcon(QIcon('resources/question.png'))
+    ResultsWidget.legend_button.pressed.connect(self.open_legend)
+    ResultsWidget.legend_button.setFixedSize(30, 30)
+    ResultsWidget.legend_button.hide()
+
+    ResultsWidget.grid_layout.addWidget(
+      ResultsWidget.legend_button, 0, 1110, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop
+    )
+
     self.layout.addWidget(self.scroll_area)
 
     self.style()
@@ -45,6 +55,12 @@ class ResultsWidget(QWidget):
   def style(self):
     from shared.styles import Styles
     self.setStyleSheet(Styles.results_widget_style)
+    ResultsWidget.legend_button.setStyleSheet(Styles.legend_button_style)
+
+  def open_legend(self):
+    from dialogs.result_explanation_widget import ResultExplanationWidget
+    result_explanation_widget = ResultExplanationWidget()
+    result_explanation_widget.exec()
 
   @staticmethod
   def show_results(word):
@@ -123,6 +139,7 @@ class ResultsWidget(QWidget):
     if text == None: text = ResultsWidget.RESULT_DISPLAY_TEXT
     ResultsWidget.placeholder_label.setText(text)
     ResultsWidget.clear_previous_results()
+    ResultsWidget.legend_button.hide()
     if not ResultsWidget.show_placeholder_label:
       ResultsWidget.show_placeholder_label = True
       ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -133,6 +150,7 @@ class ResultsWidget(QWidget):
     if ResultsWidget.show_placeholder_label:
       ResultsWidget.show_placeholder_label = False
       ResultsWidget.placeholder_label.hide()
+      ResultsWidget.legend_button.show()
 
   @staticmethod
   def remove_result(result):
