@@ -3,7 +3,8 @@ tempCodeRunnerFile.py
 *.pdf
 databases/*
 processed/*
-unprocessed/*
+unprocessed*
+backup/*
 build/*
 dist/*
 main.spec

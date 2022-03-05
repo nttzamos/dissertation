@@ -31,13 +31,15 @@ class PdfParser():
   def convert_books_to_text_files(grade):
     subject_names = PdfParser.get_grade_subjects_names(grade)
     subject_files = PdfParser.get_grade_subjects_files(grade)
-    file_name = './Unprocessed/subjects' + str(grade) + '.txt'
+    file_name = './unprocessed/subjects' + str(grade) + '.txt'
     f = open(file_name, 'w')
 
     for i in range(len(subject_names)):
       text = PdfParser.read_subject_words(grade, subject_files[i], raw_text=True)
       text = text.replace(' ', '')
       text = text.replace(' ', '')
+      text = text.replace('­', ' ')
+
       f.write(text)
       f.write('YOU_HAVE_REACHED_THE_END_OF_A_SUBJECT')
     f.close()
@@ -56,6 +58,25 @@ class PdfParser():
 
   @staticmethod
   def clean_words(words):
+    words_to_remove = []
+    words_to_add = []
+    for word in words:
+      char = None
+      possible_chars = ['�', '-', ',', '­']
+      for ch in possible_chars:
+        if ch in word:
+          char = ch
+          break
+
+      if char != None:
+        words_to_remove.append(word)
+        words_to_add += word.split(char)
+
+    words += words_to_add
+
+    for word in words_to_remove:
+      words.remove(word)
+
     for i in range(len(words)):
       words[i] = words[i].lower()
       words[i] = re.sub(r'[^\w\s]', '', words[i])

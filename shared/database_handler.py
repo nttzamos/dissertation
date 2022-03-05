@@ -73,7 +73,7 @@ def initialize_grade_database(grade):
 
   subject_names = PdfParser.get_grade_subjects_names(grade)
 
-  grade_directory_path = 'Processed/subjects' + str(grade) + '/'
+  grade_directory_path = 'processed/subjects' + str(grade) + '/'
   files_list = listdir(grade_directory_path)
   files_list.sort()
   words_set = set()
