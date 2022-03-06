@@ -28,8 +28,8 @@ class ResultExplanationWidget(QDialog):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(10)
 
-    self.setFixedHeight(300)
-    self.setFixedWidth(750)
+    self.setFixedHeight(450)
+    self.setFixedWidth(800)
 
     section_label_font = QFont(Settings.font, 20)
     text_font = QFont(Settings.font, 16)

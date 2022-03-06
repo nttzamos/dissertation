@@ -257,7 +257,7 @@ class WordUpdateWidget(QWidget):
 
       from dialogs.word_family_update_widget import WordFamilyUpdateWidget
       WordFamilyUpdateWidget.update_dictionary_words(
-        word_to_remove = self.searched_word, word_to_add = new_word, grade_id = grade_id
+        word_to_remove=self.searched_word, word_to_add=new_word, grade_id=grade_id
       )
 
       self.searched_word = new_word
@@ -276,7 +276,7 @@ class WordUpdateWidget(QWidget):
     WordUpdateWidget.completer.setModel(model)
     from dialogs.word_family_update_widget import WordFamilyUpdateWidget
     WordFamilyUpdateWidget.update_dictionary_words(
-      word_to_remove = self.searched_word, grade_id = grade_id
+      word_to_remove=self.searched_word, grade_id=grade_id
     )
 
     from search.current_search import CurrentSearch

@@ -91,8 +91,8 @@ class TutorialWidget(QDialog):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    self.setFixedHeight(400)
-    self.setFixedWidth(750)
+    self.setFixedHeight(550)
+    self.setFixedWidth(850)
 
     section_label_font = QFont(Settings.font, 20)
     text_font = QFont(Settings.font, 16)

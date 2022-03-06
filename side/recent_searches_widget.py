@@ -78,7 +78,7 @@ class RecentSearchesWidget(QWidget):
     starred_words = get_starred_words()
 
     if len(recent_searches) == 0:
-      RecentSearchesWidget.show_placeholder(text = RecentSearchesWidget.NO_RECENT_SEARCHES_TEXT)
+      RecentSearchesWidget.show_placeholder(RecentSearchesWidget.NO_RECENT_SEARCHES_TEXT)
       return
     else:
       RecentSearchesWidget.hide_placeholder()
@@ -119,7 +119,7 @@ class RecentSearchesWidget(QWidget):
   def remove_recent_search(recent_search):
     RecentSearchesWidget.widget_list.remove(recent_search)
     if len(RecentSearchesWidget.widget_list)==0:
-      RecentSearchesWidget.show_placeholder(text = RecentSearchesWidget.NO_RECENT_SEARCHES_TEXT)
+      RecentSearchesWidget.show_placeholder(RecentSearchesWidget.NO_RECENT_SEARCHES_TEXT)
 
   @staticmethod
   def clear_previous_recent_searches():
@@ -132,9 +132,9 @@ class RecentSearchesWidget(QWidget):
     RecentSearchesWidget.show_placeholder()
 
   @staticmethod
-  def show_placeholder(text = None):
-    if text == None: text = RecentSearchesWidget.SELECT_A_SUBJECT_TEXT
+  def show_placeholder(text=SELECT_A_SUBJECT_TEXT):
     RecentSearchesWidget.placeholder_label.setText(text)
+
     if not RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.show_placeholder_label = True
       RecentSearchesWidget.grid_layout.addWidget(RecentSearchesWidget.placeholder_label)

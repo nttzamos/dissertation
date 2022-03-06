@@ -76,7 +76,7 @@ class ResultsWidget(QWidget):
       if i == maximum_results: break
       row = i // ResultsWidget.grid_columns
       column = i % ResultsWidget.grid_columns
-      result = Result(word, widget_width = ResultsWidget.single_result_width, saved = True)
+      result = Result(word, widget_width=ResultsWidget.single_result_width, saved=True)
       ResultsWidget.widget_list.append(result)
       ResultsWidget.grid_layout.addWidget(result, row, column)
       i += 1
@@ -85,7 +85,7 @@ class ResultsWidget(QWidget):
       if i == maximum_results: break
       row = i // ResultsWidget.grid_columns
       column = i % ResultsWidget.grid_columns
-      result = Result(word, widget_width = ResultsWidget.single_result_width, saved = False)
+      result = Result(word, widget_width=ResultsWidget.single_result_width, saved=False)
       ResultsWidget.widget_list.append(result)
       ResultsWidget.grid_layout.addWidget(result, row, column)
       i += 1
@@ -135,11 +135,11 @@ class ResultsWidget(QWidget):
     ResultsWidget.widget_list = []
 
   @staticmethod
-  def show_placeholder(text = None):
-    if text == None: text = ResultsWidget.RESULT_DISPLAY_TEXT
+  def show_placeholder(text=RESULT_DISPLAY_TEXT):
     ResultsWidget.placeholder_label.setText(text)
     ResultsWidget.clear_previous_results()
     ResultsWidget.legend_button.hide()
+
     if not ResultsWidget.show_placeholder_label:
       ResultsWidget.show_placeholder_label = True
       ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)

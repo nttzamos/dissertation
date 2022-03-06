@@ -229,7 +229,7 @@ class WordFamilyUpdateWidget(QWidget):
     self.save_button.setDisabled(True)
 
   @staticmethod
-  def update_dictionary_words(word_to_remove = None, word_to_add = None, grade_id = None):
+  def update_dictionary_words(word_to_remove=None, word_to_add=None, grade_id=None):
     if grade_id != WordFamilyUpdateWidget.grade_selector.currentIndex() + 1: return
 
     if word_to_add != None:

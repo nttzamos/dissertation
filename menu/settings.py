@@ -60,7 +60,7 @@ class Settings():
       settings_database.set('right_widget_width', right_widget_width)
 
       from item.result import Result
-      long_result = Result('WWWWWWWWWW', initial=True) # 10
+      long_result = Result('WWWWWWWWWW') # 10
       single_result_width = long_result.sizeHint().width()
       settings_database.set('single_result_width', single_result_width)
 
@@ -68,7 +68,7 @@ class Settings():
 
   @staticmethod
   def get_results_widget_columns():
-    results_widget_columns = Settings.get_setting('right_widget_width') // (Settings.get_setting('single_result_width') + 10)
+    results_widget_columns = (Settings.get_setting('right_widget_width') - 40) // (Settings.get_setting('single_result_width') + 10)
 
     return results_widget_columns
 

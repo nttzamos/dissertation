@@ -11,7 +11,7 @@ class Result(QWidget):
   ADD_BUTTON_TEXT = 'Προσθήκη στις λέξεις των επιλεγμένων μαθήματων'
   REMOVE_BUTTON_TEXT = 'Αφαίρεση από τις συγγενικές λέξεις'
 
-  def __init__(self, word, widget_width = None, initial = False, saved = True):
+  def __init__(self, word, widget_width=None, saved=True):
     super().__init__()
 
     self.layout = QHBoxLayout(self)

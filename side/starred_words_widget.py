@@ -76,7 +76,7 @@ class StarredWordsWidget(QWidget):
     starred_words = get_starred_words()
 
     if len(starred_words) == 0:
-      StarredWordsWidget.show_placeholder(text = StarredWordsWidget.NO_STARRED_WORDS_TEXT)
+      StarredWordsWidget.show_placeholder(StarredWordsWidget.NO_STARRED_WORDS_TEXT)
       return
     else:
       StarredWordsWidget.hide_placeholder()
@@ -102,7 +102,7 @@ class StarredWordsWidget(QWidget):
   def remove_starred_word(starred_word):
     StarredWordsWidget.widget_list.remove(starred_word)
     if len(StarredWordsWidget.widget_list)==0:
-      StarredWordsWidget.show_placeholder(text = StarredWordsWidget.NO_STARRED_WORDS_TEXT)
+      StarredWordsWidget.show_placeholder(StarredWordsWidget.NO_STARRED_WORDS_TEXT)
 
   @staticmethod
   def toggle_starred_word_starred_state(word):
@@ -122,9 +122,9 @@ class StarredWordsWidget(QWidget):
     StarredWordsWidget.show_placeholder()
 
   @staticmethod
-  def show_placeholder(text = None):
-    if text == None: text = StarredWordsWidget.SELECT_A_SUBJECT_TEXT
+  def show_placeholder(text=SELECT_A_SUBJECT_TEXT):
     StarredWordsWidget.placeholder_label.setText(text)
+
     if not StarredWordsWidget.show_placeholder_label:
       StarredWordsWidget.show_placeholder_label = True
       StarredWordsWidget.grid_layout.addWidget(StarredWordsWidget.placeholder_label)
