@@ -24,12 +24,12 @@ class WordEditingWidget(QDialog):
 
     add_word_widget = WordAdditionWIdget()
     edit_word_widget = WordUpdateWidget()
-    edit_word_family_widget = WordFamilyUpdateWidget()
+    WordEditingWidget.edit_word_family_widget = WordFamilyUpdateWidget()
 
     tab_widget = QTabWidget()
     tab_widget.addTab(add_word_widget, WordEditingWidget.ADD_WORD_TEXT)
     tab_widget.addTab(edit_word_widget, WordEditingWidget.EDIT_WORD_TEXT)
-    tab_widget.addTab(edit_word_family_widget, WordEditingWidget.EDIT_FAMILY_TEXT)
+    tab_widget.addTab(WordEditingWidget.edit_word_family_widget, WordEditingWidget.EDIT_FAMILY_TEXT)
 
     self.layout.addWidget(tab_widget)
 
@@ -40,3 +40,7 @@ class WordEditingWidget(QDialog):
   def hideEvent(self, event):
     from search.searching_widget import SearchingWidget
     SearchingWidget.update_selected_dictionary()
+
+  @staticmethod
+  def update_word_family_update_widget(word, grade_id):
+    WordEditingWidget.edit_word_family_widget.update_word_family_update_widget(word, grade_id)

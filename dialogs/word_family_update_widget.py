@@ -33,6 +33,8 @@ class WordFamilyUpdateWidget(QWidget):
 
     WordFamilyUpdateWidget.just_searched_with_enter = False
     WordFamilyUpdateWidget.just_searched_related_with_enter = False
+    self.searched_word = ''
+    self.famiy_list = []
 
     grade_selection_widget = QGroupBox(WordFamilyUpdateWidget.GRADE_SELECTION_TEXT)
     grade_selection_widget.setFont(section_label_font)
@@ -120,13 +122,7 @@ class WordFamilyUpdateWidget(QWidget):
     model = QStringListModel(WordFamilyUpdateWidget.dictionary_words, WordFamilyUpdateWidget.completer)
     WordFamilyUpdateWidget.completer.setModel(model)
     WordFamilyUpdateWidget.related_completer.setModel(model)
-    self.related_word_selection_line_edit.hide()
-    self.save_button.setDisabled(True)
-
-    QTimer.singleShot(0, self.word_selection_line_edit.clear)
-
-    self.word_family_list.clear()
-    self.word_family_list.addItem(WordFamilyUpdateWidget.FAMILY_WORDS_APPEAR_HERE_TEXT)
+    self.clear_previous_search()
 
   def search_with_enter(self):
     WordFamilyUpdateWidget.just_searched_with_enter = True
@@ -217,16 +213,36 @@ class WordFamilyUpdateWidget(QWidget):
     self.save_button.setEnabled(True)
 
   def update_family(self):
-    word_list = []
-    for i in range(self.word_family_list.count()):
-      word_list.append(self.word_family_list.item(i).text())
+    words_to_remove = list(set(self.family_words) - set(self.famiy_list))
+    words_to_add = list(set(self.famiy_list) - set(self.family_words))
 
-    words_to_remove = list(set(self.family_words) - set(word_list))
-    words_to_add = list(set(word_list) - set(self.family_words))
-    self.word_subjects = word_list
     grade_id = WordFamilyUpdateWidget.grade_selector.currentIndex() + 1
     update_word_family(grade_id, self.searched_word, words_to_add, words_to_remove)
     self.save_button.setDisabled(True)
+
+    from search.current_search import CurrentSearch
+    if (self.searched_word == CurrentSearch.searched_word.text() and
+        grade_id == CurrentSearch.grade_id):
+      from central.results_widget import ResultsWidget
+      ResultsWidget.show_placeholder()
+      CurrentSearch.searched_word.setText(CurrentSearch.ENTER_WORD_TEXT)
+
+  def update_word_family_update_widget(self, word, grade_id):
+    if grade_id != WordFamilyUpdateWidget.grade_selector.currentIndex() + 1: return
+
+    if word == self.searched_word or word in self.famiy_list:
+      self.clear_previous_search()
+
+  def clear_previous_search(self):
+    self.related_word_selection_line_edit.hide()
+    self.save_button.setDisabled(True)
+    self.searched_word = ''
+    self.famiy_list = []
+
+    QTimer.singleShot(0, self.word_selection_line_edit.clear)
+
+    self.word_family_list.clear()
+    self.word_family_list.addItem(WordFamilyUpdateWidget.FAMILY_WORDS_APPEAR_HERE_TEXT)
 
   @staticmethod
   def update_dictionary_words(word_to_remove=None, word_to_add=None, grade_id=None):

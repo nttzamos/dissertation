@@ -271,6 +271,9 @@ class WordUpdateWidget(QWidget):
         word_to_remove=self.searched_word, word_to_add=new_word, grade_id=grade_id
       )
 
+      from dialogs.word_editing_widget import WordEditingWidget
+      WordEditingWidget.update_word_family_update_widget(self.searched_word, grade_id)
+
       self.searched_word = new_word
 
   def delete_word(self):
@@ -312,6 +315,9 @@ class WordUpdateWidget(QWidget):
 
     QTimer.singleShot(0, self.word_selection_line_edit.clear)
     self.word_selection_line_edit.setFocus()
+
+    from dialogs.word_editing_widget import WordEditingWidget
+    WordEditingWidget.update_word_family_update_widget(self.searched_word, grade_id)
 
   def word_changed(self):
     if self.word_line_edit.text() != self.searched_word:
