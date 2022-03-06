@@ -23,15 +23,15 @@ class WordEditingWidget(QDialog):
     self.layout.setSpacing(0)
 
     add_word_widget = WordAdditionWIdget()
-    edit_word_widget = WordUpdateWidget()
+    self.edit_word_widget = WordUpdateWidget()
     WordEditingWidget.edit_word_family_widget = WordFamilyUpdateWidget()
 
-    tab_widget = QTabWidget()
-    tab_widget.addTab(add_word_widget, WordEditingWidget.ADD_WORD_TEXT)
-    tab_widget.addTab(edit_word_widget, WordEditingWidget.EDIT_WORD_TEXT)
-    tab_widget.addTab(WordEditingWidget.edit_word_family_widget, WordEditingWidget.EDIT_FAMILY_TEXT)
+    self.tab_widget = QTabWidget()
+    self.tab_widget.addTab(add_word_widget, WordEditingWidget.ADD_WORD_TEXT)
+    self.tab_widget.addTab(self.edit_word_widget, WordEditingWidget.EDIT_WORD_TEXT)
+    self.tab_widget.addTab(WordEditingWidget.edit_word_family_widget, WordEditingWidget.EDIT_FAMILY_TEXT)
 
-    self.layout.addWidget(tab_widget)
+    self.layout.addWidget(self.tab_widget)
 
   def closeEvent(self, event):
     from search.searching_widget import SearchingWidget
@@ -40,6 +40,12 @@ class WordEditingWidget(QDialog):
   def hideEvent(self, event):
     from search.searching_widget import SearchingWidget
     SearchingWidget.update_selected_dictionary()
+
+  def set_current_tab_index(self, index):
+    self.tab_widget.setCurrentIndex(index)
+
+  def set_word_to_update(self, word, grade_id):
+    self.edit_word_widget.set_word_to_update(word, grade_id)
 
   @staticmethod
   def update_word_family_update_widget(word, grade_id):

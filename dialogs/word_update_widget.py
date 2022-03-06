@@ -151,6 +151,18 @@ class WordUpdateWidget(QWidget):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 
+  def set_word_to_update(self, word, grade_id):
+    self.grade_selector.setCurrentIndex(grade_id - 1)
+
+    WordUpdateWidget.dictionary_words = get_grade_words(grade_id)
+    model = QStringListModel(WordUpdateWidget.dictionary_words, WordUpdateWidget.completer)
+    WordUpdateWidget.completer.setModel(model)
+
+    self.word_selection_line_edit.setText(word)
+
+    self.searched_word = word
+    self.search_valid_word_details()
+
   def search_with_enter(self):
     WordUpdateWidget.just_searched_with_enter = True
 

@@ -9,7 +9,8 @@ class ResourcesManager(QWidget):
     'minimize_window.png', 'plus.png', 'book.png', 'window_icon.png',
     'settings.png', 'database.db', 'question.png', 'clear_search.png',
     'starred.svg', 'search.png', 'reload.svg', 'database_backup.db',
-    'window_icon.ico', 'delete.svg', 'close_window.png', 'unstarred.svg'
+    'window_icon.ico', 'delete.svg', 'close_window.png', 'unstarred.svg',
+    'edit.svg'
     # 'settings.json'
   ]
 

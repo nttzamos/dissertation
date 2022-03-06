@@ -5,6 +5,7 @@ from models.recent_search import create_recent_search, destroy_recent_search
 from models.starred_word import create_starred_word, destroy_starred_word
 
 class RecentSearch(QWidget):
+  EDIT_TEXT = 'Επεξεργασία Λέξης'
   RELOAD_TEXT = 'Αναζήτηση'
   STAR_TEXT = 'Προσθήκη στα Αγαπημένα'
   DELETE_TEXT = 'Αφαίρεση από τις Πρόσφατες Αναζητήσεις'
@@ -24,9 +25,16 @@ class RecentSearch(QWidget):
     data_widget = QWidget()
     data_widget.layout = QHBoxLayout(data_widget)
     data_widget.layout.setContentsMargins(0, 0, 0, 0)
+    data_widget.layout.setSpacing(5)
 
     self.word = QLabel(word)
     self.word.setFont(font)
+
+    edit_button = QPushButton()
+    edit_button.setIcon(QIcon('resources/edit.svg'))
+    edit_button.setToolTip(RecentSearch.EDIT_TEXT)
+    edit_button.clicked.connect(self.edit_word)
+    edit_button.setFixedWidth(30)
 
     reload_button = QPushButton()
     reload_button.setIcon(QIcon('resources/reload.svg'))
@@ -57,6 +65,7 @@ class RecentSearch(QWidget):
 
     data_widget.layout.addSpacing(5)
     data_widget.layout.addWidget(self.word)
+    data_widget.layout.addWidget(edit_button)
     data_widget.layout.addWidget(reload_button)
     data_widget.layout.addWidget(self.star_button)
     data_widget.layout.addWidget(delete_button)
@@ -70,6 +79,15 @@ class RecentSearch(QWidget):
   def style(self):
     from shared.styles import Styles
     self.setStyleSheet(Styles.item_widgets_style)
+
+  def edit_word(self):
+    from dialogs.word_editing_widget import WordEditingWidget
+    from search.current_search import CurrentSearch
+
+    word_editing_dialog = WordEditingWidget()
+    word_editing_dialog.set_current_tab_index(1)
+    word_editing_dialog.set_word_to_update(self.word.text(), CurrentSearch.grade_id)
+    word_editing_dialog.exec()
 
   def reload_word(self):
     word = self.word.text()

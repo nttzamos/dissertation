@@ -233,5 +233,5 @@ class SearchingWidget(QWidget):
 
   def open_words_editing_widget(self):
     from dialogs.word_editing_widget import WordEditingWidget
-    students_editing_dialog = WordEditingWidget()
-    students_editing_dialog.exec()
+    word_editing_dialog = WordEditingWidget()
+    word_editing_dialog.exec()
