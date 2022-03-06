@@ -221,11 +221,11 @@ class WordFamilyUpdateWidget(QWidget):
     self.save_button.setDisabled(True)
 
     from search.current_search import CurrentSearch
-    if (self.searched_word == CurrentSearch.searched_word.text() and
+    if (self.searched_word == CurrentSearch.searched_word_label.text() and
         grade_id == CurrentSearch.grade_id):
       from central.results_widget import ResultsWidget
       ResultsWidget.show_placeholder()
-      CurrentSearch.searched_word.setText(CurrentSearch.ENTER_WORD_TEXT)
+      CurrentSearch.searched_word_label.setText(CurrentSearch.ENTER_WORD_TEXT)
 
   def update_word_family_update_widget(self, word, grade_id):
     if grade_id != WordFamilyUpdateWidget.grade_selector.currentIndex() + 1: return

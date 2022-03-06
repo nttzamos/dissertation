@@ -33,10 +33,10 @@ class CurrentSearch(QWidget):
     searched_word_font = QFont(Settings.font, 20)
     combo_box_font = QFont(Settings.font, 14)
 
-    CurrentSearch.searched_word = QLabel(CurrentSearch.ENTER_WORD_TEXT)
-    CurrentSearch.searched_word.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    CurrentSearch.searched_word.setMaximumHeight(100)
-    CurrentSearch.searched_word.setFont(searched_word_font)
+    CurrentSearch.searched_word_label = QLabel(CurrentSearch.ENTER_WORD_TEXT)
+    CurrentSearch.searched_word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    CurrentSearch.searched_word_label.setMaximumHeight(100)
+    CurrentSearch.searched_word_label.setFont(searched_word_font)
 
     search_details = QWidget()
     search_details.layout = QVBoxLayout(search_details)
@@ -75,12 +75,12 @@ class CurrentSearch(QWidget):
     search_details.layout.addWidget(CurrentSearch.profile_selector)
     search_details.layout.addWidget(CurrentSearch.subject_selector)
 
-    self.layout.addWidget(CurrentSearch.searched_word)
+    self.layout.addWidget(CurrentSearch.searched_word_label)
     self.layout.addSpacing(100)
     self.layout.addWidget(search_details)
 
     search_details.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-    CurrentSearch.searched_word.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+    CurrentSearch.searched_word_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
     CurrentSearch.student_selector.activated.connect(self.student_selector_activated_initial)
     CurrentSearch.profile_selector.activated.connect(CurrentSearch.profile_selector_activated_initial)
@@ -99,7 +99,7 @@ class CurrentSearch(QWidget):
   def style(self):
     from shared.styles import Styles
     self.setStyleSheet(Styles.current_search_style)
-    CurrentSearch.searched_word.setStyleSheet(Styles.searched_word_style)
+    CurrentSearch.searched_word_label.setStyleSheet(Styles.searched_word_style)
 
   def open_data_editing_widget(self):
     from dialogs.data_editing_widget import DataEditingWidget
@@ -108,7 +108,7 @@ class CurrentSearch(QWidget):
 
   @staticmethod
   def clear_current_search_details():
-    CurrentSearch.searched_word.setText(CurrentSearch.ENTER_WORD_TEXT)
+    CurrentSearch.searched_word_label.setText(CurrentSearch.ENTER_WORD_TEXT)
 
     CurrentSearch.student_selector.clear()
     CurrentSearch.student_selector.addItem(CurrentSearch.NO_STUDENTS_TEXT)
@@ -140,7 +140,7 @@ class CurrentSearch(QWidget):
     if not CurrentSearch.initialize_selected_student:
       from central.main_window import MainWindow
       MainWindow.clear_previous_subject_details()
-      CurrentSearch.searched_word.setText(CurrentSearch.ENTER_WORD_TEXT)
+      CurrentSearch.searched_word_label.setText(CurrentSearch.ENTER_WORD_TEXT)
 
     CurrentSearch.initialize_selected_student = False
 
@@ -182,7 +182,7 @@ class CurrentSearch(QWidget):
 
     from central.main_window import MainWindow
     MainWindow.clear_previous_subject_details()
-    CurrentSearch.searched_word.setText(CurrentSearch.ENTER_WORD_TEXT)
+    CurrentSearch.searched_word_label.setText(CurrentSearch.ENTER_WORD_TEXT)
     CurrentSearch.profile_id, CurrentSearch.grade_id, grade_name, profile_subjects = get_profile_details(CurrentSearch.profile_selector.currentText())
     CurrentSearch.subject_selector.clear()
     CurrentSearch.subject_selector.addItem(CurrentSearch.SELECT_SUBJECT_TEXT)
@@ -216,13 +216,13 @@ class CurrentSearch(QWidget):
 
   @staticmethod
   def update_searched_word(word, new_word):
-    if CurrentSearch.searched_word.text() == word:
-      CurrentSearch.searched_word.setText(new_word)
+    if CurrentSearch.searched_word_label.text() == word:
+      CurrentSearch.searched_word_label.setText(new_word)
 
   @staticmethod
   def remove_searched_word(word):
-    if CurrentSearch.searched_word.text() == word:
-      CurrentSearch.searched_word.setText(CurrentSearch.ENTER_WORD_TEXT)
+    if CurrentSearch.searched_word_label.text() == word:
+      CurrentSearch.searched_word_label.setText(CurrentSearch.ENTER_WORD_TEXT)
       from central.results_widget import ResultsWidget
       ResultsWidget.show_placeholder()
 

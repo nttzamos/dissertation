@@ -76,7 +76,7 @@ class MainWindow(QWidget):
 
     SearchingWidget.update_selected_dictionary()
     ResultsWidget.show_placeholder()
-    MainWidget.current_search.searched_word.setText(MainWidget.current_search.ENTER_WORD_TEXT)
+    MainWidget.current_search.searched_word_label.setText(MainWidget.current_search.ENTER_WORD_TEXT)
     RecentSearchesWidget.populate()
     StarredWordsWidget.populate()
 

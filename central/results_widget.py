@@ -116,7 +116,7 @@ class ResultsWidget(QWidget):
       online_family_words = list(set(online_family_words) - set(offline_result_words))
       for online_word in online_family_words:
         if word_exists(grade_id, online_word) and not non_related_word_exists(word, online_word, grade_id):
-          update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [online_word], [])
+          update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word_label.text(), [online_word], [])
           offline_result_words.append(online_word)
 
       online_family_words = list(set(online_family_words) - set(offline_result_words))

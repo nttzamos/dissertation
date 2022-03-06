@@ -83,7 +83,7 @@ class Result(QWidget):
     from search.searching_widget import SearchingWidget
     SearchingWidget.add_or_remove_dictionary_words([word], [])
 
-    update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [word], [])
+    update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word_label.text(), [word], [])
     self.saved = True
     self.setStyleSheet(Styles.offline_result_style)
     self.add_to_family_button.hide()
@@ -93,7 +93,7 @@ class Result(QWidget):
   def remove_word_from_family(self):
     from search.current_search import CurrentSearch
     word = self.word_label.text()
-    update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word.text(), [], [word])
+    update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word_label.text(), [], [word])
     self.hide()
 
     from central.results_widget import ResultsWidget
