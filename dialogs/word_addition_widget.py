@@ -7,11 +7,6 @@ from models.word import create_word, word_exists
 from shared.database_handler import get_grades, get_grade_subjects
 
 class WordAdditionWIdget(QWidget):
-  GREEK_CHARACTERS = [
-    'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο',
-    'π', 'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'ς', 'ά', 'έ', 'ί', 'ή', 'ύ', 'ό',
-    'ώ', 'ϊ', 'ϋ']
-
   WORD_TEXT = 'Λέξη'
   GRADE_SELECTION_TEXT = 'Επιλογή Τάξης'
   SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
@@ -20,9 +15,19 @@ class WordAdditionWIdget(QWidget):
   SELECT_ALL_TEXT = 'Επιλογή όλων των μαθημάτων'
   WORD_EMPTY_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς είναι κενή'
   WORD_EXISTS_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη'
-  ONLY_GREEK_CHARACTERS_ALLOWED_TEXT = 'Η λέξη σας πρέπει να περιέχει μόνο ελληνικούς χαρακτήρες'
+  ONLY_GREEK_CHARACTERS_ALLOWED_TEXT = ('Η λέξη σας πρέπει να περιέχει μόνο '
+                                        'ελληνικούς πεζούς χαρακτήρες')
+  WORD_LENGTH_EXCEEDS_LIMIT_TEXT = ('Η λέξη δεν μπορεί να αποθηκευτεί καθώς '
+                                    'το μήκος της υπερβαίνει το όριο των 20 '
+                                    'χαρακτήρων')
   NO_SUBJECT_SELECTED_TEXT = ('Η λέξη δεν μπορεί να αποθηκευτεί καθώς δεν '
                               'έχετε επιλέξει κανένα μάθημα στο οποίο θα ανήκει')
+
+  MAXIMUM_NAME_LENGTH = 20
+  GREEK_CHARACTERS = [
+    'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο',
+    'π', 'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'ς', 'ά', 'έ', 'ί', 'ή', 'ύ',
+    'ό', 'ώ', 'ϊ', 'ϋ']
 
   def __init__(self):
     super().__init__()
@@ -156,6 +161,9 @@ class WordAdditionWIdget(QWidget):
     word = self.word_line_edit.text().strip()
     if len(word) == 0:
       return True, WordAdditionWIdget.WORD_EMPTY_TEXT
+
+    if len(word) > WordAdditionWIdget.MAXIMUM_NAME_LENGTH:
+      return True, WordAdditionWIdget.WORD_LENGTH_EXCEEDS_LIMIT_TEXT
 
     if word_exists(self.grade_selector.currentIndex() + 1, word):
       return True, WordAdditionWIdget.WORD_EXISTS_TEXT

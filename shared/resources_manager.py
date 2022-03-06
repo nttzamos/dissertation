@@ -7,10 +7,10 @@ import os
 class ResourcesManager(QWidget):
   resources_files = [
     'minimize_window.png', 'plus.png', 'book.png', 'window_icon.png',
-    'settings.png', 'settings.json', 'question.png', 'clear_search.png',
+    'settings.png', 'database.db', 'question.png', 'clear_search.png',
     'starred.svg', 'search.png', 'reload.svg', 'database_backup.db',
-    'window_icon.ico', 'delete.svg', 'close_window.png', 'unstarred.svg',
-    'database.db'
+    'window_icon.ico', 'delete.svg', 'close_window.png', 'unstarred.svg'
+    # 'settings.json'
   ]
 
   def __init__(self):

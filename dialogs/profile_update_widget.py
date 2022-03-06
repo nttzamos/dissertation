@@ -22,10 +22,15 @@ class ProfileUpdateWidget(QWidget):
   GRADE_PROFILE_DELETE_ERROR_TEXT = 'Τα προφίλ των τάξεων δεν μπορούν να διαγραφούν'
   PROFILE_NAME_EMPTY_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
                              'έχετε συμπληρώσει το όνομα του')
+  NAME_LENGTH_EXCEEDS_LIMIT_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς '
+                                    'το μήκος του ονόματος του υπερβαίνει το '
+                                    'όριο των 20 χαρακτήρων')
   PROFILE_NAME_EXISTS_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς '
                               'υπάρχει ήδη άλλο προφίλ με το ίδιο όνομα')
   NO_SUBJECT_SELECTED_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
                               'έχετε επιλέξει κάποια μαθήματα για αυτό')
+
+  MAXIMUM_NAME_LENGTH = 20
 
   def __init__(self):
     super().__init__()
@@ -273,6 +278,9 @@ class ProfileUpdateWidget(QWidget):
     profile_name = self.name_line_edit.text()
     if len(profile_name) == 0:
       return True, ProfileUpdateWidget.PROFILE_NAME_EMPTY_TEXT
+
+    if len(profile_name) > ProfileUpdateWidget.MAXIMUM_NAME_LENGTH:
+      return True, ProfileUpdateWidget.NAME_LENGTH_EXCEEDS_LIMIT_TEXT
 
     if ProfileUpdateWidget.profile_selector.currentText() != profile_name and profile_name_exists(profile_name):
       return True, ProfileUpdateWidget.PROFILE_NAME_EXISTS_TEXT

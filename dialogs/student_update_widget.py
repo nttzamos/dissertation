@@ -17,10 +17,15 @@ class StudentUpdateWidget(QWidget):
   NO_STUDENTS_TEXT = 'Δεν υπάρχουν μαθητές'
   STUDENT_NAME_EMPTY_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
                              'έχετε συμπληρώσει το όνομα του')
+  NAME_LENGTH_EXCEEDS_LIMIT_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς '
+                                    'το μήκος του ονόματος του υπερβαίνει το '
+                                    'όριο των 20 χαρακτήρων')
   STUDENT_NAME_EXISTS_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς '
                               'υπάρχει ήδη άλλος μαθητής με το ίδιο όνομα')
   NO_PROFILE_SELECTED_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
                               'έχετε επιλέξει κάποιο προφίλ για αυτόν')
+
+  MAXIMUM_NAME_LENGTH = 20
 
   def __init__(self):
     super().__init__()
@@ -229,6 +234,9 @@ class StudentUpdateWidget(QWidget):
     student_name = self.name_line_edit.text()
     if len(student_name) == 0:
       return True, StudentUpdateWidget.STUDENT_NAME_EMPTY_TEXT
+
+    if len(student_name) > StudentUpdateWidget.MAXIMUM_NAME_LENGTH:
+      return True, StudentUpdateWidget.NAME_LENGTH_EXCEEDS_LIMIT_TEXT
 
     if StudentUpdateWidget.student_selector.currentText() != student_name and  student_name_exists(student_name):
       return True, StudentUpdateWidget.STUDENT_NAME_EXISTS_TEXT

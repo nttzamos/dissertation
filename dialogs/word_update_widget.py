@@ -18,8 +18,19 @@ class WordUpdateWidget(QWidget):
   WORD_TEXT = 'Λέξη'
   WORD_EMPTY_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς είναι κενή'
   WORD_EXISTS_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη'
+  ONLY_GREEK_CHARACTERS_ALLOWED_TEXT = ('Η λέξη σας πρέπει να περιέχει μόνο '
+                                        'ελληνικούς πεζούς χαρακτήρες')
+  WORD_LENGTH_EXCEEDS_LIMIT_TEXT = ('Η λέξη δεν μπορεί να αποθηκευτεί καθώς '
+                                    'το μήκος της υπερβαίνει το όριο των 20 '
+                                    'χαρακτήρων')
   NO_SUBJECT_SELECTED_TEXT = ('Η λέξη δεν μπορεί να αποθηκευτεί καθώς δεν '
                               'έχετε επιλέξει κανένα μάθημα στο οποίο θα ανήκει')
+
+  MAXIMUM_NAME_LENGTH = 20
+  GREEK_CHARACTERS = [
+    'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο',
+    'π', 'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'ς', 'ά', 'έ', 'ί', 'ή', 'ύ',
+    'ό', 'ώ', 'ϊ', 'ϋ']
 
   def __init__(self):
     super().__init__()
@@ -324,8 +335,15 @@ class WordUpdateWidget(QWidget):
     if len(word) == 0:
       return True, WordUpdateWidget.WORD_EMPTY_TEXT
 
+    if len(word) > WordUpdateWidget.MAXIMUM_NAME_LENGTH:
+      return True, WordUpdateWidget.WORD_LENGTH_EXCEEDS_LIMIT_TEXT
+
     if self.searched_word != word and word_exists(self.grade_selector.currentIndex() + 1, word):
       return True, WordUpdateWidget.WORD_EXISTS_TEXT
+
+    for character in word:
+      if not character in WordUpdateWidget.GREEK_CHARACTERS:
+        return True, WordUpdateWidget.ONLY_GREEK_CHARACTERS_ALLOWED_TEXT
 
     for check_box in self.check_boxes:
       if check_box.isChecked():

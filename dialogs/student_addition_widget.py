@@ -14,18 +14,23 @@ class StudentAdditionWidget(QWidget):
   SELECT_ALL_TEXT = 'Επιλογή όλων των προφίλ'
   STUDENT_NAME_EMPTY_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
                              'έχετε συμπληρώσει το όνομα του')
+  NAME_LENGTH_EXCEEDS_LIMIT_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς '
+                                    'το μήκος του ονόματος του υπερβαίνει το '
+                                    'όριο των 20 χαρακτήρων')
   STUDENT_NAME_EXISTS_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς '
                               'υπάρχει ήδη άλλος μαθητής με το ίδιο όνομα')
   NO_PROFILE_SELECTED_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
                               'έχετε επιλέξει κάποιο προφίλ για αυτόν')
 
-  last_index_used = -1
+  MAXIMUM_NAME_LENGTH = 20
 
   def __init__(self):
     super().__init__()
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
+
+    StudentAdditionWidget.last_index_used = -1
 
     section_label_font = QFont(Settings.font, 16)
     check_box_font = QFont(Settings.font, 14)
@@ -126,6 +131,9 @@ class StudentAdditionWidget(QWidget):
     student_name = self.name_line_edit.text()
     if len(student_name) == 0:
       return True, StudentAdditionWidget.STUDENT_NAME_EMPTY_TEXT
+
+    if len(student_name) > StudentAdditionWidget.MAXIMUM_NAME_LENGTH:
+      return True, StudentAdditionWidget.NAME_LENGTH_EXCEEDS_LIMIT_TEXT
 
     if student_name_exists(student_name):
       return True, StudentAdditionWidget.STUDENT_NAME_EXISTS_TEXT

@@ -15,10 +15,15 @@ class ProfileAdditionWIdget(QWidget):
   SELECT_ALL_TEXT = 'Επιλογή όλων των μαθημάτων'
   PROFILE_NAME_EMPTY_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
                              'έχετε συμπληρώσει το όνομα του')
+  NAME_LENGTH_EXCEEDS_LIMIT_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς '
+                                    'το μήκος του ονόματος του υπερβαίνει το '
+                                    'όριο των 20 χαρακτήρων')
   PROFILE_NAME_EXISTS_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς '
                               'υπάρχει ήδη άλλο προφίλ με το ίδιο όνομα')
   NO_SUBJECT_SELECTED_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
                               'έχετε επιλέξει κάποια μαθήματα για αυτό')
+
+  MAXIMUM_NAME_LENGTH = 20
 
   def __init__(self):
     super().__init__()
@@ -156,6 +161,9 @@ class ProfileAdditionWIdget(QWidget):
     profile_name = self.name_line_edit.text()
     if len(profile_name) == 0:
       return True, ProfileAdditionWIdget.PROFILE_NAME_EMPTY_TEXT
+
+    if len(profile_name) > ProfileAdditionWIdget.MAXIMUM_NAME_LENGTH:
+      return True, ProfileAdditionWIdget.NAME_LENGTH_EXCEEDS_LIMIT_TEXT
 
     if profile_name_exists(profile_name):
       return True, ProfileAdditionWIdget.PROFILE_NAME_EXISTS_TEXT

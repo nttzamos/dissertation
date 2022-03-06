@@ -14,7 +14,7 @@ class Settings():
       'maximum_results': 20,
       'last_student_picked': 1,
       'theme': 'light',
-      'word_family_discovery': 'offline_database',
+      'word_family_discovery': 'online_wiktionary',
       'default_editing_action': 'update'
     }
 
@@ -52,7 +52,7 @@ class Settings():
       settings_database.set('screen_width', screen_width)
       settings_database.set('screen_height', screen_height)
 
-      long_recent_search = RecentSearch('WWWWWWWWWWWWWWW', True) # 15
+      long_recent_search = RecentSearch('ωωωωωωωωωωωωωωω', True) # 15
       left_widget_width = long_recent_search.sizeHint().width()
       settings_database.set('left_widget_width', left_widget_width)
 
@@ -60,7 +60,7 @@ class Settings():
       settings_database.set('right_widget_width', right_widget_width)
 
       from item.result import Result
-      long_result = Result('WWWWWWWWWW') # 10
+      long_result = Result('ωωωωωωωωωωωωωωωωωωωω') # 20
       single_result_width = long_result.sizeHint().width()
       settings_database.set('single_result_width', single_result_width)
 
