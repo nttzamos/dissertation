@@ -285,11 +285,24 @@ class ProfileUpdateWidget(QWidget):
     if ProfileUpdateWidget.profile_selector.currentText() != profile_name and profile_name_exists(profile_name):
       return True, ProfileUpdateWidget.PROFILE_NAME_EXISTS_TEXT
 
+    checked_check_boxes_count = 0
+
     for check_box in self.check_boxes:
       if check_box.isChecked():
-        return False, ''
+        checked_check_boxes_count += 1
 
-    return True, ProfileUpdateWidget.NO_SUBJECT_SELECTED_TEXT
+    if checked_check_boxes_count == 0:
+      return True, ProfileUpdateWidget.NO_SUBJECT_SELECTED_TEXT
+    elif checked_check_boxes_count == len(self.check_boxes):
+      return True, self.construct_redundant_profile_message()
+    else:
+      return False, ''
+
+  def construct_redundant_profile_message(self):
+    return (
+      'Το προφίλ δεν μπορεί να αποθηκευτεί καθώς τα μαθήματα του ταυτίζονται '
+      'με αυτά του προκαθορισμένου προφίλ ' + ProfileUpdateWidget.grade_label.text()
+    )
 
   @staticmethod
   def add_profile(profile_name):

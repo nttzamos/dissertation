@@ -168,8 +168,21 @@ class ProfileAdditionWIdget(QWidget):
     if profile_name_exists(profile_name):
       return True, ProfileAdditionWIdget.PROFILE_NAME_EXISTS_TEXT
 
+    checked_check_boxes_count = 0
+
     for check_box in self.check_boxes:
       if check_box.isChecked():
-        return False, ''
+        checked_check_boxes_count += 1
 
-    return True, ProfileAdditionWIdget.NO_SUBJECT_SELECTED_TEXT
+    if checked_check_boxes_count == 0:
+      return True, ProfileAdditionWIdget.NO_SUBJECT_SELECTED_TEXT
+    elif checked_check_boxes_count == len(self.check_boxes):
+      return True, self.construct_redundant_profile_message()
+    else:
+      return False, ''
+
+  def construct_redundant_profile_message(self):
+    return (
+      'Το προφίλ δεν μπορεί να αποθηκευτεί καθώς τα μαθήματα του ταυτίζονται '
+      'με αυτά του προκαθορισμένου προφίλ ' + self.grade_selector.currentText()
+    )
