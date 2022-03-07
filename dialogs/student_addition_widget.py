@@ -80,7 +80,7 @@ class StudentAdditionWidget(QWidget):
     profiles_widget.layout.addWidget(scroll_area)
 
     save_button = QPushButton(StudentAdditionWidget.SAVE_STUDENT_BUTTON_TEXT)
-    save_button.pressed.connect(self.saveStudent)
+    save_button.pressed.connect(self.save_student)
     save_button.setAutoDefault(False)
 
     select_all_button = QPushButton(StudentAdditionWidget.SELECT_ALL_TEXT)
@@ -97,7 +97,7 @@ class StudentAdditionWidget(QWidget):
     self.layout.addSpacing(10)
     self.layout.addWidget(buttons_widget)
 
-  def saveStudent(self):
+  def save_student(self):
     is_invalid, text = self.student_is_invalid()
 
     if is_invalid:

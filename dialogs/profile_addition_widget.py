@@ -153,6 +153,9 @@ class ProfileAdditionWIdget(QWidget):
     from dialogs.student_update_widget import StudentUpdateWidget
     StudentUpdateWidget.add_profile(profile_name)
 
+    from dialogs.data_editing_widget import DataEditingWidget
+    DataEditingWidget.update_student_update_widget()
+
   def select_all(self):
     for check_box in self.check_boxes:
       check_box.setChecked(True)

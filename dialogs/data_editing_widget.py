@@ -25,14 +25,18 @@ class DataEditingWidget(QDialog):
     self.layout.setSpacing(0)
 
     add_student_widget = StudentAdditionWidget()
-    edit_student_widget = StudentUpdateWidget()
+    DataEditingWidget.edit_student_widget = StudentUpdateWidget()
     add_profile_widget = ProfileAdditionWIdget()
     edit_profiles_widget = ProfileUpdateWidget()
 
     tab_widget = QTabWidget()
     tab_widget.addTab(add_student_widget, DataEditingWidget.ADD_STUDENT_TEXT)
-    tab_widget.addTab(edit_student_widget, DataEditingWidget.EDIT_STUDENT_TEXT)
+    tab_widget.addTab(DataEditingWidget.edit_student_widget, DataEditingWidget.EDIT_STUDENT_TEXT)
     tab_widget.addTab(add_profile_widget, DataEditingWidget.ADD_PROFILE_TEXT)
     tab_widget.addTab(edit_profiles_widget, DataEditingWidget.EDIT_PROFILE_TEXT)
 
     self.layout.addWidget(tab_widget)
+
+  @staticmethod
+  def update_student_update_widget():
+    DataEditingWidget.edit_student_widget.update_student_update_widget()

@@ -76,27 +76,13 @@ class StudentUpdateWidget(QWidget):
     profiles_widget.layout = QHBoxLayout(profiles_widget)
     profiles_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    StudentUpdateWidget.profiles_selection_widget = QWidget()
-    StudentUpdateWidget.profiles_selection_widget.layout = QGridLayout(StudentUpdateWidget.profiles_selection_widget)
-    StudentUpdateWidget.profiles_selection_widget.setDisabled(True)
-    StudentUpdateWidget.profiles_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+    self.scroll_area = QScrollArea()
+    self.scroll_area.setWidgetResizable(True)
+    self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
 
-    scroll_area = QScrollArea()
-    scroll_area.setWidgetResizable(True)
-    scroll_area.setWidget(StudentUpdateWidget.profiles_selection_widget)
-    scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+    self.initialize_scroll_area()
 
-    StudentUpdateWidget.check_boxes = []
-
-    vspacer = QLabel('f')
-    invisible_font = QFont(Settings.font, 1)
-    vspacer.setFont(invisible_font)
-    size_policy = vspacer.sizePolicy()
-    size_policy.setRetainSizeWhenHidden(True)
-    vspacer.setSizePolicy(size_policy)
-    StudentUpdateWidget.profiles_selection_widget.layout.addWidget(vspacer, 1000, 0)
-
-    profiles_widget.layout.addWidget(scroll_area)
+    profiles_widget.layout.addWidget(self.scroll_area)
 
     self.save_button = QPushButton(StudentUpdateWidget.UPDATE_STUDENT_BUTTON_TEXT)
     self.save_button.pressed.connect(self.update_student)
@@ -120,6 +106,24 @@ class StudentUpdateWidget(QWidget):
     self.layout.addWidget(profiles_widget)
     self.layout.addSpacing(15)
     self.layout.addWidget(buttons_widget, alignment=Qt.AlignmentFlag.AlignRight)
+
+  def initialize_scroll_area(self):
+    StudentUpdateWidget.profiles_selection_widget = QWidget()
+    StudentUpdateWidget.profiles_selection_widget.layout = QGridLayout(StudentUpdateWidget.profiles_selection_widget)
+    StudentUpdateWidget.profiles_selection_widget.setDisabled(True)
+    StudentUpdateWidget.profiles_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+
+    StudentUpdateWidget.check_boxes = []
+
+    vspacer = QLabel('f')
+    invisible_font = QFont(Settings.font, 1)
+    vspacer.setFont(invisible_font)
+    size_policy = vspacer.sizePolicy()
+    size_policy.setRetainSizeWhenHidden(True)
+    vspacer.setSizePolicy(size_policy)
+    StudentUpdateWidget.profiles_selection_widget.layout.addWidget(vspacer, 1000, 0)
+
+    self.scroll_area.setWidget(StudentUpdateWidget.profiles_selection_widget)
 
   def student_selector_activated_initial(self, index):
     if index != 0:
@@ -203,15 +207,17 @@ class StudentUpdateWidget(QWidget):
     CurrentSearch.remove_student(StudentUpdateWidget.student_selector.currentText())
 
     StudentUpdateWidget.student_selector.removeItem(StudentUpdateWidget.student_selector.currentIndex())
+
     if StudentUpdateWidget.student_selector.count() == 0:
-      StudentUpdateWidget.student_selector.addItem('There are no students')
+      self.initialize_scroll_area()
+      self.name_widget.hide()
+
+      StudentUpdateWidget.student_selector.addItem(StudentUpdateWidget.NO_STUDENTS_TEXT)
       StudentUpdateWidget.student_selector.setDisabled(True)
       StudentUpdateWidget.student_selector.activated.disconnect()
       StudentUpdateWidget.student_selector.activated.connect(self.student_selector_activated_initial)
-      self.name_widget.hide()
-      return
-
-    self.student_selector_activated(0)
+    else:
+      self.student_selector_activated(0)
 
   def student_name_changed(self):
     if self.name_line_edit.text() != self.student_selector.currentText():
@@ -246,6 +252,32 @@ class StudentUpdateWidget(QWidget):
         return False, ''
 
     return True, StudentUpdateWidget.NO_PROFILE_SELECTED_TEXT
+
+  def update_student_update_widget(self):
+    non_student_selections = [
+      StudentUpdateWidget.NO_STUDENTS_TEXT, StudentUpdateWidget.SELECT_STUDENT_TEXT
+    ]
+
+    if StudentUpdateWidget.student_selector.currentText() in non_student_selections:
+      return
+
+    self.initialize_scroll_area()
+    self.save_button.setDisabled(True)
+    self.delete_button.setDisabled(True)
+    self.name_widget.hide()
+
+    students = get_students()
+
+    StudentUpdateWidget.student_selector.clear()
+
+    if len(students) == 0:
+      StudentUpdateWidget.student_selector.addItem(StudentUpdateWidget.NO_STUDENTS_TEXT)
+      StudentUpdateWidget.student_selector.setDisabled(True)
+    else:
+      students[0:0] = [StudentUpdateWidget.SELECT_STUDENT_TEXT]
+      StudentUpdateWidget.student_selector.addItems(students)
+
+    StudentUpdateWidget.student_selector.activated.connect(self.student_selector_activated_initial)
 
   @staticmethod
   def add_student(student_name):

@@ -193,17 +193,18 @@ class ProfileUpdateWidget(QWidget):
     old_profile_name = ProfileUpdateWidget.profile_selector.currentText()
     new_profile_name = self.name_line_edit.text()
 
-    from search.current_search import CurrentSearch
-    CurrentSearch.update_profile(old_profile_name, new_profile_name)
+    if old_profile_name != new_profile_name:
+      from search.current_search import CurrentSearch
+      CurrentSearch.update_profile(old_profile_name, new_profile_name)
 
-    from dialogs.student_addition_widget import StudentAdditionWidget
-    StudentAdditionWidget.update_profile(old_profile_name, new_profile_name)
+      from dialogs.student_addition_widget import StudentAdditionWidget
+      StudentAdditionWidget.update_profile(old_profile_name, new_profile_name)
 
-    from dialogs.student_update_widget import StudentUpdateWidget
-    StudentUpdateWidget.update_profile(old_profile_name, new_profile_name)
+      self.profile_selector.setItemText(self.profile_selector.currentIndex(), new_profile_name)
+      update_profile_name(self.profile_id, new_profile_name)
 
-    self.profile_selector.setItemText(self.profile_selector.currentIndex(), new_profile_name)
-    update_profile_name(self.profile_id, new_profile_name)
+      from dialogs.data_editing_widget import DataEditingWidget
+      DataEditingWidget.update_student_update_widget()
 
     subjects_names = []
     for check_box in self.check_boxes:
@@ -213,6 +214,7 @@ class ProfileUpdateWidget(QWidget):
     subjects_to_remove = list(set(self.profile_subjects) - set(subjects_names))
     subjects_to_add = list(set(subjects_names) - set(self.profile_subjects))
     self.profile_subjects = subjects_names
+
     add_profile_subjects(self.grade_id, self.profile_id, subjects_to_add)
     remove_profile_subjects(self.grade_id, self.profile_id, subjects_to_remove)
 
@@ -256,6 +258,9 @@ class ProfileUpdateWidget(QWidget):
       return
 
     self.profile_selector_activated(0)
+
+    from dialogs.data_editing_widget import DataEditingWidget
+    DataEditingWidget.update_student_update_widget()
 
   def profile_name_changed(self):
     if self.name_line_edit.text() != self.profile_selector.currentText():
