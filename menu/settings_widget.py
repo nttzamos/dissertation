@@ -99,22 +99,22 @@ class SettingsWidget(QDialog):
     theme_selection_widget.layout.addWidget(self.light_theme_button, alignment=Qt.AlignmentFlag.AlignLeft)
     theme_selection_widget.layout.addWidget(self.dark_theme_button, alignment=Qt.AlignmentFlag.AlignLeft)
 
-    word_family_discovery_widget = QGroupBox('Εύρεση συγγενικών λέξεων')
-    word_family_discovery_widget.setFont(section_label_font)
-    word_family_discovery_widget.layout = QHBoxLayout(word_family_discovery_widget)
-    self.online_wiktionary_button = QRadioButton('Online Wiktionary')
-    self.online_wiktionary_button.toggled.connect(self.online_wiktionary_button_clicked)
-    self.offline_database_button = QRadioButton('Offline Database')
-    self.offline_database_button.toggled.connect(self.offline_database_button_clicked)
+    wiktionary_usage_widget = QGroupBox('Χρήση Wiktionary (απαιτείται σύνδεση στο διαδίκτυο)')
+    wiktionary_usage_widget.setFont(section_label_font)
+    wiktionary_usage_widget.layout = QHBoxLayout(wiktionary_usage_widget)
+    self.use_wiktionary_button = QRadioButton('Ναι')
+    self.use_wiktionary_button.toggled.connect(self.use_wiktionary_button_clicked)
+    self.dont_use_wiktionary_button = QRadioButton('Όχι')
+    self.dont_use_wiktionary_button.toggled.connect(self.dont_use_wiktionary_button_clicked)
 
-    if Settings.get_setting('word_family_discovery') == 'online_wiktionary':
-      self.online_wiktionary_button.setChecked(True)
+    if Settings.get_boolean_setting('use_wiktionary'):
+      self.use_wiktionary_button.setChecked(True)
     else:
-      self.offline_database_button.setChecked(True)
+      self.dont_use_wiktionary_button.setChecked(True)
 
-    word_family_discovery_widget.layout.setContentsMargins(10, 0, 0, 0)
-    word_family_discovery_widget.layout.addWidget(self.online_wiktionary_button, alignment=Qt.AlignmentFlag.AlignLeft)
-    word_family_discovery_widget.layout.addWidget(self.offline_database_button, alignment=Qt.AlignmentFlag.AlignLeft)
+    wiktionary_usage_widget.layout.setContentsMargins(10, 0, 0, 0)
+    wiktionary_usage_widget.layout.addWidget(self.use_wiktionary_button, alignment=Qt.AlignmentFlag.AlignLeft)
+    wiktionary_usage_widget.layout.addWidget(self.dont_use_wiktionary_button, alignment=Qt.AlignmentFlag.AlignLeft)
 
     restore_database_button = QPushButton(SettingsWidget.RESTORE_DATABASE_TEXT)
     restore_database_button.pressed.connect(self.restore_database)
@@ -129,7 +129,7 @@ class SettingsWidget(QDialog):
     self.layout.addWidget(maximum_results_selection_widget)
     self.layout.addWidget(general_settings_widget)
     self.layout.addWidget(theme_selection_widget)
-    # self.layout.addWidget(word_family_discovery_widget)
+    self.layout.addWidget(wiktionary_usage_widget)
     self.layout.addWidget(restore_database_widget)
 
     self.style()
@@ -194,13 +194,13 @@ class SettingsWidget(QDialog):
   def toggle_message_setting(value):
     Settings.set_boolean_setting('hide_theme_change_effect_message', value)
 
-  def online_wiktionary_button_clicked(self):
-    if self.online_wiktionary_button.isChecked():
-      Settings.set_setting('word_family_discovery', 'online_wiktionary')
+  def use_wiktionary_button_clicked(self):
+    if self.use_wiktionary_button.isChecked():
+      Settings.set_boolean_setting('use_wiktionary', True)
 
-  def offline_database_button_clicked(self):
-    if self.offline_database_button.isChecked():
-      Settings.set_setting('word_family_discovery', 'offline_database')
+  def dont_use_wiktionary_button_clicked(self):
+    if self.dont_use_wiktionary_button.isChecked():
+      Settings.set_boolean_setting('use_wiktionary', False)
 
   def restore_database(self):
     title = 'Επαναφορά Δεδομένων'

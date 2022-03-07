@@ -23,6 +23,7 @@ class StarredWord(QWidget):
     data_widget = QWidget()
     data_widget.layout = QHBoxLayout(data_widget)
     data_widget.layout.setContentsMargins(0, 0, 0, 0)
+    data_widget.layout.setSpacing(10)
 
     self.word = QLabel(word)
     self.word.setFont(font)
@@ -47,7 +48,7 @@ class StarredWord(QWidget):
     data_widget.layout.addWidget(self.word)
     data_widget.layout.addWidget(reload_button)
     data_widget.layout.addWidget(self.star_button)
-    data_widget.layout.addSpacing(5)
+    data_widget.layout.addSpacing(10)
 
     self.layout.addWidget(data_widget)
     self.layout.addWidget(line)

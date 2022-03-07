@@ -107,7 +107,7 @@ class ResultsWidget(QWidget):
       offline_result_words.remove(word)
     offline_result_words.sort()
 
-    if Settings.get_setting('word_family_discovery') == 'online_wiktionary':
+    if Settings.get_boolean_setting('use_wiktionary'):
       try:
         online_family_words, unused = fetch_word_details(word)
       except RuntimeError:
@@ -161,7 +161,7 @@ class ResultsWidget(QWidget):
   @staticmethod
   def show_no_internet_message():
     title = 'Αδυναμία σύνδεσης στο Διαδίκτυο'
-    text = ('Η ρύθμιση για την online χρήση του Wiktionary είναι ενεργοποιημένη,'
+    text = ('Η ρύθμιση για την χρήση του Wiktionary είναι ενεργοποιημένη, '
             'ωστόσο δεν έχετε ενεργή σύνδεση στο Διαδίκτυο.')
     answer = QMessageBox()
     answer.setIcon(QMessageBox.Icon.Critical)

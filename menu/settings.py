@@ -11,11 +11,9 @@ class Settings():
   @staticmethod
   def initialize_settings_database(screen_width, screen_height):
     settings_default_values = {
-      'maximum_results': 20,
+      'maximum_results': 30,
       'last_student_picked': 1,
-      'theme': 'light',
-      'word_family_discovery': 'online_wiktionary',
-      'default_editing_action': 'update'
+      'theme': 'light'
     }
 
     boolean_settings_default_values = {
@@ -23,7 +21,8 @@ class Settings():
       'ask_before_actions': 1,
       'show_edit_dict_words_button': 1,
       'only_show_words_with_family': 0,
-      'show_tutorial_on_startup': 1
+      'show_tutorial_on_startup': 1,
+      'use_wiktionary': 1
     }
 
     boolean_settings_about_hiding_messages = [

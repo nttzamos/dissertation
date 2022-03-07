@@ -69,7 +69,7 @@ class RecentSearch(QWidget):
     data_widget.layout.addWidget(reload_button)
     data_widget.layout.addWidget(self.star_button)
     data_widget.layout.addWidget(delete_button)
-    data_widget.layout.addSpacing(5)
+    data_widget.layout.addSpacing(10)
 
     self.layout.addWidget(data_widget)
     self.layout.addWidget(line)
