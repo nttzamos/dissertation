@@ -258,10 +258,26 @@ class WordUpdateWidget(QWidget):
     new_word = self.word_line_edit.text()
     grade_id = self.grade_selector.currentIndex() + 1
 
+    from search.current_search import CurrentSearch
+
+    if (len(subjects_to_remove) > 0
+        and grade_id == CurrentSearch.grade_id
+        and CurrentSearch.last_subject_picked in subjects_to_remove):
+
+      CurrentSearch.remove_searched_word(self.searched_word)
+
+      from side.recent_searches_widget import RecentSearchesWidget
+      RecentSearchesWidget.delete_word(self.searched_word)
+
+      from side.starred_words_widget import StarredWordsWidget
+      StarredWordsWidget.delete_word(self.searched_word)
+
+      from central.results_widget import ResultsWidget
+      ResultsWidget.delete_word(self.searched_word)
+
     update_word(self.searched_word, new_word, grade_id, subjects_to_add, subjects_to_remove)
 
     if self.searched_word != new_word:
-      from search.current_search import CurrentSearch
       if grade_id == CurrentSearch.grade_id:
         CurrentSearch.update_searched_word(self.searched_word, new_word)
 
