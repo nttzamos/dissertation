@@ -188,10 +188,14 @@ class ResultsWidget(QWidget):
     Settings.set_boolean_setting('hide_no_internet_message', value)
 
   @staticmethod
-  def update_word(word, new_word):
+  def update_word(word, new_word, reset_results):
     for result in ResultsWidget.widget_list:
       if result.saved and word == result.word_label.text():
-        result.update_word(new_word)
+        if reset_results:
+          ResultsWidget.show_placeholder()
+        else:
+          result.update_word(new_word)
+
         return
 
   @staticmethod

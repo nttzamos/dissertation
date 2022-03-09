@@ -272,7 +272,11 @@ class WordUpdateWidget(QWidget):
         StarredWordsWidget.update_word(self.searched_word, new_word)
 
         from central.results_widget import ResultsWidget
-        ResultsWidget.update_word(self.searched_word, new_word)
+        ResultsWidget.update_word(
+          self.searched_word,
+          new_word,
+          len(self.searched_word) < len(new_word)
+        )
 
       self.word_selection_line_edit.setText(new_word)
 
