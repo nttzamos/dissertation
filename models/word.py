@@ -44,8 +44,16 @@ def update_word(old_word, new_word, grade_id, subjects_to_add, subjects_to_remov
   cur.executemany(query, word_subjects)
 
   for subject in subjects_to_remove:
+    subject_id = get_subject_id(grade_id, subject)
+
     query = 'DELETE FROM ' + get_subject_table_name(grade_id) + ' WHERE word_id = ? AND subject_id = ?'
-    cur.execute(query, (word_id, get_subject_id(grade_id, subject)))
+    cur.execute(query, (word_id, subject_id))
+
+    query = 'DELETE FROM recent_search WHERE word_id = ? AND subject_id = ?'
+    cur.execute(query, (word_id, subject_id))
+
+    query = 'DELETE FROM starred_word WHERE word_id = ? AND subject_id = ?'
+    cur.execute(query, (word_id, subject_id))
 
   con.commit()
   con.close()
