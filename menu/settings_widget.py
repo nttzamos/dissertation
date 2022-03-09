@@ -46,7 +46,7 @@ class SettingsWidget(QDialog):
     maximum_results_selection_widget = QGroupBox(SettingsWidget.RESULTS_TEXT)
     maximum_results_selection_widget.setFont(section_label_font)
     maximum_results_selection_widget.layout = QHBoxLayout(maximum_results_selection_widget)
-    maximum_results_selection_widget.layout.setContentsMargins(10, 0, 0, 0)
+    maximum_results_selection_widget.layout.setContentsMargins(10, 5, 0, 5)
     maximum_results_selection_widget.layout.addWidget(maximum_results_label)
     maximum_results_selection_widget.layout.addWidget(self.maximum_results_spin_box)
 

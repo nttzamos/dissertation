@@ -66,8 +66,8 @@ class Settings():
       settings_database.dump()
 
   @staticmethod
-  def get_results_widget_columns():
-    results_widget_columns = (Settings.get_setting('right_widget_width') - 40) // (Settings.get_setting('single_result_width') + 10)
+  def get_results_widget_columns(widget_width):
+    results_widget_columns = (Settings.get_setting('right_widget_width') - 60) // (widget_width + 10)
 
     return results_widget_columns
 

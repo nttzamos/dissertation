@@ -18,8 +18,6 @@ class ResultsWidget(QWidget):
   counter = 1000000
   show_placeholder_label = True
   placeholder_label = QLabel(RESULT_DISPLAY_TEXT)
-  grid_columns = Settings.get_results_widget_columns()
-  single_result_width = Settings.get_setting('single_result_width')
 
   def __init__(self):
     super().__init__()
@@ -71,21 +69,30 @@ class ResultsWidget(QWidget):
 
     maximum_results = Settings.get_setting('maximum_results')
 
+    longest_word_offline = len(max(offline_result_words, default='', key=len))
+    longest_word_online = len(max(online_result_words, default='', key=len))
+
+    str = ''
+    for i in range(max(longest_word_offline, longest_word_online)):
+      str = str + 'ω'
+    single_result_width = Result(str).sizeHint().width()
+    grid_columns = Settings.get_results_widget_columns(single_result_width)
+
     i = 0
     for word in offline_result_words:
       if i == maximum_results: break
-      row = i // ResultsWidget.grid_columns
-      column = i % ResultsWidget.grid_columns
-      result = Result(word, widget_width=ResultsWidget.single_result_width, saved=True)
+      row = i // grid_columns
+      column = i % grid_columns
+      result = Result(word, widget_width=single_result_width, saved=True)
       ResultsWidget.widget_list.append(result)
       ResultsWidget.grid_layout.addWidget(result, row, column)
       i += 1
 
     for word in online_result_words:
       if i == maximum_results: break
-      row = i // ResultsWidget.grid_columns
-      column = i % ResultsWidget.grid_columns
-      result = Result(word, widget_width=ResultsWidget.single_result_width, saved=False)
+      row = i // grid_columns
+      column = i % grid_columns
+      result = Result(word, widget_width=single_result_width, saved=False)
       ResultsWidget.widget_list.append(result)
       ResultsWidget.grid_layout.addWidget(result, row, column)
       i += 1
