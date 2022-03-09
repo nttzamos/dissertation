@@ -10,6 +10,8 @@ class WordFamilyUpdateWidget(QWidget):
   GRADE_SELECTION_TEXT = 'Επιλογή Τάξης'
   WORD_SELECTION_TEXT = 'Επιλογή Λέξης'
   FAMILY_SELECTION_TEXT = 'Επεξεργασία συγγενικών λέξεων'
+  FAMILY_SELECTION_TEXT_WITH_CHANGES = ('Επεξεργασία συγγενικών λέξεων '
+                                        '(οι αλλαγές σας δεν έχουν αποθηκευτεί)')
   SAVE_FAMILY_BUTTON_TEXT = 'Αποθήκευση συγγενικών λέξεων'
   PLEASE_ENTER_WORD_TEXT = 'Παρακαλώ εισάγετε μια λέξη.'
   PLEASE_ENTER_ANOTHER_WORD_TEXT = 'Παρακαλώ εισάγετε μια διαφορετική λέξη.'
@@ -34,7 +36,8 @@ class WordFamilyUpdateWidget(QWidget):
     WordFamilyUpdateWidget.just_searched_with_enter = False
     WordFamilyUpdateWidget.just_searched_related_with_enter = False
     self.searched_word = ''
-    self.famiy_list = []
+    self.word_current_family = []
+    self.word_initial_family = []
 
     grade_selection_widget = QGroupBox(WordFamilyUpdateWidget.GRADE_SELECTION_TEXT)
     grade_selection_widget.setFont(section_label_font)
@@ -71,10 +74,10 @@ class WordFamilyUpdateWidget(QWidget):
     word_selection_widget.layout.addWidget(self.word_selection_line_edit)
     word_selection_widget.layout.addWidget(self.error_message_label)
 
-    word_family_selection_widget = QGroupBox(WordFamilyUpdateWidget.FAMILY_SELECTION_TEXT)
-    word_family_selection_widget.setFont(section_label_font)
-    word_family_selection_widget.layout = QVBoxLayout(word_family_selection_widget)
-    word_family_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
+    self.word_family_selection_widget = QGroupBox(WordFamilyUpdateWidget.FAMILY_SELECTION_TEXT)
+    self.word_family_selection_widget.setFont(section_label_font)
+    self.word_family_selection_widget.layout = QVBoxLayout(self.word_family_selection_widget)
+    self.word_family_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.related_word_selection_line_edit = QLineEdit()
     self.related_word_selection_line_edit.setFont(line_edit_font)
@@ -94,11 +97,11 @@ class WordFamilyUpdateWidget(QWidget):
     self.remove_words_button = QPushButton(WordFamilyUpdateWidget.REMOVE_SELECTED_WORDS_TEXT)
     self.remove_words_button.pressed.connect(self.remove_selected_words)
 
-    word_family_selection_widget.layout.addWidget(self.related_word_selection_line_edit)
-    word_family_selection_widget.layout.addSpacing(5)
-    word_family_selection_widget.layout.addWidget(self.word_family_list)
-    word_family_selection_widget.layout.addSpacing(5)
-    word_family_selection_widget.layout.addWidget(self.remove_words_button, alignment=Qt.AlignmentFlag.AlignRight)
+    self.word_family_selection_widget.layout.addWidget(self.related_word_selection_line_edit)
+    self.word_family_selection_widget.layout.addSpacing(5)
+    self.word_family_selection_widget.layout.addWidget(self.word_family_list)
+    self.word_family_selection_widget.layout.addSpacing(5)
+    self.word_family_selection_widget.layout.addWidget(self.remove_words_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.save_button = QPushButton(WordFamilyUpdateWidget.SAVE_FAMILY_BUTTON_TEXT)
     self.save_button.pressed.connect(self.update_family)
@@ -107,7 +110,7 @@ class WordFamilyUpdateWidget(QWidget):
     self.layout.addWidget(grade_selection_widget)
     self.layout.addWidget(word_selection_widget)
     self.layout.addSpacing(15)
-    self.layout.addWidget(word_family_selection_widget)
+    self.layout.addWidget(self.word_family_selection_widget)
     self.layout.addSpacing(15)
     self.layout.addWidget(self.save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
@@ -116,6 +119,12 @@ class WordFamilyUpdateWidget(QWidget):
   def style(self):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
+
+  def disable_save_button(self):
+    self.save_button.setDisabled(True)
+    self.word_family_selection_widget.setTitle(
+      WordFamilyUpdateWidget.FAMILY_SELECTION_TEXT
+    )
 
   def grade_selector_activated(self, index):
     WordFamilyUpdateWidget.dictionary_words = get_grade_words(index + 1)
@@ -148,20 +157,20 @@ class WordFamilyUpdateWidget(QWidget):
     word_id = get_word_id(grade_id, self.searched_word)
     family_id = get_family_id(grade_id, word_id)
 
-    self.family_words = get_family_words(grade_id, family_id)
-    self.famiy_list = get_family_words(grade_id, family_id)
+    self.word_initial_family = get_family_words(grade_id, family_id)
+    self.word_current_family = list(self.word_initial_family)
 
     self.word_family_list.clear()
 
-    if len(self.famiy_list) > 1:
-      self.family_words.remove(self.searched_word)
-      self.famiy_list.remove(self.searched_word)
-      self.family_words.sort()
-      self.word_family_list.addItems(self.family_words)
+    if len(self.word_current_family) > 1:
+      self.word_initial_family.remove(self.searched_word)
+      self.word_current_family.remove(self.searched_word)
+      self.word_initial_family.sort()
+      self.word_family_list.addItems(self.word_initial_family)
     else:
       self.word_family_list.addItem(WordFamilyUpdateWidget.NO_FAMILY_WORDS_TEXT)
 
-    self.save_button.setDisabled(True)
+    self.disable_save_button()
     self.related_word_selection_line_edit.show()
     self.related_word_selection_line_edit.setFocus()
 
@@ -184,12 +193,21 @@ class WordFamilyUpdateWidget(QWidget):
 
       if self.word_family_list.item(0).text() == WordFamilyUpdateWidget.NO_FAMILY_WORDS_TEXT:
         self.word_family_list.clear()
-      self.famiy_list.append(word)
+
+      self.word_current_family.append(word)
       self.word_family_list.addItem(word)
       self.save_button.setEnabled(True)
 
+      if set(self.word_initial_family) == set(self.word_current_family):
+        self.disable_save_button()
+      else:
+        self.save_button.setEnabled(True)
+        self.word_family_selection_widget.setTitle(
+          WordFamilyUpdateWidget.FAMILY_SELECTION_TEXT_WITH_CHANGES
+        )
+
   def related_word_is_invalid(self, related_word):
-    if related_word == self.searched_word or related_word in self.famiy_list:
+    if related_word == self.searched_word or related_word in self.word_current_family:
       return True
 
     if not related_word in WordFamilyUpdateWidget.dictionary_words:
@@ -204,21 +222,29 @@ class WordFamilyUpdateWidget(QWidget):
       if item.text() == WordFamilyUpdateWidget.NO_FAMILY_WORDS_TEXT: return
       if item.text() == WordFamilyUpdateWidget.FAMILY_WORDS_APPEAR_HERE_TEXT: return
 
-      self.famiy_list.remove(item.text())
+      self.word_current_family.remove(item.text())
       self.word_family_list.takeItem(self.word_family_list.row(item))
 
     if self.word_family_list.count() == 0:
       self.word_family_list.addItem(WordFamilyUpdateWidget.NO_FAMILY_WORDS_TEXT)
 
-    self.save_button.setEnabled(True)
+    if set(self.word_initial_family) == set(self.word_current_family):
+      self.disable_save_button()
+    else:
+      self.save_button.setEnabled(True)
+      self.word_family_selection_widget.setTitle(
+        WordFamilyUpdateWidget.FAMILY_SELECTION_TEXT_WITH_CHANGES
+      )
 
   def update_family(self):
-    words_to_remove = list(set(self.family_words) - set(self.famiy_list))
-    words_to_add = list(set(self.famiy_list) - set(self.family_words))
+    words_to_remove = list(set(self.word_initial_family) - set(self.word_current_family))
+    words_to_add = list(set(self.word_current_family) - set(self.word_initial_family))
 
     grade_id = WordFamilyUpdateWidget.grade_selector.currentIndex() + 1
     update_word_family(grade_id, self.searched_word, words_to_add, words_to_remove)
-    self.save_button.setDisabled(True)
+
+    self.word_initial_family = list(self.word_current_family)
+    self.disable_save_button()
 
     from search.current_search import CurrentSearch
     if (self.searched_word == CurrentSearch.searched_word_label.text() and
@@ -230,14 +256,15 @@ class WordFamilyUpdateWidget(QWidget):
   def update_word_family_update_widget(self, word, grade_id):
     if grade_id != WordFamilyUpdateWidget.grade_selector.currentIndex() + 1: return
 
-    if word == self.searched_word or word in self.famiy_list:
+    if word == self.searched_word or word in self.word_current_family:
       self.clear_previous_search()
 
   def clear_previous_search(self):
     self.related_word_selection_line_edit.hide()
-    self.save_button.setDisabled(True)
     self.searched_word = ''
-    self.famiy_list = []
+    self.word_current_family = []
+
+    self.disable_save_button()
 
     QTimer.singleShot(0, self.word_selection_line_edit.clear)
 
