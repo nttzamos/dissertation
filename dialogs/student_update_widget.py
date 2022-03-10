@@ -277,6 +277,7 @@ class StudentUpdateWidget(QWidget):
       students[0:0] = [StudentUpdateWidget.SELECT_STUDENT_TEXT]
       StudentUpdateWidget.student_selector.addItems(students)
 
+    StudentUpdateWidget.student_selector.activated.disconnect()
     StudentUpdateWidget.student_selector.activated.connect(self.student_selector_activated_initial)
 
   @staticmethod

@@ -9,10 +9,6 @@ from side.recent_searches_widget import RecentSearchesWidget
 from side.starred_words_widget import StarredWordsWidget
 
 class MainWindow(QWidget):
-  recent_searches_widget = RecentSearchesWidget()
-  starred_words_widget = StarredWordsWidget()
-  main_widget = MainWidget()
-
   def __init__(self):
     super().__init__()
 
@@ -25,25 +21,24 @@ class MainWindow(QWidget):
 
     self.menuBar = MenuBar(self)
 
-    # Left Horizontal Splitter
     self.splitter_left_horizontal = QSplitter(self)
     self.splitter_left_horizontal.setOrientation(Qt.Orientation.Horizontal)
     self.splitter_left_horizontal.setChildrenCollapsible(False)
 
-    # Splitter between 'Recent Searches' and 'Starred Words' widgets
     self.splitter_left_vertical = QSplitter(self.splitter_left_horizontal)
     self.splitter_left_vertical.setOrientation(Qt.Orientation.Vertical)
     self.splitter_left_vertical.setChildrenCollapsible(False)
 
-    # Recent Searches Scroll Area
+    MainWindow.recent_searches_widget = RecentSearchesWidget()
+    MainWindow.starred_words_widget = StarredWordsWidget()
+    MainWindow.main_widget = MainWidget()
+
     self.splitter_left_vertical.addWidget(MainWindow.recent_searches_widget)
     MainWindow.recent_searches_widget.initialize()
 
-    # Starred Words Scroll Area
     self.splitter_left_vertical.addWidget(MainWindow.starred_words_widget)
     MainWindow.starred_words_widget.initialize()
 
-    # Main Widget
     self.splitter_left_horizontal.addWidget(MainWindow.main_widget)
 
     self.line = QFrame()
@@ -76,9 +71,11 @@ class MainWindow(QWidget):
 
     SearchingWidget.update_selected_dictionary()
     ResultsWidget.show_placeholder()
-    MainWidget.current_search.searched_word_label.setText(MainWidget.current_search.ENTER_WORD_TEXT)
     RecentSearchesWidget.populate()
     StarredWordsWidget.populate()
+    MainWidget.current_search.searched_word_label.setText(
+      MainWidget.current_search.ENTER_WORD_TEXT
+    )
 
   @staticmethod
   def clear_previous_subject_details():
@@ -88,10 +85,10 @@ class MainWindow(QWidget):
     from search.searching_widget import SearchingWidget
     from central.results_widget import ResultsWidget
 
-    SearchingWidget.set_initial_error_message()
-    SearchingWidget.completer.setModel(None)
-    SearchingWidget.dictionary_words = []
-    ResultsWidget.show_placeholder()
     CurrentSearch.subject_selector_active = False
+    SearchingWidget.dictionary_words = []
+    SearchingWidget.completer.setModel(None)
+    SearchingWidget.set_initial_error_message()
+    ResultsWidget.show_placeholder()
     RecentSearchesWidget.clear_previous_recent_searches()
     StarredWordsWidget.clear_previous_starred_words()
