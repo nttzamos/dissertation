@@ -34,8 +34,8 @@ def create_recent_search(word):
           'AND student_id = ? AND subject_id = ?')
         cur.execute(query, (date_time_now, word_id, profile_id, student_id, subject_id))
       else:
-        values = (word_id, profile_id, student_id, subject_id, date_time_now)
-        cur.execute('INSERT INTO recent_search VALUES (null, ?, ?, ?, ?, ?)', values)
+        values = (word_id, profile_id, student_id, subject_id, grade_id, date_time_now)
+        cur.execute('INSERT INTO recent_search VALUES (null, ?, ?, ?, ?, ?, ?)', values)
 
   con.commit()
   con.close()

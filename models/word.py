@@ -69,8 +69,10 @@ def destroy_word(word, grades):
     cur.execute('DELETE FROM ' + get_subject_table_name(grade) + ' WHERE word_id = ?', (word_id,))
     cur.execute('DELETE FROM ' + get_family_table_name(grade) + ' WHERE word_id = ?', (word_id,))
     cur.execute('DELETE FROM candidate WHERE word_id = ?', (word_id,))
-    cur.execute('DELETE FROM recent_search WHERE word_id = ?', (word_id,))
-    cur.execute('DELETE FROM starred_word WHERE word_id = ?', (word_id,))
+    cur.execute('DELETE FROM recent_search WHERE word_id = ? AND grade_id = ?', (word_id, grade))
+    cur.execute('DELETE FROM starred_word WHERE word_id = ? AND grade_id = ?', (word_id, grade))
+    cur.execute('DELETE FROM non_related_word WHERE word_id = ? AND grade_id = ?', (word_id, grade))
+    cur.execute('DELETE FROM non_related_word WHERE non_related_word_id = ? AND grade_id = ?', (word_id, grade))
 
     con.commit()
     con.close()

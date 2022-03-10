@@ -35,6 +35,8 @@ def destroy_profile(id):
   cur.execute('DELETE FROM profile WHERE id = ?', (id,))
   cur.execute('DELETE FROM profile_subject WHERE profile_id = ?', (id,))
   cur.execute('DELETE FROM student_profile WHERE profile_id = ?', (id,))
+  cur.execute('DELETE FROM recent_search WHERE profile_id = ?', (id,))
+  cur.execute('DELETE FROM starred_word WHERE profile_id = ?', (id,))
 
   con.commit()
   con.close()

@@ -16,8 +16,8 @@ def create_starred_word(word):
 
   for subject_id in subject_ids:
     if word_exists_in_subject(word_id, subject_id, grade_id):
-      values = (word_id, profile_id, student_id, subject_id)
-      cur.execute('INSERT INTO starred_word VALUES (null, ?, ?, ?, ?)', values)
+      values = (word_id, profile_id, student_id, subject_id, grade_id)
+      cur.execute('INSERT INTO starred_word VALUES (null, ?, ?, ?, ?, ?)', values)
   con.commit()
   con.close()
 

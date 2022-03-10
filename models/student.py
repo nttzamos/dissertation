@@ -22,6 +22,8 @@ def destroy_student(id):
 
   cur.execute('DELETE FROM student WHERE id = ?', (id,))
   cur.execute('DELETE FROM student_profile WHERE student_id = ?', (id,))
+  cur.execute('DELETE FROM recent_search WHERE student_id = ?', (id,))
+  cur.execute('DELETE FROM starred_word WHERE student_id = ?', (id,))
   con.commit()
   con.close()
 
