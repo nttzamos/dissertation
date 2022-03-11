@@ -1,4 +1,5 @@
-from PyQt6.QtWidgets import QComboBox, QHBoxLayout, QLabel, QSizePolicy, QVBoxLayout, QWidget, QPushButton
+from PyQt6.QtWidgets import (QComboBox, QHBoxLayout, QLabel, QSizePolicy,
+                             QVBoxLayout, QWidget, QPushButton)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
@@ -20,15 +21,15 @@ class CurrentSearch(QWidget):
   SELECT_SUBJECT_TEXT = 'Επιλέξτε ένα μάθημα...'
   ALL_SUBJECTS_TEXT = 'Όλα τα μαθήματα'
 
-  subject_selector_active = False
-  grade_id = -1
-
   def __init__(self):
     super().__init__()
 
     self.setFixedHeight(300)
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(50, 50, 50, 50)
+
+    CurrentSearch.subject_selector_active = False
+    CurrentSearch.grade_id = -1
 
     searched_word_font = QFont(Settings.FONT, 20)
     combo_box_font = QFont(Settings.FONT, 14)
@@ -148,8 +149,10 @@ class CurrentSearch(QWidget):
     Settings.set_setting('last_student_picked', CurrentSearch.last_student_picked)
 
     student_name = CurrentSearch.student_selector.currentText()
+
     CurrentSearch.profile_selector.clear()
     CurrentSearch.student_id, student_profiles = get_student_details(student_name)
+
     if len(student_profiles) == 0:
       CurrentSearch.profile_selector.addItem(CurrentSearch.STUDENT_NO_PROFILES_TEXT)
       CurrentSearch.profile_selector.setDisabled(True)
@@ -159,7 +162,9 @@ class CurrentSearch(QWidget):
       CurrentSearch.profile_selector.setEnabled(True)
 
       CurrentSearch.profile_selector.activated.disconnect()
-      CurrentSearch.profile_selector.activated.connect(CurrentSearch.profile_selector_activated_initial)
+      CurrentSearch.profile_selector.activated.connect(
+        CurrentSearch.profile_selector_activated_initial
+      )
 
     CurrentSearch.subject_selector.clear()
     CurrentSearch.subject_selector.addItem(CurrentSearch.MUST_SELECT_PROFILE_TEXT)
@@ -183,7 +188,10 @@ class CurrentSearch(QWidget):
     from central.main_window import MainWindow
     MainWindow.clear_previous_subject_details()
     CurrentSearch.searched_word_label.setText(CurrentSearch.ENTER_WORD_TEXT)
-    CurrentSearch.profile_id, CurrentSearch.grade_id, grade_name, profile_subjects = get_profile_details(CurrentSearch.profile_selector.currentText())
+    CurrentSearch.profile_id, CurrentSearch.grade_id, grade_name, profile_subjects = (
+      get_profile_details(CurrentSearch.profile_selector.currentText())
+    )
+
     CurrentSearch.subject_selector.clear()
     CurrentSearch.subject_selector.addItem(CurrentSearch.SELECT_SUBJECT_TEXT)
     CurrentSearch.subject_selector.addItems(profile_subjects)
@@ -192,7 +200,10 @@ class CurrentSearch(QWidget):
       CurrentSearch.subject_selector.addItem(CurrentSearch.ALL_SUBJECTS_TEXT)
 
     CurrentSearch.subject_selector.activated.disconnect()
-    CurrentSearch.subject_selector.activated.connect(CurrentSearch.subject_selector_activated_initial)
+    CurrentSearch.subject_selector.activated.connect(
+      CurrentSearch.subject_selector_activated_initial
+    )
+
     CurrentSearch.subject_selector.setEnabled(True)
 
   @staticmethod
@@ -212,7 +223,9 @@ class CurrentSearch(QWidget):
 
     CurrentSearch.subject_selector_active = True
     from central.main_window import MainWindow
-    MainWindow.update_widgets(CurrentSearch.profile_id, CurrentSearch.subject_selector.currentText())
+    MainWindow.update_widgets(
+      CurrentSearch.profile_id, CurrentSearch.subject_selector.currentText()
+    )
 
   @staticmethod
   def update_searched_word(word, new_word):
@@ -228,7 +241,10 @@ class CurrentSearch(QWidget):
 
   @staticmethod
   def get_current_selection_details():
-    return CurrentSearch.student_id, CurrentSearch.profile_id, CurrentSearch.grade_id, CurrentSearch.subject_selector.currentText()
+    return (
+      CurrentSearch.student_id, CurrentSearch.profile_id,
+      CurrentSearch.grade_id, CurrentSearch.subject_selector.currentText()
+    )
 
   @staticmethod
   def add_student(student_name):
@@ -237,7 +253,9 @@ class CurrentSearch(QWidget):
       CurrentSearch.student_selector.clear()
       CurrentSearch.student_selector.addItem(CurrentSearch.SELECT_STUDENT_TEXT)
       CurrentSearch.student_selector.activated.disconnect()
-      CurrentSearch.student_selector.activated.connect(CurrentSearch.student_selector_activated_initial)
+      CurrentSearch.student_selector.activated.connect(
+        CurrentSearch.student_selector_activated_initial
+      )
 
     CurrentSearch.student_selector.addItem(student_name)
 
@@ -253,7 +271,9 @@ class CurrentSearch(QWidget):
     CurrentSearch.student_selector.removeItem(index)
 
     if (CurrentSearch.student_selector.count() == 0
-        or (CurrentSearch.student_selector.count() == 1 and CurrentSearch.student_selector.currentText() == CurrentSearch.SELECT_STUDENT_TEXT)):
+        or (CurrentSearch.student_selector.count() == 1
+        and CurrentSearch.student_selector.currentText() == CurrentSearch.SELECT_STUDENT_TEXT)):
+
       CurrentSearch.student_selector.clear()
       CurrentSearch.student_selector.addItem(CurrentSearch.NO_STUDENTS_TEXT)
       CurrentSearch.student_selector.setDisabled(True)
@@ -275,7 +295,9 @@ class CurrentSearch(QWidget):
       CurrentSearch.profile_selector.clear()
       CurrentSearch.profile_selector.addItem(CurrentSearch.SELECT_PROFILE_TEXT)
       CurrentSearch.profile_selector.activated.disconnect()
-      CurrentSearch.profile_selector.activated.connect(CurrentSearch.profile_selector_activated_initial)
+      CurrentSearch.profile_selector.activated.connect(
+        CurrentSearch.profile_selector_activated_initial
+      )
 
     CurrentSearch.profile_selector.addItems(profile_names)
 
@@ -297,7 +319,9 @@ class CurrentSearch(QWidget):
         CurrentSearch.profile_selector.removeItem(index)
 
     if (CurrentSearch.profile_selector.count() == 0
-        or (CurrentSearch.profile_selector.count() == 1 and CurrentSearch.profile_selector.currentText() == CurrentSearch.SELECT_PROFILE_TEXT)):
+        or (CurrentSearch.profile_selector.count() == 1
+        and CurrentSearch.profile_selector.currentText() == CurrentSearch.SELECT_PROFILE_TEXT)):
+
       CurrentSearch.profile_selector.clear()
       CurrentSearch.profile_selector.addItem(CurrentSearch.STUDENT_NO_PROFILES_TEXT)
       CurrentSearch.profile_selector.setDisabled(True)

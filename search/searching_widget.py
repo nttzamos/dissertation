@@ -1,11 +1,12 @@
-from PyQt6.QtWidgets import QCompleter, QHBoxLayout, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QSizePolicy
+from PyQt6.QtWidgets import (QCompleter, QHBoxLayout, QLabel, QLineEdit,
+                             QPushButton, QVBoxLayout, QWidget, QSizePolicy)
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
 from PyQt6.QtGui import QFont, QIcon, QKeySequence, QShortcut
 
 from menu.settings import Settings
 from models.family import get_words_with_family
 from models.recent_search import create_recent_search
-from shared.database_handler import get_grades, get_words
+from shared.database_handler import get_words
 from shared.styles import Styles
 from side.recent_searches_widget import RecentSearchesWidget
 
@@ -18,17 +19,6 @@ class SearchingWidget(QWidget):
   EDIT_WORDS_TOOLTIP_TEXT = ('Μπορείτε να επεξεργαστείτε τις λέξεις κάθε τάξης, '
                              'καθώς και τις συγγενικές τους λέξεις')
 
-  dictionary_words = []
-
-  line_edit = QLineEdit()
-
-  grades = get_grades()
-  grades_mapping = {}
-  for i in range(len(grades)):
-    grades_mapping[i + 1] = grades[i]
-
-  just_searched_with_enter = False
-
   def __init__(self):
     super().__init__()
 
@@ -40,12 +30,16 @@ class SearchingWidget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 0)
     self.layout.setSpacing(0)
 
+    SearchingWidget.just_searched_with_enter = False
+
+    SearchingWidget.line_edit = QLineEdit()
     SearchingWidget.line_edit.setFont(line_edit_font)
     SearchingWidget.line_edit.setContentsMargins(0, 1, 0, 1)
     SearchingWidget.line_edit.returnPressed.connect(self.search_with_enter)
     SearchingWidget.line_edit.textChanged.connect(self.search_text_changed)
     self.show_error_message = False
 
+    SearchingWidget.dictionary_words = []
     SearchingWidget.completer = QCompleter(SearchingWidget.dictionary_words)
     SearchingWidget.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
     SearchingWidget.completer.activated.connect(self.search_with_click)
@@ -144,7 +138,10 @@ class SearchingWidget(QWidget):
 
   @staticmethod
   def toggle_edit_words_button_visibility(new_visibility_status):
-    SearchingWidget.edit_words_button.show() if new_visibility_status else SearchingWidget.edit_words_button.hide()
+    if new_visibility_status:
+      SearchingWidget.edit_words_button.show()
+    else:
+      SearchingWidget.edit_words_button.hide()
 
   @staticmethod
   def update_selected_dictionary():
@@ -153,9 +150,13 @@ class SearchingWidget(QWidget):
       subject_name = CurrentSearch.subject_selector.currentText()
 
       if Settings.get_boolean_setting('only_show_words_with_family'):
-        SearchingWidget.dictionary_words = get_words_with_family(CurrentSearch.profile_id, CurrentSearch.grade_id, subject_name)
+        SearchingWidget.dictionary_words = get_words_with_family(
+          CurrentSearch.profile_id, CurrentSearch.grade_id, subject_name
+        )
       else:
-        SearchingWidget.dictionary_words = get_words(CurrentSearch.profile_id, CurrentSearch.grade_id, subject_name)
+        SearchingWidget.dictionary_words = get_words(
+          CurrentSearch.profile_id, CurrentSearch.grade_id, subject_name
+        )
 
       model = QStringListModel(SearchingWidget.dictionary_words, SearchingWidget.completer)
       SearchingWidget.completer.setModel(model)
