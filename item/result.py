@@ -16,6 +16,7 @@ class Result(QWidget):
 
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(0, 0, 10, 10)
+    self.layout.setSpacing(0)
 
     from menu.settings import Settings
     font = QFont(Settings.font, 20)
@@ -28,8 +29,9 @@ class Result(QWidget):
     data_widget = QWidget()
     data_widget.layout = QVBoxLayout(data_widget)
     data_widget.layout.setContentsMargins(0, 25, 0, 25)
+    data_widget.layout.setSpacing(0)
 
-    self.word_label = QLabel(self, text=word)
+    self.word_label = QLabel(word)
     self.word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.word_label.setFont(font)
 
@@ -55,7 +57,7 @@ class Result(QWidget):
       self.buttons_widget.layout.addWidget(self.add_to_family_button)
 
     data_widget.layout.addWidget(self.word_label)
-    data_widget.layout.addSpacing(5)
+    data_widget.layout.addSpacing(12)
     data_widget.layout.addWidget(self.buttons_widget)
 
     self.layout.addWidget(data_widget)
@@ -73,17 +75,22 @@ class Result(QWidget):
   def add_word_to_family(self):
     from search.current_search import CurrentSearch
     word = self.word_label.text()
-    x, y, z, subject_names = CurrentSearch.get_current_selection_details()
-    subject_names = [subject_names]
+    x, y, z, current_subject_name = CurrentSearch.get_current_selection_details()
+    subject_names = [current_subject_name]
 
     if subject_names[0] == CurrentSearch.ALL_SUBJECTS_TEXT:
       subject_names = get_grade_subjects(CurrentSearch.grade_id)
+
     create_word(word, CurrentSearch.grade_id, subject_names)
 
     from search.searching_widget import SearchingWidget
     SearchingWidget.add_or_remove_dictionary_words([word], [])
 
-    update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word_label.text(), [word], [])
+    update_word_family(
+      CurrentSearch.grade_id,
+      CurrentSearch.searched_word_label.text(), [word], []
+    )
+
     self.saved = True
     self.setStyleSheet(Styles.offline_result_style)
     self.add_to_family_button.hide()
@@ -93,8 +100,12 @@ class Result(QWidget):
   def remove_word_from_family(self):
     from search.current_search import CurrentSearch
     word = self.word_label.text()
-    update_word_family(CurrentSearch.grade_id, CurrentSearch.searched_word_label.text(), [], [word])
     self.hide()
+
+    update_word_family(
+      CurrentSearch.grade_id,
+      CurrentSearch.searched_word_label.text(), [], [word]
+    )
 
     from central.results_widget import ResultsWidget
     ResultsWidget.remove_result(self)

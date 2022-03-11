@@ -91,11 +91,13 @@ class RecentSearch(QWidget):
 
   def reload_word(self):
     word = self.word.text()
+
     from central.main_widget import MainWidget
     from side.recent_searches_widget import RecentSearchesWidget
     MainWidget.add_word(word)
-    create_recent_search(word)
     RecentSearchesWidget.remove_and_add_recent_search(word)
+
+    create_recent_search(word)
 
   def toggle_starred_state(self):
     from side.starred_words_widget import StarredWordsWidget
@@ -120,9 +122,11 @@ class RecentSearch(QWidget):
 
   def remove_word(self):
     from side.recent_searches_widget import RecentSearchesWidget
-    destroy_recent_search(self.word.text())
-    self.hide()
     RecentSearchesWidget.remove_recent_search(self)
+
+    destroy_recent_search(self.word.text())
+
+    self.hide()
     self.deleteLater()
 
   def update_word(self, new_word):

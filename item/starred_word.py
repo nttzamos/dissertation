@@ -60,23 +60,28 @@ class StarredWord(QWidget):
     self.setStyleSheet(Styles.item_widgets_style)
 
   def toggle_starred_state(self):
-    from side.recent_searches_widget import RecentSearchesWidget
     word = self.word.text()
-    destroy_starred_word(word)
+
+    from side.recent_searches_widget import RecentSearchesWidget
     RecentSearchesWidget.toggle_recent_search_starred_icon(word)
+
+    destroy_starred_word(word)
     self.remove_word()
 
   def remove_word(self):
     from side.starred_words_widget import StarredWordsWidget
-    self.hide()
     StarredWordsWidget.remove_starred_word(self)
+
+    self.hide()
     self.deleteLater()
 
   def reload_word(self):
     word = self.word.text()
+
     from central.main_widget import MainWidget
     from side.recent_searches_widget import RecentSearchesWidget
     MainWidget.add_word(word)
+
     recent_search_exists = create_recent_search(word)
     if recent_search_exists:
       RecentSearchesWidget.remove_and_add_recent_search(word)
