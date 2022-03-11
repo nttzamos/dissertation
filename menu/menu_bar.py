@@ -15,18 +15,20 @@ class MenuBar(QWidget):
     super().__init__()
     self.parent = parent
 
+    self.setMaximumHeight(30)
+
     self.layout = QHBoxLayout(self)
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
-    self.setMaximumHeight(30)
 
     self.application_icon = QPushButton()
     self.application_icon.setIcon(QIcon('resources/window_icon.png'))
     self.application_icon.setFixedHeight(30)
     self.application_icon.setFixedWidth(30)
 
+    font = QFont(Settings.FONT, 14)
+
     self.title = QLabel('Wordinary')
-    font = QFont(Settings.font, 14)
     self.title.setFont(font)
 
     self.settings_button = QPushButton()

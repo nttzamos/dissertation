@@ -18,7 +18,7 @@ class StarredWord(QWidget):
     self.layout.setSpacing(0)
 
     from menu.settings import Settings
-    font = QFont(Settings.font, 14)
+    font = QFont(Settings.FONT, 14)
 
     data_widget = QWidget()
     data_widget.layout = QHBoxLayout(data_widget)

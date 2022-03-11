@@ -19,7 +19,7 @@ class Result(QWidget):
     self.layout.setSpacing(0)
 
     from menu.settings import Settings
-    font = QFont(Settings.font, 20)
+    font = QFont(Settings.FONT, 20)
 
     self.saved = saved
 

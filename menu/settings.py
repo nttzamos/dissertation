@@ -5,8 +5,8 @@ from item.recent_search import RecentSearch
 import pickledb
 
 class Settings():
-  settings_database_file = 'resources/settings.json'
-  font = QFont().family()
+  SETTINGS_DATABASE_FILE = 'resources/settings.json'
+  FONT = QFont().family()
 
   @staticmethod
   def initialize_settings_database(screen_width, screen_height):
@@ -46,7 +46,7 @@ class Settings():
 
   @staticmethod
   def calculate_size_settings(screen_width, screen_height):
-    settings_database = pickledb.load(Settings.settings_database_file, False)
+    settings_database = pickledb.load(Settings.SETTINGS_DATABASE_FILE, False)
     if not settings_database.get('screen_width') == screen_width:
       settings_database.set('screen_width', screen_width)
       settings_database.set('screen_height', screen_height)
@@ -81,12 +81,12 @@ class Settings():
 
   @staticmethod
   def set_setting(setting_name, setting_value):
-    settings_database = pickledb.load(Settings.settings_database_file, False)
+    settings_database = pickledb.load(Settings.SETTINGS_DATABASE_FILE, False)
     settings_database.set(setting_name, setting_value)
     settings_database.dump()
 
   @staticmethod
   def get_setting(setting_name):
-    settings_database = pickledb.load(Settings.settings_database_file, False)
+    settings_database = pickledb.load(Settings.SETTINGS_DATABASE_FILE, False)
 
     return settings_database.get(setting_name)

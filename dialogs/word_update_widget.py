@@ -39,11 +39,11 @@ class WordUpdateWidget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    section_label_font = QFont(Settings.font, 16)
-    combo_box_font = QFont(Settings.font, 14)
-    line_edit_font = QFont(Settings.font, 14)
-    completer_font = QFont(Settings.font, 12)
-    error_message_font = QFont(Settings.font, 10)
+    section_label_font = QFont(Settings.FONT, 16)
+    combo_box_font = QFont(Settings.FONT, 14)
+    line_edit_font = QFont(Settings.FONT, 14)
+    completer_font = QFont(Settings.FONT, 12)
+    error_message_font = QFont(Settings.FONT, 10)
 
     self.check_boxes_modified = []
 
@@ -112,7 +112,7 @@ class WordUpdateWidget(QWidget):
     self.check_boxes = []
 
     vspacer = QLabel('f')
-    invisible_font = QFont(Settings.font, 1)
+    invisible_font = QFont(Settings.FONT, 1)
     vspacer.setFont(invisible_font)
     size_policy = vspacer.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
@@ -193,7 +193,7 @@ class WordUpdateWidget(QWidget):
     grade_subjects = get_grade_subjects(WordUpdateWidget.grade_selector.currentIndex() + 1)
     self.word_subjects = get_word_subjects(WordUpdateWidget.grade_selector.currentIndex() + 1, self.searched_word)
 
-    check_box_font = QFont(Settings.font, 14)
+    check_box_font = QFont(Settings.FONT, 14)
     self.check_boxes = []
     self.check_boxes_modified = []
     for i in range(len(grade_subjects)):

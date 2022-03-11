@@ -34,8 +34,8 @@ class RecentSearchesWidget(QWidget):
     RecentSearchesWidget.counter = RecentSearchesWidget.MAX_ROW
     RecentSearchesWidget.widget_list = []
 
-    font = QFont(Settings.font, 18)
-    invisible_font = QFont(Settings.font, 1)
+    font = QFont(Settings.FONT, 18)
+    invisible_font = QFont(Settings.FONT, 1)
 
     self.title_label = QLabel(RecentSearchesWidget.TITLE)
     self.title_label.setFont(font)

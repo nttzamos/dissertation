@@ -1,4 +1,6 @@
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog, QCheckBox, QRadioButton, QSpinBox, QLabel, QGroupBox, QPushButton, QMessageBox
+from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QDialog, QCheckBox,
+                             QRadioButton, QSpinBox, QLabel, QGroupBox,
+                             QPushButton, QMessageBox)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon, QFont
 
@@ -19,12 +21,13 @@ class SettingsWidget(QDialog):
   THEME_SELECTION_TEXT = 'Επιλογή Θέματος'
   LIGHT_THEME_TEXT = 'Ανοιχτό'
   DARK_THEME_TEXT = 'Σκοτεινό'
-  RESTORE_TEXT = 'Επαναφορά Δεδομένων'
+  RESTORE_TITLE_TEXT = 'Επαναφορά Δεδομένων'
   RESTORE_DATABASE_TEXT = 'Διαγραφή δεδομένων χρήστη'
   SHOW_TUTORIAL_TEXT = 'Εμφανισή οδηγιών κατά την εκκίνηση'
 
   def __init__(self):
     super().__init__()
+
     self.setWindowTitle(SettingsWidget.TITLE_TEXT)
     self.setWindowIcon(QIcon('resources/window_icon.png'))
 
@@ -32,8 +35,8 @@ class SettingsWidget(QDialog):
     self.layout.setContentsMargins(20, 20, 20, 20)
     self.layout.setSpacing(20)
 
-    section_label_font = QFont(Settings.font, 16)
-    spin_box_font = QFont(Settings.font, 12)
+    section_label_font = QFont(Settings.FONT, 16)
+    spin_box_font = QFont(Settings.FONT, 12)
 
     maximum_results_label = QLabel(SettingsWidget.MAXIMUM_RESULTS_TEXT)
     self.maximum_results_spin_box = QSpinBox()
@@ -120,7 +123,7 @@ class SettingsWidget(QDialog):
     restore_database_button.pressed.connect(self.restore_database)
     restore_database_button.setAutoDefault(False)
 
-    restore_database_widget = QGroupBox(SettingsWidget.RESTORE_TEXT)
+    restore_database_widget = QGroupBox(SettingsWidget.RESTORE_TITLE_TEXT)
     restore_database_widget.setFont(section_label_font)
     restore_database_widget.layout = QHBoxLayout(restore_database_widget)
     restore_database_widget.layout.setContentsMargins(50, 10, 50, 10)
@@ -221,7 +224,9 @@ class SettingsWidget(QDialog):
     if answer.clickedButton() == yes_button:
       os.remove('resources/database.db')
       shutil.copyfile('resources/database_backup.db', 'resources/database.db')
+
       from central.main_window import MainWindow
       MainWindow.clear_previous_subject_details()
+
       from search.current_search import CurrentSearch
       CurrentSearch.clear_current_search_details()

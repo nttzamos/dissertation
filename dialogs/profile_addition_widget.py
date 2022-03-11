@@ -32,10 +32,10 @@ class ProfileAdditionWIdget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    section_label_font = QFont(Settings.font, 16)
-    combo_box_font = QFont(Settings.font, 14)
-    check_box_font = QFont(Settings.font, 14)
-    line_edit_font = QFont(Settings.font, 14)
+    section_label_font = QFont(Settings.FONT, 16)
+    combo_box_font = QFont(Settings.FONT, 14)
+    check_box_font = QFont(Settings.FONT, 14)
+    line_edit_font = QFont(Settings.FONT, 14)
 
     name_widget = QGroupBox(ProfileAdditionWIdget.PROFILE_NAME_TEXT)
     name_widget.setFont(section_label_font)
@@ -82,7 +82,7 @@ class ProfileAdditionWIdget(QWidget):
       self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
 
     vspacer = QLabel('f')
-    invisible_font = QFont(Settings.font, 1)
+    invisible_font = QFont(Settings.FONT, 1)
     vspacer.setFont(invisible_font)
     size_policy = vspacer.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
@@ -116,7 +116,7 @@ class ProfileAdditionWIdget(QWidget):
 
     grade_subjects = get_grade_subjects(index + 1)
 
-    check_box_font = QFont(Settings.font, 14)
+    check_box_font = QFont(Settings.FONT, 14)
     self.check_boxes = []
     for i in range(len(grade_subjects)):
       check_box = QCheckBox(grade_subjects[i])

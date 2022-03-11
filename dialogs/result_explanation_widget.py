@@ -31,8 +31,8 @@ class ResultExplanationWidget(QDialog):
     self.setFixedHeight(450)
     self.setFixedWidth(800)
 
-    section_label_font = QFont(Settings.font, 20)
-    text_font = QFont(Settings.font, 16)
+    section_label_font = QFont(Settings.FONT, 20)
+    text_font = QFont(Settings.FONT, 16)
 
     self.group_box_widget = QGroupBox(ResultExplanationWidget.RESULT_EXPLANATION_TITLE)
     self.group_box_widget.setFont(section_label_font)

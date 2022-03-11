@@ -32,8 +32,8 @@ class SearchingWidget(QWidget):
   def __init__(self):
     super().__init__()
 
-    line_edit_font = QFont(Settings.font, 14)
-    completer_font = QFont(Settings.font, 12)
+    line_edit_font = QFont(Settings.FONT, 14)
+    completer_font = QFont(Settings.FONT, 12)
     error_message_font = completer_font
 
     self.layout = QVBoxLayout(self)
@@ -83,7 +83,7 @@ class SearchingWidget(QWidget):
     SearchingWidget.error_message.setSizePolicy(size_policy)
     SearchingWidget.error_message.hide()
 
-    edit_words_button_font = QFont(Settings.font, 14)
+    edit_words_button_font = QFont(Settings.FONT, 14)
     SearchingWidget.edit_words_button = QPushButton(SearchingWidget.EDIT_WORDS_BUTTON_TEXT)
     SearchingWidget.edit_words_button.setToolTip(SearchingWidget.EDIT_WORDS_TOOLTIP_TEXT)
     SearchingWidget.edit_words_button.setFont(edit_words_button_font)

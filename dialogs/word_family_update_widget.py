@@ -27,11 +27,11 @@ class WordFamilyUpdateWidget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    section_label_font = QFont(Settings.font, 16)
-    combo_box_font = QFont(Settings.font, 14)
-    line_edit_font = QFont(Settings.font, 14)
-    completer_font = QFont(Settings.font, 12)
-    error_message_font = QFont(Settings.font, 10)
+    section_label_font = QFont(Settings.FONT, 16)
+    combo_box_font = QFont(Settings.FONT, 14)
+    line_edit_font = QFont(Settings.FONT, 14)
+    completer_font = QFont(Settings.FONT, 12)
+    error_message_font = QFont(Settings.FONT, 10)
 
     WordFamilyUpdateWidget.just_searched_with_enter = False
     WordFamilyUpdateWidget.just_searched_related_with_enter = False

@@ -33,9 +33,9 @@ class StudentUpdateWidget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    section_label_font = QFont(Settings.font, 16)
-    combo_box_font = QFont(Settings.font, 14)
-    line_edit_font = QFont(Settings.font, 14)
+    section_label_font = QFont(Settings.FONT, 16)
+    combo_box_font = QFont(Settings.FONT, 14)
+    line_edit_font = QFont(Settings.FONT, 14)
 
     self.check_boxes_modified = []
 
@@ -116,7 +116,7 @@ class StudentUpdateWidget(QWidget):
     StudentUpdateWidget.check_boxes = []
 
     vspacer = QLabel('f')
-    invisible_font = QFont(Settings.font, 1)
+    invisible_font = QFont(Settings.FONT, 1)
     vspacer.setFont(invisible_font)
     size_policy = vspacer.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
@@ -146,7 +146,7 @@ class StudentUpdateWidget(QWidget):
     for check_box in StudentUpdateWidget.check_boxes:
       StudentUpdateWidget.profiles_selection_widget.layout.removeWidget(check_box)
 
-    check_box_font = QFont(Settings.font, 14)
+    check_box_font = QFont(Settings.FONT, 14)
     StudentUpdateWidget.check_boxes = []
     self.check_boxes_modified = []
     for i in range(len(profiles)):
@@ -297,7 +297,7 @@ class StudentUpdateWidget(QWidget):
       return
 
     check_box = QCheckBox(profile_name)
-    check_box_font = QFont(Settings.font, 14)
+    check_box_font = QFont(Settings.FONT, 14)
     check_box.setFont(check_box_font)
     StudentUpdateWidget.check_boxes.append(check_box)
     StudentUpdateWidget.last_index_used += 1

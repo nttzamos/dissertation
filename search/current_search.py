@@ -30,8 +30,8 @@ class CurrentSearch(QWidget):
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(50, 50, 50, 50)
 
-    searched_word_font = QFont(Settings.font, 20)
-    combo_box_font = QFont(Settings.font, 14)
+    searched_word_font = QFont(Settings.FONT, 20)
+    combo_box_font = QFont(Settings.FONT, 14)
 
     CurrentSearch.searched_word_label = QLabel(CurrentSearch.ENTER_WORD_TEXT)
     CurrentSearch.searched_word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)

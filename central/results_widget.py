@@ -27,7 +27,7 @@ class ResultsWidget(QWidget):
     ResultsWidget.show_placeholder_label = True
     ResultsWidget.placeholder_label = QLabel(ResultsWidget.RESULT_DISPLAY_TEXT)
 
-    font = QFont(Settings.font, 18)
+    font = QFont(Settings.FONT, 18)
 
     ResultsWidget.placeholder_label.setFont(font)
     ResultsWidget.grid_layout.addWidget(ResultsWidget.placeholder_label)

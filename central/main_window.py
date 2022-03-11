@@ -19,7 +19,7 @@ class MainWindow(QWidget):
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    self.menuBar = MenuBar(self)
+    self.menu_bar = MenuBar(self)
 
     self.splitter_left_horizontal = QSplitter(self)
     self.splitter_left_horizontal.setOrientation(Qt.Orientation.Horizontal)
@@ -46,7 +46,7 @@ class MainWindow(QWidget):
     self.line.setFrameShadow(QFrame.Shadow.Plain)
     self.line.setFixedHeight(2)
 
-    self.layout.addWidget(self.menuBar, 0, 0)
+    self.layout.addWidget(self.menu_bar, 0, 0)
     self.layout.addWidget(self.line, 1, 0)
     self.layout.addWidget(self.splitter_left_horizontal, 2, 0)
 

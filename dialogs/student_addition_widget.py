@@ -32,9 +32,9 @@ class StudentAdditionWidget(QWidget):
 
     StudentAdditionWidget.last_index_used = -1
 
-    section_label_font = QFont(Settings.font, 16)
-    check_box_font = QFont(Settings.font, 14)
-    line_edit_font = QFont(Settings.font, 14)
+    section_label_font = QFont(Settings.FONT, 16)
+    check_box_font = QFont(Settings.FONT, 14)
+    line_edit_font = QFont(Settings.FONT, 14)
 
     name_widget = QGroupBox(StudentAdditionWidget.STUDENT_NAME_TEXT)
     name_widget.setFont(section_label_font)
@@ -70,7 +70,7 @@ class StudentAdditionWidget(QWidget):
       StudentAdditionWidget.last_index_used = i
 
     vspacer = QLabel('f')
-    invisible_font = QFont(Settings.font, 1)
+    invisible_font = QFont(Settings.FONT, 1)
     vspacer.setFont(invisible_font)
     size_policy = vspacer.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
@@ -147,7 +147,7 @@ class StudentAdditionWidget(QWidget):
   @staticmethod
   def add_profile(profile_name):
     check_box = QCheckBox(profile_name)
-    check_box_font = QFont(Settings.font, 14)
+    check_box_font = QFont(Settings.FONT, 14)
     check_box.setFont(check_box_font)
     StudentAdditionWidget.check_boxes.append(check_box)
     StudentAdditionWidget.last_index_used += 1
