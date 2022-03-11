@@ -10,26 +10,28 @@ class StarredWordsWidget(QWidget):
   TITLE = 'Αγαπημένες Λέξεις'
   NO_STARRED_WORDS_TEXT = 'Δεν έχετε αγαπημένες λέξεις'
   SELECT_A_SUBJECT_TEXT = 'Επιλέξτε κάποιο μάθημα πρώτα.'
-
-  scroll_area_widget_contents = QWidget()
-  grid_layout = QGridLayout(scroll_area_widget_contents)
-  grid_layout.setSpacing(0)
-  grid_layout.setContentsMargins(0, 0, 0, 0)
-
-  counter = 1000000
-  widget_list = []
-
-  placeholder_label = QLabel()
-  show_placeholder_label = False
-
-  vspacer = QLabel('f')
+  MAX_ROW = 1000000
 
   def __init__(self):
     super().__init__()
 
     self.layout = QVBoxLayout(self)
-    self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
+    self.layout.setSpacing(0)
+
+    scroll_area_widget_contents = QWidget()
+
+    StarredWordsWidget.grid_layout = QGridLayout(scroll_area_widget_contents)
+    StarredWordsWidget.grid_layout.setSpacing(0)
+    StarredWordsWidget.grid_layout.setContentsMargins(0, 0, 0, 0)
+
+    scroll_area = QScrollArea()
+    scroll_area.setWidgetResizable(True)
+    scroll_area.setWidget(scroll_area_widget_contents)
+    scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+
+    StarredWordsWidget.counter = StarredWordsWidget.MAX_ROW
+    StarredWordsWidget.widget_list = []
 
     font = QFont(Settings.font, 18)
     invisible_font = QFont(Settings.font, 1)
@@ -38,22 +40,20 @@ class StarredWordsWidget(QWidget):
     self.title_label.setFont(font)
     self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+    StarredWordsWidget.placeholder_label = QLabel()
     StarredWordsWidget.placeholder_label.setFont(font)
     StarredWordsWidget.placeholder_label.setWordWrap(True)
     StarredWordsWidget.placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    StarredWordsWidget.show_placeholder_label = False
 
+    StarredWordsWidget.vspacer = QLabel('f')
     StarredWordsWidget.vspacer.setFont(invisible_font)
     size_policy = StarredWordsWidget.vspacer.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
     StarredWordsWidget.vspacer.setSizePolicy(size_policy)
 
-    self.scroll_area = QScrollArea()
-    self.scroll_area.setWidgetResizable(True)
-    self.scroll_area.setWidget(StarredWordsWidget.scroll_area_widget_contents)
-    self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-
     self.layout.addWidget(self.title_label)
-    self.layout.addWidget(self.scroll_area)
+    self.layout.addWidget(scroll_area)
 
     self.setMinimumWidth(Settings.get_setting('left_widget_width'))
 
@@ -66,8 +66,10 @@ class StarredWordsWidget(QWidget):
 
   @staticmethod
   def initialize():
-    StarredWordsWidget.grid_layout.addWidget(StarredWordsWidget.vspacer, 1000001, 0, 1, -1)
     StarredWordsWidget.show_placeholder()
+    StarredWordsWidget.grid_layout.addWidget(
+      StarredWordsWidget.vspacer, StarredWordsWidget.MAX_ROW + 1, 0, 1, -1
+    )
 
   @staticmethod
   def populate():
@@ -95,7 +97,11 @@ class StarredWordsWidget(QWidget):
     widget = StarredWord(word)
     StarredWordsWidget.widget_list.append(widget)
     length = len(StarredWordsWidget.widget_list)
-    StarredWordsWidget.grid_layout.addWidget(StarredWordsWidget.widget_list[length-1], StarredWordsWidget.counter, 0)
+
+    StarredWordsWidget.grid_layout.addWidget(
+      StarredWordsWidget.widget_list[length-1], StarredWordsWidget.counter, 0
+    )
+
     StarredWordsWidget.counter -= 1
 
   @staticmethod
@@ -118,7 +124,7 @@ class StarredWordsWidget(QWidget):
       starred_word.deleteLater()
 
     StarredWordsWidget.widget_list = []
-    StarredWordsWidget.counter = 1000000
+    StarredWordsWidget.counter = StarredWordsWidget.MAX_ROW
     StarredWordsWidget.show_placeholder()
 
   @staticmethod
@@ -135,8 +141,10 @@ class StarredWordsWidget(QWidget):
   def hide_placeholder():
     if StarredWordsWidget.show_placeholder_label:
       StarredWordsWidget.show_placeholder_label = False
-      StarredWordsWidget.grid_layout.addWidget(StarredWordsWidget.vspacer, 1000001, 0, 1, -1)
       StarredWordsWidget.placeholder_label.hide()
+      StarredWordsWidget.grid_layout.addWidget(
+        StarredWordsWidget.vspacer, StarredWordsWidget.MAX_ROW + 1, 0, 1, -1
+      )
 
   @staticmethod
   def update_word(word, new_word):

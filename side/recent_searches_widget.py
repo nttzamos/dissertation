@@ -11,19 +11,7 @@ class RecentSearchesWidget(QWidget):
   TITLE = 'Πρόσφατες Αναζητήσεις'
   NO_RECENT_SEARCHES_TEXT = 'Δεν έχετε πρόσφατες αναζητήσεις'
   SELECT_A_SUBJECT_TEXT = 'Επιλέξτε κάποιο μάθημα πρώτα.'
-
-  scroll_area_widget_contents = QWidget()
-  grid_layout = QGridLayout(scroll_area_widget_contents)
-  grid_layout.setSpacing(0)
-  grid_layout.setContentsMargins(0, 0, 0, 0)
-
-  counter = 1000000
-  widget_list = []
-
-  placeholder_label = QLabel()
-  show_placeholder_label = False
-
-  vspacer = QLabel('f')
+  MAX_ROW = 1000000
 
   def __init__(self):
     super().__init__()
@@ -32,6 +20,20 @@ class RecentSearchesWidget(QWidget):
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
+    scroll_area_widget_contents = QWidget()
+
+    RecentSearchesWidget.grid_layout = QGridLayout(scroll_area_widget_contents)
+    RecentSearchesWidget.grid_layout.setSpacing(0)
+    RecentSearchesWidget.grid_layout.setContentsMargins(0, 0, 0, 0)
+
+    scroll_area = QScrollArea()
+    scroll_area.setWidgetResizable(True)
+    scroll_area.setWidget(scroll_area_widget_contents)
+    scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+
+    RecentSearchesWidget.counter = RecentSearchesWidget.MAX_ROW
+    RecentSearchesWidget.widget_list = []
+
     font = QFont(Settings.font, 18)
     invisible_font = QFont(Settings.font, 1)
 
@@ -39,22 +41,20 @@ class RecentSearchesWidget(QWidget):
     self.title_label.setFont(font)
     self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+    RecentSearchesWidget.placeholder_label = QLabel()
     RecentSearchesWidget.placeholder_label.setFont(font)
     RecentSearchesWidget.placeholder_label.setWordWrap(True)
     RecentSearchesWidget.placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    RecentSearchesWidget.show_placeholder_label = False
 
+    RecentSearchesWidget.vspacer = QLabel('f')
     RecentSearchesWidget.vspacer.setFont(invisible_font)
     size_policy = RecentSearchesWidget.vspacer.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
     RecentSearchesWidget.vspacer.setSizePolicy(size_policy)
 
-    self.scroll_area = QScrollArea()
-    self.scroll_area.setWidgetResizable(True)
-    self.scroll_area.setWidget(RecentSearchesWidget.scroll_area_widget_contents)
-    self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-
     self.layout.addWidget(self.title_label)
-    self.layout.addWidget(self.scroll_area)
+    self.layout.addWidget(scroll_area)
 
     self.setMinimumWidth(Settings.get_setting('left_widget_width'))
 
@@ -67,8 +67,10 @@ class RecentSearchesWidget(QWidget):
 
   @staticmethod
   def initialize():
-    RecentSearchesWidget.grid_layout.addWidget(RecentSearchesWidget.vspacer, 1000001, 0, 1, -1)
     RecentSearchesWidget.show_placeholder()
+    RecentSearchesWidget.grid_layout.addWidget(
+      RecentSearchesWidget.vspacer, RecentSearchesWidget.MAX_ROW + 1, 0, 1, -1
+    )
 
   @staticmethod
   def populate():
@@ -128,7 +130,7 @@ class RecentSearchesWidget(QWidget):
       recentSearch.deleteLater()
 
     RecentSearchesWidget.widget_list = []
-    RecentSearchesWidget.counter = 1000000
+    RecentSearchesWidget.counter = RecentSearchesWidget.MAX_ROW
     RecentSearchesWidget.show_placeholder()
 
   @staticmethod
@@ -145,8 +147,10 @@ class RecentSearchesWidget(QWidget):
   def hide_placeholder():
     if RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.show_placeholder_label = False
-      RecentSearchesWidget.grid_layout.addWidget(RecentSearchesWidget.vspacer, 1000001, 0, 1, -1)
       RecentSearchesWidget.placeholder_label.hide()
+      RecentSearchesWidget.grid_layout.addWidget(
+        RecentSearchesWidget.vspacer, RecentSearchesWidget.MAX_ROW + 1, 0, 1, -1
+      )
 
   @staticmethod
   def update_word(word, new_word):
