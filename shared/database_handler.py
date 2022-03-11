@@ -19,24 +19,42 @@ def initialize_databases():
 
 def initialize_common_database():
   con, cur = connect_to_database()
-  grade_names = ["Α' Δημοτικού", "Β' Δημοτικού", "Γ' Δημοτικού", "Δ' Δημοτικού", "Ε' Δημοτικού", "ΣΤ' Δημοτικού"]
+  grade_names = [
+    "Α' Δημοτικού", "Β' Δημοτικού", "Γ' Δημοτικού", "Δ' Δημοτικού",
+    "Ε' Δημοτικού", "ΣΤ' Δημοτικού"
+  ]
 
   cur.execute('CREATE TABLE grade (id INTEGER PRIMARY KEY, name TEXT)')
-  cur.execute('CREATE TABLE subject (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, grade_id INTEGER)')
-  cur.execute('CREATE TABLE student (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)')
-  cur.execute('CREATE TABLE profile (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, grade_id INTEGER)')
-  cur.execute('CREATE TABLE student_profile (id INTEGER PRIMARY KEY AUTOINCREMENT, student_id INTEGER, profile_id INTEGER)')
-  cur.execute('CREATE TABLE profile_subject (id INTEGER PRIMARY KEY AUTOINCREMENT, profile_id INTEGER, subject_id INTEGER)')
-  cur.execute('CREATE TABLE candidate (id INTEGER PRIMARY KEY AUTOINCREMENT, grade_id INTEGER, word_id INTEGER)')
-  cur.execute('CREATE TABLE non_related_word (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, non_related_word_id INTEGER, grade_id INTEGER)')
+  cur.execute('CREATE TABLE subject (id INTEGER PRIMARY KEY AUTOINCREMENT, '
+              'name TEXT, grade_id INTEGER)')
+  cur.execute('CREATE TABLE student (id INTEGER PRIMARY KEY AUTOINCREMENT, '
+              'name TEXT)')
+  cur.execute('CREATE TABLE profile (id INTEGER PRIMARY KEY AUTOINCREMENT, '
+              'name TEXT, grade_id INTEGER)')
+  cur.execute('CREATE TABLE student_profile (id INTEGER PRIMARY KEY AUTOINCREMENT, '
+              'student_id INTEGER, profile_id INTEGER)')
+  cur.execute('CREATE TABLE profile_subject (id INTEGER PRIMARY KEY AUTOINCREMENT, '
+              'profile_id INTEGER, subject_id INTEGER)')
+  cur.execute('CREATE TABLE candidate (id INTEGER PRIMARY KEY AUTOINCREMENT, '
+              'grade_id INTEGER, word_id INTEGER)')
+  cur.execute('CREATE TABLE non_related_word (id INTEGER PRIMARY KEY AUTOINCREMENT, '
+              'word_id INTEGER, non_related_word_id INTEGER, grade_id INTEGER)')
+  cur.execute('CREATE TABLE recent_search (id INTEGER PRIMARY KEY AUTOINCREMENT, '
+              'word_id INTEGER, profile_id INTEGER, student_id INTEGER, '
+              'subject_id INTEGER, searched_at TIMESTAMP)')
+  cur.execute('CREATE TABLE starred_word (id INTEGER PRIMARY KEY AUTOINCREMENT, '
+              'word_id INTEGER, profile_id INTEGER, student_id INTEGER, subject_id INTEGER)')
 
-  cur.execute('CREATE TABLE recent_search (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, profile_id INTEGER, student_id INTEGER, subject_id INTEGER, searched_at TIMESTAMP)')
-  cur.execute('CREATE TABLE starred_word (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, profile_id INTEGER, student_id INTEGER, subject_id INTEGER)')
   for grade in range(1, 7):
-    cur.execute('INSERT INTO grade VALUES (?, ?) ON CONFLICT(id) DO NOTHING', (grade, grade_names[grade - 1]))
+    query = 'INSERT INTO grade VALUES (?, ?) ON CONFLICT(id) DO NOTHING'
+    cur.execute(query, (grade, grade_names[grade - 1]))
+
     subject_names = PdfParser.get_grade_subjects_names(grade)
     subjects = list(zip(subject_names, [grade] * len(subject_names)))
-    cur.executemany('INSERT INTO subject VALUES (null, ?, ?) ON CONFLICT(id) DO NOTHING', subjects)
+
+    query = 'INSERT INTO subject VALUES (null, ?, ?) ON CONFLICT(id) DO NOTHING'
+    cur.executemany(query, subjects)
+
     con.commit()
 
   from models.profile import create_default_grade_profiles
@@ -121,7 +139,11 @@ def initialize_grade_database(grade):
     from models.subject import get_subject_id
     subject_id = get_subject_id(grade, subject_names[i])
     subjects_words = list(zip([subject_id] * n, words_list_indeces))
-    cur.executemany('INSERT INTO ' + subject_table_name + ' VALUES (null, ?, ?) ON CONFLICT(id) DO NOTHING', subjects_words)
+
+    query = ('INSERT INTO ' + subject_table_name + ' VALUES (null, ?, ?) '
+             'ON CONFLICT(id) DO NOTHING')
+
+    cur.executemany(query, subjects_words)
     con.commit()
 
   con.close()
@@ -159,7 +181,8 @@ def get_words(profile_id, grade_id, subject_name):
     query = ('SELECT word '
       'FROM ' + get_grade_table_name(grade_id) + ' ' +
       'INNER JOIN ' + get_subject_table_name(grade_id) + ' ' +
-      'ON ' + get_grade_table_name(grade_id) + '.id = ' + get_subject_table_name(grade_id) + '.word_id '
+      'ON ' + get_grade_table_name(grade_id) + '.id =' +
+      ' ' + get_subject_table_name(grade_id) + '.word_id '
       'WHERE ' + get_subject_table_name(grade_id) + '.subject_id = ?')
 
     cur.execute(query, (subject_id,))

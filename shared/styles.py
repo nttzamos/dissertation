@@ -44,7 +44,6 @@ class Styles():
     main_window_style = """
       QWidget { background-color: #2B2B2B }
       QPushButton { background-color: none }"""
-      # QWidget { background-color: #E0C097 }
 
   if theme == 'light':
     main_window_background_style = """
@@ -54,7 +53,6 @@ class Styles():
     main_window_background_style = """
       QWidget { background-color: #171010 }\n
       QPushButton { background-color: none }"""
-      # QWidget { background-color: #5C3D2E }
 
   if theme == 'light':
     side_widgets_style = """
@@ -66,7 +64,6 @@ class Styles():
       QWidget { background-color: #362222 }
       QLabel { color: white }
       QScrollBar { background-color: none }"""
-      # QWidget { background-color: #2D2424 }
 
   if theme == 'light':
     side_widgets_title_label_style = """
@@ -74,7 +71,6 @@ class Styles():
   else:
     side_widgets_title_label_style = """
       QLabel { border : 1px solid white; border-bottom: 0px; padding: 10px 0px; background-color: #423F3E; color: white }"""
-      # QLabel { border : 1px solid black; border-bottom: 0px; padding: 10px 0px; background-color: #B85C38; color: blue }"""
 
   if theme == 'light':
     item_widgets_style = """
@@ -184,7 +180,6 @@ class Styles():
       QCheckBox { color: white }
       QRadioButton { color: white }
       QLabel { color: white }"""
-      # QDialog { background-color: #5C3D2E }
 
   if theme == 'light':
     error_message_label_style = """QLabel { color: red }"""
@@ -212,7 +207,6 @@ class Styles():
   else:
     searched_word_style = """
       QLabel { border: 1px solid white; border-radius: 50%; padding: 0px 50px; background-color: #423F3E; color: white }"""
-      # QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px; background-color: #B85C38; color: black }"""
 
   if theme == 'light':
     results_widget_style = """
@@ -224,7 +218,6 @@ class Styles():
       QWidget { background-color: #362222 }
       QLabel { color: white }
       QScrollBar { background-color: none }"""
-      # QWidget { background-color: #2D2424 }
 
   if theme == 'light':
     offline_result_style = """

@@ -4,8 +4,10 @@ import requests
 
 def fetch_word_details(word):
   if not active_internet_connection_exists(): raise RuntimeError
+
   url = 'https://el.wiktionary.org/wiki/{}'
   session = requests.Session()
+
   try:
     session.mount('https://', requests.adapters.HTTPAdapter(max_retries = 2))
   except Exception as e:

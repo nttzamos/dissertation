@@ -19,7 +19,10 @@ class PdfParser():
 
   @staticmethod
   def get_grade_subjects_names(grade):
-    subjects_names = list(map(lambda subject_file: subject_file.replace('.pdf', ''), PdfParser.get_grade_subjects_files(grade)))
+    subjects_names = list(map(
+        lambda subject_file: subject_file.replace('.pdf', ''),
+        PdfParser.get_grade_subjects_files(grade)))
+
     subjects_names.sort()
     return subjects_names
 

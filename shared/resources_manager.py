@@ -1,6 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QMessageBox, QCheckBox
-
-from menu.settings import Settings
+from PyQt6.QtWidgets import QWidget, QMessageBox
 
 import os
 
@@ -10,8 +8,7 @@ class ResourcesManager(QWidget):
     'settings.png', 'database.db', 'question.png', 'clear_search.png',
     'starred.svg', 'search.png', 'reload.svg', 'database_backup.db',
     'window_icon.ico', 'delete.svg', 'close_window.png', 'unstarred.svg',
-    'edit.svg'
-    # 'settings.json'
+    'edit.svg' # 'settings.json'
   ]
 
   def __init__(self):
@@ -52,5 +49,4 @@ class ResourcesManager(QWidget):
     answer.setText(text)
     answer.setWindowTitle(title)
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
-
     answer.exec()
