@@ -1,4 +1,7 @@
-from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QScrollArea, QCheckBox, QPushButton, QComboBox, QSizePolicy, QMessageBox, QCompleter
+from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
+                             QLineEdit, QLabel, QGroupBox, QScrollArea,
+                            QCheckBox, QPushButton, QComboBox, QSizePolicy,
+                            QMessageBox, QCompleter)
 from PyQt6.QtCore import Qt, QStringListModel, QTimer
 from PyQt6.QtGui import QFont
 
@@ -191,7 +194,9 @@ class WordUpdateWidget(QWidget):
       self.subjects_selection_widget.layout.removeWidget(check_box)
 
     grade_subjects = get_grade_subjects(WordUpdateWidget.grade_selector.currentIndex() + 1)
-    self.word_subjects = get_word_subjects(WordUpdateWidget.grade_selector.currentIndex() + 1, self.searched_word)
+    self.word_subjects = get_word_subjects(
+      WordUpdateWidget.grade_selector.currentIndex() + 1, self.searched_word
+    )
 
     check_box_font = QFont(Settings.FONT, 14)
     self.check_boxes = []
@@ -214,6 +219,7 @@ class WordUpdateWidget(QWidget):
     self.word_selection_line_edit.setFocus()
 
     self.save_button.setDisabled(True)
+    self.delete_button.setDisabled(True)
     self.word_widget.hide()
 
     for check_box in self.check_boxes:
@@ -314,6 +320,7 @@ class WordUpdateWidget(QWidget):
         return
 
     self.save_button.setDisabled(True)
+    self.delete_button.setDisabled(True)
 
     grade_id = self.grade_selector.currentIndex() + 1
 
@@ -390,11 +397,9 @@ class WordUpdateWidget(QWidget):
     return True, WordUpdateWidget.NO_SUBJECT_SELECTED_TEXT
 
   def get_permission_to_delete(self):
-    title = 'Διαγραφή Προφίλ'
-    question = ('Είστε σίγουροι ότι θέλετε να διαγράψετε το επιλεγμένο προφίλ; '
-                'Τα δεδομένα των μαθητών για το προφίλ αυτό θα διαγραφούν. '
-                'Επίσης, μαθητές που έχουν μόνο το συγκεκριμένο προφίλ θα '
-                'μείνουν χωρίς προφίλ.')
+    title = 'Διαγραφή Λέξης'
+    question = ('Είστε σίγουροι ότι θέλετε να διαγράψετε την επιλεγμένη λέξη; '
+                'Όλα τα δεδομένα της λέξης για την επιλεγμένη τάξη θα διαγραφούν.')
 
     answer = QMessageBox(self)
     answer.setIcon(QMessageBox.Icon.Critical)

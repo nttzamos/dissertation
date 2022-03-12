@@ -1,4 +1,7 @@
-from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLabel, QGroupBox, QScrollArea, QCheckBox, QPushButton, QComboBox, QLineEdit, QSizePolicy, QMessageBox
+from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
+                             QLabel, QGroupBox, QScrollArea, QCheckBox,
+                             QPushButton, QComboBox, QLineEdit, QSizePolicy,
+                             QMessageBox)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
@@ -29,6 +32,7 @@ class StudentUpdateWidget(QWidget):
 
   def __init__(self):
     super().__init__()
+
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
@@ -56,7 +60,9 @@ class StudentUpdateWidget(QWidget):
       students[0:0] = [StudentUpdateWidget.SELECT_STUDENT_TEXT]
       StudentUpdateWidget.student_selector.addItems(students)
 
-    StudentUpdateWidget.student_selector.activated.connect(self.student_selector_activated_initial)
+    StudentUpdateWidget.student_selector.activated.connect(
+      self.student_selector_activated_initial
+    )
 
     student_selection_widget.layout.addWidget(StudentUpdateWidget.student_selector)
 
@@ -111,7 +117,9 @@ class StudentUpdateWidget(QWidget):
     StudentUpdateWidget.profiles_selection_widget = QWidget()
     StudentUpdateWidget.profiles_selection_widget.layout = QGridLayout(StudentUpdateWidget.profiles_selection_widget)
     StudentUpdateWidget.profiles_selection_widget.setDisabled(True)
-    StudentUpdateWidget.profiles_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+    StudentUpdateWidget.profiles_selection_widget.setSizePolicy(
+      QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum
+    )
 
     StudentUpdateWidget.check_boxes = []
 
@@ -129,7 +137,10 @@ class StudentUpdateWidget(QWidget):
     if index != 0:
       StudentUpdateWidget.student_selector.removeItem(0)
       StudentUpdateWidget.student_selector.activated.disconnect()
-      StudentUpdateWidget.student_selector.activated.connect(self.student_selector_activated)
+      StudentUpdateWidget.student_selector.activated.connect(
+        self.student_selector_activated
+      )
+
       self.student_selector_activated(index - 1)
       self.delete_button.setEnabled(True)
       StudentUpdateWidget.profiles_selection_widget.setEnabled(True)
@@ -175,8 +186,14 @@ class StudentUpdateWidget(QWidget):
 
     new_student_name = self.name_line_edit.text()
     from search.current_search import CurrentSearch
-    CurrentSearch.update_student(StudentUpdateWidget.student_selector.currentText(), new_student_name)
-    self.student_selector.setItemText(self.student_selector.currentIndex(), new_student_name)
+    CurrentSearch.update_student(
+      StudentUpdateWidget.student_selector.currentText(), new_student_name
+    )
+
+    self.student_selector.setItemText(
+      self.student_selector.currentIndex(), new_student_name
+    )
+
     update_student_name(self.student_id, new_student_name)
 
     profile_names = []
@@ -199,6 +216,9 @@ class StudentUpdateWidget(QWidget):
       if not self.get_permission_to_delete():
         return
 
+    self.save_button.setDisabled(True)
+    self.delete_button.setDisabled(True)
+
     destroy_student(self.student_id)
     for check_box in StudentUpdateWidget.check_boxes:
       StudentUpdateWidget.profiles_selection_widget.layout.removeWidget(check_box)
@@ -206,7 +226,9 @@ class StudentUpdateWidget(QWidget):
     from search.current_search import CurrentSearch
     CurrentSearch.remove_student(StudentUpdateWidget.student_selector.currentText())
 
-    StudentUpdateWidget.student_selector.removeItem(StudentUpdateWidget.student_selector.currentIndex())
+    StudentUpdateWidget.student_selector.removeItem(
+      StudentUpdateWidget.student_selector.currentIndex()
+    )
 
     if StudentUpdateWidget.student_selector.count() == 0:
       self.initialize_scroll_area()
@@ -215,7 +237,9 @@ class StudentUpdateWidget(QWidget):
       StudentUpdateWidget.student_selector.addItem(StudentUpdateWidget.NO_STUDENTS_TEXT)
       StudentUpdateWidget.student_selector.setDisabled(True)
       StudentUpdateWidget.student_selector.activated.disconnect()
-      StudentUpdateWidget.student_selector.activated.connect(self.student_selector_activated_initial)
+      StudentUpdateWidget.student_selector.activated.connect(
+        self.student_selector_activated_initial
+      )
     else:
       self.student_selector_activated(0)
 
@@ -244,7 +268,8 @@ class StudentUpdateWidget(QWidget):
     if len(student_name) > StudentUpdateWidget.MAXIMUM_NAME_LENGTH:
       return True, StudentUpdateWidget.NAME_LENGTH_EXCEEDS_LIMIT_TEXT
 
-    if StudentUpdateWidget.student_selector.currentText() != student_name and student_name_exists(student_name):
+    if (StudentUpdateWidget.student_selector.currentText() != student_name
+        and student_name_exists(student_name)):
       return True, StudentUpdateWidget.STUDENT_NAME_EXISTS_TEXT
 
     for check_box in StudentUpdateWidget.check_boxes:
@@ -278,22 +303,31 @@ class StudentUpdateWidget(QWidget):
       StudentUpdateWidget.student_selector.addItems(students)
 
     StudentUpdateWidget.student_selector.activated.disconnect()
-    StudentUpdateWidget.student_selector.activated.connect(self.student_selector_activated_initial)
+    StudentUpdateWidget.student_selector.activated.connect(
+      self.student_selector_activated_initial
+    )
 
   @staticmethod
   def add_student(student_name):
-    if StudentUpdateWidget.student_selector.currentText() == StudentUpdateWidget.NO_STUDENTS_TEXT:
-      StudentUpdateWidget.student_selector.setItemText(0, StudentUpdateWidget.SELECT_STUDENT_TEXT)
+    student_selector_current_text = StudentUpdateWidget.student_selector.currentText()
+
+    if student_selector_current_text == StudentUpdateWidget.NO_STUDENTS_TEXT:
+      StudentUpdateWidget.student_selector.setItemText(
+        0, StudentUpdateWidget.SELECT_STUDENT_TEXT
+      )
+
       StudentUpdateWidget.student_selector.setEnabled(True)
 
     StudentUpdateWidget.student_selector.addItem(student_name)
 
   @staticmethod
   def add_profile(profile_name):
-    if StudentUpdateWidget.student_selector.currentText() == StudentUpdateWidget.NO_STUDENTS_TEXT:
+    student_selector_current_text = StudentUpdateWidget.student_selector.currentText()
+
+    if student_selector_current_text == StudentUpdateWidget.NO_STUDENTS_TEXT:
       return
 
-    if StudentUpdateWidget.student_selector.currentText() == StudentUpdateWidget.SELECT_STUDENT_TEXT:
+    if student_selector_current_text == StudentUpdateWidget.SELECT_STUDENT_TEXT:
       return
 
     check_box = QCheckBox(profile_name)
@@ -301,7 +335,9 @@ class StudentUpdateWidget(QWidget):
     check_box.setFont(check_box_font)
     StudentUpdateWidget.check_boxes.append(check_box)
     StudentUpdateWidget.last_index_used += 1
-    StudentUpdateWidget.profiles_selection_widget.layout.addWidget(check_box, StudentUpdateWidget.last_index_used, 0)
+    StudentUpdateWidget.profiles_selection_widget.layout.addWidget(
+      check_box, StudentUpdateWidget.last_index_used, 0
+    )
 
   @staticmethod
   def update_profile(old_profile_name, new_profile_name):
@@ -325,11 +361,9 @@ class StudentUpdateWidget(QWidget):
         return
 
   def get_permission_to_delete(self):
-    title = 'Διαγραφή Προφίλ'
-    question = ('Είστε σίγουροι ότι θέλετε να διαγράψετε το επιλεγμένο προφίλ; '
-                'Τα δεδομένα των μαθητών για το προφίλ αυτό θα διαγραφούν. '
-                'Επίσης, μαθητές που έχουν μόνο το συγκεκριμένο προφίλ θα '
-                'μείνουν χωρίς προφίλ.')
+    title = 'Διαγραφή Μαθητή'
+    question = ('Είστε σίγουροι ότι θέλετε να διαγράψετε τον επιλεγμένο μαθητή; '
+                'Όλα τα δεδομένα του μαθητή θα διαγραφούν.')
 
     answer = QMessageBox(self)
     answer.setIcon(QMessageBox.Icon.Critical)

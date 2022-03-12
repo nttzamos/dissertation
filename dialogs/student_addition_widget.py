@@ -1,4 +1,6 @@
-from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QScrollArea, QCheckBox, QPushButton, QMessageBox, QSizePolicy
+from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
+                             QLineEdit, QLabel, QGroupBox, QScrollArea,
+                             QCheckBox, QPushButton, QMessageBox, QSizePolicy)
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QFont
 
@@ -26,6 +28,7 @@ class StudentAdditionWidget(QWidget):
 
   def __init__(self):
     super().__init__()
+
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
@@ -51,8 +54,12 @@ class StudentAdditionWidget(QWidget):
     profiles_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     StudentAdditionWidget.profiles_selection_widget = QWidget()
-    StudentAdditionWidget.profiles_selection_widget.layout = QGridLayout(StudentAdditionWidget.profiles_selection_widget)
-    StudentAdditionWidget.profiles_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+    StudentAdditionWidget.profiles_selection_widget.layout = \
+      QGridLayout(StudentAdditionWidget.profiles_selection_widget)
+
+    StudentAdditionWidget.profiles_selection_widget.setSizePolicy(
+      QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum
+    )
 
     scroll_area = QScrollArea()
     scroll_area.setWidgetResizable(True)
@@ -151,7 +158,9 @@ class StudentAdditionWidget(QWidget):
     check_box.setFont(check_box_font)
     StudentAdditionWidget.check_boxes.append(check_box)
     StudentAdditionWidget.last_index_used += 1
-    StudentAdditionWidget.profiles_selection_widget.layout.addWidget(check_box, StudentAdditionWidget.last_index_used, 0)
+    StudentAdditionWidget.profiles_selection_widget.layout.addWidget(
+      check_box, StudentAdditionWidget.last_index_used, 0
+    )
 
   @staticmethod
   def update_profile(old_profile_name, new_profile_name):

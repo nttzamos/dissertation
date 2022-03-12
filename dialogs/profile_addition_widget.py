@@ -1,4 +1,7 @@
-from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QScrollArea, QCheckBox, QPushButton, QComboBox, QSizePolicy, QMessageBox
+from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
+                             QLineEdit, QLabel, QGroupBox, QScrollArea,
+                             QCheckBox, QPushButton, QComboBox, QSizePolicy,
+                             QMessageBox)
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtGui import QFont
 
@@ -65,7 +68,9 @@ class ProfileAdditionWIdget(QWidget):
 
     self.subjects_selection_widget = QWidget()
     self.subjects_selection_widget.layout = QGridLayout(self.subjects_selection_widget)
-    self.subjects_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+    self.subjects_selection_widget.setSizePolicy(
+      QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum
+    )
 
     scroll_area = QScrollArea()
     scroll_area.setWidgetResizable(True)

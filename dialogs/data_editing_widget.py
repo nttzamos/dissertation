@@ -16,6 +16,7 @@ class DataEditingWidget(QDialog):
 
   def __init__(self):
     super().__init__()
+
     self.setWindowTitle(DataEditingWidget.EDIT_DATA_TEXT)
     self.setWindowIcon(QIcon('resources/window_icon.png'))
     self.setFixedWidth(Settings.get_setting('screen_width') / 2)

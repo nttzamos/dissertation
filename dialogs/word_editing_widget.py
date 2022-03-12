@@ -14,6 +14,7 @@ class WordEditingWidget(QDialog):
 
   def __init__(self):
     super().__init__()
+
     self.setWindowTitle(WordEditingWidget.EDIT_WORDS_TEXT)
     self.setWindowIcon(QIcon('resources/window_icon.png'))
     self.setFixedWidth(Settings.get_setting('screen_width') / 2)
@@ -29,7 +30,9 @@ class WordEditingWidget(QDialog):
     self.tab_widget = QTabWidget()
     self.tab_widget.addTab(add_word_widget, WordEditingWidget.ADD_WORD_TEXT)
     self.tab_widget.addTab(self.edit_word_widget, WordEditingWidget.EDIT_WORD_TEXT)
-    self.tab_widget.addTab(WordEditingWidget.edit_word_family_widget, WordEditingWidget.EDIT_FAMILY_TEXT)
+    self.tab_widget.addTab(
+      WordEditingWidget.edit_word_family_widget, WordEditingWidget.EDIT_FAMILY_TEXT
+    )
 
     self.layout.addWidget(self.tab_widget)
 

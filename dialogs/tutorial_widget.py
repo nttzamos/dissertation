@@ -1,4 +1,5 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QWidget, QCheckBox, QLabel, QGroupBox, QPushButton
+from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QWidget,
+                             QCheckBox, QLabel, QGroupBox, QPushButton)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon, QFont
 
@@ -84,15 +85,15 @@ class TutorialWidget(QDialog):
 
   def __init__(self):
     super().__init__()
+
     self.setWindowTitle(TutorialWidget.DIALOG_TITLE)
     self.setWindowIcon(QIcon('resources/window_icon.png'))
+    self.setFixedHeight(550)
+    self.setFixedWidth(850)
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
-
-    self.setFixedHeight(550)
-    self.setFixedWidth(850)
 
     section_label_font = QFont(Settings.FONT, 20)
     text_font = QFont(Settings.FONT, 16)
@@ -131,13 +132,13 @@ class TutorialWidget(QDialog):
     self.previous_tutorial_button.setDisabled(True)
     self.previous_tutorial_button.setAutoDefault(False)
 
-    self.close_tutorial_button = QPushButton(TutorialWidget.CLOSE_BUTTON_TEXT)
-    self.close_tutorial_button.adjustSize()
-    self.close_tutorial_button.pressed.connect(self.close)
-    self.close_tutorial_button.setAutoDefault(False)
+    close_tutorial_button = QPushButton(TutorialWidget.CLOSE_BUTTON_TEXT)
+    close_tutorial_button.adjustSize()
+    close_tutorial_button.pressed.connect(self.close)
+    close_tutorial_button.setAutoDefault(False)
 
     buttons_widget.layout.addWidget(self.setting_check_box, alignment=Qt.AlignmentFlag.AlignLeft)
-    buttons_widget.layout.addWidget(self.close_tutorial_button, alignment=Qt.AlignmentFlag.AlignRight)
+    buttons_widget.layout.addWidget(close_tutorial_button, alignment=Qt.AlignmentFlag.AlignRight)
     buttons_widget.layout.addWidget(self.previous_tutorial_button)
     buttons_widget.layout.addWidget(self.next_tutorial_button)
 
@@ -173,9 +174,10 @@ class TutorialWidget(QDialog):
       self.next_tutorial_button.setEnabled(True)
 
   def update_tutorial(self):
-    counter_text = (' (' + str(self.current_tutorial + 1) + '/' +
-      str(len(TutorialWidget.TEXTS)) + ')'
+    counter_text = (
+      ' (' + str(self.current_tutorial + 1) + '/' + str(len(TutorialWidget.TEXTS)) + ')'
     )
+
     self.group_box_widget.setTitle(TutorialWidget.TITLES[self.current_tutorial] + counter_text)
     self.explanation.setText(TutorialWidget.TEXTS[self.current_tutorial])
 

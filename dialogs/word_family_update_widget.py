@@ -1,4 +1,6 @@
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QListWidget, QPushButton, QComboBox, QCompleter, QAbstractItemView
+from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QWidget, QLineEdit,
+                             QLabel, QGroupBox, QListWidget, QPushButton,
+                             QComboBox, QCompleter, QAbstractItemView)
 from PyQt6.QtCore import Qt, QTimer, QStringListModel
 from PyQt6.QtGui import QFont
 
@@ -35,6 +37,7 @@ class WordFamilyUpdateWidget(QWidget):
 
     WordFamilyUpdateWidget.just_searched_with_enter = False
     WordFamilyUpdateWidget.just_searched_related_with_enter = False
+
     self.searched_word = ''
     self.word_current_family = []
     self.word_initial_family = []
@@ -81,13 +84,30 @@ class WordFamilyUpdateWidget(QWidget):
 
     self.related_word_selection_line_edit = QLineEdit()
     self.related_word_selection_line_edit.setFont(line_edit_font)
-    self.related_word_selection_line_edit.returnPressed.connect(self.search_related_with_enter)
-    WordFamilyUpdateWidget.related_completer = QCompleter(WordFamilyUpdateWidget.dictionary_words)
-    WordFamilyUpdateWidget.related_completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
-    WordFamilyUpdateWidget.related_completer.activated.connect(self.search_related_with_click)
+    self.related_word_selection_line_edit.returnPressed.connect(
+      self.search_related_with_enter
+    )
+
+    WordFamilyUpdateWidget.related_completer = \
+      QCompleter(WordFamilyUpdateWidget.dictionary_words)
+
+    WordFamilyUpdateWidget.related_completer.setCaseSensitivity(
+      Qt.CaseSensitivity.CaseInsensitive
+    )
+
+    WordFamilyUpdateWidget.related_completer.activated.connect(
+      self.search_related_with_click
+    )
+
     WordFamilyUpdateWidget.related_completer.popup().setFont(completer_font)
-    self.related_word_selection_line_edit.setCompleter(WordFamilyUpdateWidget.related_completer)
-    self.related_word_selection_line_edit.setPlaceholderText(WordFamilyUpdateWidget.SELECT_WORD_TO_BE_ADDED_TEXT)
+    self.related_word_selection_line_edit.setCompleter(
+      WordFamilyUpdateWidget.related_completer
+    )
+
+    self.related_word_selection_line_edit.setPlaceholderText(
+      WordFamilyUpdateWidget.SELECT_WORD_TO_BE_ADDED_TEXT
+    )
+
     self.related_word_selection_line_edit.hide()
 
     self.word_family_list = QListWidget()
@@ -101,7 +121,9 @@ class WordFamilyUpdateWidget(QWidget):
     self.word_family_selection_widget.layout.addSpacing(5)
     self.word_family_selection_widget.layout.addWidget(self.word_family_list)
     self.word_family_selection_widget.layout.addSpacing(5)
-    self.word_family_selection_widget.layout.addWidget(self.remove_words_button, alignment=Qt.AlignmentFlag.AlignRight)
+    self.word_family_selection_widget.layout.addWidget(
+      self.remove_words_button, alignment=Qt.AlignmentFlag.AlignRight
+    )
 
     self.save_button = QPushButton(WordFamilyUpdateWidget.SAVE_FAMILY_BUTTON_TEXT)
     self.save_button.pressed.connect(self.update_family)
@@ -128,7 +150,10 @@ class WordFamilyUpdateWidget(QWidget):
 
   def grade_selector_activated(self, index):
     WordFamilyUpdateWidget.dictionary_words = get_grade_words(index + 1)
-    model = QStringListModel(WordFamilyUpdateWidget.dictionary_words, WordFamilyUpdateWidget.completer)
+    model = QStringListModel(
+      WordFamilyUpdateWidget.dictionary_words, WordFamilyUpdateWidget.completer
+    )
+
     WordFamilyUpdateWidget.completer.setModel(model)
     WordFamilyUpdateWidget.related_completer.setModel(model)
     self.clear_previous_search()
@@ -281,6 +306,9 @@ class WordFamilyUpdateWidget(QWidget):
     if word_to_remove != None:
       WordFamilyUpdateWidget.dictionary_words.remove(word_to_remove)
 
-    model = QStringListModel(WordFamilyUpdateWidget.dictionary_words, WordFamilyUpdateWidget.completer)
+    model = QStringListModel(
+      WordFamilyUpdateWidget.dictionary_words, WordFamilyUpdateWidget.completer
+    )
+
     WordFamilyUpdateWidget.completer.setModel(model)
     WordFamilyUpdateWidget.related_completer.setModel(model)

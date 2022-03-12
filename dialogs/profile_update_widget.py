@@ -1,4 +1,7 @@
-from PyQt6.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, QLineEdit, QLabel, QGroupBox, QScrollArea, QCheckBox, QPushButton, QComboBox, QSizePolicy, QMessageBox
+from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
+                             QLineEdit, QLabel, QGroupBox, QScrollArea,
+                            QCheckBox, QPushButton, QComboBox, QSizePolicy,
+                            QMessageBox)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
@@ -63,7 +66,9 @@ class ProfileUpdateWidget(QWidget):
       profiles[0:0] = [ProfileUpdateWidget.SELECT_PROFILE_TEXT]
       ProfileUpdateWidget.profile_selector.addItems(profiles)
 
-    ProfileUpdateWidget.profile_selector.activated.connect(self.profile_selector_activated_initial)
+    ProfileUpdateWidget.profile_selector.activated.connect(
+      self.profile_selector_activated_initial
+    )
 
     profile_selection_widget.layout.addWidget(ProfileUpdateWidget.profile_selector)
 
@@ -96,7 +101,9 @@ class ProfileUpdateWidget(QWidget):
     self.subjects_selection_widget = QWidget()
     self.subjects_selection_widget.layout = QGridLayout(self.subjects_selection_widget)
     self.subjects_selection_widget.setDisabled(True)
-    self.subjects_selection_widget.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+    self.subjects_selection_widget.setSizePolicy(
+      QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum
+    )
 
     scroll_area = QScrollArea()
     scroll_area.setWidgetResizable(True)
@@ -247,12 +254,18 @@ class ProfileUpdateWidget(QWidget):
     from search.current_search import CurrentSearch
     CurrentSearch.remove_profiles([ProfileUpdateWidget.profile_selector.currentText()])
 
-    ProfileUpdateWidget.profile_selector.removeItem(ProfileUpdateWidget.profile_selector.currentIndex())
+    ProfileUpdateWidget.profile_selector.removeItem(
+      ProfileUpdateWidget.profile_selector.currentIndex()
+    )
+
     if ProfileUpdateWidget.profile_selector.count() == 0:
       ProfileUpdateWidget.profile_selector.addItem(ProfileUpdateWidget.NO_PROFILES_TEXT)
       ProfileUpdateWidget.profile_selector.setDisabled(True)
       ProfileUpdateWidget.profile_selector.activated.disconnect()
-      ProfileUpdateWidget.profile_selector.activated.connect(self.profile_selector_activated_initial)
+      ProfileUpdateWidget.profile_selector.activated.connect(
+        self.profile_selector_activated_initial
+      )
+
       ProfileUpdateWidget.grade_label.setText(ProfileUpdateWidget.MUST_SELECT_PROFILE_TEXT)
       self.name_widget.hide()
       return
@@ -287,7 +300,8 @@ class ProfileUpdateWidget(QWidget):
     if len(profile_name) > ProfileUpdateWidget.MAXIMUM_NAME_LENGTH:
       return True, ProfileUpdateWidget.NAME_LENGTH_EXCEEDS_LIMIT_TEXT
 
-    if ProfileUpdateWidget.profile_selector.currentText() != profile_name and profile_name_exists(profile_name):
+    if (ProfileUpdateWidget.profile_selector.currentText() != profile_name
+        and profile_name_exists(profile_name)):
       return True, ProfileUpdateWidget.PROFILE_NAME_EXISTS_TEXT
 
     checked_check_boxes_count = 0
