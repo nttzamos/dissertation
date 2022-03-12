@@ -66,10 +66,11 @@ class StarredWordsWidget(QWidget):
 
   @staticmethod
   def initialize():
-    StarredWordsWidget.show_placeholder()
     StarredWordsWidget.grid_layout.addWidget(
       StarredWordsWidget.vspacer, StarredWordsWidget.MAX_ROW + 1, 0, 1, -1
     )
+
+    StarredWordsWidget.show_placeholder()
 
   @staticmethod
   def populate():
@@ -141,10 +142,11 @@ class StarredWordsWidget(QWidget):
   def hide_placeholder():
     if StarredWordsWidget.show_placeholder_label:
       StarredWordsWidget.show_placeholder_label = False
-      StarredWordsWidget.placeholder_label.hide()
       StarredWordsWidget.grid_layout.addWidget(
         StarredWordsWidget.vspacer, StarredWordsWidget.MAX_ROW + 1, 0, 1, -1
       )
+
+      StarredWordsWidget.placeholder_label.hide()
 
   @staticmethod
   def update_word(word, new_word):

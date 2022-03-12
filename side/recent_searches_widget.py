@@ -67,10 +67,11 @@ class RecentSearchesWidget(QWidget):
 
   @staticmethod
   def initialize():
-    RecentSearchesWidget.show_placeholder()
     RecentSearchesWidget.grid_layout.addWidget(
       RecentSearchesWidget.vspacer, RecentSearchesWidget.MAX_ROW + 1, 0, 1, -1
     )
+
+    RecentSearchesWidget.show_placeholder()
 
   @staticmethod
   def populate():
@@ -147,10 +148,11 @@ class RecentSearchesWidget(QWidget):
   def hide_placeholder():
     if RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.show_placeholder_label = False
-      RecentSearchesWidget.placeholder_label.hide()
       RecentSearchesWidget.grid_layout.addWidget(
         RecentSearchesWidget.vspacer, RecentSearchesWidget.MAX_ROW + 1, 0, 1, -1
       )
+
+      RecentSearchesWidget.placeholder_label.hide()
 
   @staticmethod
   def update_word(word, new_word):
