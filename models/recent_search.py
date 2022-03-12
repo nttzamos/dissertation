@@ -7,7 +7,9 @@ import datetime
 
 def create_recent_search(word):
   from search.current_search import CurrentSearch
-  student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
+  student_id, profile_id, grade_id, subject_name = \
+    CurrentSearch.get_current_selection_details()
+
   if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     subject_ids = get_profile_subject_ids(profile_id)
   else:
@@ -20,7 +22,8 @@ def create_recent_search(word):
   for subject_id in subject_ids:
     if word_exists_in_subject(word_id, subject_id, grade_id):
       query = ('SELECT COUNT(*) FROM recent_search WHERE word_id = ? '
-        'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+               'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+
       cur.execute(query, (word_id, profile_id, student_id, subject_id))
       recent_search_exists_in_subject = cur.fetchone()[0] > 0
 
@@ -30,20 +33,26 @@ def create_recent_search(word):
         recent_search_exists = True
         values = (word_id, profile_id, student_id, subject_id)
         query = ('UPDATE recent_search SET searched_at = ? '
-          'WHERE word_id = ? AND profile_id = ? '
-          'AND student_id = ? AND subject_id = ?')
+                 'WHERE word_id = ? AND profile_id = ? '
+                 'AND student_id = ? AND subject_id = ?')
+
         cur.execute(query, (date_time_now, word_id, profile_id, student_id, subject_id))
       else:
         values = (word_id, profile_id, student_id, subject_id, grade_id, date_time_now)
-        cur.execute('INSERT INTO recent_search VALUES (null, ?, ?, ?, ?, ?, ?)', values)
+        query = 'INSERT INTO recent_search VALUES (null, ?, ?, ?, ?, ?, ?)'
+
+        cur.execute(query, values)
 
   con.commit()
   con.close()
+
   return recent_search_exists
 
 def destroy_recent_search(word):
   from search.current_search import CurrentSearch
-  student_id, profile_id, grade_id, subject_name = CurrentSearch.get_current_selection_details()
+  student_id, profile_id, grade_id, subject_name = \
+    CurrentSearch.get_current_selection_details()
+
   if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     subject_ids = get_profile_subject_ids(profile_id)
   else:
@@ -51,10 +60,12 @@ def destroy_recent_search(word):
 
   word_id = get_word_id(grade_id, word)
   con, cur = connect_to_database()
+
   for subject_id in subject_ids:
     if word_exists_in_subject(word_id, subject_id, grade_id):
       query = ('DELETE FROM recent_search WHERE word_id = ? '
-        'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+               'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+
       cur.execute(query, (word_id, profile_id, student_id, subject_id))
 
   con.commit()
@@ -62,30 +73,33 @@ def destroy_recent_search(word):
 
 def get_recent_searches():
   from search.current_search import CurrentSearch
-  student_id, profile_id, grade, subject_name = CurrentSearch.get_current_selection_details()
+  student_id, profile_id, grade, subject_name = \
+    CurrentSearch.get_current_selection_details()
+
   if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
     values = (profile_id, student_id)
     query = ('SELECT DISTINCT word '
-      'FROM ' + get_grade_table_name(grade) + ' ' +
-      'INNER JOIN recent_search '
-      'ON ' + get_grade_table_name(grade) + '.id = recent_search.word_id '
-      'WHERE recent_search.profile_id = ? '
-      'AND recent_search.student_id = ? '
-      'ORDER BY recent_search.searched_at')
+             'FROM ' + get_grade_table_name(grade) + ' ' +
+             'INNER JOIN recent_search '
+             'ON ' + get_grade_table_name(grade) + '.id = recent_search.word_id '
+             'WHERE recent_search.profile_id = ? '
+             'AND recent_search.student_id = ? '
+             'ORDER BY recent_search.searched_at')
   else:
     values = (get_subject_id(grade, subject_name), profile_id, student_id)
     query = ('SELECT word '
-      'FROM ' + get_grade_table_name(grade) + ' ' +
-      'INNER JOIN recent_search '
-      'ON ' + get_grade_table_name(grade) + '.id = recent_search.word_id '
-      'WHERE recent_search.subject_id = ? '
-      'AND recent_search.profile_id = ? '
-      'AND recent_search.student_id = ? '
-      'ORDER BY recent_search.searched_at')
+             'FROM ' + get_grade_table_name(grade) + ' ' +
+             'INNER JOIN recent_search '
+             'ON ' + get_grade_table_name(grade) + '.id = recent_search.word_id '
+             'WHERE recent_search.subject_id = ? '
+             'AND recent_search.profile_id = ? '
+             'AND recent_search.student_id = ? '
+             'ORDER BY recent_search.searched_at')
 
   con, cur = connect_to_database()
 
   cur.execute(query, values)
   recent_searches = list(map(lambda recent_search: recent_search[0], cur.fetchall()))
   con.close()
+
   return recent_searches

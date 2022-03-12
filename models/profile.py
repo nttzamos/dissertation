@@ -1,8 +1,10 @@
 from models.subject import get_subject_id
-from shared.database_handler import get_grades, get_grade_subjects, connect_to_database
+from shared.database_handler import (get_grades, get_grade_subjects,
+                                     connect_to_database)
 
 def create_default_grade_profiles():
   grade_names = get_grades()
+
   for grade in range(1, 7):
     grade_subjects = get_grade_subjects(grade)
     create_profile(grade_names[grade - 1], grade, grade_subjects)
@@ -25,13 +27,16 @@ def create_profile(name, grade, subjects):
 
 def update_profile_name(profile_id, new_profile_name):
   con, cur = connect_to_database()
-  cur.execute('UPDATE profile SET name = ? WHERE id = ?', (new_profile_name, profile_id))
+
+  query = 'UPDATE profile SET name = ? WHERE id = ?'
+  cur.execute(query, (new_profile_name, profile_id))
 
   con.commit()
   con.close()
 
 def destroy_profile(id):
   con, cur = connect_to_database()
+
   cur.execute('DELETE FROM profile WHERE id = ?', (id,))
   cur.execute('DELETE FROM profile_subject WHERE profile_id = ?', (id,))
   cur.execute('DELETE FROM student_profile WHERE profile_id = ?', (id,))
@@ -47,6 +52,7 @@ def get_profiles():
   profiles = list(map(lambda profile: profile[0], cur.fetchall()))
 
   con.close()
+
   return profiles
 
 def get_profile_id(profile_name):
@@ -73,14 +79,15 @@ def get_profile_details(profile_name):
   cur.execute('SELECT name FROM grade WHERE id = ?', (grade_id,))
   grade_name = cur.fetchone()[0]
 
-  query = ('SELECT name '
-    'FROM subject INNER JOIN profile_subject ON subject.id = profile_subject.subject_id '
-    'WHERE profile_subject.profile_id = ? ORDER BY name')
+  query = ('SELECT name FROM subject INNER JOIN profile_subject '
+           'ON subject.id = profile_subject.subject_id '
+           'WHERE profile_subject.profile_id = ? ORDER BY name')
 
   cur.execute(query, (profile_id,))
   profile_subjects = list(map(lambda word: word[0], cur.fetchall()))
 
   con.close()
+
   return profile_id, grade_id, grade_name, profile_subjects
 
 def profile_name_exists(profile_name):
@@ -116,9 +123,12 @@ def remove_profile_subjects(grade_id, profile_id, subjects):
 
 def get_profile_subject_ids(profile_id):
   con, cur = connect_to_database()
-  cur.execute('SELECT subject_id FROM profile_subject WHERE profile_id = ?', (profile_id,))
+
+  query = 'SELECT subject_id FROM profile_subject WHERE profile_id = ?'
+  cur.execute(query, (profile_id,))
 
   profile_subjects = list(map(lambda subject: subject[0], cur.fetchall()))
 
   con.close()
+
   return profile_subjects

@@ -34,9 +34,13 @@ def create_families(grade):
     if len(words_in_dict) == 0: continue
 
     family_counter += 1
-    cur.execute('INSERT INTO ' + family_table_name + ' VALUES (null, ?, ?)', (current_word_id, family_counter))
+
+    query = 'INSERT INTO ' + family_table_name + ' VALUES (null, ?, ?)'
+    cur.execute(query, (current_word_id, family_counter))
+
     for word_id in words_in_dict:
-      cur.execute('INSERT INTO ' + family_table_name + ' VALUES (null, ?, ?)', (word_id, family_counter))
+      query = 'INSERT INTO ' + family_table_name + ' VALUES (null, ?, ?)'
+      cur.execute(query, (word_id, family_counter))
 
     con.commit()
 
@@ -59,6 +63,7 @@ def get_family_id(grade, word_id):
   cur.execute(query, (word_id,))
   object = cur.fetchone()
   con.close()
+
   if object == None:
     return -1
   else:
@@ -70,6 +75,7 @@ def get_last_family_id(grade_id):
   cur.execute(('SELECT MAX(family_id) FROM ' + family_table_name))
   last_family_id = cur.fetchone()[0]
   con.close()
+
   return last_family_id
 
 def get_family_words(grade, family_id):
@@ -84,6 +90,7 @@ def get_family_words(grade, family_id):
   cur.execute(query, (family_id,))
   family_words = list(map(lambda word: word[0], cur.fetchall()))
   con.close()
+
   return family_words
 
 def get_words_with_family(profile_id, grade_id, subject_name):
@@ -140,9 +147,12 @@ def update_word_family(grade_id, word, words_to_add, words_to_remove):
   con.commit()
 
   for family_word in words_to_remove:
-    query = 'DELETE FROM ' + get_family_table_name(grade_id) + ' WHERE word_id = ? AND family_id = ?'
+    query = ('DELETE FROM ' + get_family_table_name(grade_id) + ' '
+             'WHERE word_id = ? AND family_id = ?')
+
     cur.execute(query, (get_word_id(grade_id, family_word), family_id))
     con.commit()
+
     create_non_related_word(word, family_word, grade_id)
 
   con.close()
@@ -165,8 +175,12 @@ def get_non_related_words(word, grade_id):
     'INNER JOIN non_related_word ON ' + grade_table_name + '.id = '
     'non_related_word.word_id WHERE word_id = ? AND grade_id = ?')
   cur.execute(query, (word_id, grade_id))
-  non_related_words = list(map(lambda non_related_word: non_related_word[0], cur.fetchall()))
+
+  non_related_words = \
+    list(map(lambda non_related_word: non_related_word[0], cur.fetchall()))
+
   con.close()
+
   return non_related_words
 
 def non_related_word_exists(word, non_related_word, grade_id):
@@ -179,6 +193,7 @@ def non_related_word_exists(word, non_related_word, grade_id):
   cur.execute(query, (word_id, non_related_word_id, grade_id))
   non_related_word_exists = cur.fetchone()[0] > 0
   con.close()
+
   return non_related_word_exists
 
 def destroy_non_related_word(word, non_related_word, grade_id):
