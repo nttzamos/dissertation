@@ -8,7 +8,7 @@ from dialogs.student_update_widget import StudentUpdateWidget
 from menu.settings import Settings
 
 class DataEditingWidget(QDialog):
-  EDIT_DATA_TEXT = 'Επεξεργασία Δεδομένων'
+  EDIT_DATA_TEXT = 'Επεξεργασία Μαθητών και Προφίλ'
   ADD_STUDENT_TEXT = 'Προσθήκη Μαθητή'
   EDIT_STUDENT_TEXT = 'Επεξεργασία Μαθητή'
   ADD_PROFILE_TEXT = 'Προσθήκη Προφίλ'

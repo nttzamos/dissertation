@@ -18,7 +18,7 @@ class WordUpdateWidget(QWidget):
   ERROR_SAVING_WORD_TEXT = 'Αδυναμία αποθήκευσης λέξης'
   PLEASE_ENTER_WORD_TEXT = 'Παρακαλώ εισάγετε μια λέξη.'
   PLEASE_ENTER_ANOTHER_WORD_TEXT = 'Παρακαλώ εισάγετε μια διαφορετική λέξη.'
-  WORD_TEXT = 'Λέξη'
+  WORD_MODIFICATION_TEXT = 'Τροποποίηση Λέξης'
   WORD_EMPTY_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς είναι κενή'
   WORD_EXISTS_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη'
   ONLY_GREEK_CHARACTERS_ALLOWED_TEXT = ('Η λέξη σας πρέπει να περιέχει μόνο '
@@ -87,7 +87,7 @@ class WordUpdateWidget(QWidget):
     word_selection_widget.layout.addWidget(self.word_selection_line_edit)
     word_selection_widget.layout.addWidget(self.error_message_label)
 
-    self.word_widget = QGroupBox(WordUpdateWidget.WORD_TEXT)
+    self.word_widget = QGroupBox(WordUpdateWidget.WORD_MODIFICATION_TEXT)
     self.word_widget.setFont(section_label_font)
     self.word_widget.layout = QHBoxLayout(self.word_widget)
     self.word_widget.layout.setContentsMargins(10, 5, 10, 10)
