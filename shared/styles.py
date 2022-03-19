@@ -145,7 +145,7 @@ class Styles():
   if theme == 'light':
     subwidget_style = """
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
-      QPushButton { color: black }
+      QPushButton { color: black; border-bottom: 3px solid black; border-right: 3px solid black }
       QPushButton:hover { background-color: grey }"""
   else:
     subwidget_style = """
@@ -190,7 +190,7 @@ class Styles():
     current_search_style = """
       QWidget { background-color: none }
       QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
-      QPushButton { color: black }
+      QPushButton { color: black; border-bottom: 3px solid black; border-right: 3px solid black }
       QPushButton:hover { background-color: grey }
       QComboBox { color: black }"""
   else:
