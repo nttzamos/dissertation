@@ -28,14 +28,14 @@ def fetch_word_details(word):
     compound_words_list = compound_words_header.find_next('ul')
     for item in compound_words_list.find_all():
       if item_is_valid(item):
-        family_words.add(clean_word(item.text))
+        family_words.add(clean_word(item.text.lower()))
 
   relative_words_header = soup.find(id='Συγγενικές_λέξεις')
   if relative_words_header != None:
     relative_words_list = relative_words_header.find_next('ul')
     for item in relative_words_list.find_all():
       if item_is_valid(item):
-        family_words.add(clean_word(item.text))
+        family_words.add(clean_word(item.text.lower()))
 
   return list(family_words), False
 
