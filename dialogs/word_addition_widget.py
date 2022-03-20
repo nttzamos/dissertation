@@ -15,6 +15,7 @@ class WordAdditionWIdget(QWidget):
   SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
   SAVE_WORD_BUTTON_TEXT = 'Αποθήκευση λέξης'
   ERROR_SAVING_WORD_TEXT = 'Αδυναμία αποθήκευσης λέξης'
+  SUCCESS_SAVING_WORD_TEXT = 'Η λέξη που προσθέσατε αποθηκεύτηκε επιτυχώς!'
   SELECT_ALL_TEXT = 'Επιλογή όλων των μαθημάτων'
   WORD_EMPTY_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς είναι κενή'
   WORD_EXISTS_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη'
@@ -30,19 +31,28 @@ class WordAdditionWIdget(QWidget):
   GREEK_CHARACTERS = [
     'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο',
     'π', 'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'ς', 'ά', 'έ', 'ί', 'ή', 'ύ',
-    'ό', 'ώ', 'ϊ', 'ϋ']
+    'ό', 'ώ', 'ϊ', 'ϋ', 'ΐ', 'ΰ']
 
   def __init__(self):
     super().__init__()
 
     self.layout = QVBoxLayout(self)
-    self.layout.setContentsMargins(20, 10, 20, 10)
+    self.layout.setContentsMargins(20, 0, 20, 10)
     self.layout.setSpacing(0)
 
     section_label_font = QFont(Settings.FONT, 16)
     combo_box_font = QFont(Settings.FONT, 14)
     check_box_font = QFont(Settings.FONT, 14)
     line_edit_font = QFont(Settings.FONT, 14)
+    label_font = QFont(Settings.FONT, 12)
+
+    self.success_label = QLabel(WordAdditionWIdget.SUCCESS_SAVING_WORD_TEXT)
+    self.success_label.setFont(label_font)
+    size_policy = self.success_label.sizePolicy()
+    size_policy.setRetainSizeWhenHidden(True)
+    self.success_label.setSizePolicy(size_policy)
+    self.success_label.hide()
+    self.success_label.setStyleSheet('QLabel { color: green }')
 
     word_widget = QGroupBox(WordAdditionWIdget.WORD_TEXT)
     word_widget.setFont(section_label_font)
@@ -113,6 +123,7 @@ class WordAdditionWIdget(QWidget):
     buttons_widget.layout.addWidget(select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
     buttons_widget.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
+    self.layout.addWidget(self.success_label, alignment=Qt.AlignmentFlag.AlignRight)
     self.layout.addWidget(word_widget)
     self.layout.addWidget(grade_selection_widget)
     self.layout.addWidget(subjects_widget)
@@ -138,9 +149,8 @@ class WordAdditionWIdget(QWidget):
 
     if is_invalid:
       title = WordAdditionWIdget.ERROR_SAVING_WORD_TEXT
-      answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
-      if answer == QMessageBox.StandardButton.Ok:
-        return
+      QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
+      return
 
     word = self.word_line_edit.text().strip()
     QTimer.singleShot(0, self.word_line_edit.clear)
@@ -157,6 +167,9 @@ class WordAdditionWIdget(QWidget):
     WordUpdateWidget.add_word_to_dictionary(grade_id, word)
     from dialogs.word_family_update_widget import WordFamilyUpdateWidget
     WordFamilyUpdateWidget.update_dictionary_words(word_to_add=word, grade_id=grade_id)
+
+    self.success_label.show()
+    QTimer.singleShot(3500, self.success_label.hide)
 
   def select_all(self):
     for check_box in self.check_boxes:

@@ -15,6 +15,7 @@ class ProfileAdditionWIdget(QWidget):
   SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
   SAVE_PROFILE_BUTTON_TEXT = 'Αποθήκευση Προφίλ'
   ERROR_SAVING_PROFILE_TEXT = 'Αδυναμία αποθήκευσης προφίλ'
+  SUCCESS_SAVING_PROFILE_TEXT = 'Το προφίλ που προσθέσατε αποθηκεύτηκε επιτυχώς!'
   SELECT_ALL_TEXT = 'Επιλογή όλων των μαθημάτων'
   PROFILE_NAME_EMPTY_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
                              'έχετε συμπληρώσει το όνομα του')
@@ -32,13 +33,22 @@ class ProfileAdditionWIdget(QWidget):
     super().__init__()
 
     self.layout = QVBoxLayout(self)
-    self.layout.setContentsMargins(20, 10, 20, 10)
+    self.layout.setContentsMargins(20, 0, 20, 10)
     self.layout.setSpacing(0)
 
     section_label_font = QFont(Settings.FONT, 16)
     combo_box_font = QFont(Settings.FONT, 14)
     check_box_font = QFont(Settings.FONT, 14)
     line_edit_font = QFont(Settings.FONT, 14)
+    label_font = QFont(Settings.FONT, 12)
+
+    self.success_label = QLabel(ProfileAdditionWIdget.SUCCESS_SAVING_PROFILE_TEXT)
+    self.success_label.setFont(label_font)
+    size_policy = self.success_label.sizePolicy()
+    size_policy.setRetainSizeWhenHidden(True)
+    self.success_label.setSizePolicy(size_policy)
+    self.success_label.hide()
+    self.success_label.setStyleSheet('QLabel { color: green }')
 
     name_widget = QGroupBox(ProfileAdditionWIdget.PROFILE_NAME_TEXT)
     name_widget.setFont(section_label_font)
@@ -109,6 +119,7 @@ class ProfileAdditionWIdget(QWidget):
     buttons_widget.layout.addWidget(select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
     buttons_widget.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
+    self.layout.addWidget(self.success_label, alignment=Qt.AlignmentFlag.AlignRight)
     self.layout.addWidget(name_widget)
     self.layout.addWidget(grade_selection_widget)
     self.layout.addWidget(subjects_widget)
@@ -134,9 +145,8 @@ class ProfileAdditionWIdget(QWidget):
 
     if is_invalid:
       title = ProfileAdditionWIdget.ERROR_SAVING_PROFILE_TEXT
-      answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
-      if answer == QMessageBox.StandardButton.Ok:
-        return
+      QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
+      return
 
     profile_name = self.name_line_edit.text()
     QTimer.singleShot(0, self.name_line_edit.clear)
@@ -160,6 +170,9 @@ class ProfileAdditionWIdget(QWidget):
 
     from dialogs.data_editing_widget import DataEditingWidget
     DataEditingWidget.update_student_update_widget()
+
+    self.success_label.show()
+    QTimer.singleShot(3500, self.success_label.hide)
 
   def select_all(self):
     for check_box in self.check_boxes:
