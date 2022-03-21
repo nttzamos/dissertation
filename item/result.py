@@ -74,7 +74,9 @@ class Result(QWidget):
 
   def add_word_to_family(self):
     from search.current_search import CurrentSearch
+
     word = self.word_label.text()
+
     x, y, z, current_subject_name = CurrentSearch.get_current_selection_details()
     subject_names = [current_subject_name]
 
@@ -86,16 +88,7 @@ class Result(QWidget):
     from search.searching_widget import SearchingWidget
     SearchingWidget.add_or_remove_dictionary_words([word], [])
 
-    update_word_family(
-      CurrentSearch.grade_id,
-      CurrentSearch.searched_word_label.text(), [word], []
-    )
-
-    self.saved = True
-    self.setStyleSheet(Styles.offline_result_style)
-    self.add_to_family_button.hide()
-    self.add_to_family_button.deleteLater()
-    self.buttons_widget.layout.addWidget(self.remove_from_family_button)
+    self.add_word()
 
   def remove_word_from_family(self):
     from search.current_search import CurrentSearch
@@ -109,6 +102,19 @@ class Result(QWidget):
 
     from central.results_widget import ResultsWidget
     ResultsWidget.remove_result(self)
+
+  def add_word(self):
+    from search.current_search import CurrentSearch
+    update_word_family(
+      CurrentSearch.grade_id,
+      CurrentSearch.searched_word_label.text(), [self.word_label.text()], []
+    )
+
+    self.saved = True
+    self.setStyleSheet(Styles.offline_result_style)
+    self.add_to_family_button.hide()
+    self.add_to_family_button.deleteLater()
+    self.buttons_widget.layout.addWidget(self.remove_from_family_button)
 
   def update_word(self, new_word):
     self.word_label.setText(new_word)

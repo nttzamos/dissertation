@@ -131,7 +131,7 @@ class SettingsWidget(QDialog):
 
     self.layout.addWidget(maximum_results_selection_widget)
     self.layout.addWidget(general_settings_widget)
-    self.layout.addWidget(theme_selection_widget)
+    # self.layout.addWidget(theme_selection_widget)
     self.layout.addWidget(wiktionary_usage_widget)
     self.layout.addWidget(restore_database_widget)
 
