@@ -200,8 +200,8 @@ class ProfileUpdateWidget(QWidget):
     old_profile_name = ProfileUpdateWidget.profile_selector.currentText()
     new_profile_name = self.name_line_edit.text()
 
+    from search.current_search import CurrentSearch
     if old_profile_name != new_profile_name:
-      from search.current_search import CurrentSearch
       CurrentSearch.update_profile(old_profile_name, new_profile_name)
 
       from dialogs.student_addition_widget import StudentAdditionWidget

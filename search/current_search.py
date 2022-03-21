@@ -349,5 +349,9 @@ class CurrentSearch(QWidget):
       index = CurrentSearch.subject_selector.findText(subject_name)
       CurrentSearch.subject_selector.removeItem(index)
 
+    if CurrentSearch.subject_selector.count() == 2:
+      index = CurrentSearch.subject_selector.findText(CurrentSearch.ALL_SUBJECTS_TEXT)
+      CurrentSearch.subject_selector.removeItem(index)
+
     if text != CurrentSearch.subject_selector.currentText():
       CurrentSearch.subject_selector_activated(CurrentSearch.subject_selector.currentIndex())
