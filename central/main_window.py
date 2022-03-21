@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QFrame, QGridLayout, QSplitter, QWidget
+from PyQt6.QtWidgets import QFrame, QSplitter, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 
@@ -15,40 +15,41 @@ class MainWindow(QWidget):
     self.setWindowIcon(QIcon('resources/window_icon.png'))
     self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
 
-    self.layout = QGridLayout(self)
+    self.layout = QVBoxLayout(self)
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
     self.menu_bar = MenuBar(self)
 
-    self.splitter_left_horizontal = QSplitter(self)
-    self.splitter_left_horizontal.setOrientation(Qt.Orientation.Horizontal)
-    self.splitter_left_horizontal.setChildrenCollapsible(False)
-
-    self.splitter_left_vertical = QSplitter(self.splitter_left_horizontal)
-    self.splitter_left_vertical.setOrientation(Qt.Orientation.Vertical)
-    self.splitter_left_vertical.setChildrenCollapsible(False)
+    vertical_splitter = QSplitter()
+    vertical_splitter.setOrientation(Qt.Orientation.Vertical)
+    vertical_splitter.setChildrenCollapsible(False)
 
     MainWindow.recent_searches_widget = RecentSearchesWidget()
     MainWindow.starred_words_widget = StarredWordsWidget()
     MainWindow.main_widget = MainWidget()
 
-    self.splitter_left_vertical.addWidget(MainWindow.recent_searches_widget)
+    vertical_splitter.addWidget(MainWindow.recent_searches_widget)
     MainWindow.recent_searches_widget.initialize()
 
-    self.splitter_left_vertical.addWidget(MainWindow.starred_words_widget)
+    vertical_splitter.addWidget(MainWindow.starred_words_widget)
     MainWindow.starred_words_widget.initialize()
 
-    self.splitter_left_horizontal.addWidget(MainWindow.main_widget)
+    self.main_window_widget = QWidget(self)
+    self.main_window_widget.layout = QHBoxLayout(self.main_window_widget)
+    self.main_window_widget.layout.setSpacing(10)
+    self.main_window_widget.layout.setContentsMargins(0, 0, 0, 0)
+    self.main_window_widget.layout.addWidget(vertical_splitter)
+    self.main_window_widget.layout.addWidget(MainWindow.main_widget)
 
     self.line = QFrame()
     self.line.setFrameShape(QFrame.Shape.HLine)
     self.line.setFrameShadow(QFrame.Shadow.Plain)
     self.line.setFixedHeight(2)
 
-    self.layout.addWidget(self.menu_bar, 0, 0)
-    self.layout.addWidget(self.line, 1, 0)
-    self.layout.addWidget(self.splitter_left_horizontal, 2, 0)
+    self.layout.addWidget(self.menu_bar)
+    self.layout.addWidget(self.line)
+    self.layout.addWidget(self.main_window_widget)
 
     self.style()
 
@@ -56,7 +57,7 @@ class MainWindow(QWidget):
     self.line.setStyleSheet('QWidget { background-color: none }')
 
     from shared.styles import Styles
-    self.splitter_left_horizontal.setStyleSheet(Styles.main_window_background_style)
+    self.main_window_widget.setStyleSheet(Styles.main_window_background_style)
     self.setStyleSheet(Styles.main_window_style)
 
   @staticmethod
