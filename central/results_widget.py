@@ -126,17 +126,23 @@ class ResultsWidget(QWidget):
         return offline_result_words, [], True
 
       online_family_words = list(set(online_family_words) - set(offline_result_words))
+      non_related_online_family_words = []
 
       for online_word in online_family_words:
-        if word_exists(grade_id, online_word) and not non_related_word_exists(word, online_word, grade_id):
-          offline_result_words.append(online_word)
+        if word_exists(grade_id, online_word):
+          if non_related_word_exists(word, online_word, grade_id):
+            non_related_online_family_words.append(online_word)
+          else:
+            offline_result_words.append(online_word)
+            update_word_family(
+              CurrentSearch.grade_id,
+              CurrentSearch.searched_word_label.text(), [online_word], []
+            )
 
-          update_word_family(
-            CurrentSearch.grade_id,
-            CurrentSearch.searched_word_label.text(), [online_word], []
-          )
+      online_family_words = list(
+        set(online_family_words) - set(offline_result_words) - set(non_related_online_family_words)
+      )
 
-      online_family_words = list(set(online_family_words) - set(offline_result_words))
       online_family_words.sort()
       offline_result_words.sort()
 
@@ -201,7 +207,6 @@ class ResultsWidget(QWidget):
 
   @staticmethod
   def add_word(word):
-    print(word)
     for result in ResultsWidget.widget_list:
       if word == result.word_label.text():
         result.add_word()
