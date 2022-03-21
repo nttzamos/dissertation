@@ -212,13 +212,10 @@ class ResultsWidget(QWidget):
         result.add_word()
 
   @staticmethod
-  def update_word(word, new_word, reset_results):
+  def update_word(word, new_word):
     for result in ResultsWidget.widget_list:
-      if result.saved and word == result.word_label.text():
-        if reset_results:
-          ResultsWidget.show_placeholder()
-        else:
-          result.update_word(new_word)
+      if word == result.word_label.text() or new_word == result.word_label.text():
+        ResultsWidget.show_placeholder()
         return
 
   @staticmethod
