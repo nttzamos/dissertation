@@ -131,10 +131,10 @@ class SearchingWidget(QWidget):
   def unknown_word_message(text, single):
     if single:
       return 'Αυτή η λέξη δεν περιλαμβάνεται στις λέξεις του βιβλίου ' + \
-        text + '. Παρακαλώ αναζητήστε μια διαφορετική λέξη.'
+        text + '.\nΠαρακαλώ αναζητήστε μια διαφορετική λέξη.'
     else:
       return 'Αυτή η λέξη δεν περιλαμβάνεται στα βιβλία του προφίλ ' + \
-        text + '. Παρακαλώ αναζητήστε μια διαφορετική λέξη.'
+        text + '.\nΠαρακαλώ αναζητήστε μια διαφορετική λέξη.'
 
   @staticmethod
   def toggle_edit_words_button_visibility(new_visibility_status):
