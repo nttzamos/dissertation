@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 
 from models.recent_search import create_recent_search, destroy_recent_search
@@ -28,6 +29,7 @@ class RecentSearch(QWidget):
     data_widget.layout.setSpacing(5)
 
     self.word = QLabel(word)
+    self.word.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
     self.word.setFont(font)
 
     edit_button = QPushButton()

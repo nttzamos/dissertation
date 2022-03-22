@@ -32,6 +32,7 @@ class Result(QWidget):
     data_widget.layout.setSpacing(0)
 
     self.word_label = QLabel(word)
+    self.word_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
     self.word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.word_label.setFont(font)
 

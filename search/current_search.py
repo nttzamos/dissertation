@@ -38,6 +38,9 @@ class CurrentSearch(QWidget):
     CurrentSearch.searched_word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     CurrentSearch.searched_word_label.setMaximumHeight(100)
     CurrentSearch.searched_word_label.setFont(searched_word_font)
+    CurrentSearch.searched_word_label.setTextInteractionFlags(
+      Qt.TextInteractionFlag.TextSelectableByMouse
+    )
 
     search_details = QWidget()
     search_details.layout = QVBoxLayout(search_details)
