@@ -1,6 +1,15 @@
 from PyQt6.QtWidgets import QWidget, QMessageBox
 
+from menu.settings import Settings
+
 import os
+import gettext
+
+language_code = Settings.get_setting('language')
+if language_code == False: language_code = 'el'
+language = gettext.translation('shared', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
 
 class ResourcesManager(QWidget):
   resources_files = [
@@ -23,11 +32,8 @@ class ResourcesManager(QWidget):
       self.show_missing_resources_files_message(missing_resources_files)
 
   def show_no_resources_folder_message(self):
-    title = 'Απουσία Φακέλου Αρχείων'
-    text = ('Ο φάκελος "resources" απουσιάζει από τον φάκελο που βρίσκεται το '
-            'αρχείο του εκτελέσιμου προγράμματος. Ο φάκελος αυτός είναι '
-            'αναγκαίος για την εκτέλεση της εφαρμογής. Η λειτουργία της '
-            'εφαρμογής θα τερματιστεί.')
+    title = _('MISSING_FOLDER_TITLE')
+    text = _('MISSING_FOLDER_MESSAGE')
 
     answer = QMessageBox()
     answer.setIcon(QMessageBox.Icon.Critical)
@@ -37,12 +43,8 @@ class ResourcesManager(QWidget):
     answer.exec()
 
   def show_missing_resources_files_message(self, files):
-    title = 'Απουσία Αρχείων'
-    text = ('Απουσιάζουν από τον φάκελο "resources" αρχεία που είναι αναγκαία '
-            'για την εκτέλεση της εφαρμογής. Αυτό μπορεί να οδηγήσει σε '
-            'πολύ σοβαρά προβλήματα και η εφαρμογή μπορεί να τερματιστεί '
-            'αναπάντεχα, πιθανώς καταστρέφοντας τα δεδομένα σας. Τα αρχεία που '
-            'απουσιάζουν είναι τα εξής:\n\n' + str(files))
+    title = _('MISSING_FILES_TITLE')
+    text = _('MISSING_FILES_MESSAGE') + '\n\n' + str(files)
 
     answer = QMessageBox()
     answer.setIcon(QMessageBox.Icon.Critical)

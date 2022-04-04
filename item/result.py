@@ -7,18 +7,22 @@ from models.word import create_word
 from shared.database_handler import get_grade_subjects
 from shared.styles import Styles
 
-class Result(QWidget):
-  ADD_BUTTON_TEXT = 'Προσθήκη στις λέξεις των επιλεγμένων μαθήματων'
-  REMOVE_BUTTON_TEXT = 'Αφαίρεση από τις συγγενικές λέξεις'
+import gettext
 
+class Result(QWidget):
   def __init__(self, word, widget_width=None, saved=True):
     super().__init__()
+
+    from menu.settings import Settings
+    language_code = Settings.get_setting('language')
+    language = gettext.translation('item', localedir='resources/locale', languages=[language_code])
+    language.install()
+    _ = language.gettext
 
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(0, 0, 10, 10)
     self.layout.setSpacing(0)
 
-    from menu.settings import Settings
     font = QFont(Settings.FONT, 20)
 
     self.saved = saved
@@ -41,13 +45,13 @@ class Result(QWidget):
     self.buttons_widget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.add_to_family_button = QPushButton()
-    self.add_to_family_button.setToolTip(Result.ADD_BUTTON_TEXT)
+    self.add_to_family_button.setToolTip(_('ADD_BUTTON_TEXT'))
     self.add_to_family_button.setIcon(QIcon('resources/plus.png'))
     self.add_to_family_button.clicked.connect(self.add_word_to_family)
     self.add_to_family_button.setFixedWidth(30)
 
     self.remove_from_family_button = QPushButton()
-    self.remove_from_family_button.setToolTip(Result.REMOVE_BUTTON_TEXT)
+    self.remove_from_family_button.setToolTip(_('REMOVE_BUTTON_TEXT'))
     self.remove_from_family_button.setIcon(QIcon('resources/delete.svg'))
     self.remove_from_family_button.clicked.connect(self.remove_word_from_family)
     self.remove_from_family_button.setFixedWidth(30)

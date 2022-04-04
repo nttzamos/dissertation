@@ -6,10 +6,14 @@ from item.starred_word import StarredWord
 from menu.settings import Settings
 from models.starred_word import get_starred_words
 
+import gettext
+
+language_code = Settings.get_setting('language')
+language = gettext.translation('side', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
+
 class StarredWordsWidget(QWidget):
-  TITLE = 'Αγαπημένες Λέξεις'
-  NO_STARRED_WORDS_TEXT = 'Δεν έχετε αγαπημένες λέξεις'
-  SELECT_A_SUBJECT_TEXT = 'Επιλέξτε κάποιο μάθημα πρώτα.'
   MAX_ROW = 1000000
 
   def __init__(self):
@@ -36,7 +40,7 @@ class StarredWordsWidget(QWidget):
     font = QFont(Settings.FONT, 18)
     invisible_font = QFont(Settings.FONT, 1)
 
-    self.title_label = QLabel(StarredWordsWidget.TITLE)
+    self.title_label = QLabel(_('STARRED_WORDS_TITLE'))
     self.title_label.setFont(font)
     self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -79,7 +83,7 @@ class StarredWordsWidget(QWidget):
     starred_words = get_starred_words()
 
     if len(starred_words) == 0:
-      StarredWordsWidget.show_placeholder(StarredWordsWidget.NO_STARRED_WORDS_TEXT)
+      StarredWordsWidget.show_placeholder(_('NO_STARRED_WORDS_TEXT'))
       return
     else:
       StarredWordsWidget.hide_placeholder()
@@ -109,7 +113,7 @@ class StarredWordsWidget(QWidget):
   def remove_starred_word(starred_word):
     StarredWordsWidget.widget_list.remove(starred_word)
     if len(StarredWordsWidget.widget_list)==0:
-      StarredWordsWidget.show_placeholder(StarredWordsWidget.NO_STARRED_WORDS_TEXT)
+      StarredWordsWidget.show_placeholder(_('NO_STARRED_WORDS_TEXT'))
 
   @staticmethod
   def toggle_starred_word_starred_state(word):
@@ -129,7 +133,9 @@ class StarredWordsWidget(QWidget):
     StarredWordsWidget.show_placeholder()
 
   @staticmethod
-  def show_placeholder(text=SELECT_A_SUBJECT_TEXT):
+  def show_placeholder(text=None):
+    if text == None: text = _('SELECT_A_SUBJECT_TEXT')
+
     StarredWordsWidget.placeholder_label.setText(text)
 
     if not StarredWordsWidget.show_placeholder_label:

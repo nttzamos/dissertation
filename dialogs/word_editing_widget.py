@@ -6,16 +6,18 @@ from dialogs.word_family_update_widget import WordFamilyUpdateWidget
 from dialogs.word_update_widget import WordUpdateWidget
 from menu.settings import Settings
 
-class WordEditingWidget(QDialog):
-  EDIT_WORDS_TEXT = 'Επεξεργασία Λέξεων'
-  ADD_WORD_TEXT = 'Προσθήκη Λέξης'
-  EDIT_WORD_TEXT = 'Επεξεργασία Λέξης'
-  EDIT_FAMILY_TEXT = 'Επεξεργασία Συγγενικών Λέξεων'
+import gettext
 
+class WordEditingWidget(QDialog):
   def __init__(self):
     super().__init__()
 
-    self.setWindowTitle(WordEditingWidget.EDIT_WORDS_TEXT)
+    language_code = Settings.get_setting('language')
+    language = gettext.translation('dialogs', localedir='resources/locale', languages=[language_code])
+    language.install()
+    _ = language.gettext
+
+    self.setWindowTitle(_('EDIT_WORDS_TEXT'))
     self.setWindowIcon(QIcon('resources/window_icon.png'))
     self.setFixedWidth(Settings.get_setting('screen_width') / 2)
 
@@ -28,10 +30,10 @@ class WordEditingWidget(QDialog):
     WordEditingWidget.edit_word_family_widget = WordFamilyUpdateWidget()
 
     self.tab_widget = QTabWidget()
-    self.tab_widget.addTab(add_word_widget, WordEditingWidget.ADD_WORD_TEXT)
-    self.tab_widget.addTab(self.edit_word_widget, WordEditingWidget.EDIT_WORD_TEXT)
+    self.tab_widget.addTab(add_word_widget, _('ADD_WORD_TEXT'))
+    self.tab_widget.addTab(self.edit_word_widget, _('EDIT_WORD_TEXT'))
     self.tab_widget.addTab(
-      WordEditingWidget.edit_word_family_widget, WordEditingWidget.EDIT_FAMILY_TEXT
+      WordEditingWidget.edit_word_family_widget, _('EDIT_FAMILY_TEXT')
     )
 
     self.layout.addWidget(self.tab_widget)

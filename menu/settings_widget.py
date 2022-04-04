@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QDialog, QCheckBox,
                              QRadioButton, QSpinBox, QLabel, QGroupBox,
-                             QPushButton, QMessageBox)
+                             QPushButton, QMessageBox, QComboBox)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon, QFont
 
@@ -8,27 +8,18 @@ from menu.settings import Settings
 
 import os
 import shutil
+import gettext
 
 class SettingsWidget(QDialog):
-  TITLE_TEXT = 'Ρυθμίσεις'
-  RESULTS_TEXT = 'Αριθμός Αποτελεσμάτων'
-  MAXIMUM_RESULTS_TEXT = 'Μέγιστος αριθμός αποτελεσμάτων'
-  GENERAL_SETTINGS_TEXT = 'Γενικές Ρυθμίσεις'
-  REMEMBER_LAST_STUDENT_TEXT = 'Αυτόματη επιλογή του τελευτ'
-  ASK_BEFORE_ACTION_TEXT = 'ερερ'
-  SHOW_EDIT_WORDS_BUTTON_TEXT = 'Εμφάνιση επιλογής επεξεργασίας λέξεων'
-  ONLY_SHOW_WORDS_WITH_FAMILY_TEXT = 'Εμφάνιση μόνο λέξεων '
-  THEME_SELECTION_TEXT = 'Επιλογή Θέματος'
-  LIGHT_THEME_TEXT = 'Ανοιχτό'
-  DARK_THEME_TEXT = 'Σκοτεινό'
-  RESTORE_TITLE_TEXT = 'Επαναφορά Δεδομένων'
-  RESTORE_DATABASE_TEXT = 'Διαγραφή δεδομένων χρήστη'
-  SHOW_TUTORIAL_TEXT = 'Εμφανισή οδηγιών κατά την εκκίνηση'
-
   def __init__(self):
     super().__init__()
 
-    self.setWindowTitle(SettingsWidget.TITLE_TEXT)
+    language_code = Settings.get_setting('language')
+    language = gettext.translation('menu', localedir='resources/locale', languages=[language_code])
+    language.install()
+    _ = language.gettext
+
+    self.setWindowTitle(_('TITLE_TEXT'))
     self.setWindowIcon(QIcon('resources/window_icon.png'))
 
     self.layout = QVBoxLayout(self)
@@ -37,8 +28,9 @@ class SettingsWidget(QDialog):
 
     section_label_font = QFont(Settings.FONT, 16)
     spin_box_font = QFont(Settings.FONT, 12)
+    combo_box_font = QFont(Settings.FONT, 12)
 
-    maximum_results_label = QLabel(SettingsWidget.MAXIMUM_RESULTS_TEXT)
+    maximum_results_label = QLabel(_('MAXIMUM_RESULTS_TEXT'))
     self.maximum_results_spin_box = QSpinBox()
     self.maximum_results_spin_box.setFont(spin_box_font)
     self.maximum_results_spin_box.valueChanged.connect(self.maximum_results_changed)
@@ -46,50 +38,45 @@ class SettingsWidget(QDialog):
     self.maximum_results_spin_box.setMinimum(1)
     self.maximum_results_spin_box.setMaximum(50)
 
-    maximum_results_selection_widget = QGroupBox(SettingsWidget.RESULTS_TEXT)
+    maximum_results_selection_widget = QGroupBox(_('RESULTS_TEXT'))
     maximum_results_selection_widget.setFont(section_label_font)
     maximum_results_selection_widget.layout = QHBoxLayout(maximum_results_selection_widget)
     maximum_results_selection_widget.layout.setContentsMargins(10, 5, 0, 5)
     maximum_results_selection_widget.layout.addWidget(maximum_results_label)
     maximum_results_selection_widget.layout.addWidget(self.maximum_results_spin_box)
 
-    general_settings_widget = QGroupBox(SettingsWidget.GENERAL_SETTINGS_TEXT)
+    general_settings_widget = QGroupBox(_('GENERAL_SETTINGS_TEXT'))
     general_settings_widget.setFont(section_label_font)
     general_settings_widget.layout = QVBoxLayout(general_settings_widget)
     general_settings_widget.layout.setContentsMargins(10, 0, 0, 0)
 
-    self.remember_last_student_picked = QCheckBox(SettingsWidget.REMEMBER_LAST_STUDENT_TEXT, objectName='remember_last_student_picked')
+    self.remember_last_student_picked = QCheckBox(_('REMEMBER_LAST_STUDENT_TEXT'), objectName='remember_last_student_picked')
     self.remember_last_student_picked.clicked.connect(lambda: self.toggle_setting('remember_last_student_picked'))
     self.remember_last_student_picked.setChecked(Settings.get_boolean_setting('remember_last_student_picked'))
 
-    self.ask_before_actions = QCheckBox(SettingsWidget.ASK_BEFORE_ACTION_TEXT, objectName='ask_before_actions')
-    self.ask_before_actions.clicked.connect(lambda: self.toggle_setting('ask_before_actions'))
-    self.ask_before_actions.setChecked(Settings.get_boolean_setting('ask_before_actions'))
-
-    self.show_edit_dict_words_button = QCheckBox(SettingsWidget.SHOW_EDIT_WORDS_BUTTON_TEXT, objectName='show_edit_dict_words_button')
+    self.show_edit_dict_words_button = QCheckBox(_('SHOW_EDIT_WORDS_BUTTON_TEXT'), objectName='show_edit_dict_words_button')
     self.show_edit_dict_words_button.clicked.connect(lambda: self.toggle_setting('show_edit_dict_words_button'))
     self.show_edit_dict_words_button.setChecked(Settings.get_boolean_setting('show_edit_dict_words_button'))
 
-    self.only_show_words_with_family = QCheckBox(SettingsWidget.ONLY_SHOW_WORDS_WITH_FAMILY_TEXT, objectName='only_show_words_with_family')
+    self.only_show_words_with_family = QCheckBox(_('ONLY_SHOW_WORDS_WITH_FAMILY_TEXT'), objectName='only_show_words_with_family')
     self.only_show_words_with_family.clicked.connect(lambda: self.toggle_setting('only_show_words_with_family'))
     self.only_show_words_with_family.setChecked(Settings.get_boolean_setting('only_show_words_with_family'))
 
-    self.show_tutorial_on_startup = QCheckBox(SettingsWidget.SHOW_TUTORIAL_TEXT, objectName='show_tutorial_on_startup')
+    self.show_tutorial_on_startup = QCheckBox(_('SHOW_TUTORIAL_TEXT'), objectName='show_tutorial_on_startup')
     self.show_tutorial_on_startup.clicked.connect(lambda: self.toggle_setting('show_tutorial_on_startup'))
     self.show_tutorial_on_startup.setChecked(Settings.get_boolean_setting('show_tutorial_on_startup'))
 
     # general_settings_widget.layout.addWidget(self.remember_last_student_picked)
-    # general_settings_widget.layout.addWidget(self.ask_before_actions)
     general_settings_widget.layout.addWidget(self.show_edit_dict_words_button)
     # general_settings_widget.layout.addWidget(self.only_show_words_with_family)
     general_settings_widget.layout.addWidget(self.show_tutorial_on_startup)
 
-    theme_selection_widget = QGroupBox(SettingsWidget.THEME_SELECTION_TEXT)
+    theme_selection_widget = QGroupBox(_('THEME_SELECTION_TEXT'))
     theme_selection_widget.setFont(section_label_font)
     theme_selection_widget.layout = QHBoxLayout(theme_selection_widget)
-    self.light_theme_button = QRadioButton(SettingsWidget.LIGHT_THEME_TEXT)
+    self.light_theme_button = QRadioButton(_('LIGHT_THEME_TEXT'))
     self.light_theme_button.toggled.connect(self.light_theme_button_clicked)
-    self.dark_theme_button = QRadioButton(SettingsWidget.DARK_THEME_TEXT)
+    self.dark_theme_button = QRadioButton(_('DARK_THEME_TEXT'))
     self.dark_theme_button.toggled.connect(self.dark_theme_button_clicked)
     self.initial_toggle = True
 
@@ -101,6 +88,18 @@ class SettingsWidget(QDialog):
     theme_selection_widget.layout.setContentsMargins(10, 0, 0, 0)
     theme_selection_widget.layout.addWidget(self.light_theme_button, alignment=Qt.AlignmentFlag.AlignLeft)
     theme_selection_widget.layout.addWidget(self.dark_theme_button, alignment=Qt.AlignmentFlag.AlignLeft)
+
+    language_selection_widget = QGroupBox(_('LANGUAGE_SELECTION_TEXT'))
+    language_selection_widget.setFont(section_label_font)
+    language_selection_widget.layout = QVBoxLayout(language_selection_widget)
+    self.language_selector = QComboBox()
+    self.language_selector.setFont(combo_box_font)
+    self.language_selector.addItems(Settings.get_available_languages())
+    self.language_selector.setCurrentText(Settings.get_language())
+    self.language_selector.currentTextChanged.connect(self.language_selector_activated)
+
+    language_selection_widget.layout.setContentsMargins(10, 0, 0, 0)
+    language_selection_widget.layout.addWidget(self.language_selector)
 
     wiktionary_usage_widget = QGroupBox('Χρήση Wiktionary (απαιτείται σύνδεση στο διαδίκτυο)')
     wiktionary_usage_widget.setFont(section_label_font)
@@ -119,11 +118,11 @@ class SettingsWidget(QDialog):
     wiktionary_usage_widget.layout.addWidget(self.use_wiktionary_button, alignment=Qt.AlignmentFlag.AlignLeft)
     wiktionary_usage_widget.layout.addWidget(self.dont_use_wiktionary_button, alignment=Qt.AlignmentFlag.AlignLeft)
 
-    restore_database_button = QPushButton(SettingsWidget.RESTORE_DATABASE_TEXT)
+    restore_database_button = QPushButton(_('RESTORE_DATABASE_TEXT'))
     restore_database_button.pressed.connect(self.restore_database)
     restore_database_button.setAutoDefault(False)
 
-    restore_database_widget = QGroupBox(SettingsWidget.RESTORE_TITLE_TEXT)
+    restore_database_widget = QGroupBox(_('RESTORE_TITLE_TEXT'))
     restore_database_widget.setFont(section_label_font)
     restore_database_widget.layout = QHBoxLayout(restore_database_widget)
     restore_database_widget.layout.setContentsMargins(50, 10, 50, 10)
@@ -132,6 +131,7 @@ class SettingsWidget(QDialog):
     self.layout.addWidget(maximum_results_selection_widget)
     self.layout.addWidget(general_settings_widget)
     # self.layout.addWidget(theme_selection_widget)
+    self.layout.addWidget(language_selection_widget)
     self.layout.addWidget(wiktionary_usage_widget)
     self.layout.addWidget(restore_database_widget)
 
@@ -187,15 +187,39 @@ class SettingsWidget(QDialog):
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
 
     check_box = QCheckBox('Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή')
-    check_box.clicked.connect(self.toggle_message_setting)
+    check_box.clicked.connect(self.toggle_theme_message_setting)
     check_box.setChecked(False)
 
     answer.setCheckBox(check_box)
     answer.exec()
 
-  @staticmethod
-  def toggle_message_setting(value):
+  def toggle_theme_message_setting(value):
     Settings.set_boolean_setting('hide_theme_change_effect_message', value)
+
+  def language_selector_activated(self, index):
+    Settings.set_language(self.language_selector.currentText())
+    self.show_language_change_effect_message()
+
+  def show_language_change_effect_message(self):
+    if Settings.get_boolean_setting('hide_language_change_effect_message'): return
+
+    title = 'Ανανέωση γλώσσας'
+    text = 'Η αλλαγή της γλώσσας θα εφαρμοστεί όταν γίνει επανεκκίνηση της εφαρμογής'
+    answer = QMessageBox()
+    answer.setIcon(QMessageBox.Icon.Information)
+    answer.setText(text)
+    answer.setWindowTitle(title)
+    answer.setStandardButtons(QMessageBox.StandardButton.Ok)
+
+    check_box = QCheckBox('Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή')
+    check_box.clicked.connect(self.toggle_language_message_setting)
+    check_box.setChecked(False)
+
+    answer.setCheckBox(check_box)
+    answer.exec()
+
+  def toggle_language_message_setting(value):
+    Settings.set_boolean_setting('hide_language_change_effect_message', value)
 
   def use_wiktionary_button_clicked(self):
     if self.use_wiktionary_button.isChecked():

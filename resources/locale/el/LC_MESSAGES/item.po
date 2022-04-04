@@ -1,0 +1,36 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2022-04-03 12:30+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+msgid "ADD_BUTTON_TEXT"
+msgstr "Προσθήκη στις λέξεις των επιλεγμένων μαθήματων"
+
+msgid "REMOVE_BUTTON_TEXT"
+msgstr "Αφαίρεση από τις συγγενικές λέξεις"
+
+msgid "RELOAD_TEXT"
+msgstr "Αναζήτηση"
+
+msgid "UNSTAR_TEXT"
+msgstr "Αφαίρεση από τα Αγαπημένα"
+
+msgid "EDIT_TEXT"
+msgstr "Επεξεργασία Λέξης"
+
+msgid "STAR_TEXT"
+msgstr "Προσθήκη στα Αγαπημένα"
+
+msgid "DELETE_TEXT"
+msgstr "Αφαίρεση από τις Πρόσφατες Αναζητήσεις"

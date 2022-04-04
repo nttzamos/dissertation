@@ -5,14 +5,17 @@ from PyQt6.QtGui import QFont, QIcon
 from models.recent_search import create_recent_search, destroy_recent_search
 from models.starred_word import create_starred_word, destroy_starred_word
 
-class RecentSearch(QWidget):
-  EDIT_TEXT = 'Επεξεργασία Λέξης'
-  RELOAD_TEXT = 'Αναζήτηση'
-  STAR_TEXT = 'Προσθήκη στα Αγαπημένα'
-  DELETE_TEXT = 'Αφαίρεση από τις Πρόσφατες Αναζητήσεις'
+import gettext
 
+class RecentSearch(QWidget):
   def __init__(self, word, is_starred):
     super().__init__()
+
+    from menu.settings import Settings
+    language_code = Settings.get_setting('language')
+    language = gettext.translation('item', localedir='resources/locale', languages=[language_code])
+    language.install()
+    _ = language.gettext
 
     self.setFixedHeight(50)
 
@@ -20,7 +23,6 @@ class RecentSearch(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
-    from menu.settings import Settings
     font = QFont(Settings.FONT, 14)
 
     data_widget = QWidget()
@@ -34,18 +36,18 @@ class RecentSearch(QWidget):
 
     edit_button = QPushButton()
     edit_button.setIcon(QIcon('resources/edit.svg'))
-    edit_button.setToolTip(RecentSearch.EDIT_TEXT)
+    edit_button.setToolTip(_('EDIT_TEXT'))
     edit_button.clicked.connect(self.edit_word)
     edit_button.setFixedWidth(30)
 
     reload_button = QPushButton()
     reload_button.setIcon(QIcon('resources/reload.svg'))
-    reload_button.setToolTip(RecentSearch.RELOAD_TEXT)
+    reload_button.setToolTip(_('RELOAD_TEXT'))
     reload_button.clicked.connect(self.reload_word)
     reload_button.setFixedWidth(30)
 
     self.star_button = QPushButton()
-    self.star_button.setToolTip(RecentSearch.STAR_TEXT)
+    self.star_button.setToolTip(_('STAR_TEXT'))
     self.star_button.clicked.connect(self.toggle_starred_state)
     self.star_button.setFixedWidth(30)
 
@@ -57,7 +59,7 @@ class RecentSearch(QWidget):
 
     delete_button = QPushButton()
     delete_button.setIcon(QIcon('resources/delete.svg'))
-    delete_button.setToolTip(RecentSearch.DELETE_TEXT)
+    delete_button.setToolTip(_('DELETE_TEXT'))
     delete_button.clicked.connect(self.remove_word)
     delete_button.setFixedWidth(30)
 
@@ -76,7 +78,11 @@ class RecentSearch(QWidget):
     self.layout.addWidget(data_widget)
     self.layout.addWidget(line)
 
+    self.set_texts()
     self.style()
+
+  def set_texts(self):
+    pass
 
   def style(self):
     from shared.styles import Styles

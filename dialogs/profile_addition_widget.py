@@ -9,24 +9,14 @@ from menu.settings import Settings
 from models.profile import create_profile, profile_name_exists
 from shared.database_handler import get_grades, get_grade_subjects
 
-class ProfileAdditionWIdget(QWidget):
-  PROFILE_NAME_TEXT = 'Όνομα Προφίλ'
-  GRADE_SELECTION_TEXT = 'Επιλογή Τάξης'
-  SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
-  SAVE_PROFILE_BUTTON_TEXT = 'Αποθήκευση Προφίλ'
-  ERROR_SAVING_PROFILE_TEXT = 'Αδυναμία αποθήκευσης προφίλ'
-  SUCCESS_SAVING_PROFILE_TEXT = 'Το προφίλ που προσθέσατε αποθηκεύτηκε επιτυχώς!'
-  SELECT_ALL_TEXT = 'Επιλογή όλων των μαθημάτων'
-  PROFILE_NAME_EMPTY_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
-                             'έχετε συμπληρώσει το όνομα του')
-  NAME_LENGTH_EXCEEDS_LIMIT_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς '
-                                    'το μήκος του ονόματος του υπερβαίνει το '
-                                    'όριο των 20 χαρακτήρων')
-  PROFILE_NAME_EXISTS_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς '
-                              'υπάρχει ήδη άλλο προφίλ με το ίδιο όνομα')
-  NO_SUBJECT_SELECTED_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
-                              'έχετε επιλέξει κάποια μαθήματα για αυτό')
+import gettext
 
+language_code = Settings.get_setting('language')
+language = gettext.translation('dialogs', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
+
+class ProfileAdditionWIdget(QWidget):
   MAXIMUM_NAME_LENGTH = 20
 
   def __init__(self):
@@ -42,7 +32,7 @@ class ProfileAdditionWIdget(QWidget):
     line_edit_font = QFont(Settings.FONT, 14)
     label_font = QFont(Settings.FONT, 12)
 
-    self.success_label = QLabel(ProfileAdditionWIdget.SUCCESS_SAVING_PROFILE_TEXT)
+    self.success_label = QLabel(_('SUCCESS_SAVING_PROFILE_TEXT'))
     self.success_label.setFont(label_font)
     size_policy = self.success_label.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
@@ -50,7 +40,7 @@ class ProfileAdditionWIdget(QWidget):
     self.success_label.hide()
     self.success_label.setStyleSheet('QLabel { color: green }')
 
-    name_widget = QGroupBox(ProfileAdditionWIdget.PROFILE_NAME_TEXT)
+    name_widget = QGroupBox(_('PROFILE_NAME_TEXT'))
     name_widget.setFont(section_label_font)
     name_widget.layout = QHBoxLayout(name_widget)
     name_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -59,7 +49,7 @@ class ProfileAdditionWIdget(QWidget):
     self.name_line_edit.setFont(line_edit_font)
     name_widget.layout.addWidget(self.name_line_edit)
 
-    grade_selection_widget = QGroupBox(ProfileAdditionWIdget.GRADE_SELECTION_TEXT)
+    grade_selection_widget = QGroupBox(_('GRADE_SELECTION_TEXT'))
     grade_selection_widget.setFont(section_label_font)
     grade_selection_widget.layout = QHBoxLayout(grade_selection_widget)
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -71,7 +61,7 @@ class ProfileAdditionWIdget(QWidget):
 
     grade_selection_widget.layout.addWidget(self.grade_selector)
 
-    subjects_widget = QGroupBox(ProfileAdditionWIdget.SUBJECT_SELECTION_TEXT)
+    subjects_widget = QGroupBox(_('SUBJECT_SELECTION_TEXT'))
     subjects_widget.setFont(section_label_font)
     subjects_widget.layout = QHBoxLayout(subjects_widget)
     subjects_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -106,11 +96,11 @@ class ProfileAdditionWIdget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    save_button = QPushButton(ProfileAdditionWIdget.SAVE_PROFILE_BUTTON_TEXT)
+    save_button = QPushButton(_('SAVE_PROFILE_BUTTON_TEXT'))
     save_button.pressed.connect(self.save_profile)
     save_button.setAutoDefault(False)
 
-    select_all_button = QPushButton(ProfileAdditionWIdget.SELECT_ALL_TEXT)
+    select_all_button = QPushButton(_('SELECT_ALL_SUBJECTS_TEXT'))
     select_all_button.pressed.connect(self.select_all)
     select_all_button.setAutoDefault(False)
 
@@ -144,7 +134,7 @@ class ProfileAdditionWIdget(QWidget):
     is_invalid, text = self.profile_is_invalid()
 
     if is_invalid:
-      title = ProfileAdditionWIdget.ERROR_SAVING_PROFILE_TEXT
+      title = _('ERROR_SAVING_PROFILE_TEXT')
       QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       return
 
@@ -181,13 +171,13 @@ class ProfileAdditionWIdget(QWidget):
   def profile_is_invalid(self):
     profile_name = self.name_line_edit.text()
     if len(profile_name) == 0:
-      return True, ProfileAdditionWIdget.PROFILE_NAME_EMPTY_TEXT
+      return True, _('PROFILE_NAME_EMPTY_TEXT')
 
     if len(profile_name) > ProfileAdditionWIdget.MAXIMUM_NAME_LENGTH:
-      return True, ProfileAdditionWIdget.NAME_LENGTH_EXCEEDS_LIMIT_TEXT
+      return True, _('PROFILE_NAME_LENGTH_EXCEEDS_LIMIT_TEXT')
 
     if profile_name_exists(profile_name):
-      return True, ProfileAdditionWIdget.PROFILE_NAME_EXISTS_TEXT
+      return True, _('PROFILE_NAME_EXISTS_TEXT')
 
     checked_check_boxes_count = 0
 
@@ -196,7 +186,7 @@ class ProfileAdditionWIdget(QWidget):
         checked_check_boxes_count += 1
 
     if checked_check_boxes_count == 0:
-      return True, ProfileAdditionWIdget.NO_SUBJECT_SELECTED_TEXT
+      return True, _('NO_SUBJECT_SELECTED_TEXT')
     elif checked_check_boxes_count == len(self.check_boxes):
       return True, self.construct_redundant_profile_message()
     else:

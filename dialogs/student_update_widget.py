@@ -9,25 +9,14 @@ from menu.settings import Settings
 from models.profile import get_profiles
 from models.student import *
 
-class StudentUpdateWidget(QWidget):
-  STUDENT_SELECTION_TEXT = 'Επιλογή Μαθητή'
-  STUDENT_NAME_TEXT = 'Όνομα Μαθητή'
-  PROFILE_SELECTION_TEXT = 'Επιλογή Προφίλ'
-  UPDATE_STUDENT_BUTTON_TEXT = 'Αποθήκευση Μαθητή'
-  DELETE_STUDENT_BUTTON_TEXT = 'Διαγραφή Μαθητή'
-  ERROR_SAVING_STUDENT_TEXT = 'Αδυναμία αποθήκευσης μαθητή'
-  SELECT_STUDENT_TEXT = 'Επιλέξτε έναν μαθητή...'
-  NO_STUDENTS_TEXT = 'Δεν υπάρχουν μαθητές'
-  STUDENT_NAME_EMPTY_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
-                             'έχετε συμπληρώσει το όνομα του')
-  NAME_LENGTH_EXCEEDS_LIMIT_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς '
-                                    'το μήκος του ονόματος του υπερβαίνει το '
-                                    'όριο των 20 χαρακτήρων')
-  STUDENT_NAME_EXISTS_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς '
-                              'υπάρχει ήδη άλλος μαθητής με το ίδιο όνομα')
-  NO_PROFILE_SELECTED_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
-                              'έχετε επιλέξει κάποιο προφίλ για αυτόν')
+import gettext
 
+language_code = Settings.get_setting('language')
+language = gettext.translation('dialogs', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
+
+class StudentUpdateWidget(QWidget):
   MAXIMUM_NAME_LENGTH = 20
 
   def __init__(self):
@@ -43,7 +32,7 @@ class StudentUpdateWidget(QWidget):
 
     self.check_boxes_modified = []
 
-    student_selection_widget = QGroupBox(StudentUpdateWidget.STUDENT_SELECTION_TEXT)
+    student_selection_widget = QGroupBox(_('STUDENT_SELECTION_TEXT'))
     student_selection_widget.setFont(section_label_font)
     student_selection_widget.layout = QHBoxLayout(student_selection_widget)
     student_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -54,10 +43,10 @@ class StudentUpdateWidget(QWidget):
     StudentUpdateWidget.student_selector.setFont(combo_box_font)
 
     if len(students) == 0:
-      StudentUpdateWidget.student_selector.addItem(StudentUpdateWidget.NO_STUDENTS_TEXT)
+      StudentUpdateWidget.student_selector.addItem(_('NO_STUDENTS_TEXT'))
       StudentUpdateWidget.student_selector.setDisabled(True)
     else:
-      students[0:0] = [StudentUpdateWidget.SELECT_STUDENT_TEXT]
+      students[0:0] = [_('SELECT_STUDENT_TEXT')]
       StudentUpdateWidget.student_selector.addItems(students)
 
     StudentUpdateWidget.student_selector.activated.connect(
@@ -66,7 +55,7 @@ class StudentUpdateWidget(QWidget):
 
     student_selection_widget.layout.addWidget(StudentUpdateWidget.student_selector)
 
-    self.name_widget = QGroupBox(StudentUpdateWidget.STUDENT_NAME_TEXT)
+    self.name_widget = QGroupBox(_('STUDENT_NAME_TEXT'))
     self.name_widget.setFont(section_label_font)
     self.name_widget.layout = QHBoxLayout(self.name_widget)
     self.name_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -77,7 +66,7 @@ class StudentUpdateWidget(QWidget):
     self.name_line_edit.textChanged.connect(self.student_name_changed)
     self.name_widget.layout.addWidget(self.name_line_edit)
 
-    profiles_widget = QGroupBox(StudentUpdateWidget.PROFILE_SELECTION_TEXT)
+    profiles_widget = QGroupBox(_('PROFILE_SELECTION_TEXT'))
     profiles_widget.setFont(section_label_font)
     profiles_widget.layout = QHBoxLayout(profiles_widget)
     profiles_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -90,12 +79,12 @@ class StudentUpdateWidget(QWidget):
 
     profiles_widget.layout.addWidget(self.scroll_area)
 
-    self.save_button = QPushButton(StudentUpdateWidget.UPDATE_STUDENT_BUTTON_TEXT)
+    self.save_button = QPushButton(_('UPDATE_STUDENT_BUTTON_TEXT'))
     self.save_button.pressed.connect(self.update_student)
     self.save_button.setDisabled(True)
     self.save_button.setAutoDefault(False)
 
-    self.delete_button = QPushButton(StudentUpdateWidget.DELETE_STUDENT_BUTTON_TEXT)
+    self.delete_button = QPushButton(_('DELETE_STUDENT_BUTTON_TEXT'))
     self.delete_button.pressed.connect(self.delete_student)
     self.delete_button.setDisabled(True)
     self.delete_button.setAutoDefault(False)
@@ -176,7 +165,7 @@ class StudentUpdateWidget(QWidget):
     is_invalid, text = self.student_is_invalid()
 
     if is_invalid:
-      title = StudentUpdateWidget.ERROR_SAVING_STUDENT_TEXT
+      title = _('ERROR_SAVING_STUDENT_TEXT')
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -234,7 +223,7 @@ class StudentUpdateWidget(QWidget):
       self.initialize_scroll_area()
       self.name_widget.hide()
 
-      StudentUpdateWidget.student_selector.addItem(StudentUpdateWidget.NO_STUDENTS_TEXT)
+      StudentUpdateWidget.student_selector.addItem(_('NO_STUDENTS_TEXT'))
       StudentUpdateWidget.student_selector.setDisabled(True)
       StudentUpdateWidget.student_selector.activated.disconnect()
       StudentUpdateWidget.student_selector.activated.connect(
@@ -263,24 +252,24 @@ class StudentUpdateWidget(QWidget):
   def student_is_invalid(self):
     student_name = self.name_line_edit.text()
     if len(student_name) == 0:
-      return True, StudentUpdateWidget.STUDENT_NAME_EMPTY_TEXT
+      return True, _('STUDENT_NAME_EMPTY_TEXT')
 
     if len(student_name) > StudentUpdateWidget.MAXIMUM_NAME_LENGTH:
-      return True, StudentUpdateWidget.NAME_LENGTH_EXCEEDS_LIMIT_TEXT
+      return True, _('STUDENT_NAME_LENGTH_EXCEEDS_LIMIT_TEXT')
 
     if (StudentUpdateWidget.student_selector.currentText() != student_name
         and student_name_exists(student_name)):
-      return True, StudentUpdateWidget.STUDENT_NAME_EXISTS_TEXT
+      return True, _('STUDENT_NAME_EXISTS_TEXT')
 
     for check_box in StudentUpdateWidget.check_boxes:
       if check_box.isChecked():
         return False, ''
 
-    return True, StudentUpdateWidget.NO_PROFILE_SELECTED_TEXT
+    return True, _('NO_PROFILE_SELECTED_TEXT')
 
   def update_student_update_widget(self):
     non_student_selections = [
-      StudentUpdateWidget.NO_STUDENTS_TEXT, StudentUpdateWidget.SELECT_STUDENT_TEXT
+      _('NO_STUDENTS_TEXT'), _('SELECT_STUDENT_TEXT')
     ]
 
     if StudentUpdateWidget.student_selector.currentText() in non_student_selections:
@@ -296,10 +285,10 @@ class StudentUpdateWidget(QWidget):
     StudentUpdateWidget.student_selector.clear()
 
     if len(students) == 0:
-      StudentUpdateWidget.student_selector.addItem(StudentUpdateWidget.NO_STUDENTS_TEXT)
+      StudentUpdateWidget.student_selector.addItem(_('NO_STUDENTS_TEXT'))
       StudentUpdateWidget.student_selector.setDisabled(True)
     else:
-      students[0:0] = [StudentUpdateWidget.SELECT_STUDENT_TEXT]
+      students[0:0] = [_('SELECT_STUDENT_TEXT')]
       StudentUpdateWidget.student_selector.addItems(students)
 
     StudentUpdateWidget.student_selector.activated.disconnect()
@@ -311,9 +300,9 @@ class StudentUpdateWidget(QWidget):
   def add_student(student_name):
     student_selector_current_text = StudentUpdateWidget.student_selector.currentText()
 
-    if student_selector_current_text == StudentUpdateWidget.NO_STUDENTS_TEXT:
+    if student_selector_current_text == _('NO_STUDENTS_TEXT'):
       StudentUpdateWidget.student_selector.setItemText(
-        0, StudentUpdateWidget.SELECT_STUDENT_TEXT
+        0, _('SELECT_STUDENT_TEXT')
       )
 
       StudentUpdateWidget.student_selector.setEnabled(True)
@@ -324,10 +313,10 @@ class StudentUpdateWidget(QWidget):
   def add_profile(profile_name):
     student_selector_current_text = StudentUpdateWidget.student_selector.currentText()
 
-    if student_selector_current_text == StudentUpdateWidget.NO_STUDENTS_TEXT:
+    if student_selector_current_text == _('NO_STUDENTS_TEXT'):
       return
 
-    if student_selector_current_text == StudentUpdateWidget.SELECT_STUDENT_TEXT:
+    if student_selector_current_text == _('SELECT_STUDENT_TEXT'):
       return
 
     check_box = QCheckBox(profile_name)

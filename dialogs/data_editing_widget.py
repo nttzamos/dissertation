@@ -7,17 +7,18 @@ from dialogs.student_addition_widget import StudentAdditionWidget
 from dialogs.student_update_widget import StudentUpdateWidget
 from menu.settings import Settings
 
-class DataEditingWidget(QDialog):
-  EDIT_DATA_TEXT = 'Επεξεργασία Μαθητών και Προφίλ'
-  ADD_STUDENT_TEXT = 'Προσθήκη Μαθητή'
-  EDIT_STUDENT_TEXT = 'Επεξεργασία Μαθητή'
-  ADD_PROFILE_TEXT = 'Προσθήκη Προφίλ'
-  EDIT_PROFILE_TEXT = 'Επεξεργασία Προφίλ'
+import gettext
 
+class DataEditingWidget(QDialog):
   def __init__(self):
     super().__init__()
 
-    self.setWindowTitle(DataEditingWidget.EDIT_DATA_TEXT)
+    language_code = Settings.get_setting('language')
+    language = gettext.translation('dialogs', localedir='resources/locale', languages=[language_code])
+    language.install()
+    _ = language.gettext
+
+    self.setWindowTitle(_('EDIT_DATA_TEXT'))
     self.setWindowIcon(QIcon('resources/window_icon.png'))
     self.setFixedWidth(Settings.get_setting('screen_width') / 2)
 
@@ -31,10 +32,10 @@ class DataEditingWidget(QDialog):
     edit_profiles_widget = ProfileUpdateWidget()
 
     tab_widget = QTabWidget()
-    tab_widget.addTab(add_student_widget, DataEditingWidget.ADD_STUDENT_TEXT)
-    tab_widget.addTab(DataEditingWidget.edit_student_widget, DataEditingWidget.EDIT_STUDENT_TEXT)
-    tab_widget.addTab(add_profile_widget, DataEditingWidget.ADD_PROFILE_TEXT)
-    tab_widget.addTab(edit_profiles_widget, DataEditingWidget.EDIT_PROFILE_TEXT)
+    tab_widget.addTab(add_student_widget, _('ADD_STUDENT_TEXT'))
+    tab_widget.addTab(DataEditingWidget.edit_student_widget, _('EDIT_STUDENT_TEXT'))
+    tab_widget.addTab(add_profile_widget, _('ADD_PROFILE_TEXT'))
+    tab_widget.addTab(edit_profiles_widget, _('EDIT_PROFILE_TEXT'))
 
     self.layout.addWidget(tab_widget)
 

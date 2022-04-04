@@ -8,23 +8,14 @@ from menu.settings import Settings
 from models.profile import get_profiles
 from models.student import create_student, student_name_exists
 
-class StudentAdditionWidget(QWidget):
-  STUDENT_NAME_TEXT = 'Όνομα Μαθητή'
-  PROFILE_SELECTION_TEXT = 'Επιλογή Προφίλ'
-  SAVE_STUDENT_BUTTON_TEXT = 'Αποθήκευση Μαθητή'
-  ERROR_SAVING_STUDENT_TEXT = 'Αδυναμία αποθήκευσης μαθητή'
-  SUCCESS_SAVING_STUDENT_TEXT = 'Ο μαθητής που προσθέσατε αποθηκεύτηκε επιτυχώς!'
-  SELECT_ALL_TEXT = 'Επιλογή όλων των προφίλ'
-  STUDENT_NAME_EMPTY_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
-                             'έχετε συμπληρώσει το όνομα του')
-  NAME_LENGTH_EXCEEDS_LIMIT_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς '
-                                    'το μήκος του ονόματος του υπερβαίνει το '
-                                    'όριο των 20 χαρακτήρων')
-  STUDENT_NAME_EXISTS_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς '
-                              'υπάρχει ήδη άλλος μαθητής με το ίδιο όνομα')
-  NO_PROFILE_SELECTED_TEXT = ('Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν '
-                              'έχετε επιλέξει κάποιο προφίλ για αυτόν')
+import gettext
 
+language_code = Settings.get_setting('language')
+language = gettext.translation('dialogs', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
+
+class StudentAdditionWidget(QWidget):
   MAXIMUM_NAME_LENGTH = 20
 
   def __init__(self):
@@ -41,7 +32,7 @@ class StudentAdditionWidget(QWidget):
     line_edit_font = QFont(Settings.FONT, 14)
     label_font = QFont(Settings.FONT, 12)
 
-    self.success_label = QLabel(StudentAdditionWidget.SUCCESS_SAVING_STUDENT_TEXT)
+    self.success_label = QLabel(_('SUCCESS_SAVING_STUDENT_TEXT'))
     self.success_label.setFont(label_font)
     size_policy = self.success_label.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
@@ -49,7 +40,7 @@ class StudentAdditionWidget(QWidget):
     self.success_label.hide()
     self.success_label.setStyleSheet('QLabel { color: green }')
 
-    name_widget = QGroupBox(StudentAdditionWidget.STUDENT_NAME_TEXT)
+    name_widget = QGroupBox(_('STUDENT_NAME_TEXT'))
     name_widget.setFont(section_label_font)
     name_widget.layout = QHBoxLayout(name_widget)
     name_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -58,7 +49,7 @@ class StudentAdditionWidget(QWidget):
     self.name_line_edit.setFont(line_edit_font)
     name_widget.layout.addWidget(self.name_line_edit)
 
-    profiles_widget = QGroupBox(StudentAdditionWidget.PROFILE_SELECTION_TEXT)
+    profiles_widget = QGroupBox(_('PROFILE_SELECTION_TEXT'))
     profiles_widget.setFont(section_label_font)
     profiles_widget.layout = QHBoxLayout(profiles_widget)
     profiles_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -96,11 +87,11 @@ class StudentAdditionWidget(QWidget):
 
     profiles_widget.layout.addWidget(scroll_area)
 
-    save_button = QPushButton(StudentAdditionWidget.SAVE_STUDENT_BUTTON_TEXT)
+    save_button = QPushButton(_('SAVE_STUDENT_BUTTON_TEXT'))
     save_button.pressed.connect(self.save_student)
     save_button.setAutoDefault(False)
 
-    select_all_button = QPushButton(StudentAdditionWidget.SELECT_ALL_TEXT)
+    select_all_button = QPushButton(_('SELECT_ALL_PROFILES_TEXT'))
     select_all_button.pressed.connect(self.select_all)
     select_all_button.setAutoDefault(False)
 
@@ -119,7 +110,7 @@ class StudentAdditionWidget(QWidget):
     is_invalid, text = self.student_is_invalid()
 
     if is_invalid:
-      title = StudentAdditionWidget.ERROR_SAVING_STUDENT_TEXT
+      title = _('ERROR_SAVING_STUDENT_TEXT')
       QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       return
 
@@ -150,19 +141,19 @@ class StudentAdditionWidget(QWidget):
   def student_is_invalid(self):
     student_name = self.name_line_edit.text()
     if len(student_name) == 0:
-      return True, StudentAdditionWidget.STUDENT_NAME_EMPTY_TEXT
+      return True, _('STUDENT_NAME_EMPTY_TEXT')
 
     if len(student_name) > StudentAdditionWidget.MAXIMUM_NAME_LENGTH:
-      return True, StudentAdditionWidget.NAME_LENGTH_EXCEEDS_LIMIT_TEXT
+      return True, _('STUDENT_NAME_LENGTH_EXCEEDS_LIMIT_TEXT')
 
     if student_name_exists(student_name):
-      return True, StudentAdditionWidget.STUDENT_NAME_EXISTS_TEXT
+      return True, _('STUDENT_NAME_EXISTS_TEXT')
 
     for check_box in StudentAdditionWidget.check_boxes:
       if check_box.isChecked():
         return False, ''
 
-    return True, StudentAdditionWidget.NO_PROFILE_SELECTED_TEXT
+    return True, _('NO_PROFILE_SELECTED_TEXT')
 
   @staticmethod
   def add_profile(profile_name):

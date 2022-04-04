@@ -7,13 +7,18 @@ import pickledb
 class Settings():
   SETTINGS_DATABASE_FILE = 'resources/settings.json'
   FONT = QFont().family()
+  LANGUAGES = {
+    'Ελληνικά': 'el',
+    'English': 'en'
+  } # If you wish to add more languages, modify this dictionary accordingly
 
   @staticmethod
   def initialize_settings_database(screen_width, screen_height):
     settings_default_values = {
       'maximum_results': 30,
       'last_student_picked': 1,
-      'theme': 'light'
+      'theme': 'light',
+      'language': 'el'
     }
 
     boolean_settings_default_values = {
@@ -28,7 +33,7 @@ class Settings():
     boolean_settings_about_hiding_messages = [
       'hide_no_internet_message', 'hide_theme_change_effect_message',
       'hide_delete_profile_message', 'hide_delete_student_message',
-      'hide_delete_word_message'
+      'hide_delete_word_message', 'hide_language_change_effect_message'
     ]
 
     for key, value in settings_default_values.items():
@@ -90,3 +95,19 @@ class Settings():
     settings_database = pickledb.load(Settings.SETTINGS_DATABASE_FILE, False)
 
     return settings_database.get(setting_name)
+
+  @staticmethod
+  def get_available_languages():
+    return list(Settings.LANGUAGES.keys())
+
+  @staticmethod
+  def set_language(language):
+    Settings.set_setting('language', Settings.LANGUAGES[language])
+
+  @staticmethod
+  def get_language():
+    selected_language_code = Settings.get_setting('language')
+    for language_name, language_code in Settings.LANGUAGES.items():
+      if language_code == selected_language_code:
+        return language_name
+

@@ -5,12 +5,17 @@ from PyQt6.QtGui import QFont, QIcon
 from models.recent_search import create_recent_search
 from models.starred_word import destroy_starred_word
 
-class StarredWord(QWidget):
-  RELOAD_TEXT = 'Αναζήτηση'
-  STAR_TEXT = 'Αφαίρεση από τα Αγαπημένα'
+import gettext
 
+class StarredWord(QWidget):
   def __init__(self, word):
     super().__init__()
+
+    from menu.settings import Settings
+    language_code = Settings.get_setting('language')
+    language = gettext.translation('item', localedir='resources/locale', languages=[language_code])
+    language.install()
+    _ = language.gettext
 
     self.setFixedHeight(50)
 
@@ -18,7 +23,6 @@ class StarredWord(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
-    from menu.settings import Settings
     font = QFont(Settings.FONT, 14)
 
     data_widget = QWidget()
@@ -32,12 +36,12 @@ class StarredWord(QWidget):
 
     reload_button = QPushButton()
     reload_button.setIcon(QIcon('resources/reload.svg'))
-    reload_button.setToolTip(StarredWord.RELOAD_TEXT)
+    reload_button.setToolTip(_('RELOAD_TEXT'))
     reload_button.clicked.connect(self.reload_word)
     reload_button.setFixedWidth(30)
 
     self.star_button = QPushButton()
-    self.star_button.setToolTip(StarredWord.STAR_TEXT)
+    self.star_button.setToolTip(_('UNSTAR_TEXT'))
     self.star_button.clicked.connect(self.toggle_starred_state)
     self.star_button.setFixedWidth(30)
     self.star_button.setIcon(QIcon('resources/starred.svg'))

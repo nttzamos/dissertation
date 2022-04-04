@@ -9,30 +9,14 @@ from menu.settings import Settings
 from models.profile import *
 from shared.database_handler import get_grades, get_grade_subjects
 
-class ProfileUpdateWidget(QWidget):
-  PROFILE_SELECTION_TEXT = 'Επιλογή Προφίλ'
-  SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων'
-  PROFILE_NAME_TEXT = 'Όνομα Προφίλ'
-  PROFILE_GRADE_TEXT = 'Τάξη Προφίλ'
-  UPDATE_PROFILE_BUTTON_TEXT = 'Αποθήκευση Προφίλ'
-  DELETE_PROFILE_BUTTON_TEXT = 'Διαγραφή Προφίλ'
-  ERROR_SAVING_PROFILE_TEXT = 'Αδυναμία αποθήκευσης προφίλ'
-  ERROR_DELETING_PROFILE_TEXT = 'Αδυναμία διαγραφή προφίλ'
-  SELECT_PROFILE_TEXT = 'Επιλέξτε ένα προφίλ...'
-  NO_PROFILES_TEXT = 'Δεν υπάρχουν προφίλ'
-  MUST_SELECT_PROFILE_TEXT = 'Πρέπει να επιλέξετε ένα προφίλ'
-  GRADE_PROFILE_UPDATE_ERROR_TEXT = 'Τα προφίλ των τάξεων δεν μπορούν να μεταβληθούν'
-  GRADE_PROFILE_DELETE_ERROR_TEXT = 'Τα προφίλ των τάξεων δεν μπορούν να διαγραφούν'
-  PROFILE_NAME_EMPTY_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
-                             'έχετε συμπληρώσει το όνομα του')
-  NAME_LENGTH_EXCEEDS_LIMIT_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς '
-                                    'το μήκος του ονόματος του υπερβαίνει το '
-                                    'όριο των 20 χαρακτήρων')
-  PROFILE_NAME_EXISTS_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς '
-                              'υπάρχει ήδη άλλο προφίλ με το ίδιο όνομα')
-  NO_SUBJECT_SELECTED_TEXT = ('Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν '
-                              'έχετε επιλέξει κάποια μαθήματα για αυτό')
+import gettext
 
+language_code = Settings.get_setting('language')
+language = gettext.translation('dialogs', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
+
+class ProfileUpdateWidget(QWidget):
   MAXIMUM_NAME_LENGTH = 20
 
   def __init__(self):
@@ -49,7 +33,7 @@ class ProfileUpdateWidget(QWidget):
 
     self.check_boxes_modified = []
 
-    profile_selection_widget = QGroupBox(ProfileUpdateWidget.PROFILE_SELECTION_TEXT)
+    profile_selection_widget = QGroupBox(_('PROFILE_SELECTION_TEXT'))
     profile_selection_widget.setFont(section_label_font)
     profile_selection_widget.layout = QHBoxLayout(profile_selection_widget)
     profile_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -60,10 +44,10 @@ class ProfileUpdateWidget(QWidget):
     ProfileUpdateWidget.profile_selector.setFont(combo_box_font)
 
     if len(profiles) == 0:
-      ProfileUpdateWidget.profile_selector.addItem(ProfileUpdateWidget.NO_PROFILES_TEXT)
+      ProfileUpdateWidget.profile_selector.addItem(_('NO_PROFILES_TEXT'))
       ProfileUpdateWidget.profile_selector.setDisabled(True)
     else:
-      profiles[0:0] = [ProfileUpdateWidget.SELECT_PROFILE_TEXT]
+      profiles[0:0] = [_('SELECT_PROFILE_TEXT')]
       ProfileUpdateWidget.profile_selector.addItems(profiles)
 
     ProfileUpdateWidget.profile_selector.activated.connect(
@@ -72,7 +56,7 @@ class ProfileUpdateWidget(QWidget):
 
     profile_selection_widget.layout.addWidget(ProfileUpdateWidget.profile_selector)
 
-    self.name_widget = QGroupBox(ProfileUpdateWidget.PROFILE_NAME_TEXT)
+    self.name_widget = QGroupBox(_('PROFILE_NAME_TEXT'))
     self.name_widget.setFont(section_label_font)
     self.name_widget.layout = QHBoxLayout(self.name_widget)
     self.name_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -83,17 +67,17 @@ class ProfileUpdateWidget(QWidget):
     self.name_widget.layout.addWidget(self.name_line_edit)
     self.name_widget.hide()
 
-    grade_label_widget = QGroupBox(ProfileUpdateWidget.PROFILE_GRADE_TEXT)
+    grade_label_widget = QGroupBox(_('PROFILE_GRADE_TEXT'))
     grade_label_widget.setFont(section_label_font)
     grade_label_widget.layout = QHBoxLayout(grade_label_widget)
     grade_label_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    ProfileUpdateWidget.grade_label = QLabel(ProfileUpdateWidget.MUST_SELECT_PROFILE_TEXT)
+    ProfileUpdateWidget.grade_label = QLabel(_('MUST_SELECT_PROFILE_TEXT'))
     ProfileUpdateWidget.grade_label.setFont(label_font)
 
     grade_label_widget.layout.addWidget(ProfileUpdateWidget.grade_label)
 
-    subjects_widget = QGroupBox(ProfileUpdateWidget.SUBJECT_SELECTION_TEXT)
+    subjects_widget = QGroupBox(_('SUBJECT_SELECTION_TEXT'))
     subjects_widget.setFont(section_label_font)
     subjects_widget.layout = QHBoxLayout(subjects_widget)
     subjects_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -122,12 +106,12 @@ class ProfileUpdateWidget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    self.save_button = QPushButton(ProfileUpdateWidget.UPDATE_PROFILE_BUTTON_TEXT)
+    self.save_button = QPushButton(_('UPDATE_PROFILE_BUTTON_TEXT'))
     self.save_button.pressed.connect(self.update_profile)
     self.save_button.setDisabled(True)
     self.save_button.setAutoDefault(False)
 
-    self.delete_button = QPushButton(ProfileUpdateWidget.DELETE_PROFILE_BUTTON_TEXT)
+    self.delete_button = QPushButton(_('DELETE_PROFILE_BUTTON_TEXT'))
     self.delete_button.pressed.connect(self.delete_profile)
     self.delete_button.setDisabled(True)
     self.delete_button.setAutoDefault(False)
@@ -184,12 +168,12 @@ class ProfileUpdateWidget(QWidget):
 
   def update_profile(self):
     if self.profile_selector.currentText() in get_grades():
-      is_invalid, text = True, ProfileUpdateWidget.GRADE_PROFILE_UPDATE_ERROR_TEXT
+      is_invalid, text = True, _('GRADE_PROFILE_UPDATE_ERROR_TEXT')
     else:
       is_invalid, text = self.profile_is_invalid()
 
     if is_invalid:
-      title = ProfileUpdateWidget.ERROR_SAVING_PROFILE_TEXT
+      title = _('ERROR_SAVING_PROFILE_TEXT')
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -231,8 +215,8 @@ class ProfileUpdateWidget(QWidget):
 
   def delete_profile(self):
     if self.profile_selector.currentText() in get_grades():
-      title = ProfileUpdateWidget.ERROR_DELETING_PROFILE_TEXT
-      text = ProfileUpdateWidget.GRADE_PROFILE_DELETE_ERROR_TEXT
+      title = _('ERROR_DELETING_PROFILE_TEXT')
+      text = _('GRADE_PROFILE_DELETE_ERROR_TEXT')
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -259,14 +243,14 @@ class ProfileUpdateWidget(QWidget):
     )
 
     if ProfileUpdateWidget.profile_selector.count() == 0:
-      ProfileUpdateWidget.profile_selector.addItem(ProfileUpdateWidget.NO_PROFILES_TEXT)
+      ProfileUpdateWidget.profile_selector.addItem(_('NO_PROFILES_TEXT'))
       ProfileUpdateWidget.profile_selector.setDisabled(True)
       ProfileUpdateWidget.profile_selector.activated.disconnect()
       ProfileUpdateWidget.profile_selector.activated.connect(
         self.profile_selector_activated_initial
       )
 
-      ProfileUpdateWidget.grade_label.setText(ProfileUpdateWidget.MUST_SELECT_PROFILE_TEXT)
+      ProfileUpdateWidget.grade_label.setText(_('MUST_SELECT_PROFILE_TEXT'))
       self.name_widget.hide()
       return
 
@@ -295,14 +279,14 @@ class ProfileUpdateWidget(QWidget):
   def profile_is_invalid(self):
     profile_name = self.name_line_edit.text()
     if len(profile_name) == 0:
-      return True, ProfileUpdateWidget.PROFILE_NAME_EMPTY_TEXT
+      return True, _('PROFILE_NAME_EMPTY_TEXT')
 
     if len(profile_name) > ProfileUpdateWidget.MAXIMUM_NAME_LENGTH:
-      return True, ProfileUpdateWidget.NAME_LENGTH_EXCEEDS_LIMIT_TEXT
+      return True, _('PROFILE_NAME_LENGTH_EXCEEDS_LIMIT_TEXT')
 
     if (ProfileUpdateWidget.profile_selector.currentText() != profile_name
         and profile_name_exists(profile_name)):
-      return True, ProfileUpdateWidget.PROFILE_NAME_EXISTS_TEXT
+      return True, _('PROFILE_NAME_EXISTS_TEXT')
 
     checked_check_boxes_count = 0
 
@@ -311,7 +295,7 @@ class ProfileUpdateWidget(QWidget):
         checked_check_boxes_count += 1
 
     if checked_check_boxes_count == 0:
-      return True, ProfileUpdateWidget.NO_SUBJECT_SELECTED_TEXT
+      return True, _('NO_SUBJECT_SELECTED_TEXT')
     elif checked_check_boxes_count == len(self.check_boxes):
       return True, self.construct_redundant_profile_message()
     else:
@@ -325,9 +309,9 @@ class ProfileUpdateWidget(QWidget):
 
   @staticmethod
   def add_profile(profile_name):
-    if ProfileUpdateWidget.profile_selector.currentText() == ProfileUpdateWidget.NO_PROFILES_TEXT:
-      ProfileUpdateWidget.profile_selector.setItemText(0, ProfileUpdateWidget.SELECT_PROFILE_TEXT)
-      ProfileUpdateWidget.grade_label.setText(ProfileUpdateWidget.SELECT_PROFILE_TEXT)
+    if ProfileUpdateWidget.profile_selector.currentText() == _('NO_PROFILES_TEXT'):
+      ProfileUpdateWidget.profile_selector.setItemText(0, _('SELECT_PROFILE_TEXT'))
+      ProfileUpdateWidget.grade_label.setText(_('SELECT_PROFILE_TEXT'))
       ProfileUpdateWidget.profile_selector.setEnabled(True)
 
     ProfileUpdateWidget.profile_selector.addItem(profile_name)

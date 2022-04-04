@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2022-04-03 23:39+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+msgid "SEARCH_TEXT"
+msgstr "Αναζήτηση"
+
+msgid "CLEAR_SEARCH_TEXT"
+msgstr "Καθαρισμός αναζήτησης"
+
+msgid "UNINITIALIZED_STATE_TEXT"
+msgstr "Πρέπει να επιλέξετε κάποιο μάθημα πρώτα."
+
+msgid "PLEASE_ENTER_WORD_TEXT"
+msgstr "Παρακαλώ εισάγετε μια λέξη."
+
+msgid "EDIT_WORDS_BUTTON_TEXT"
+msgstr "Επεξεργασία Λέξεων"
+
+msgid "EDIT_WORDS_TOOLTIP_TEXT"
+msgstr "Μπορείτε να επεξεργαστείτε τις λέξεις κάθε τάξης, καθώς και τις συγγενικές τους λέξεις"
+
+msgid "ENTER_WORD_TEXT"
+msgstr "Πρέπει να αναζητήσετε μια λέξη."
+
+msgid "EDIT_DATA_BUTTON_TEXT"
+msgstr "Επεξεργασία Μαθητών και Προφίλ"
+
+msgid "EDIT_DATA_TOOLTIP_TEXT"
+msgstr "Μπορείτε να δημιουργήσετε/επεξεργαστείτε μαθητές, καθώς και τα προφίλ τους."
+
+msgid "SELECT_STUDENT_TEXT"
+msgstr "Επιλέξτε έναν μαθητή..."
+
+msgid "NO_STUDENTS_TEXT"
+msgstr "Δεν υπάρχουν μαθητές"
+
+msgid "MUST_SELECT_STUDENT_TEXT"
+msgstr "Πρέπει να επιλέξετε μαθητή."
+
+msgid "MUST_SELECT_STUDENT_AND_PROFILE_TEXT"
+msgstr "Πρέπει να επιλέξετε μαθητή και προφίλ."
+
+msgid "MUST_SELECT_PROFILE_TEXT"
+msgstr "Πρέπει να επιλέξετε προφίλ."
+
+msgid "STUDENT_NO_PROFILES_TEXT"
+msgstr "Ο μαθητής δεν έχει προφίλ."
+
+msgid "SELECT_PROFILE_TEXT"
+msgstr "Επιλέξτε ένα προφίλ..."
+
+msgid "SELECT_SUBJECT_TEXT"
+msgstr "Επιλέξτε ένα μάθημα..."
+
+msgid "ALL_SUBJECTS_TEXT"
+msgstr "Όλα τα μαθήματα"

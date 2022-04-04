@@ -9,26 +9,14 @@ from menu.settings import Settings
 from models.word import get_word_subjects, word_exists, update_word, destroy_word
 from shared.database_handler import get_grades, get_grade_words, get_grade_subjects
 
-class WordUpdateWidget(QWidget):
-  GRADE_SELECTION_TEXT = 'Επιλογή Τάξης'
-  SUBJECT_SELECTION_TEXT = 'Επιλογή Μαθημάτων (μαθήματα στα οποία ανήκει η λέξη)'
-  WORD_SELECTION_TEXT = 'Επιλογή Λέξης'
-  UPDATE_WORD_BUTTON_TEXT = 'Αποθήκευση Λέξης'
-  DELETE_WORD_BUTTON_TEXT = 'Διαγραφή Λέξης'
-  ERROR_SAVING_WORD_TEXT = 'Αδυναμία αποθήκευσης λέξης'
-  PLEASE_ENTER_WORD_TEXT = 'Παρακαλώ εισάγετε μια λέξη.'
-  PLEASE_ENTER_ANOTHER_WORD_TEXT = 'Παρακαλώ εισάγετε μια διαφορετική λέξη.'
-  WORD_MODIFICATION_TEXT = 'Τροποποίηση Λέξης'
-  WORD_EMPTY_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς είναι κενή'
-  WORD_EXISTS_TEXT = 'Η λέξη δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη'
-  ONLY_GREEK_CHARACTERS_ALLOWED_TEXT = ('Η λέξη σας πρέπει να περιέχει μόνο '
-                                        'ελληνικούς πεζούς χαρακτήρες')
-  WORD_LENGTH_EXCEEDS_LIMIT_TEXT = ('Η λέξη δεν μπορεί να αποθηκευτεί καθώς '
-                                    'το μήκος της υπερβαίνει το όριο των 20 '
-                                    'χαρακτήρων')
-  NO_SUBJECT_SELECTED_TEXT = ('Η λέξη δεν μπορεί να αποθηκευτεί καθώς δεν '
-                              'έχετε επιλέξει κανένα μάθημα στο οποίο θα ανήκει')
+import gettext
 
+language_code = Settings.get_setting('language')
+language = gettext.translation('dialogs', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
+
+class WordUpdateWidget(QWidget):
   MAXIMUM_NAME_LENGTH = 20
   GREEK_CHARACTERS = [
     'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο',
@@ -52,7 +40,7 @@ class WordUpdateWidget(QWidget):
 
     WordUpdateWidget.just_searched_with_enter = False
 
-    grade_selection_widget = QGroupBox(WordUpdateWidget.GRADE_SELECTION_TEXT)
+    grade_selection_widget = QGroupBox(_('GRADE_SELECTION_TEXT'))
     grade_selection_widget.setFont(section_label_font)
     grade_selection_widget.layout = QHBoxLayout(grade_selection_widget)
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -64,7 +52,7 @@ class WordUpdateWidget(QWidget):
 
     grade_selection_widget.layout.addWidget(WordUpdateWidget.grade_selector)
 
-    word_selection_widget = QGroupBox(WordUpdateWidget.WORD_SELECTION_TEXT)
+    word_selection_widget = QGroupBox(_('WORD_SELECTION_TEXT'))
     word_selection_widget.setFont(section_label_font)
     word_selection_widget.layout = QVBoxLayout(word_selection_widget)
     word_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -78,8 +66,8 @@ class WordUpdateWidget(QWidget):
     WordUpdateWidget.completer.activated.connect(self.search_with_click)
     WordUpdateWidget.completer.popup().setFont(completer_font)
     self.word_selection_line_edit.setCompleter(WordUpdateWidget.completer)
-    self.word_selection_line_edit.setPlaceholderText(WordUpdateWidget.PLEASE_ENTER_WORD_TEXT)
-    self.error_message_label = QLabel(WordUpdateWidget.PLEASE_ENTER_ANOTHER_WORD_TEXT, self)
+    self.word_selection_line_edit.setPlaceholderText(_('PLEASE_ENTER_WORD_TEXT'))
+    self.error_message_label = QLabel(_('PLEASE_ENTER_ANOTHER_WORD_TEXT'), self)
     self.error_message_label.setFont(error_message_font)
     self.word_selection_line_edit.textChanged.connect(self.error_message_label.hide)
     self.error_message_label.hide()
@@ -87,7 +75,7 @@ class WordUpdateWidget(QWidget):
     word_selection_widget.layout.addWidget(self.word_selection_line_edit)
     word_selection_widget.layout.addWidget(self.error_message_label)
 
-    self.word_widget = QGroupBox(WordUpdateWidget.WORD_MODIFICATION_TEXT)
+    self.word_widget = QGroupBox(_('WORD_MODIFICATION_TEXT'))
     self.word_widget.setFont(section_label_font)
     self.word_widget.layout = QHBoxLayout(self.word_widget)
     self.word_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -98,7 +86,7 @@ class WordUpdateWidget(QWidget):
     self.word_widget.layout.addWidget(self.word_line_edit)
     self.word_widget.hide()
 
-    subjects_widget = QGroupBox(WordUpdateWidget.SUBJECT_SELECTION_TEXT)
+    subjects_widget = QGroupBox(_('WORD_SUBJECT_SELECTION_TEXT'))
     subjects_widget.setFont(section_label_font)
     subjects_widget.layout = QHBoxLayout(subjects_widget)
     subjects_widget.layout.setContentsMargins(10, 5, 10, 10)
@@ -124,12 +112,12 @@ class WordUpdateWidget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    self.save_button = QPushButton(WordUpdateWidget.UPDATE_WORD_BUTTON_TEXT)
+    self.save_button = QPushButton(_('UPDATE_WORD_BUTTON_TEXT'))
     self.save_button.pressed.connect(self.update_word)
     self.save_button.setDisabled(True)
     self.save_button.setAutoDefault(False)
 
-    self.delete_button = QPushButton(WordUpdateWidget.DELETE_WORD_BUTTON_TEXT)
+    self.delete_button = QPushButton(_('DELETE_WORD_BUTTON_TEXT'))
     self.delete_button.pressed.connect(self.delete_word)
     self.delete_button.setDisabled(True)
     self.delete_button.setAutoDefault(False)
@@ -244,7 +232,7 @@ class WordUpdateWidget(QWidget):
     is_invalid, text = self.word_is_invalid()
 
     if is_invalid:
-      title = WordUpdateWidget.ERROR_SAVING_WORD_TEXT
+      title = _('ERROR_SAVING_WORD_TEXT')
       answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       if answer == QMessageBox.StandardButton.Ok:
         return
@@ -374,23 +362,23 @@ class WordUpdateWidget(QWidget):
   def word_is_invalid(self):
     word = self.word_line_edit.text()
     if len(word) == 0:
-      return True, WordUpdateWidget.WORD_EMPTY_TEXT
+      return True, _('WORD_EMPTY_TEXT')
 
     if len(word) > WordUpdateWidget.MAXIMUM_NAME_LENGTH:
-      return True, WordUpdateWidget.WORD_LENGTH_EXCEEDS_LIMIT_TEXT
+      return True, _('WORD_LENGTH_EXCEEDS_LIMIT_TEXT')
 
     if self.searched_word != word and word_exists(self.grade_selector.currentIndex() + 1, word):
-      return True, WordUpdateWidget.WORD_EXISTS_TEXT
+      return True, _('WORD_EXISTS_TEXT')
 
     for character in word:
       if not character in WordUpdateWidget.GREEK_CHARACTERS:
-        return True, WordUpdateWidget.ONLY_GREEK_CHARACTERS_ALLOWED_TEXT
+        return True, _('ONLY_GREEK_CHARACTERS_ALLOWED_TEXT')
 
     for check_box in self.check_boxes:
       if check_box.isChecked():
         return False, ''
 
-    return True, WordUpdateWidget.NO_SUBJECT_SELECTED_TEXT
+    return True, _('NO_SUBJECT_SELECTED_TEXT')
 
   def get_permission_to_delete(self):
     title = 'Διαγραφή Λέξης'

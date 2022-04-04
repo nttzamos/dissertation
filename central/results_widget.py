@@ -10,10 +10,14 @@ from models.family import (get_family_id, get_family_words, update_word_family,
 from models.word import get_word_id, word_exists
 from shared.wiktionary_parser import fetch_word_details
 
-class ResultsWidget(QWidget):
-  RESULT_DISPLAY_TEXT = 'Τα αποτελέσματα της αναζήτησης σας θα εμφανιστούν εδώ.'
-  NO_RESULTS_TEXT = 'Δεν βρέθηκαν συγγενικές λέξεις για την λέξη που αναζητήσατε.'
+import gettext
 
+language_code = Settings.get_setting('language')
+language = gettext.translation('central', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
+
+class ResultsWidget(QWidget):
   def __init__(self):
     super().__init__()
 
@@ -25,7 +29,7 @@ class ResultsWidget(QWidget):
     ResultsWidget.grid_layout = QGridLayout(ResultsWidget.scroll_area_widget_contents)
     ResultsWidget.widget_list = []
     ResultsWidget.show_placeholder_label = True
-    ResultsWidget.placeholder_label = QLabel(ResultsWidget.RESULT_DISPLAY_TEXT)
+    ResultsWidget.placeholder_label = QLabel(_('RESULT_DISPLAY_TEXT'))
 
     font = QFont(Settings.FONT, 18)
 
@@ -104,7 +108,7 @@ class ResultsWidget(QWidget):
       ResultsWidget.show_no_internet_message()
 
     if i == 0:
-      ResultsWidget.show_placeholder(ResultsWidget.NO_RESULTS_TEXT)
+      ResultsWidget.show_placeholder(_('NO_RESULTS_TEXT'))
 
   @staticmethod
   def get_results(word):
@@ -159,7 +163,9 @@ class ResultsWidget(QWidget):
     ResultsWidget.widget_list = []
 
   @staticmethod
-  def show_placeholder(text=RESULT_DISPLAY_TEXT):
+  def show_placeholder(text=None):
+    if text == None: text = _('RESULT_DISPLAY_TEXT')
+
     ResultsWidget.placeholder_label.setText(text)
     ResultsWidget.clear_previous_results()
     ResultsWidget.legend_button.hide()
@@ -181,7 +187,7 @@ class ResultsWidget(QWidget):
     ResultsWidget.widget_list.remove(result)
 
     if len(ResultsWidget.widget_list)==0:
-      ResultsWidget.show_placeholder(ResultsWidget.NO_RESULTS_TEXT)
+      ResultsWidget.show_placeholder(_('NO_RESULTS_TEXT'))
 
   @staticmethod
   def show_no_internet_message():
