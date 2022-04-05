@@ -40,9 +40,12 @@ class StarredWordsWidget(QWidget):
     font = QFont(Settings.FONT, 18)
     invisible_font = QFont(Settings.FONT, 1)
 
-    self.title_label = QLabel(_('STARRED_WORDS_TITLE'))
-    self.title_label.setFont(font)
-    self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    title_label = QLabel(_('STARRED_WORDS_TITLE'))
+    title_label.setFont(font)
+    title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    from shared.styles import Styles
+    title_label.setStyleSheet(Styles.side_widgets_title_label_style)
 
     StarredWordsWidget.placeholder_label = QLabel()
     StarredWordsWidget.placeholder_label.setFont(font)
@@ -56,7 +59,7 @@ class StarredWordsWidget(QWidget):
     size_policy.setRetainSizeWhenHidden(True)
     StarredWordsWidget.vspacer.setSizePolicy(size_policy)
 
-    self.layout.addWidget(self.title_label)
+    self.layout.addWidget(title_label)
     self.layout.addWidget(scroll_area)
 
     self.setMinimumWidth(Settings.get_setting('left_widget_width'))
@@ -65,7 +68,6 @@ class StarredWordsWidget(QWidget):
 
   def style(self):
     from shared.styles import Styles
-    self.title_label.setStyleSheet(Styles.side_widgets_title_label_style)
     self.setStyleSheet(Styles.side_widgets_style)
 
   @staticmethod
