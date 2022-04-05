@@ -15,137 +15,137 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 msgid "EDIT_DATA_TEXT"
-msgstr "Επεξεργασία Μαθητών και Προφίλ"
+msgstr "Edit Students/Profiles"
 
 msgid "ADD_STUDENT_TEXT"
-msgstr "Προσθήκη Μαθητή"
+msgstr "Add Student"
 
 msgid "EDIT_STUDENT_TEXT"
-msgstr "Επεξεργασία Μαθητή"
+msgstr "Edit Student"
 
 msgid "ADD_PROFILE_TEXT"
-msgstr "Προσθήκη Προφίλ"
+msgstr "Add Profile"
 
 msgid "EDIT_PROFILE_TEXT"
-msgstr "Επεξεργασία Προφίλ"
+msgstr "Edit Profile"
 
 msgid "PROFILE_NAME_TEXT"
-msgstr "Όνομα Προφίλ"
+msgstr "Profile Name"
 
 msgid "GRADE_SELECTION_TEXT"
-msgstr "Επιλογή Τάξης"
+msgstr "Grade Selection"
 
 msgid "SUBJECT_SELECTION_TEXT"
-msgstr "Επιλογή Μαθημάτων"
+msgstr "Subjects Selection"
 
 msgid "SAVE_PROFILE_BUTTON_TEXT"
-msgstr "Αποθήκευση Προφίλ"
+msgstr "Save Profile"
 
 msgid "ERROR_SAVING_PROFILE_TEXT"
-msgstr "Αδυναμία αποθήκευσης προφίλ"
+msgstr "Error saving profile"
 
 msgid "SUCCESS_SAVING_PROFILE_TEXT"
-msgstr "Το προφίλ που προσθέσατε αποθηκεύτηκε επιτυχώς!"
+msgstr "The profile was saved successfully!"
 
 msgid "SELECT_ALL_SUBJECTS_TEXT"
-msgstr "Επιλογή όλων των μαθημάτων"
+msgstr "Select all subjects"
 
 msgid "PROFILE_NAME_EMPTY_TEXT"
-msgstr "Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν έχετε συμπληρώσει το όνομα του"
+msgstr "The profile can not be saved because its name is empty"
 
 msgid "PROFILE_NAME_LENGTH_EXCEEDS_LIMIT_TEXT"
-msgstr "Το προφίλ δεν μπορεί να αποθηκευτεί καθώς το μήκος του ονόματος του υπερβαίνει το όριο των 20 χαρακτήρων"
+msgstr "The profile can not be saved because its name length exceeds the upper limit of 20 characters"
 
 msgid "PROFILE_NAME_EXISTS_TEXT"
-msgstr "Το προφίλ δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη άλλο προφίλ με το ίδιο όνομα"
+msgstr "The profile can not be saved because another profile with the same name already exists"
 
 msgid "NO_SUBJECT_SELECTED_TEXT"
-msgstr "Το προφίλ δεν μπορεί να αποθηκευτεί καθώς δεν έχετε επιλέξει κάποια μαθήματα για αυτό"
+msgstr "The profile can not be saved because you have not selected any subjects"
 
 msgid "PROFILE_SELECTION_TEXT"
-msgstr "Επιλογή Προφίλ"
+msgstr "Profile Selection"
 
 msgid "PROFILE_GRADE_TEXT"
-msgstr "Τάξη Προφίλ"
+msgstr "Profile Grade"
 
 msgid "UPDATE_PROFILE_BUTTON_TEXT"
-msgstr "Αποθήκευση Προφίλ"
+msgstr "Update Profile"
 
 msgid "DELETE_PROFILE_BUTTON_TEXT"
-msgstr "Διαγραφή Προφίλ"
+msgstr "Delete Profile"
 
 msgid "ERROR_DELETING_PROFILE_TEXT"
-msgstr "Αδυναμία διαγραφή προφίλ"
+msgstr "Error deleting profile"
 
 msgid "SELECT_PROFILE_TEXT"
-msgstr "Επιλέξτε ένα προφίλ..."
+msgstr "Select a profile..."
 
 msgid "NO_PROFILES_TEXT"
-msgstr "Δεν υπάρχουν προφίλ"
+msgstr "No profiles exist"
 
 msgid "MUST_SELECT_PROFILE_TEXT"
-msgstr "Πρέπει να επιλέξετε ένα προφίλ"
+msgstr "You must select a profile"
 
 msgid "GRADE_PROFILE_UPDATE_ERROR_TEXT"
-msgstr "Τα προφίλ των τάξεων δεν μπορούν να μεταβληθούν"
+msgstr "The grade profiles can not be updated"
 
 msgid "GRADE_PROFILE_DELETE_ERROR_TEXT"
-msgstr "Τα προφίλ των τάξεων δεν μπορούν να διαγραφούν"
+msgstr "The grade profiles can not be deleted"
 
 msgid "STUDENT_NAME_TEXT"
-msgstr "Όνομα Μαθητή"
+msgstr "Student Name"
 
 msgid "SAVE_STUDENT_BUTTON_TEXT"
-msgstr "Αποθήκευση Μαθητή"
+msgstr "Save Student"
 
 msgid "ERROR_SAVING_STUDENT_TEXT"
-msgstr "Αδυναμία αποθήκευσης μαθητή"
+msgstr "Error saving student"
 
 msgid "SUCCESS_SAVING_STUDENT_TEXT"
-msgstr "Ο μαθητής που προσθέσατε αποθηκεύτηκε επιτυχώς!"
+msgstr "The student was saved successfully!"
 
 msgid "SELECT_ALL_PROFILES_TEXT"
-msgstr "Επιλογή όλων των προφίλ"
+msgstr "Select all profiles"
 
 msgid "STUDENT_NAME_EMPTY_TEXT"
-msgstr "Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν έχετε συμπληρώσει το όνομα του"
+msgstr "The student can not be saved because its name is empty"
 
 msgid "STUDENT_NAME_LENGTH_EXCEEDS_LIMIT_TEXT"
-msgstr "Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς το μήκος του ονόματος του υπερβαίνει το όριο των 20 χαρακτήρων"
+msgstr "The student can not be saved because its name length exceeds the upper limit of 20 characters"
 
 msgid "STUDENT_NAME_EXISTS_TEXT"
-msgstr "Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη άλλος μαθητής με το ίδιο όνομα"
+msgstr "The student can not be saved because another student with the same name already exists"
 
 msgid "NO_PROFILE_SELECTED_TEXT"
-msgstr "Ο μαθητής δεν μπορεί να αποθηκευτεί καθώς δεν έχετε επιλέξει κάποιο προφίλ για αυτόν"
+msgstr "The student can not be saved because you have not selected any profiles"
 
 msgid "STUDENT_SELECTION_TEXT"
-msgstr "Επιλογή Μαθητή"
+msgstr "Student Selection"
 
 msgid "UPDATE_STUDENT_BUTTON_TEXT"
-msgstr "Αποθήκευση Μαθητή"
+msgstr "Update Student"
 
 msgid "DELETE_STUDENT_BUTTON_TEXT"
-msgstr "Διαγραφή Μαθητή"
+msgstr "Delete Student"
 
 msgid "SELECT_STUDENT_TEXT"
-msgstr "Επιλέξτε έναν μαθητή..."
+msgstr "Select a student..."
 
 msgid "NO_STUDENTS_TEXT"
-msgstr "Δεν υπάρχουν μαθητές"
+msgstr "No students exist"
 
 msgid "RESULT_EXPLANATION_DIALOG_TITLE"
-msgstr "Αποτελέσματα"
+msgstr "Results"
 
 msgid "CLOSE_BUTTON_TEXT"
-msgstr "Κλείσιμο"
+msgstr "Close"
 
 msgid "RESULT_EXPLANATION_TITLE"
-msgstr "Επεξήγηση Αποτελεσμάτων"
+msgstr "Results Explanation"
 
 msgid "RESULT_EXPLANATION_TEXT"
 msgstr ""
-"Οι συγγενικές λέξεις που ανήκουν σε κάποιο βιβλίο της τάξης "
+"to_be_updatedΟι συγγενικές λέξεις που ανήκουν σε κάποιο βιβλίο της τάξης "
 "του επιλεγμένου προφίλ εμφανίζονται μέσα σε ένα μαύρο πλάισιο.\n\nΛέξεις "
 "τις οποίες επιστρέφει το Wiktionary ως συγγενικές, της λέξης που αναζητήθηκε "
 "μόλις, αλλά οι οποίες δεν υπάρχουν σε κάποιο βιβλίο της τάξης του "
@@ -156,7 +156,7 @@ msgstr ""
 
 msgid "APPLICATION_INTRODUCTION"
 msgstr ""
-"Καλώς ήρθατε στο Wordinary! Μια εφαρμογή που βοηθά μαθητές Δημοτικού να "
+"to_be_updatedΚαλώς ήρθατε στο Wordinary! Μια εφαρμογή που βοηθά μαθητές Δημοτικού να "
 "μάθουν ευκολότερα τις συγγενικές λέξεις των λέξεων που ανήκουν στα βιβλία "
 "τους.\n\nΓια να χρησιμοποιήσετε την εφαρμογή, πρέπει να επιλέξετε έναν μαθητή, "
 "ένα προφίλ του συγκεκριμένου μαθητή και ένα ή όλα τα μαθήματα του συγκεκριμένου "
@@ -166,7 +166,7 @@ msgstr ""
 
 msgid "STUDENT_EXPLANATION"
 msgstr ""
-"Μπορείτε να δημιουργήσετε μαθητές, οι οποίοι αντιστοιχούν ουσιαστικά στους "
+"to_be_updatedΜπορείτε να δημιουργήσετε μαθητές, οι οποίοι αντιστοιχούν ουσιαστικά στους "
 "πραγματικούς σας μαθητές, έτσι ώστε να διαφοροποιήσετε δεδομένα τους, όπως "
 "τα προφίλ τους, τις αναζητήσεις αλλά και τις αγαπημένες τους λέξεις.\n\n"
 "Μπορείτε να δημιουργήσετε νέους μαθητές ή να επεξεργαστείτε τους υπάρχοντες "
@@ -175,7 +175,7 @@ msgstr ""
 
 msgid "PROFILE_EXPLANATION"
 msgstr ""
-"Τα προφίλ ανήκουν σε μια συγκεκριμένη τάξη και περιέχουν ένα σύνολο των "
+"to_be_updatedΤα προφίλ ανήκουν σε μια συγκεκριμένη τάξη και περιέχουν ένα σύνολο των "
 "μαθημάτων αυτής της τάξης.\n\nΥπάρχουν 6 προκαθορισμένα προφίλ (ένα για κάθε "
 "τάξη του δημοτικού) που περιέχουν όλα τα μαθήματα της εκάστοτε τάξης, και τα "
 "οποία δεν μπορούν να μεταβληθούν ή να διαγραφούν.\n\nΜπορείτε να δημιουργήσετε "
@@ -184,7 +184,7 @@ msgstr ""
 
 msgid "SUBJECT_EXPLANATION"
 msgstr ""
-"Κάθε προφίλ αποτελείται από πολλαπλά μαθήματα.\n\n"
+"to_be_updatedΚάθε προφίλ αποτελείται από πολλαπλά μαθήματα.\n\n"
 "Τα μάθηματα που επιλέγετε ορίζουν το σύνολο λέξεων από το οποίο μπορείτε να "
 "αναζητήσετε μια λέξη από την μπάρα αναζήτησης που βρίσκεται στο πάνω μέρος "
 "της εφαρμογής. Επίσης, οι πρόσφατες αναζητήσεις και οι αγαπημένες λέξεις "
@@ -197,7 +197,7 @@ msgstr ""
 
 msgid "RESULT_EXPLANATION"
 msgstr ""
-"Τα αποτελέσματα της αναζήτησης του χρήστη εμφανίζονται στο κάτω μέρος της "
+"to_be_updatedΤα αποτελέσματα της αναζήτησης του χρήστη εμφανίζονται στο κάτω μέρος της "
 "εφαρμογής.\n\nΟι συγγενικές λέξεις που ανήκουν σε κάποιο βιβλίο της τάξης "
 "του επιλεγμένου προφίλ εμφανίζονται χωρίς πλάισιο. Λέξεις τις οποίες "
 "επιστρέφει το Wiktionary ως συγγενικές της λέξης που αναζητήθηκε μόλις, "
@@ -206,7 +206,7 @@ msgstr ""
 
 msgid "VOCABULARY_EXPLANATION"
 msgstr ""
-"Μπορείτε να επεξεργαστείτε το λεξιλόγιο των βιβλίων των τάξεων του "
+"to_be_updatedΜπορείτε να επεξεργαστείτε το λεξιλόγιο των βιβλίων των τάξεων του "
 "Δημοτικού πατώντας το κουμπί \"Επεξεργασία Λέξεων\" που βρίσκεται στην πάνω "
 "δεξιά γωνία της εφαρμογής.\n\nΜπορείτε να προσθέσετε νέες λέξεις σε όποιο "
 "βιβλίο επιθυμείτε, να επεξεργαστείτε υπάρχουσες λέξεις σε περίπτωση που "
@@ -215,94 +215,94 @@ msgstr ""
 "προσθέτωντας ή αφαιρώντας λέξεις σε αυτό."
 
 msgid "TUTORIAL_DIALOG_TITLE"
-msgstr "Οδηγίες"
+msgstr "Tutorial"
 
 msgid "CHECK_BOX_TEXT"
-msgstr "Εμφανισή οδηγιών κατά την εκκίνηση"
+msgstr "Show tutorial on startup"
 
 msgid "PREVIOUS_BUTTON_TEXT"
-msgstr "Προηγούμενο"
+msgstr "Previous"
 
 msgid "NEXT_BUTTON_TEXT"
-msgstr "Επόμενο"
+msgstr "Next"
 
 msgid "WORD_TEXT"
-msgstr "Λέξη"
+msgstr "Word"
 
 msgid "SAVE_WORD_BUTTON_TEXT"
-msgstr "Αποθήκευση λέξης"
+msgstr "Save Word"
 
 msgid "ERROR_SAVING_WORD_TEXT"
-msgstr "Αδυναμία αποθήκευσης λέξης"
+msgstr "Error saving word"
 
 msgid "SUCCESS_SAVING_WORD_TEXT"
-msgstr "Η λέξη που προσθέσατε αποθηκεύτηκε επιτυχώς!"
+msgstr "The word was saved successfully"
 
 msgid "WORD_EMPTY_TEXT"
-msgstr "Η λέξη δεν μπορεί να αποθηκευτεί καθώς είναι κενή"
+msgstr "The word can not be saved because it is empty"
 
 msgid "WORD_EXISTS_TEXT"
-msgstr "Η λέξη δεν μπορεί να αποθηκευτεί καθώς υπάρχει ήδη"
+msgstr "The word can not be saved because it already exists"
 
 msgid "ONLY_GREEK_CHARACTERS_ALLOWED_TEXT"
-msgstr "Η λέξη σας πρέπει να περιέχει μόνο ελληνικούς πεζούς χαρακτήρες"
+msgstr "Words must contain only greek lowercase letters"
 
 msgid "WORD_LENGTH_EXCEEDS_LIMIT_TEXT"
-msgstr "Η λέξη δεν μπορεί να αποθηκευτεί καθώς το μήκος της υπερβαίνει το όριο των 20 χαρακτήρων"
+msgstr "The word can not be saved because its length exceed the upper limit of 20 characters"
 
 msgid "WORD_NO_SUBJECT_SELECTED_TEXT"
-msgstr "Η λέξη δεν μπορεί να αποθηκευτεί καθώς δεν έχετε επιλέξει κανένα μάθημα στο οποίο θα ανήκει"
+msgstr "The word can not be saved because you have not selected any subject to which it will belong"
 
 msgid "WORD_SUBJECT_SELECTION_TEXT"
-msgstr "Επιλογή Μαθημάτων (μαθήματα στα οποία ανήκει η λέξη)"
+msgstr "Subject Selection (Subjects in which the word will belong)"
 
 msgid "WORD_SELECTION_TEXT"
-msgstr "Επιλογή Λέξης"
+msgstr "Word Selection"
 
 msgid "UPDATE_WORD_BUTTON_TEXT"
-msgstr "Αποθήκευση Λέξης"
+msgstr "Update Word"
 
 msgid "DELETE_WORD_BUTTON_TEXT"
-msgstr "Διαγραφή Λέξης"
+msgstr "Delete Word"
 
 msgid "PLEASE_ENTER_WORD_TEXT"
-msgstr "Παρακαλώ εισάγετε μια λέξη."
+msgstr "Please enter a word."
 
 msgid "PLEASE_ENTER_ANOTHER_WORD_TEXT"
-msgstr "Παρακαλώ εισάγετε μια διαφορετική λέξη."
+msgstr "Please enter another word."
 
 msgid "WORD_MODIFICATION_TEXT"
-msgstr "Τροποποίηση Λέξης"
+msgstr "Word Modification"
 
 msgid "FAMILY_SELECTION_TEXT"
-msgstr "Επεξεργασία συγγενικών λέξεων"
+msgstr "Edit related words"
 
 msgid "FAMILY_SELECTION_TEXT_WITH_CHANGES"
-msgstr "Επεξεργασία συγγενικών λέξεων (οι αλλαγές σας δεν έχουν αποθηκευτεί)"
+msgstr "Edit related words (your changes have not been saved)"
 
 msgid "SAVE_FAMILY_BUTTON_TEXT"
-msgstr "Αποθήκευση συγγενικών λέξεων"
+msgstr "Save related words"
 
 msgid "SELECT_WORD_TO_BE_ADDED_TEXT"
-msgstr "Επιλέξτε μια λέξη που θα προστεθεί στις συγγενικές λέξεις"
+msgstr "Select a word to be added to the related words"
 
 msgid "REMOVE_SELECTED_WORDS_TEXT"
-msgstr "Αφαίρεση επιλεγμένων λέξεων"
+msgstr "Remove selected words"
 
 msgid "FAMILY_WORDS_APPEAR_HERE_TEXT"
-msgstr "Εδώ εμφανίζονται οι συγγενικές λέξεις των λέξεων που αναζητείτε"
+msgstr "The related words of the words you search for appear here"
 
 msgid "NO_FAMILY_WORDS_TEXT"
-msgstr "Η επιλεγμένη λέξη δεν έχει συγγενικές λέξεις στα βιβλία της τάξης"
+msgstr "The word you searched for does not have any related words in the grade subjects"
 
 msgid "EDIT_WORDS_TEXT"
-msgstr "Επεξεργασία Λέξεων"
+msgstr "Edit Words"
 
 msgid "ADD_WORD_TEXT"
-msgstr "Προσθήκη Λέξης"
+msgstr "Add Word"
 
 msgid "EDIT_WORD_TEXT"
-msgstr "Επεξεργασία Λέξης"
+msgstr "Edit Word"
 
 msgid "EDIT_FAMILY_TEXT"
-msgstr "Επεξεργασία Συγγενικών Λέξεων"
+msgstr "Edit Related Words"

@@ -75,7 +75,7 @@ msgid "DELETE_PROFILE_BUTTON_TEXT"
 msgstr "Διαγραφή Προφίλ"
 
 msgid "ERROR_DELETING_PROFILE_TEXT"
-msgstr "Αδυναμία διαγραφή προφίλ"
+msgstr "Αδυναμία διαγραφής προφίλ"
 
 msgid "SELECT_PROFILE_TEXT"
 msgstr "Επιλέξτε ένα προφίλ..."
