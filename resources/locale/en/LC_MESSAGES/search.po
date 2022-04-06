@@ -36,7 +36,7 @@ msgid "ENTER_WORD_TEXT"
 msgstr "You have to enter a word."
 
 msgid "EDIT_DATA_BUTTON_TEXT"
-msgstr "Edit Student and Profiles"
+msgstr "Edit Students and Profiles"
 
 msgid "EDIT_DATA_TOOLTIP_TEXT"
 msgstr "You can create/edit students, as well as their profiles."
