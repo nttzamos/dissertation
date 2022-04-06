@@ -19,3 +19,12 @@ msgstr ""
 
 msgid "NO_RESULTS_TEXT"
 msgstr ""
+
+msgid "NO_INTERNET_CONNECTION_TITLE"
+msgstr ""
+
+msgid "NO_INTERNET_CONNECTION__TEXT"
+msgstr ""
+
+msgid "HIDE_MESSAGE_CHECKBOX"
+msgstr ""

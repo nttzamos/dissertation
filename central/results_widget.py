@@ -191,16 +191,15 @@ class ResultsWidget(QWidget):
 
   @staticmethod
   def show_no_internet_message():
-    title = 'Αδυναμία σύνδεσης στο Διαδίκτυο'
-    text = ('Η ρύθμιση για την χρήση του Wiktionary είναι ενεργοποιημένη, '
-            'ωστόσο δεν έχετε ενεργή σύνδεση στο Διαδίκτυο.')
+    title = _('NO_INTERNET_CONNECTION_TITLE')
+    text = _('NO_INTERNET_CONNECTION__TEXT')
     answer = QMessageBox()
     answer.setIcon(QMessageBox.Icon.Critical)
     answer.setText(text)
     answer.setWindowTitle(title)
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
 
-    check_box = QCheckBox('Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή')
+    check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
     check_box.clicked.connect(ResultsWidget.toggle_message_setting)
     check_box.setChecked(False)
 

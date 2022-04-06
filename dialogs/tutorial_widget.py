@@ -8,11 +8,6 @@ from menu.settings import Settings
 import gettext
 
 class TutorialWidget(QDialog):
-  TITLES = [
-    'Εισαγωγή στο Wordinary', 'Μαθητές', 'Προφίλ', 'Μαθήματα', 'Αποτελέσματα',
-    'Λεξιλόγιο'
-  ]
-
   def __init__(self):
     super().__init__()
 
@@ -21,9 +16,16 @@ class TutorialWidget(QDialog):
     language.install()
     _ = language.gettext
 
+    self.TITLES = [
+      _('APPLICATION_INTRODUCTION_TITLE'), _('STUDENT_EXPLANATION_TITLE'),
+      _('PROFILE_EXPLANATION_TITLE'), _('SUBJECT_EXPLANATION_TITLE'),
+      _('RESULT_EXPLANATION_TUTORIAL_TITLE'), _('VOCABULARY_EXPLANATION_TITLE')
+    ]
+
     self.TEXTS = [
-      _('APPLICATION_INTRODUCTION'), _('STUDENT_EXPLANATION'), _('PROFILE_EXPLANATION'),
-      _('SUBJECT_EXPLANATION'), _('RESULT_EXPLANATION'), _('VOCABULARY_EXPLANATION')
+      _('APPLICATION_INTRODUCTION_TEXT'), _('STUDENT_EXPLANATION_TEXT'),
+      _('PROFILE_EXPLANATION_TEXT'), _('SUBJECT_EXPLANATION_TEXT'),
+      _('RESULT_EXPLANATION_TUTORIAL_TEXT'), _('VOCABULARY_EXPLANATION_TEXT')
     ]
 
     language_code = Settings.get_setting('language')
@@ -123,7 +125,7 @@ class TutorialWidget(QDialog):
       ' (' + str(self.current_tutorial + 1) + '/' + str(len(self.TEXTS)) + ')'
     )
 
-    self.group_box_widget.setTitle(TutorialWidget.TITLES[self.current_tutorial] + counter_text)
+    self.group_box_widget.setTitle(self.TITLES[self.current_tutorial] + counter_text)
     self.explanation.setText(self.TEXTS[self.current_tutorial])
 
   def toggle_tutorial_setting(self):

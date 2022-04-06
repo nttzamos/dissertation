@@ -302,10 +302,7 @@ class ProfileUpdateWidget(QWidget):
       return False, ''
 
   def construct_redundant_profile_message(self):
-    return (
-      'Το προφίλ δεν μπορεί να αποθηκευτεί καθώς τα μαθήματα του ταυτίζονται '
-      'με αυτά του προκαθορισμένου προφίλ ' + ProfileUpdateWidget.grade_label.text()
-    )
+    return _('REDUNDANT_PROFILE_MESSAGE') + ProfileUpdateWidget.grade_label.text()
 
   @staticmethod
   def add_profile(profile_name):
@@ -317,23 +314,20 @@ class ProfileUpdateWidget(QWidget):
     ProfileUpdateWidget.profile_selector.addItem(profile_name)
 
   def get_permission_to_delete(self):
-    title = 'Διαγραφή Προφίλ'
-    question = ('Είστε σίγουροι ότι θέλετε να διαγράψετε το επιλεγμένο προφίλ; '
-                'Τα δεδομένα των μαθητών για το προφίλ αυτό θα διαγραφούν. '
-                'Επίσης, μαθητές που έχουν μόνο το συγκεκριμένο προφίλ θα '
-                'μείνουν χωρίς προφίλ.')
+    title = _('DELETE_PROFILE_BUTTON_TEXT')
+    question = _('DELETE_PROFILE_PERMISSION')
 
     answer = QMessageBox(self)
     answer.setIcon(QMessageBox.Icon.Critical)
     answer.setText(question)
     answer.setWindowTitle(title)
 
-    yes_button = answer.addButton('Ναι', QMessageBox.ButtonRole.YesRole)
-    cancel_button = answer.addButton('Ακύρωση', QMessageBox.ButtonRole.RejectRole)
+    yes_button = answer.addButton(_('YES'), QMessageBox.ButtonRole.YesRole)
+    cancel_button = answer.addButton(_('CANCEL'), QMessageBox.ButtonRole.RejectRole)
 
     answer.setDefaultButton(cancel_button)
 
-    check_box = QCheckBox('Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή')
+    check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
     check_box.clicked.connect(self.toggle_message_setting)
     check_box.setChecked(False)
 

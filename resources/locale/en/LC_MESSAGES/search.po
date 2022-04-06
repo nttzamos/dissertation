@@ -67,3 +67,12 @@ msgstr "Please select a subject..."
 
 msgid "ALL_SUBJECTS_TEXT"
 msgstr "All subjects"
+
+msgid "WORD_NOT_INCLUDED_IN_BOOK"
+msgstr "This word is not included in the words of the book "
+
+msgid "WORD_NOT_INCLUDED_IN_PROFILE"
+msgstr "This word is not included in the books of the profile "
+
+msgid "SEARCH_ANOTHER_WORD"
+msgstr ".\nPlease search for a different word."

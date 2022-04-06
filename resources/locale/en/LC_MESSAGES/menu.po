@@ -59,11 +59,41 @@ msgstr "Light"
 msgid "DARK_THEME_TEXT"
 msgstr "Dark"
 
-msgid "RESTORE_TITLE_TEXT"
-msgstr "Restore Data"
+msgid "RESTORE_DATABASE_TITLE"
+msgstr "Restore Database"
 
-msgid "RESTORE_DATABASE_TEXT"
+msgid "RESTORE_DATABASE_BUTTON"
 msgstr "Restore default data"
 
 msgid "SHOW_TUTORIAL_TEXT"
 msgstr "Show tutorial on startup"
+
+msgid "WIKTIONARY_USAGE"
+msgstr "Use Wiktionary (internet connection needed)"
+
+msgid "YES"
+msgstr "Yes"
+
+msgid "NO"
+msgstr "No"
+
+msgid "CANCEL"
+msgstr "Cancel"
+
+msgid "HIDE_MESSAGE_CHECKBOX"
+msgstr "Do not show again until the application closes"
+
+msgid "THEME_UPDATE_TITLE"
+msgstr "Theme Update"
+
+msgid "THEME_UPDATE_TEXT"
+msgstr "The theme will be updated once the application is restarted"
+
+msgid "LANGUAGE_UPDATE_TITLE"
+msgstr "Language Update"
+
+msgid "LANGUAGE_UPDATE_TEXT"
+msgstr "The application language will be updated once the application is restarted"
+
+msgid "RESTORE_DATABASE_TEXT"
+msgstr "Are you sure that you wish to restore the database to its default state? All of your application data will be erased."

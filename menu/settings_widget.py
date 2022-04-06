@@ -10,14 +10,14 @@ import os
 import shutil
 import gettext
 
+language_code = Settings.get_setting('language')
+language = gettext.translation('menu', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
+
 class SettingsWidget(QDialog):
   def __init__(self):
     super().__init__()
-
-    language_code = Settings.get_setting('language')
-    language = gettext.translation('menu', localedir='resources/locale', languages=[language_code])
-    language.install()
-    _ = language.gettext
 
     self.setWindowTitle(_('TITLE_TEXT'))
     self.setWindowIcon(QIcon('resources/window_icon.png'))
@@ -101,12 +101,12 @@ class SettingsWidget(QDialog):
     language_selection_widget.layout.setContentsMargins(10, 0, 0, 0)
     language_selection_widget.layout.addWidget(self.language_selector)
 
-    wiktionary_usage_widget = QGroupBox('Χρήση Wiktionary (απαιτείται σύνδεση στο διαδίκτυο)')
+    wiktionary_usage_widget = QGroupBox(_('WIKTIONARY_USAGE'))
     wiktionary_usage_widget.setFont(section_label_font)
     wiktionary_usage_widget.layout = QHBoxLayout(wiktionary_usage_widget)
-    self.use_wiktionary_button = QRadioButton('Ναι')
+    self.use_wiktionary_button = QRadioButton(_('YES'))
     self.use_wiktionary_button.toggled.connect(self.use_wiktionary_button_clicked)
-    self.dont_use_wiktionary_button = QRadioButton('Όχι')
+    self.dont_use_wiktionary_button = QRadioButton(_('NO'))
     self.dont_use_wiktionary_button.toggled.connect(self.dont_use_wiktionary_button_clicked)
 
     if Settings.get_boolean_setting('use_wiktionary'):
@@ -118,13 +118,14 @@ class SettingsWidget(QDialog):
     wiktionary_usage_widget.layout.addWidget(self.use_wiktionary_button, alignment=Qt.AlignmentFlag.AlignLeft)
     wiktionary_usage_widget.layout.addWidget(self.dont_use_wiktionary_button, alignment=Qt.AlignmentFlag.AlignLeft)
 
-    restore_database_button = QPushButton(_('RESTORE_DATABASE_TEXT'))
+
+    restore_database_widget = QGroupBox(_('RESTORE_DATABASE_TITLE'))
+    restore_database_widget.setFont(section_label_font)
+    restore_database_widget.layout = QHBoxLayout(restore_database_widget)
+    restore_database_button = QPushButton(_('RESTORE_DATABASE_BUTTON'))
     restore_database_button.pressed.connect(self.restore_database)
     restore_database_button.setAutoDefault(False)
 
-    restore_database_widget = QGroupBox(_('RESTORE_TITLE_TEXT'))
-    restore_database_widget.setFont(section_label_font)
-    restore_database_widget.layout = QHBoxLayout(restore_database_widget)
     restore_database_widget.layout.setContentsMargins(50, 10, 50, 10)
     restore_database_widget.layout.addWidget(restore_database_button)
 
@@ -178,15 +179,15 @@ class SettingsWidget(QDialog):
   def show_theme_change_effect_message(self):
     if Settings.get_boolean_setting('hide_theme_change_effect_message'): return
 
-    title = 'Ανανέωση Θέματος'
-    text = 'Η αλλαγή του θέματος θα εφαρμοστεί όταν γίνει επανεκκίνηση της εφαρμογής'
+    title = _('THEME_UPDATE_TITLE')
+    text = _('THEME_UPDATE_TEXT')
     answer = QMessageBox()
     answer.setIcon(QMessageBox.Icon.Information)
     answer.setText(text)
     answer.setWindowTitle(title)
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
 
-    check_box = QCheckBox('Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή')
+    check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
     check_box.clicked.connect(self.toggle_theme_message_setting)
     check_box.setChecked(False)
 
@@ -203,15 +204,15 @@ class SettingsWidget(QDialog):
   def show_language_change_effect_message(self):
     if Settings.get_boolean_setting('hide_language_change_effect_message'): return
 
-    title = 'Ανανέωση γλώσσας'
-    text = 'Η αλλαγή της γλώσσας θα εφαρμοστεί όταν γίνει επανεκκίνηση της εφαρμογής'
+    title = _('LANGUAGE_UPDATE_TITLE')
+    text = _('LANGUAGE_UPDATE_TEXT')
     answer = QMessageBox()
     answer.setIcon(QMessageBox.Icon.Information)
     answer.setText(text)
     answer.setWindowTitle(title)
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
 
-    check_box = QCheckBox('Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή')
+    check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
     check_box.clicked.connect(self.toggle_language_message_setting)
     check_box.setChecked(False)
 
@@ -230,17 +231,16 @@ class SettingsWidget(QDialog):
       Settings.set_boolean_setting('use_wiktionary', False)
 
   def restore_database(self):
-    title = 'Επαναφορά Δεδομένων'
-    question = ('Είστε σίγουροι ότι θέλετε να επαναφέρετε την βάση δεδομένων '
-                'στην αρχική της κατάσταση; Όλα τα δεδομένα σας θα διαγραφούν.')
+    title = _('RESTORE_DATABASE_TITLE')
+    question = _('RESTORE_DATABASE_TEXT')
 
     answer = QMessageBox(self)
     answer.setIcon(QMessageBox.Icon.Question)
     answer.setText(question)
     answer.setWindowTitle(title)
 
-    yes_button = answer.addButton('Ναι', QMessageBox.ButtonRole.YesRole)
-    cancel_button = answer.addButton('Ακύρωση', QMessageBox.ButtonRole.RejectRole)
+    yes_button = answer.addButton(_('YES'), QMessageBox.ButtonRole.YesRole)
+    cancel_button = answer.addButton(_('CANCEL'), QMessageBox.ButtonRole.RejectRole)
 
     answer.setDefaultButton(cancel_button)
     answer.exec()

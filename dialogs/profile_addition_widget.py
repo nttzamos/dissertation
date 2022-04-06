@@ -193,7 +193,4 @@ class ProfileAdditionWIdget(QWidget):
       return False, ''
 
   def construct_redundant_profile_message(self):
-    return (
-      'Το προφίλ δεν μπορεί να αποθηκευτεί καθώς τα μαθήματα του ταυτίζονται '
-      'με αυτά του προκαθορισμένου προφίλ ' + self.grade_selector.currentText()
-    )
+    return _('REDUNDANT_PROFILE_MESSAGE') + self.grade_selector.currentText()

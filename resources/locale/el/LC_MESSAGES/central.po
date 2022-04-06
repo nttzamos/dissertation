@@ -19,3 +19,12 @@ msgstr "Τα αποτελέσματα της αναζήτησης σας θα ε
 
 msgid "NO_RESULTS_TEXT"
 msgstr "Δεν βρέθηκαν συγγενικές λέξεις για την λέξη που αναζητήσατε."
+
+msgid "NO_INTERNET_CONNECTION_TITLE"
+msgstr "Αδυναμία σύνδεσης στο Διαδίκτυο"
+
+msgid "NO_INTERNET_CONNECTION__TEXT"
+msgstr "Η ρύθμιση για την χρήση του Wiktionary είναι ενεργοποιημένη, ωστόσο δεν έχετε ενεργή σύνδεση στο Διαδίκτυο."
+
+msgid "HIDE_MESSAGE_CHECKBOX"
+msgstr "Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή"

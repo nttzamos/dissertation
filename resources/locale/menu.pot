@@ -59,11 +59,41 @@ msgstr ""
 msgid "DARK_THEME_TEXT"
 msgstr ""
 
-msgid "RESTORE_TITLE_TEXT"
+msgid "RESTORE_DATABASE_TITLE"
 msgstr ""
 
-msgid "RESTORE_DATABASE_TEXT"
+msgid "RESTORE_DATABASE_BUTTON"
 msgstr ""
 
 msgid "SHOW_TUTORIAL_TEXT"
+msgstr ""
+
+msgid "WIKTIONARY_USAGE"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "NO"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "HIDE_MESSAGE_CHECKBOX"
+msgstr ""
+
+msgid "THEME_UPDATE_TITLE"
+msgstr ""
+
+msgid "THEME_UPDATE_TEXT"
+msgstr ""
+
+msgid "LANGUAGE_UPDATE_TITLE"
+msgstr ""
+
+msgid "LANGUAGE_UPDATE_TEXT"
+msgstr ""
+
+msgid "RESTORE_DATABASE_TEXT"
 msgstr ""

@@ -67,3 +67,12 @@ msgstr "Επιλέξτε ένα μάθημα..."
 
 msgid "ALL_SUBJECTS_TEXT"
 msgstr "Όλα τα μαθήματα"
+
+msgid "WORD_NOT_INCLUDED_IN_BOOK"
+msgstr "Αυτή η λέξη δεν περιλαμβάνεται στις λέξεις του βιβλίου "
+
+msgid "WORD_NOT_INCLUDED_IN_PROFILE"
+msgstr "Αυτή η λέξη δεν περιλαμβάνεται στα βιβλία του προφίλ "
+
+msgid "SEARCH_ANOTHER_WORD"
+msgstr ".\nΠαρακαλώ αναζητήστε μια διαφορετική λέξη."

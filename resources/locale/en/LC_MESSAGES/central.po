@@ -19,3 +19,12 @@ msgstr "The results of your search will appear here."
 
 msgid "NO_RESULTS_TEXT"
 msgstr "No related words were found for the word you searched."
+
+msgid "NO_INTERNET_CONNECTION_TITLE"
+msgstr "No Internet connection"
+
+msgid "NO_INTERNET_CONNECTION__TEXT"
+msgstr "The setting for the usage of Wiktionary is enabled, but no internet connection exists"
+
+msgid "HIDE_MESSAGE_CHECKBOX"
+msgstr "Do not show again until the application closes"

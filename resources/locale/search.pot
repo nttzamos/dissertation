@@ -67,3 +67,12 @@ msgstr ""
 
 msgid "ALL_SUBJECTS_TEXT"
 msgstr ""
+
+msgid "WORD_NOT_INCLUDED_IN_BOOK"
+msgstr ""
+
+msgid "WORD_NOT_INCLUDED_IN_PROFILE"
+msgstr ""
+
+msgid "SEARCH_ANOTHER_WORD"
+msgstr ""

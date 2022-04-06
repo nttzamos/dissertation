@@ -182,7 +182,7 @@ class WordAdditionWIdget(QWidget):
       return True, _('WORD_EXISTS_TEXT')
 
     for character in word:
-      if not character in _('GREEK_CHARACTERS'):
+      if not character in WordAdditionWIdget.GREEK_CHARACTERS:
         return True, _('ONLY_GREEK_CHARACTERS_ALLOWED_TEXT')
 
     for check_box in self.check_boxes:

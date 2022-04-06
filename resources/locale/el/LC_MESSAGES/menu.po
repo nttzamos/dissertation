@@ -59,11 +59,41 @@ msgstr "Ανοιχτό"
 msgid "DARK_THEME_TEXT"
 msgstr "Σκοτεινό"
 
-msgid "RESTORE_TITLE_TEXT"
+msgid "RESTORE_DATABASE_TITLE"
 msgstr "Επαναφορά Δεδομένων"
 
-msgid "RESTORE_DATABASE_TEXT"
+msgid "RESTORE_DATABASE_BUTTON"
 msgstr "Διαγραφή δεδομένων χρήστη"
 
 msgid "SHOW_TUTORIAL_TEXT"
 msgstr "Εμφανισή οδηγιών κατά την εκκίνηση"
+
+msgid "WIKTIONARY_USAGE"
+msgstr "Χρήση Wiktionary (απαιτείται σύνδεση στο διαδίκτυο)"
+
+msgid "YES"
+msgstr "Ναι"
+
+msgid "NO"
+msgstr "Όχι"
+
+msgid "CANCEL"
+msgstr "Ακύρωση"
+
+msgid "HIDE_MESSAGE_CHECKBOX"
+msgstr "Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή"
+
+msgid "THEME_UPDATE_TITLE"
+msgstr "Ανανέωση Θέματος"
+
+msgid "THEME_UPDATE_TEXT"
+msgstr "Η αλλαγή του θέματος θα εφαρμοστεί όταν γίνει επανεκκίνηση της εφαρμογής"
+
+msgid "LANGUAGE_UPDATE_TITLE"
+msgstr "Ανανέωση γλώσσας"
+
+msgid "LANGUAGE_UPDATE_TEXT"
+msgstr "Η αλλαγή της γλώσσας θα εφαρμοστεί όταν γίνει επανεκκίνηση της εφαρμογής"
+
+msgid "RESTORE_DATABASE_TEXT"
+msgstr "Είστε σίγουροι ότι θέλετε να επαναφέρετε την βάση δεδομένων στην αρχική της κατάσταση; Όλα τα δεδομένα σας θα διαγραφούν."

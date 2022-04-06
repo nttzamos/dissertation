@@ -146,22 +146,40 @@ msgstr ""
 msgid "RESULT_EXPLANATION_TEXT"
 msgstr ""
 
-msgid "APPLICATION_INTRODUCTION"
+msgid "APPLICATION_INTRODUCTION_TITLE"
 msgstr ""
 
-msgid "STUDENT_EXPLANATION"
+msgid "APPLICATION_INTRODUCTION_TEXT"
 msgstr ""
 
-msgid "PROFILE_EXPLANATION"
+msgid "STUDENT_EXPLANATION_TITLE"
 msgstr ""
 
-msgid "SUBJECT_EXPLANATION"
+msgid "STUDENT_EXPLANATION_TEXT"
 msgstr ""
 
-msgid "RESULT_EXPLANATION"
+msgid "PROFILE_EXPLANATION_TITLE"
 msgstr ""
 
-msgid "VOCABULARY_EXPLANATION"
+msgid "PROFILE_EXPLANATION_TEXT"
+msgstr ""
+
+msgid "SUBJECT_EXPLANATION_TITLE"
+msgstr ""
+
+msgid "SUBJECT_EXPLANATION_TEXT"
+msgstr ""
+
+msgid "RESULT_EXPLANATION_TUTORIAL_TITLE"
+msgstr ""
+
+msgid "RESULT_EXPLANATION_TUTORIAL_TEXT"
+msgstr ""
+
+msgid "VOCABULARY_EXPLANATION_TITLE"
+msgstr ""
+
+msgid "VOCABULARY_EXPLANATION_TEXT"
 msgstr ""
 
 msgid "TUTORIAL_DIALOG_TITLE"
@@ -255,4 +273,25 @@ msgid "EDIT_WORD_TEXT"
 msgstr ""
 
 msgid "EDIT_FAMILY_TEXT"
+msgstr ""
+
+msgid "REDUNDANT_PROFILE_MESSAGE"
+msgstr ""
+
+msgid "HIDE_MESSAGE_CHECKBOX"
+msgstr ""
+
+msgid "DELETE_PROFILE_PERMISSION"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
+
+msgid "DELETE_STUDENT_PERMISSION"
+msgstr ""
+
+msgid "DELETE_WORD_PERMISSION"
 msgstr ""
