@@ -4,9 +4,17 @@ from PyQt6.QtGui import QIcon
 
 from central.main_widget import MainWidget
 from menu.menu_bar import MenuBar
+from menu.settings import Settings
 from models.profile import get_profile_name
 from side.recent_searches_widget import RecentSearchesWidget
 from side.starred_words_widget import StarredWordsWidget
+
+import gettext
+
+language_code = Settings.get_setting('language')
+language = gettext.translation('search', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
 
 class MainWindow(QWidget):
   def __init__(self):
@@ -65,7 +73,7 @@ class MainWindow(QWidget):
     from search.searching_widget import SearchingWidget
     from central.results_widget import ResultsWidget
 
-    if subject_name == MainWidget.current_search.ALL_SUBJECTS_TEXT:
+    if subject_name == _('ALL_SUBJECTS_TEXT'):
       SearchingWidget.modify_error_message(get_profile_name(profile_id), False)
     else:
       SearchingWidget.modify_error_message(subject_name, True)
@@ -74,9 +82,7 @@ class MainWindow(QWidget):
     ResultsWidget.show_placeholder()
     RecentSearchesWidget.populate()
     StarredWordsWidget.populate()
-    MainWidget.current_search.searched_word_label.setText(
-      MainWidget.current_search.ENTER_WORD_TEXT
-    )
+    MainWidget.current_search.searched_word_label.setText(_('ENTER_WORD_TEXT'))
 
   @staticmethod
   def clear_previous_subject_details():

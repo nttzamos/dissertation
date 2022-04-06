@@ -1,3 +1,4 @@
+from menu.settings import Settings
 from models.profile import get_profile_subject_ids
 from models.subject import get_subject_id
 from models.word import get_word_id
@@ -5,6 +6,12 @@ from shared.database_handler import connect_to_database, get_family_table_name, 
 from shared.wiktionary_parser import fetch_word_details
 
 import timeit
+import gettext
+
+language_code = Settings.get_setting('language')
+language = gettext.translation('search', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
 
 def create_families(grade):
   con, cur = connect_to_database()
@@ -13,7 +20,6 @@ def create_families(grade):
   family_counter = 0
 
   grade_start = timeit.default_timer()
-  print(len(words_list))
   for i in range(len(words_list)):
     if i % 100 == 0 and i > 0:
       print(timeit.default_timer() - grade_start)
@@ -95,7 +101,7 @@ def get_family_words(grade, family_id):
 
 def get_words_with_family(profile_id, grade_id, subject_name):
   from search.current_search import CurrentSearch
-  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
+  if subject_name == _('ALL_SUBJECTS_TEXT'):
     subject_ids = get_profile_subject_ids(profile_id)
   else:
     subject_ids = [get_subject_id(grade_id, subject_name)]

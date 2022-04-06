@@ -1,16 +1,23 @@
+from menu.settings import Settings
 from models.profile import get_profile_subject_ids
 from models.subject import get_subject_id
 from models.word import get_word_id, word_exists_in_subject
 from shared.database_handler import connect_to_database, get_grade_table_name
 
 import datetime
+import gettext
+
+language_code = Settings.get_setting('language')
+language = gettext.translation('search', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
 
 def create_recent_search(word):
   from search.current_search import CurrentSearch
   student_id, profile_id, grade_id, subject_name = \
     CurrentSearch.get_current_selection_details()
 
-  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
+  if subject_name == _('ALL_SUBJECTS_TEXT'):
     subject_ids = get_profile_subject_ids(profile_id)
   else:
     subject_ids = [get_subject_id(grade_id, subject_name)]
@@ -53,7 +60,7 @@ def destroy_recent_search(word):
   student_id, profile_id, grade_id, subject_name = \
     CurrentSearch.get_current_selection_details()
 
-  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
+  if subject_name == _('ALL_SUBJECTS_TEXT'):
     subject_ids = get_profile_subject_ids(profile_id)
   else:
     subject_ids = [get_subject_id(grade_id, subject_name)]
@@ -76,7 +83,7 @@ def get_recent_searches():
   student_id, profile_id, grade, subject_name = \
     CurrentSearch.get_current_selection_details()
 
-  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
+  if subject_name == _('ALL_SUBJECTS_TEXT'):
     values = (profile_id, student_id)
     query = ('SELECT DISTINCT word '
              'FROM ' + get_grade_table_name(grade) + ' ' +

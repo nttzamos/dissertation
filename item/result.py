@@ -14,8 +14,8 @@ class Result(QWidget):
     super().__init__()
 
     from menu.settings import Settings
-    language_code = Settings.get_setting('language')
-    language = gettext.translation('item', localedir='resources/locale', languages=[language_code])
+    self.language_code = Settings.get_setting('language')
+    language = gettext.translation('item', localedir='resources/locale', languages=[self.language_code])
     language.install()
     _ = language.gettext
 
@@ -85,7 +85,9 @@ class Result(QWidget):
     x, y, z, current_subject_name = CurrentSearch.get_current_selection_details()
     subject_names = [current_subject_name]
 
-    if subject_names[0] == CurrentSearch.ALL_SUBJECTS_TEXT:
+    language = gettext.translation('search', localedir='resources/locale', languages=[self.language_code])
+    language.install()
+    if subject_names[0] == language.gettext('ALL_SUBJECTS_TEXT'):
       subject_names = get_grade_subjects(CurrentSearch.grade_id)
 
     create_word(word, CurrentSearch.grade_id, subject_names)

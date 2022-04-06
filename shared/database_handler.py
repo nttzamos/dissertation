@@ -1,3 +1,4 @@
+from menu.settings import Settings
 from shared.pdf_parser import PdfParser
 
 from os import path
@@ -5,6 +6,12 @@ from os import listdir
 
 import sqlite3
 import re
+import gettext
+
+language_code = Settings.get_setting('language')
+language = gettext.translation('search', localedir='resources/locale', languages=[language_code])
+language.install()
+_ = language.gettext
 
 databases_directory_path = 'resources/'
 database_file = 'database.db'
@@ -167,7 +174,7 @@ def sort_words_alphabetically(words):
 
 def get_words(profile_id, grade_id, subject_name):
   from search.current_search import CurrentSearch
-  if subject_name == CurrentSearch.ALL_SUBJECTS_TEXT:
+  if subject_name == _('ALL_SUBJECTS_TEXT'):
     from models.profile import get_profile_subject_ids
     subject_ids = get_profile_subject_ids(profile_id)
   else:
