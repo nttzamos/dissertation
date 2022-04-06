@@ -89,12 +89,14 @@ class SettingsWidget(QDialog):
     theme_selection_widget.layout.addWidget(self.light_theme_button, alignment=Qt.AlignmentFlag.AlignLeft)
     theme_selection_widget.layout.addWidget(self.dark_theme_button, alignment=Qt.AlignmentFlag.AlignLeft)
 
+    available_languages = Settings.get_available_languages()
+
     language_selection_widget = QGroupBox(_('LANGUAGE_SELECTION_TEXT'))
     language_selection_widget.setFont(section_label_font)
     language_selection_widget.layout = QVBoxLayout(language_selection_widget)
     self.language_selector = QComboBox()
     self.language_selector.setFont(combo_box_font)
-    self.language_selector.addItems(Settings.get_available_languages())
+    self.language_selector.addItems(available_languages)
     self.language_selector.setCurrentText(Settings.get_language())
     self.language_selector.currentTextChanged.connect(self.language_selector_activated)
 
@@ -132,7 +134,7 @@ class SettingsWidget(QDialog):
     self.layout.addWidget(maximum_results_selection_widget)
     self.layout.addWidget(general_settings_widget)
     # self.layout.addWidget(theme_selection_widget)
-    self.layout.addWidget(language_selection_widget)
+    if len(available_languages) > 1: self.layout.addWidget(language_selection_widget)
     self.layout.addWidget(wiktionary_usage_widget)
     self.layout.addWidget(restore_database_widget)
 
@@ -203,6 +205,11 @@ class SettingsWidget(QDialog):
 
   def show_language_change_effect_message(self):
     if Settings.get_boolean_setting('hide_language_change_effect_message'): return
+
+    updated_language_code = Settings.get_setting('updated_language')
+    updated_language = gettext.translation('menu', localedir='resources/locale', languages=[updated_language_code])
+    updated_language.install()
+    _ = updated_language.gettext
 
     title = _('LANGUAGE_UPDATE_TITLE')
     text = _('LANGUAGE_UPDATE_TEXT')

@@ -18,7 +18,7 @@ class Settings():
       'maximum_results': 30,
       'last_student_picked': 1,
       'theme': 'light',
-      'language': 'el'
+      'updated_language': 'el'
     }
 
     boolean_settings_default_values = {
@@ -46,6 +46,8 @@ class Settings():
 
     for key in boolean_settings_about_hiding_messages:
       Settings.set_setting(key, 0)
+
+    Settings.set_setting('language', Settings.get_setting('updated_language'))
 
     Settings.calculate_size_settings(screen_width, screen_height)
 
@@ -102,7 +104,7 @@ class Settings():
 
   @staticmethod
   def set_language(language):
-    Settings.set_setting('language', Settings.LANGUAGES[language])
+    Settings.set_setting('updated_language', Settings.LANGUAGES[language])
 
   @staticmethod
   def get_language():
