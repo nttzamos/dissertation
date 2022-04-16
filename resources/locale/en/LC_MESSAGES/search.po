@@ -27,7 +27,7 @@ msgid "PLEASE_ENTER_WORD_TEXT"
 msgstr "Please enter a word."
 
 msgid "EDIT_WORDS_BUTTON_TEXT"
-msgstr "Edit Words"
+msgstr "Manage Vocabulary"
 
 msgid "EDIT_WORDS_TOOLTIP_TEXT"
 msgstr "You can edit the words of each grade, as well as their relative words"
@@ -36,7 +36,7 @@ msgid "ENTER_WORD_TEXT"
 msgstr "You have to enter a word."
 
 msgid "EDIT_DATA_BUTTON_TEXT"
-msgstr "Edit Students and Profiles"
+msgstr "Manage Students and Profiles"
 
 msgid "EDIT_DATA_TOOLTIP_TEXT"
 msgstr "You can create/edit students, as well as their profiles."

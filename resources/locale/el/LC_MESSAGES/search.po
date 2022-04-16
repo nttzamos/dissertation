@@ -18,7 +18,7 @@ msgid "SEARCH_TEXT"
 msgstr "Αναζήτηση"
 
 msgid "CLEAR_SEARCH_TEXT"
-msgstr "Καθαρισμός αναζήτησης"
+msgstr "Καθαρισμός Αναζήτησης"
 
 msgid "UNINITIALIZED_STATE_TEXT"
 msgstr "Πρέπει να επιλέξετε κάποιο μάθημα πρώτα."
@@ -27,7 +27,7 @@ msgid "PLEASE_ENTER_WORD_TEXT"
 msgstr "Παρακαλώ εισάγετε μια λέξη."
 
 msgid "EDIT_WORDS_BUTTON_TEXT"
-msgstr "Επεξεργασία Λέξεων"
+msgstr "Διαχείριση Λεξιλογίου"
 
 msgid "EDIT_WORDS_TOOLTIP_TEXT"
 msgstr "Μπορείτε να επεξεργαστείτε τις λέξεις κάθε τάξης, καθώς και τις συγγενικές τους λέξεις"
@@ -36,7 +36,7 @@ msgid "ENTER_WORD_TEXT"
 msgstr "Πρέπει να αναζητήσετε μια λέξη."
 
 msgid "EDIT_DATA_BUTTON_TEXT"
-msgstr "Επεξεργασία Μαθητών και Προφίλ"
+msgstr "Διαχείριση Μαθητών και Προφίλ"
 
 msgid "EDIT_DATA_TOOLTIP_TEXT"
 msgstr "Μπορείτε να δημιουργήσετε/επεξεργαστείτε μαθητές, καθώς και τα προφίλ τους."
