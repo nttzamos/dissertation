@@ -34,3 +34,19 @@ msgstr "Add to Favorites"
 
 msgid "DELETE_TEXT"
 msgstr "Remove from Recent Searches"
+
+msgid "REMOVE_WORD_FROM_FAMILY_PERMISSION"
+msgstr ""
+"Are you sure that you wish to remove this word from the related words of the "
+"word you have just searched for? This will result in this word not being "
+"displayed in the related words of the aforementioned word, even if it is "
+"returned as a related word by Wiktionary."
+
+msgid "HIDE_MESSAGE_CHECKBOX"
+msgstr "Do not show again until the application closes"
+
+msgid "YES"
+msgstr "Yes"
+
+msgid "CANCEL"
+msgstr "Cancel"

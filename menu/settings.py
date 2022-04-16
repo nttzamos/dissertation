@@ -33,7 +33,8 @@ class Settings():
     boolean_settings_about_hiding_messages = [
       'hide_no_internet_message', 'hide_theme_change_effect_message',
       'hide_delete_profile_message', 'hide_delete_student_message',
-      'hide_delete_word_message', 'hide_language_change_effect_message'
+      'hide_delete_word_message', 'hide_language_change_effect_message',
+      'hide_remove_word_from_family_message'
     ]
 
     for key, value in settings_default_values.items():

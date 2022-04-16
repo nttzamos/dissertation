@@ -1,4 +1,5 @@
-from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import (QHBoxLayout, QLabel, QPushButton, QVBoxLayout,
+                             QWidget, QMessageBox, QCheckBox)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 
@@ -17,7 +18,7 @@ class Result(QWidget):
     self.language_code = Settings.get_setting('language')
     language = gettext.translation('item', localedir='resources/locale', languages=[self.language_code])
     language.install()
-    _ = language.gettext
+    Result._ = language.gettext
 
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(0, 0, 10, 10)
@@ -45,13 +46,13 @@ class Result(QWidget):
     self.buttons_widget.layout.setContentsMargins(0, 0, 0, 0)
 
     self.add_to_family_button = QPushButton()
-    self.add_to_family_button.setToolTip(_('ADD_BUTTON_TEXT'))
+    self.add_to_family_button.setToolTip(Result._('ADD_BUTTON_TEXT'))
     self.add_to_family_button.setIcon(QIcon('resources/plus.png'))
     self.add_to_family_button.clicked.connect(self.add_word_to_family)
     self.add_to_family_button.setFixedWidth(30)
 
     self.remove_from_family_button = QPushButton()
-    self.remove_from_family_button.setToolTip(_('REMOVE_BUTTON_TEXT'))
+    self.remove_from_family_button.setToolTip(Result._('REMOVE_BUTTON_TEXT'))
     self.remove_from_family_button.setIcon(QIcon('resources/delete.svg'))
     self.remove_from_family_button.clicked.connect(self.remove_word_from_family)
     self.remove_from_family_button.setFixedWidth(30)
@@ -98,6 +99,11 @@ class Result(QWidget):
     self.add_word()
 
   def remove_word_from_family(self):
+    from menu.settings import Settings
+    if not Settings.get_boolean_setting('hide_remove_word_from_family_message'):
+      if not self.get_permission_to_remove():
+        return
+
     from search.current_search import CurrentSearch
     word = self.word_label.text()
     self.hide()
@@ -125,3 +131,37 @@ class Result(QWidget):
 
   def update_word(self, new_word):
     self.word_label.setText(new_word)
+
+  def get_permission_to_remove(self):
+    title = Result._('REMOVE_BUTTON_TEXT')
+    question = Result._('REMOVE_WORD_FROM_FAMILY_PERMISSION')
+
+    answer = QMessageBox(self)
+    answer.setIcon(QMessageBox.Icon.Critical)
+    answer.setText(question)
+    answer.setWindowTitle(title)
+
+    yes_button = answer.addButton(Result._('YES'), QMessageBox.ButtonRole.YesRole)
+    cancel_button = answer.addButton(Result._('CANCEL'), QMessageBox.ButtonRole.RejectRole)
+
+    answer.setDefaultButton(cancel_button)
+
+    check_box = QCheckBox(Result._('HIDE_MESSAGE_CHECKBOX'))
+    check_box.clicked.connect(self.toggle_message_setting)
+    check_box.setChecked(False)
+
+    answer.setCheckBox(check_box)
+    yes_button.setStyleSheet(Styles.result_dialog_style)
+    cancel_button.setStyleSheet(Styles.result_dialog_default_button_style)
+    answer.setStyleSheet(Styles.result_dialog_style)
+    answer.exec()
+
+    if answer.clickedButton() == yes_button:
+      return True
+
+    return False
+
+  @staticmethod
+  def toggle_message_setting(value):
+    from menu.settings import Settings
+    Settings.set_boolean_setting('hide_remove_word_from_family_message', value)

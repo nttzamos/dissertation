@@ -34,3 +34,15 @@ msgstr ""
 
 msgid "DELETE_TEXT"
 msgstr ""
+
+msgid "REMOVE_WORD_FROM_FAMILY_PERMISSION"
+msgstr ""
+
+msgid "HIDE_MESSAGE_CHECKBOX"
+msgstr ""
+
+msgid "YES"
+msgstr ""
+
+msgid "CANCEL"
+msgstr ""
