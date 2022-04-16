@@ -28,3 +28,6 @@ msgstr "The setting for the usage of Wiktionary is enabled, but no internet conn
 
 msgid "HIDE_MESSAGE_CHECKBOX"
 msgstr "Do not show again until the application closes"
+
+msgid "RESULT_EXPLANATION_TOOLTIP"
+msgstr "Results Explanation"

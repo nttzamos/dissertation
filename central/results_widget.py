@@ -43,6 +43,7 @@ class ResultsWidget(QWidget):
 
     ResultsWidget.legend_button = QPushButton()
     ResultsWidget.legend_button.setIcon(QIcon('resources/question.png'))
+    ResultsWidget.legend_button.setToolTip(_('RESULT_EXPLANATION_TOOLTIP'))
     ResultsWidget.legend_button.pressed.connect(self.open_legend)
     ResultsWidget.legend_button.setFixedSize(30, 30)
     ResultsWidget.legend_button.hide()

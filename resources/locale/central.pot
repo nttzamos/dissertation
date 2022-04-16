@@ -28,3 +28,6 @@ msgstr ""
 
 msgid "HIDE_MESSAGE_CHECKBOX"
 msgstr ""
+
+msgid "RESULT_EXPLANATION_TOOLTIP"
+msgstr ""

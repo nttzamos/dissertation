@@ -28,3 +28,6 @@ msgstr "Η ρύθμιση για την χρήση του Wiktionary είναι 
 
 msgid "HIDE_MESSAGE_CHECKBOX"
 msgstr "Να μην εμφανιστεί ξανά, μέχρι να κλείσει η εφαρμογή"
+
+msgid "RESULT_EXPLANATION_TOOLTIP"
+msgstr "Επεξήγηση Αποτελεσμάτων"
