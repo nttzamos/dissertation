@@ -100,13 +100,8 @@ class ProfileAdditionWIdget(QWidget):
     save_button.pressed.connect(self.save_profile)
     save_button.setAutoDefault(False)
 
-    select_all_button = QPushButton(_('SELECT_ALL_SUBJECTS_TEXT'))
-    select_all_button.pressed.connect(self.select_all)
-    select_all_button.setAutoDefault(False)
-
     buttons_widget = QWidget()
     buttons_widget.layout = QHBoxLayout(buttons_widget)
-    buttons_widget.layout.addWidget(select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
     buttons_widget.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.layout.addWidget(self.success_label, alignment=Qt.AlignmentFlag.AlignRight)
@@ -163,10 +158,6 @@ class ProfileAdditionWIdget(QWidget):
 
     self.success_label.show()
     QTimer.singleShot(3500, self.success_label.hide)
-
-  def select_all(self):
-    for check_box in self.check_boxes:
-      check_box.setChecked(True)
 
   def profile_is_invalid(self):
     profile_name = self.name_line_edit.text()
