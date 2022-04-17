@@ -254,9 +254,9 @@ class WordUpdateWidget(QWidget):
 
     from search.current_search import CurrentSearch
 
-    if (len(subjects_to_remove) > 0
-        and grade_id == CurrentSearch.grade_id
-        and CurrentSearch.last_subject_picked in subjects_to_remove):
+    if (len(subjects_to_remove) > 0 and
+        grade_id == CurrentSearch.grade_id and
+        CurrentSearch.last_subject_picked in subjects_to_remove):
 
       CurrentSearch.remove_searched_word(self.searched_word)
 

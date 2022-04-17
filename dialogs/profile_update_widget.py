@@ -284,8 +284,8 @@ class ProfileUpdateWidget(QWidget):
     if len(profile_name) > ProfileUpdateWidget.MAXIMUM_NAME_LENGTH:
       return True, _('PROFILE_NAME_LENGTH_EXCEEDS_LIMIT_TEXT')
 
-    if (ProfileUpdateWidget.profile_selector.currentText() != profile_name
-        and profile_name_exists(profile_name)):
+    if (ProfileUpdateWidget.profile_selector.currentText() != profile_name and
+        profile_name_exists(profile_name)):
       return True, _('PROFILE_NAME_EXISTS_TEXT')
 
     checked_check_boxes_count = 0

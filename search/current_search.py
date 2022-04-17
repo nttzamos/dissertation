@@ -267,9 +267,9 @@ class CurrentSearch(QWidget):
     current_index = CurrentSearch.student_selector.currentIndex()
     CurrentSearch.student_selector.removeItem(index)
 
-    if (CurrentSearch.student_selector.count() == 0
-        or (CurrentSearch.student_selector.count() == 1
-        and CurrentSearch.student_selector.currentText() == _('SELECT_STUDENT_TEXT'))):
+    if (CurrentSearch.student_selector.count() == 0 or
+        (CurrentSearch.student_selector.count() == 1 and
+         CurrentSearch.student_selector.currentText() == _('SELECT_STUDENT_TEXT'))):
 
       CurrentSearch.student_selector.clear()
       CurrentSearch.student_selector.addItem(_('NO_STUDENTS_TEXT'))
@@ -315,9 +315,9 @@ class CurrentSearch(QWidget):
       if index != -1:
         CurrentSearch.profile_selector.removeItem(index)
 
-    if (CurrentSearch.profile_selector.count() == 0
-        or (CurrentSearch.profile_selector.count() == 1
-        and CurrentSearch.profile_selector.currentText() == _('SELECT_PROFILE_TEXT'))):
+    if (CurrentSearch.profile_selector.count() == 0 or
+        (CurrentSearch.profile_selector.count() == 1 and
+         CurrentSearch.profile_selector.currentText() == _('SELECT_PROFILE_TEXT'))):
 
       CurrentSearch.profile_selector.clear()
       CurrentSearch.profile_selector.addItem(_('STUDENT_NO_PROFILES_TEXT'))

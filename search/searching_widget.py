@@ -69,7 +69,8 @@ class SearchingWidget(QWidget):
     self.search_bar_widget.layout.addWidget(search_button)
     self.search_bar_widget.layout.addSpacing(10)
 
-    SearchingWidget.error_message = QLabel(_('UNINITIALIZED_STATE_TEXT'), self)
+    SearchingWidget.current_error_message_text = _('UNINITIALIZED_STATE_TEXT')
+    SearchingWidget.error_message = QLabel(self)
     SearchingWidget.error_message.setFont(error_message_font)
     size_policy = SearchingWidget.error_message.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
@@ -116,15 +117,22 @@ class SearchingWidget(QWidget):
 
   def set_error_style_sheet(self):
     self.search_bar_widget.setStyleSheet(Styles.searching_widget_error_style)
+
+    if (SearchingWidget.line_edit.text() == '' and
+        SearchingWidget.current_error_message_text != _('UNINITIALIZED_STATE_TEXT')):
+      SearchingWidget.error_message.setText(_('PLEASE_ENTER_WORD_TEXT'))
+    else:
+      SearchingWidget.error_message.setText(SearchingWidget.current_error_message_text)
+
     SearchingWidget.error_message.show()
 
   @staticmethod
   def set_initial_error_message():
-    SearchingWidget.error_message.setText(_('UNINITIALIZED_STATE_TEXT'))
+    SearchingWidget.current_error_message_text = _('UNINITIALIZED_STATE_TEXT')
 
   @staticmethod
   def modify_error_message(text, single):
-    SearchingWidget.error_message.setText(SearchingWidget.unknown_word_message(text, single))
+    SearchingWidget.current_error_message_text = SearchingWidget.unknown_word_message(text, single)
 
   @staticmethod
   def unknown_word_message(text, single):

@@ -257,8 +257,8 @@ class StudentUpdateWidget(QWidget):
     if len(student_name) > StudentUpdateWidget.MAXIMUM_NAME_LENGTH:
       return True, _('STUDENT_NAME_LENGTH_EXCEEDS_LIMIT_TEXT')
 
-    if (StudentUpdateWidget.student_selector.currentText() != student_name
-        and student_name_exists(student_name)):
+    if (StudentUpdateWidget.student_selector.currentText() != student_name and
+        student_name_exists(student_name)):
       return True, _('STUDENT_NAME_EXISTS_TEXT')
 
     for check_box in StudentUpdateWidget.check_boxes:
