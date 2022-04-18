@@ -50,17 +50,11 @@ msgstr "The profile was saved successfully!"
 msgid "SELECT_ALL_SUBJECTS_TEXT"
 msgstr "Select all subjects"
 
-msgid "PROFILE_NAME_EMPTY_TEXT"
-msgstr "The profile can not be saved because its name is empty"
-
 msgid "PROFILE_NAME_LENGTH_EXCEEDS_LIMIT_TEXT"
 msgstr "The profile can not be saved because its name length exceeds the upper limit of 20 characters"
 
 msgid "PROFILE_NAME_EXISTS_TEXT"
 msgstr "The profile can not be saved because another profile with the same name already exists"
-
-msgid "NO_SUBJECT_SELECTED_TEXT"
-msgstr "The profile can not be saved because you have not selected any subjects"
 
 msgid "PROFILE_SELECTION_TEXT"
 msgstr "Profile Selection"
@@ -107,17 +101,11 @@ msgstr "The student was saved successfully!"
 msgid "SELECT_ALL_PROFILES_TEXT"
 msgstr "Select all profiles"
 
-msgid "STUDENT_NAME_EMPTY_TEXT"
-msgstr "The student can not be saved because its name is empty"
-
 msgid "STUDENT_NAME_LENGTH_EXCEEDS_LIMIT_TEXT"
 msgstr "The student can not be saved because its name length exceeds the upper limit of 20 characters"
 
 msgid "STUDENT_NAME_EXISTS_TEXT"
 msgstr "The student can not be saved because another student with the same name already exists"
-
-msgid "NO_PROFILE_SELECTED_TEXT"
-msgstr "The student can not be saved because you have not selected any profiles"
 
 msgid "STUDENT_SELECTION_TEXT"
 msgstr "Student Selection"
@@ -249,9 +237,6 @@ msgstr "Error saving word"
 msgid "SUCCESS_SAVING_WORD_TEXT"
 msgstr "The word was saved successfully!"
 
-msgid "WORD_EMPTY_TEXT"
-msgstr "The word can not be saved because it is empty"
-
 msgid "WORD_EXISTS_TEXT"
 msgstr "The word can not be saved because it already exists"
 
@@ -260,9 +245,6 @@ msgstr "Words must contain only greek lowercase letters"
 
 msgid "WORD_LENGTH_EXCEEDS_LIMIT_TEXT"
 msgstr "The word can not be saved because its length exceed the upper limit of 20 characters"
-
-msgid "WORD_NO_SUBJECT_SELECTED_TEXT"
-msgstr "The word can not be saved because you have not selected any subject to which it will belong"
 
 msgid "WORD_SUBJECT_SELECTION_TEXT"
 msgstr "Subject Selection (subjects in which the word will belong)"

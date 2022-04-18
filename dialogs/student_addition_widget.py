@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
                              QLineEdit, QLabel, QGroupBox, QScrollArea,
-                             QCheckBox, QPushButton, QMessageBox, QSizePolicy)
+                             QCheckBox, QPushButton, QSizePolicy)
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QFont
 
@@ -31,6 +31,7 @@ class StudentAdditionWidget(QWidget):
     check_box_font = QFont(Settings.FONT, 14)
     line_edit_font = QFont(Settings.FONT, 14)
     label_font = QFont(Settings.FONT, 12)
+    error_message_font = QFont(Settings.FONT, 10)
 
     self.success_label = QLabel(_('SUCCESS_SAVING_STUDENT_TEXT'))
     self.success_label.setFont(label_font)
@@ -42,7 +43,7 @@ class StudentAdditionWidget(QWidget):
 
     name_widget = QGroupBox(_('STUDENT_NAME_TEXT'))
     name_widget.setFont(section_label_font)
-    name_widget.layout = QHBoxLayout(name_widget)
+    name_widget.layout = QVBoxLayout(name_widget)
     name_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     StudentAdditionWidget.name_line_edit = QLineEdit()
@@ -51,7 +52,13 @@ class StudentAdditionWidget(QWidget):
       StudentAdditionWidget.update_save_button_state
     )
 
+    self.error_message_label = QLabel(self)
+    self.error_message_label.setFont(error_message_font)
+    StudentAdditionWidget.name_line_edit.textChanged.connect(self.error_message_label.hide)
+    self.error_message_label.hide()
+
     name_widget.layout.addWidget(StudentAdditionWidget.name_line_edit)
+    name_widget.layout.addWidget(self.error_message_label)
 
     profiles_widget = QGroupBox(_('PROFILE_SELECTION_TEXT'))
     profiles_widget.setFont(section_label_font)
@@ -113,12 +120,18 @@ class StudentAdditionWidget(QWidget):
     self.layout.addSpacing(10)
     self.layout.addWidget(buttons_widget)
 
+    self.style()
+
+  def style(self):
+    from shared.styles import Styles
+    self.error_message_label.setStyleSheet(Styles.error_message_label_style)
+
   def save_student(self):
     is_invalid, text = self.student_is_invalid()
 
     if is_invalid:
-      title = _('ERROR_SAVING_STUDENT_TEXT')
-      QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
+      self.error_message_label.setText(text)
+      self.error_message_label.show()
       return
 
     student_name = StudentAdditionWidget.name_line_edit.text()
@@ -170,8 +183,6 @@ class StudentAdditionWidget(QWidget):
 
   def student_is_invalid(self):
     student_name = StudentAdditionWidget.name_line_edit.text()
-    if len(student_name) == 0:
-      return True, _('STUDENT_NAME_EMPTY_TEXT')
 
     if len(student_name) > StudentAdditionWidget.MAXIMUM_NAME_LENGTH:
       return True, _('STUDENT_NAME_LENGTH_EXCEEDS_LIMIT_TEXT')
@@ -179,11 +190,7 @@ class StudentAdditionWidget(QWidget):
     if student_name_exists(student_name):
       return True, _('STUDENT_NAME_EXISTS_TEXT')
 
-    for check_box in StudentAdditionWidget.check_boxes:
-      if check_box.isChecked():
-        return False, ''
-
-    return True, _('NO_PROFILE_SELECTED_TEXT')
+    return False, ''
 
   @staticmethod
   def add_profile(profile_name):

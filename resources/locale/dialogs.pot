@@ -50,16 +50,10 @@ msgstr ""
 msgid "SELECT_ALL_SUBJECTS_TEXT"
 msgstr ""
 
-msgid "PROFILE_NAME_EMPTY_TEXT"
-msgstr ""
-
 msgid "PROFILE_NAME_LENGTH_EXCEEDS_LIMIT_TEXT"
 msgstr ""
 
 msgid "PROFILE_NAME_EXISTS_TEXT"
-msgstr ""
-
-msgid "NO_SUBJECT_SELECTED_TEXT"
 msgstr ""
 
 msgid "PROFILE_SELECTION_TEXT"
@@ -107,16 +101,10 @@ msgstr ""
 msgid "SELECT_ALL_PROFILES_TEXT"
 msgstr ""
 
-msgid "STUDENT_NAME_EMPTY_TEXT"
-msgstr ""
-
 msgid "STUDENT_NAME_LENGTH_EXCEEDS_LIMIT_TEXT"
 msgstr ""
 
 msgid "STUDENT_NAME_EXISTS_TEXT"
-msgstr ""
-
-msgid "NO_PROFILE_SELECTED_TEXT"
 msgstr ""
 
 msgid "STUDENT_SELECTION_TEXT"
@@ -206,9 +194,6 @@ msgstr ""
 msgid "SUCCESS_SAVING_WORD_TEXT"
 msgstr ""
 
-msgid "WORD_EMPTY_TEXT"
-msgstr ""
-
 msgid "WORD_EXISTS_TEXT"
 msgstr ""
 
@@ -216,9 +201,6 @@ msgid "ONLY_GREEK_CHARACTERS_ALLOWED_TEXT"
 msgstr ""
 
 msgid "WORD_LENGTH_EXCEEDS_LIMIT_TEXT"
-msgstr ""
-
-msgid "WORD_NO_SUBJECT_SELECTED_TEXT"
 msgstr ""
 
 msgid "WORD_SUBJECT_SELECTION_TEXT"

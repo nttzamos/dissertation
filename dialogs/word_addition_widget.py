@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
                              QLineEdit, QLabel, QGroupBox, QScrollArea,
-                             QCheckBox, QPushButton, QComboBox, QSizePolicy,
-                             QMessageBox)
+                             QCheckBox, QPushButton, QComboBox, QSizePolicy)
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtGui import QFont
 
@@ -35,6 +34,7 @@ class WordAdditionWIdget(QWidget):
     check_box_font = QFont(Settings.FONT, 14)
     line_edit_font = QFont(Settings.FONT, 14)
     label_font = QFont(Settings.FONT, 12)
+    error_message_font = QFont(Settings.FONT, 10)
 
     self.success_label = QLabel(_('SUCCESS_SAVING_WORD_TEXT'))
     self.success_label.setFont(label_font)
@@ -46,13 +46,20 @@ class WordAdditionWIdget(QWidget):
 
     word_widget = QGroupBox(_('WORD_TEXT'))
     word_widget.setFont(section_label_font)
-    word_widget.layout = QHBoxLayout(word_widget)
+    word_widget.layout = QVBoxLayout(word_widget)
     word_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.word_line_edit = QLineEdit()
     self.word_line_edit.setFont(line_edit_font)
     self.word_line_edit.textChanged.connect(self.update_save_button_state)
+
+    self.error_message_label = QLabel(self)
+    self.error_message_label.setFont(error_message_font)
+    self.word_line_edit.textChanged.connect(self.error_message_label.hide)
+    self.error_message_label.hide()
+
     word_widget.layout.addWidget(self.word_line_edit)
+    word_widget.layout.addWidget(self.error_message_label)
 
     grade_selection_widget = QGroupBox(_('GRADE_SELECTION_TEXT'))
     grade_selection_widget.setFont(section_label_font)
@@ -123,6 +130,11 @@ class WordAdditionWIdget(QWidget):
     self.layout.addWidget(subjects_widget)
     self.layout.addSpacing(10)
     self.layout.addWidget(buttons_widget)
+    self.style()
+
+  def style(self):
+    from shared.styles import Styles
+    self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 
   def grade_selector_activated(self, index):
     for check_box in self.check_boxes:
@@ -146,8 +158,8 @@ class WordAdditionWIdget(QWidget):
     is_invalid, text = self.word_is_invalid()
 
     if is_invalid:
-      title = _('ERROR_SAVING_WORD_TEXT')
-      QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
+      self.error_message_label.setText(text)
+      self.error_message_label.show()
       return
 
     word = self.word_line_edit.text().strip()
@@ -193,16 +205,13 @@ class WordAdditionWIdget(QWidget):
     self.update_save_button_state()
 
   def update_save_button_state(self):
-    if (len(self.word_line_edit.text()) > 0 and
-        len(self.check_boxes_selected) > 0):
+    if len(self.word_line_edit.text()) > 0 and len(self.check_boxes_selected) > 0:
       self.save_button.setEnabled(True)
     else:
       self.save_button.setDisabled(True)
 
   def word_is_invalid(self):
     word = self.word_line_edit.text().strip()
-    if len(word) == 0:
-      return True, _('WORD_EMPTY_TEXT')
 
     if len(word) > WordAdditionWIdget.MAXIMUM_NAME_LENGTH:
       return True, _('WORD_LENGTH_EXCEEDS_LIMIT_TEXT')
@@ -214,8 +223,4 @@ class WordAdditionWIdget(QWidget):
       if not character in WordAdditionWIdget.GREEK_CHARACTERS:
         return True, _('ONLY_GREEK_CHARACTERS_ALLOWED_TEXT')
 
-    for check_box in self.check_boxes:
-      if check_box.isChecked():
-        return False, ''
-
-    return True, _('WORD_NO_SUBJECT_SELECTED_TEXT')
+    return False, ''

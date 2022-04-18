@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
                              QLineEdit, QLabel, QGroupBox, QScrollArea,
-                            QCheckBox, QPushButton, QComboBox, QSizePolicy,
-                            QMessageBox)
+                             QCheckBox, QPushButton, QComboBox, QSizePolicy,
+                             QMessageBox)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
@@ -30,6 +30,7 @@ class ProfileUpdateWidget(QWidget):
     combo_box_font = QFont(Settings.FONT, 14)
     label_font = QFont(Settings.FONT, 14)
     line_edit_font = QFont(Settings.FONT, 14)
+    error_message_font = QFont(Settings.FONT, 10)
 
     self.check_boxes_modified = []
 
@@ -58,13 +59,21 @@ class ProfileUpdateWidget(QWidget):
 
     self.name_widget = QGroupBox(_('PROFILE_NAME_TEXT'))
     self.name_widget.setFont(section_label_font)
-    self.name_widget.layout = QHBoxLayout(self.name_widget)
+    self.name_widget.layout = QVBoxLayout(self.name_widget)
     self.name_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.name_line_edit = QLineEdit()
     self.name_line_edit.setFont(line_edit_font)
-    self.name_line_edit.textChanged.connect(self.profile_name_changed)
+    self.name_line_edit.textChanged.connect(self.update_save_button_state)
+
+    self.error_message_label = QLabel(self)
+    self.error_message_label.setFont(error_message_font)
+    self.name_line_edit.textChanged.connect(self.error_message_label.hide)
+    self.error_message_label.hide()
+
     self.name_widget.layout.addWidget(self.name_line_edit)
+    self.name_widget.layout.addWidget(self.error_message_label)
+
     self.name_widget.hide()
 
     grade_label_widget = QGroupBox(_('PROFILE_GRADE_TEXT'))
@@ -129,6 +138,11 @@ class ProfileUpdateWidget(QWidget):
     self.layout.addWidget(subjects_widget)
     self.layout.addSpacing(15)
     self.layout.addWidget(buttons_widget, alignment=Qt.AlignmentFlag.AlignRight)
+    self.style()
+
+  def style(self):
+    from shared.styles import Styles
+    self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 
   def profile_selector_activated_initial(self, index):
     if index != 0:
@@ -172,11 +186,19 @@ class ProfileUpdateWidget(QWidget):
     else:
       is_invalid, text = self.profile_is_invalid()
 
+    message_box_values = [
+      _('GRADE_PROFILE_UPDATE_ERROR_TEXT'), self.construct_redundant_profile_message()
+    ]
+
     if is_invalid:
-      title = _('ERROR_SAVING_PROFILE_TEXT')
-      answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
-      if answer == QMessageBox.StandardButton.Ok:
-        return
+      if text in message_box_values:
+        title = _('ERROR_SAVING_PROFILE_TEXT')
+        QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
+      else:
+        self.error_message_label.setText(text)
+        self.error_message_label.show()
+
+      return
 
     self.check_boxes_modified = []
     self.save_button.setDisabled(True)
@@ -259,27 +281,32 @@ class ProfileUpdateWidget(QWidget):
     from dialogs.data_editing_widget import DataEditingWidget
     DataEditingWidget.update_student_update_widget()
 
-  def profile_name_changed(self):
-    if self.name_line_edit.text() != self.profile_selector.currentText():
-      self.save_button.setEnabled(True)
-    elif len(self.check_boxes_modified) == 0:
-      self.save_button.setDisabled(True)
-
   def check_box_modified(self, text):
     if text in self.check_boxes_modified:
       self.check_boxes_modified.remove(text)
     else:
       self.check_boxes_modified.append(text)
 
-    if len(self.check_boxes_modified) > 0:
+    self.update_save_button_state()
+
+  def update_save_button_state(self):
+    fields_non_empty = len(self.name_line_edit.text()) > 0 and self.selected_check_box_exists()
+
+    if fields_non_empty and (len(self.check_boxes_modified) or
+       self.name_line_edit.text() != self.profile_selector.currentText()):
       self.save_button.setEnabled(True)
-    elif self.name_line_edit.text() == self.profile_selector.currentText():
+    else:
       self.save_button.setDisabled(True)
+
+  def selected_check_box_exists(self):
+    for check_box in self.check_boxes:
+      if check_box.isChecked():
+        return True
+
+    return False
 
   def profile_is_invalid(self):
     profile_name = self.name_line_edit.text()
-    if len(profile_name) == 0:
-      return True, _('PROFILE_NAME_EMPTY_TEXT')
 
     if len(profile_name) > ProfileUpdateWidget.MAXIMUM_NAME_LENGTH:
       return True, _('PROFILE_NAME_LENGTH_EXCEEDS_LIMIT_TEXT')
@@ -288,18 +315,11 @@ class ProfileUpdateWidget(QWidget):
         profile_name_exists(profile_name)):
       return True, _('PROFILE_NAME_EXISTS_TEXT')
 
-    checked_check_boxes_count = 0
-
     for check_box in self.check_boxes:
-      if check_box.isChecked():
-        checked_check_boxes_count += 1
+      if not check_box.isChecked():
+        return False, ''
 
-    if checked_check_boxes_count == 0:
-      return True, _('NO_SUBJECT_SELECTED_TEXT')
-    elif checked_check_boxes_count == len(self.check_boxes):
-      return True, self.construct_redundant_profile_message()
-    else:
-      return False, ''
+    return True, self.construct_redundant_profile_message()
 
   def construct_redundant_profile_message(self):
     return _('REDUNDANT_PROFILE_MESSAGE') + ProfileUpdateWidget.grade_label.text()

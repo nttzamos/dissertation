@@ -29,6 +29,7 @@ class StudentUpdateWidget(QWidget):
     section_label_font = QFont(Settings.FONT, 16)
     combo_box_font = QFont(Settings.FONT, 14)
     line_edit_font = QFont(Settings.FONT, 14)
+    error_message_font = QFont(Settings.FONT, 10)
 
     self.check_boxes_modified = []
 
@@ -57,14 +58,21 @@ class StudentUpdateWidget(QWidget):
 
     self.name_widget = QGroupBox(_('STUDENT_NAME_TEXT'))
     self.name_widget.setFont(section_label_font)
-    self.name_widget.layout = QHBoxLayout(self.name_widget)
+    self.name_widget.layout = QVBoxLayout(self.name_widget)
     self.name_widget.layout.setContentsMargins(10, 5, 10, 10)
     self.name_widget.hide()
 
     self.name_line_edit = QLineEdit()
     self.name_line_edit.setFont(line_edit_font)
-    self.name_line_edit.textChanged.connect(self.student_name_changed)
+    self.name_line_edit.textChanged.connect(self.update_save_button_state)
+
+    self.error_message_label = QLabel(self)
+    self.error_message_label.setFont(error_message_font)
+    self.name_line_edit.textChanged.connect(self.error_message_label.hide)
+    self.error_message_label.hide()
+
     self.name_widget.layout.addWidget(self.name_line_edit)
+    self.name_widget.layout.addWidget(self.error_message_label)
 
     profiles_widget = QGroupBox(_('PROFILE_SELECTION_TEXT'))
     profiles_widget.setFont(section_label_font)
@@ -101,6 +109,11 @@ class StudentUpdateWidget(QWidget):
     self.layout.addWidget(profiles_widget)
     self.layout.addSpacing(15)
     self.layout.addWidget(buttons_widget, alignment=Qt.AlignmentFlag.AlignRight)
+    self.style()
+
+  def style(self):
+    from shared.styles import Styles
+    self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 
   def initialize_scroll_area(self):
     StudentUpdateWidget.profiles_selection_widget = QWidget()
@@ -165,10 +178,9 @@ class StudentUpdateWidget(QWidget):
     is_invalid, text = self.student_is_invalid()
 
     if is_invalid:
-      title = _('ERROR_SAVING_STUDENT_TEXT')
-      answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
-      if answer == QMessageBox.StandardButton.Ok:
-        return
+      self.error_message_label.setText(text)
+      self.error_message_label.show()
+      return
 
     self.check_boxes_modified = []
     self.save_button.setDisabled(True)
@@ -232,27 +244,32 @@ class StudentUpdateWidget(QWidget):
     else:
       self.student_selector_activated(0)
 
-  def student_name_changed(self):
-    if self.name_line_edit.text() != self.student_selector.currentText():
-      self.save_button.setEnabled(True)
-    elif len(self.check_boxes_modified) == 0:
-      self.save_button.setDisabled(True)
-
   def check_box_modified(self, text):
     if text in self.check_boxes_modified:
       self.check_boxes_modified.remove(text)
     else:
       self.check_boxes_modified.append(text)
 
-    if len(self.check_boxes_modified) > 0:
+    self.update_save_button_state()
+
+  def update_save_button_state(self):
+    fields_non_empty = len(self.name_line_edit.text()) > 0 and self.selected_check_box_exists()
+
+    if fields_non_empty and (len(self.check_boxes_modified) or
+       self.name_line_edit.text() != self.student_selector.currentText()):
       self.save_button.setEnabled(True)
-    elif self.name_line_edit.text() == self.student_selector.currentText():
+    else:
       self.save_button.setDisabled(True)
+
+  def selected_check_box_exists(self):
+    for check_box in StudentUpdateWidget.check_boxes:
+      if check_box.isChecked():
+        return True
+
+    return False
 
   def student_is_invalid(self):
     student_name = self.name_line_edit.text()
-    if len(student_name) == 0:
-      return True, _('STUDENT_NAME_EMPTY_TEXT')
 
     if len(student_name) > StudentUpdateWidget.MAXIMUM_NAME_LENGTH:
       return True, _('STUDENT_NAME_LENGTH_EXCEEDS_LIMIT_TEXT')
@@ -261,11 +278,7 @@ class StudentUpdateWidget(QWidget):
         student_name_exists(student_name)):
       return True, _('STUDENT_NAME_EXISTS_TEXT')
 
-    for check_box in StudentUpdateWidget.check_boxes:
-      if check_box.isChecked():
-        return False, ''
-
-    return True, _('NO_PROFILE_SELECTED_TEXT')
+    return False, ''
 
   def update_student_update_widget(self):
     non_student_selections = [

@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
                              QLineEdit, QLabel, QGroupBox, QScrollArea,
-                            QCheckBox, QPushButton, QComboBox, QSizePolicy,
-                            QMessageBox, QCompleter)
+                             QCheckBox, QPushButton, QComboBox, QSizePolicy,
+                             QMessageBox, QCompleter)
 from PyQt6.QtCore import Qt, QStringListModel, QTimer
 from PyQt6.QtGui import QFont
 
@@ -67,23 +67,30 @@ class WordUpdateWidget(QWidget):
     WordUpdateWidget.completer.popup().setFont(completer_font)
     self.word_selection_line_edit.setCompleter(WordUpdateWidget.completer)
     self.word_selection_line_edit.setPlaceholderText(_('PLEASE_ENTER_WORD_TEXT'))
-    self.error_message_label = QLabel(_('PLEASE_ENTER_ANOTHER_WORD_TEXT'), self)
-    self.error_message_label.setFont(error_message_font)
-    self.word_selection_line_edit.textChanged.connect(self.error_message_label.hide)
-    self.error_message_label.hide()
+    self.selection_error_message_label = QLabel(_('PLEASE_ENTER_ANOTHER_WORD_TEXT'), self)
+    self.selection_error_message_label.setFont(error_message_font)
+    self.word_selection_line_edit.textChanged.connect(self.selection_error_message_label.hide)
+    self.selection_error_message_label.hide()
 
     word_selection_widget.layout.addWidget(self.word_selection_line_edit)
-    word_selection_widget.layout.addWidget(self.error_message_label)
+    word_selection_widget.layout.addWidget(self.selection_error_message_label)
 
     self.word_widget = QGroupBox(_('WORD_MODIFICATION_TEXT'))
     self.word_widget.setFont(section_label_font)
-    self.word_widget.layout = QHBoxLayout(self.word_widget)
+    self.word_widget.layout = QVBoxLayout(self.word_widget)
     self.word_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.word_line_edit = QLineEdit()
     self.word_line_edit.setFont(line_edit_font)
-    self.word_line_edit.textChanged.connect(self.word_changed)
+    self.word_line_edit.textChanged.connect(self.update_save_button_state)
+
+    self.error_message_label = QLabel(self)
+    self.error_message_label.setFont(error_message_font)
+    self.word_line_edit.textChanged.connect(self.error_message_label.hide)
+    self.error_message_label.hide()
+
     self.word_widget.layout.addWidget(self.word_line_edit)
+    self.word_widget.layout.addWidget(self.error_message_label)
     self.word_widget.hide()
 
     subjects_widget = QGroupBox(_('WORD_SUBJECT_SELECTION_TEXT'))
@@ -140,6 +147,7 @@ class WordUpdateWidget(QWidget):
 
   def style(self):
     from shared.styles import Styles
+    self.selection_error_message_label.setStyleSheet(Styles.error_message_label_style)
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
 
   def set_word_to_update(self, word, grade_id):
@@ -161,7 +169,7 @@ class WordUpdateWidget(QWidget):
     if self.searched_word in WordUpdateWidget.dictionary_words:
       self.search_valid_word_details()
     else:
-      self.error_message_label.show()
+      self.selection_error_message_label.show()
 
   def search_with_click(self, text):
     if WordUpdateWidget.just_searched_with_enter:
@@ -232,10 +240,9 @@ class WordUpdateWidget(QWidget):
     is_invalid, text = self.word_is_invalid()
 
     if is_invalid:
-      title = _('ERROR_SAVING_WORD_TEXT')
-      answer = QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
-      if answer == QMessageBox.StandardButton.Ok:
-        return
+      self.error_message_label.setText(text)
+      self.error_message_label.show()
+      return
 
     self.check_boxes_modified = []
     self.save_button.setDisabled(True)
@@ -342,27 +349,32 @@ class WordUpdateWidget(QWidget):
     from dialogs.word_editing_widget import WordEditingWidget
     WordEditingWidget.update_word_family_update_widget(self.searched_word, grade_id)
 
-  def word_changed(self):
-    if self.word_line_edit.text() != self.searched_word:
-      self.save_button.setEnabled(True)
-    elif len(self.check_boxes_modified) == 0:
-      self.save_button.setDisabled(True)
-
   def check_box_modified(self, text):
     if text in self.check_boxes_modified:
       self.check_boxes_modified.remove(text)
     else:
       self.check_boxes_modified.append(text)
 
-    if len(self.check_boxes_modified) > 0:
+    self.update_save_button_state()
+
+  def update_save_button_state(self):
+    fields_non_empty = len(self.word_line_edit.text()) > 0 and self.selected_check_box_exists()
+
+    if fields_non_empty and (len(self.check_boxes_modified) or
+       self.word_line_edit.text() != self.searched_word):
       self.save_button.setEnabled(True)
-    elif self.word_line_edit.text() == self.searched_word:
+    else:
       self.save_button.setDisabled(True)
+
+  def selected_check_box_exists(self):
+    for check_box in self.check_boxes:
+      if check_box.isChecked():
+        return True
+
+    return False
 
   def word_is_invalid(self):
     word = self.word_line_edit.text()
-    if len(word) == 0:
-      return True, _('WORD_EMPTY_TEXT')
 
     if len(word) > WordUpdateWidget.MAXIMUM_NAME_LENGTH:
       return True, _('WORD_LENGTH_EXCEEDS_LIMIT_TEXT')
@@ -374,11 +386,7 @@ class WordUpdateWidget(QWidget):
       if not character in WordUpdateWidget.GREEK_CHARACTERS:
         return True, _('ONLY_GREEK_CHARACTERS_ALLOWED_TEXT')
 
-    for check_box in self.check_boxes:
-      if check_box.isChecked():
-        return False, ''
-
-    return True, _('NO_SUBJECT_SELECTED_TEXT')
+    return False, ''
 
   def get_permission_to_delete(self):
     title = _('DELETE_WORD_BUTTON_TEXT')
