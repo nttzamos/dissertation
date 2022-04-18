@@ -150,7 +150,12 @@ class ProfileUpdateWidget(QWidget):
       ProfileUpdateWidget.profile_selector.activated.disconnect()
       ProfileUpdateWidget.profile_selector.activated.connect(self.profile_selector_activated)
       self.profile_selector_activated(index - 1)
-      self.delete_button.setEnabled(True)
+
+      if self.profile_selector.currentText() in get_grades():
+        self.delete_button.setDisabled(True)
+      else:
+        self.delete_button.setEnabled(True)
+
       self.subjects_selection_widget.setEnabled(True)
       self.name_widget.show()
 
@@ -290,6 +295,10 @@ class ProfileUpdateWidget(QWidget):
     self.update_save_button_state()
 
   def update_save_button_state(self):
+    if self.profile_selector.currentText() in get_grades():
+      self.save_button.setDisabled(True)
+      return
+
     fields_non_empty = len(self.name_line_edit.text()) > 0 and self.selected_check_box_exists()
 
     if fields_non_empty and (len(self.check_boxes_modified) or
