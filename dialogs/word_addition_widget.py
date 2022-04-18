@@ -51,6 +51,7 @@ class WordAdditionWIdget(QWidget):
 
     self.word_line_edit = QLineEdit()
     self.word_line_edit.setFont(line_edit_font)
+    self.word_line_edit.textChanged.connect(self.update_save_button_state)
     word_widget.layout.addWidget(self.word_line_edit)
 
     grade_selection_widget = QGroupBox(_('GRADE_SELECTION_TEXT'))
@@ -84,8 +85,10 @@ class WordAdditionWIdget(QWidget):
     grade_subjects = get_grade_subjects(1)
 
     self.check_boxes = []
+    self.check_boxes_selected = []
     for i in range(len(grade_subjects)):
       check_box = QCheckBox(grade_subjects[i])
+      check_box.clicked.connect(lambda ch, i=i: self.check_box_modified(grade_subjects[i]))
       check_box.setFont(check_box_font)
       self.check_boxes.append(check_box)
       self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
@@ -100,9 +103,10 @@ class WordAdditionWIdget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    save_button = QPushButton(_('SAVE_WORD_BUTTON_TEXT'))
-    save_button.pressed.connect(self.save_word)
-    save_button.setAutoDefault(False)
+    self.save_button = QPushButton(_('SAVE_WORD_BUTTON_TEXT'))
+    self.save_button.pressed.connect(self.save_word)
+    self.save_button.setAutoDefault(False)
+    self.save_button.setDisabled(True)
 
     select_all_button = QPushButton(_('SELECT_ALL_SUBJECTS_TEXT'))
     select_all_button.pressed.connect(self.select_all)
@@ -111,7 +115,7 @@ class WordAdditionWIdget(QWidget):
     buttons_widget = QWidget()
     buttons_widget.layout = QHBoxLayout(buttons_widget)
     buttons_widget.layout.addWidget(select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
-    buttons_widget.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
+    buttons_widget.layout.addWidget(self.save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.layout.addWidget(self.success_label, alignment=Qt.AlignmentFlag.AlignRight)
     self.layout.addWidget(word_widget)
@@ -126,10 +130,14 @@ class WordAdditionWIdget(QWidget):
 
     grade_subjects = get_grade_subjects(index + 1)
 
+    self.save_button.setDisabled(True)
+
     check_box_font = QFont(Settings.FONT, 14)
     self.check_boxes = []
+    self.check_boxes_selected = []
     for i in range(len(grade_subjects)):
       check_box = QCheckBox(grade_subjects[i])
+      check_box.clicked.connect(lambda ch, i=i: self.check_box_modified(grade_subjects[i]))
       check_box.setFont(check_box_font)
       self.check_boxes.append(check_box)
       self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
@@ -144,6 +152,7 @@ class WordAdditionWIdget(QWidget):
 
     word = self.word_line_edit.text().strip()
     QTimer.singleShot(0, self.word_line_edit.clear)
+    self.check_boxes_selected = []
 
     subjects = []
     for check_box in self.check_boxes:
@@ -167,8 +176,28 @@ class WordAdditionWIdget(QWidget):
     QTimer.singleShot(3500, self.success_label.hide)
 
   def select_all(self):
+    self.check_boxes_selected = []
+
     for check_box in self.check_boxes:
       check_box.setChecked(True)
+      self.check_boxes_selected.append(check_box.text())
+
+    self.update_save_button_state()
+
+  def check_box_modified(self, text):
+    if text in self.check_boxes_selected:
+      self.check_boxes_selected.remove(text)
+    else:
+      self.check_boxes_selected.append(text)
+
+    self.update_save_button_state()
+
+  def update_save_button_state(self):
+    if (len(self.word_line_edit.text()) > 0 and
+        len(self.check_boxes_selected) > 0):
+      self.save_button.setEnabled(True)
+    else:
+      self.save_button.setDisabled(True)
 
   def word_is_invalid(self):
     word = self.word_line_edit.text().strip()

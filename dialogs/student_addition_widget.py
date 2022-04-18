@@ -45,9 +45,13 @@ class StudentAdditionWidget(QWidget):
     name_widget.layout = QHBoxLayout(name_widget)
     name_widget.layout.setContentsMargins(10, 5, 10, 10)
 
-    self.name_line_edit = QLineEdit()
-    self.name_line_edit.setFont(line_edit_font)
-    name_widget.layout.addWidget(self.name_line_edit)
+    StudentAdditionWidget.name_line_edit = QLineEdit()
+    StudentAdditionWidget.name_line_edit.setFont(line_edit_font)
+    StudentAdditionWidget.name_line_edit.textChanged.connect(
+      StudentAdditionWidget.update_save_button_state
+    )
+
+    name_widget.layout.addWidget(StudentAdditionWidget.name_line_edit)
 
     profiles_widget = QGroupBox(_('PROFILE_SELECTION_TEXT'))
     profiles_widget.setFont(section_label_font)
@@ -69,9 +73,11 @@ class StudentAdditionWidget(QWidget):
 
     profiles = get_profiles()
 
+    StudentAdditionWidget.check_boxes_selected = []
     StudentAdditionWidget.check_boxes = []
     for i in range(len(profiles)):
       check_box = QCheckBox(profiles[i])
+      check_box.clicked.connect(lambda ch, i=i: StudentAdditionWidget.check_box_modified(profiles[i]))
       check_box.setFont(check_box_font)
       StudentAdditionWidget.check_boxes.append(check_box)
       StudentAdditionWidget.profiles_selection_widget.layout.addWidget(check_box, i, 0)
@@ -87,9 +93,10 @@ class StudentAdditionWidget(QWidget):
 
     profiles_widget.layout.addWidget(scroll_area)
 
-    save_button = QPushButton(_('SAVE_STUDENT_BUTTON_TEXT'))
-    save_button.pressed.connect(self.save_student)
-    save_button.setAutoDefault(False)
+    StudentAdditionWidget.save_button = QPushButton(_('SAVE_STUDENT_BUTTON_TEXT'))
+    StudentAdditionWidget.save_button.pressed.connect(self.save_student)
+    StudentAdditionWidget.save_button.setAutoDefault(False)
+    StudentAdditionWidget.save_button.setDisabled(True)
 
     select_all_button = QPushButton(_('SELECT_ALL_PROFILES_TEXT'))
     select_all_button.pressed.connect(self.select_all)
@@ -98,7 +105,7 @@ class StudentAdditionWidget(QWidget):
     buttons_widget = QWidget()
     buttons_widget.layout = QHBoxLayout(buttons_widget)
     buttons_widget.layout.addWidget(select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
-    buttons_widget.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
+    buttons_widget.layout.addWidget(StudentAdditionWidget.save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.layout.addWidget(self.success_label, alignment=Qt.AlignmentFlag.AlignRight)
     self.layout.addWidget(name_widget)
@@ -114,8 +121,9 @@ class StudentAdditionWidget(QWidget):
       QMessageBox.critical(self, title, text, QMessageBox.StandardButton.Ok)
       return
 
-    student_name = self.name_line_edit.text()
-    QTimer.singleShot(0, self.name_line_edit.clear)
+    student_name = StudentAdditionWidget.name_line_edit.text()
+    QTimer.singleShot(0, StudentAdditionWidget.name_line_edit.clear)
+    StudentAdditionWidget.check_boxes_selected = []
 
     checked_profiles = []
     for check_box in StudentAdditionWidget.check_boxes:
@@ -134,12 +142,34 @@ class StudentAdditionWidget(QWidget):
     self.success_label.show()
     QTimer.singleShot(3500, self.success_label.hide)
 
+  @staticmethod
+  def check_box_modified(text):
+    if text in StudentAdditionWidget.check_boxes_selected:
+      StudentAdditionWidget.check_boxes_selected.remove(text)
+    else:
+      StudentAdditionWidget.check_boxes_selected.append(text)
+
+    StudentAdditionWidget.update_save_button_state()
+
+  @staticmethod
+  def update_save_button_state():
+    if (len(StudentAdditionWidget.name_line_edit.text()) > 0 and
+        len(StudentAdditionWidget.check_boxes_selected) > 0):
+      StudentAdditionWidget.save_button.setEnabled(True)
+    else:
+      StudentAdditionWidget.save_button.setDisabled(True)
+
   def select_all(self):
+    StudentAdditionWidget.check_boxes_selected = []
+
     for check_box in StudentAdditionWidget.check_boxes:
       check_box.setChecked(True)
+      StudentAdditionWidget.check_boxes_selected.append(check_box.text())
+
+    StudentAdditionWidget.update_save_button_state()
 
   def student_is_invalid(self):
-    student_name = self.name_line_edit.text()
+    student_name = StudentAdditionWidget.name_line_edit.text()
     if len(student_name) == 0:
       return True, _('STUDENT_NAME_EMPTY_TEXT')
 
@@ -159,6 +189,7 @@ class StudentAdditionWidget(QWidget):
   def add_profile(profile_name):
     check_box = QCheckBox(profile_name)
     check_box_font = QFont(Settings.FONT, 14)
+    check_box.clicked.connect(lambda ch, i=1: StudentAdditionWidget.check_box_modified(profile_name))
     check_box.setFont(check_box_font)
     StudentAdditionWidget.check_boxes.append(check_box)
     StudentAdditionWidget.last_index_used += 1
@@ -179,4 +210,9 @@ class StudentAdditionWidget(QWidget):
       if check_box.text() == profile_name:
         StudentAdditionWidget.profiles_selection_widget.layout.removeWidget(check_box)
         StudentAdditionWidget.check_boxes.remove(check_box)
+
+        if profile_name in StudentAdditionWidget.check_boxes_selected:
+          StudentAdditionWidget.check_boxes_selected.remove(profile_name)
+          StudentAdditionWidget.update_save_button_state()
+
         return

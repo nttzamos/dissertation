@@ -47,6 +47,7 @@ class ProfileAdditionWIdget(QWidget):
 
     self.name_line_edit = QLineEdit()
     self.name_line_edit.setFont(line_edit_font)
+    self.name_line_edit.textChanged.connect(self.update_save_button_state)
     name_widget.layout.addWidget(self.name_line_edit)
 
     grade_selection_widget = QGroupBox(_('GRADE_SELECTION_TEXT'))
@@ -80,8 +81,10 @@ class ProfileAdditionWIdget(QWidget):
     grade_subjects = get_grade_subjects(1)
 
     self.check_boxes = []
+    self.check_boxes_selected = []
     for i in range(len(grade_subjects)):
       check_box = QCheckBox(grade_subjects[i])
+      check_box.clicked.connect(lambda ch, i=i: self.check_box_modified(grade_subjects[i]))
       check_box.setFont(check_box_font)
       self.check_boxes.append(check_box)
       self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
@@ -96,13 +99,14 @@ class ProfileAdditionWIdget(QWidget):
 
     subjects_widget.layout.addWidget(scroll_area)
 
-    save_button = QPushButton(_('SAVE_PROFILE_BUTTON_TEXT'))
-    save_button.pressed.connect(self.save_profile)
-    save_button.setAutoDefault(False)
+    self.save_button = QPushButton(_('SAVE_PROFILE_BUTTON_TEXT'))
+    self.save_button.pressed.connect(self.save_profile)
+    self.save_button.setAutoDefault(False)
+    self.save_button.setDisabled(True)
 
     buttons_widget = QWidget()
     buttons_widget.layout = QHBoxLayout(buttons_widget)
-    buttons_widget.layout.addWidget(save_button, alignment=Qt.AlignmentFlag.AlignRight)
+    buttons_widget.layout.addWidget(self.save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.layout.addWidget(self.success_label, alignment=Qt.AlignmentFlag.AlignRight)
     self.layout.addWidget(name_widget)
@@ -117,10 +121,14 @@ class ProfileAdditionWIdget(QWidget):
 
     grade_subjects = get_grade_subjects(index + 1)
 
+    self.save_button.setDisabled(True)
+
     check_box_font = QFont(Settings.FONT, 14)
     self.check_boxes = []
+    self.check_boxes_selected = []
     for i in range(len(grade_subjects)):
       check_box = QCheckBox(grade_subjects[i])
+      check_box.clicked.connect(lambda ch, i=i: self.check_box_modified(grade_subjects[i]))
       check_box.setFont(check_box_font)
       self.check_boxes.append(check_box)
       self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
@@ -135,6 +143,7 @@ class ProfileAdditionWIdget(QWidget):
 
     profile_name = self.name_line_edit.text()
     QTimer.singleShot(0, self.name_line_edit.clear)
+    self.check_boxes_selected = []
 
     subjects = []
     for check_box in self.check_boxes:
@@ -158,6 +167,21 @@ class ProfileAdditionWIdget(QWidget):
 
     self.success_label.show()
     QTimer.singleShot(3500, self.success_label.hide)
+
+  def check_box_modified(self, text):
+    if text in self.check_boxes_selected:
+      self.check_boxes_selected.remove(text)
+    else:
+      self.check_boxes_selected.append(text)
+
+    self.update_save_button_state()
+
+  def update_save_button_state(self):
+    if (len(self.name_line_edit.text()) > 0 and
+        len(self.check_boxes_selected) > 0):
+      self.save_button.setEnabled(True)
+    else:
+      self.save_button.setDisabled(True)
 
   def profile_is_invalid(self):
     profile_name = self.name_line_edit.text()
