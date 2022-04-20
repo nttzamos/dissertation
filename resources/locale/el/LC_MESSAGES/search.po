@@ -21,10 +21,10 @@ msgid "CLEAR_SEARCH_TEXT"
 msgstr "Καθαρισμός Αναζήτησης"
 
 msgid "UNINITIALIZED_STATE_TEXT"
-msgstr "Πρέπει να επιλέξετε κάποιο μάθημα πρώτα."
+msgstr "Πρέπει να επιλέξετε κατά σειρά μαθητή, προφίλ και μάθημα(τα)."
 
 msgid "PLEASE_ENTER_WORD_TEXT"
-msgstr "Παρακαλώ εισάγετε μια λέξη."
+msgstr "Εδώ μπορείτε να αναζητήσετε λέξεις."
 
 msgid "EDIT_WORDS_BUTTON_TEXT"
 msgstr "Διαχείριση Λεξιλογίου"
@@ -47,15 +47,6 @@ msgstr "Επιλέξτε έναν μαθητή..."
 msgid "NO_STUDENTS_TEXT"
 msgstr "Δεν υπάρχουν μαθητές"
 
-msgid "MUST_SELECT_STUDENT_TEXT"
-msgstr "Πρέπει να επιλέξετε μαθητή."
-
-msgid "MUST_SELECT_STUDENT_AND_PROFILE_TEXT"
-msgstr "Πρέπει να επιλέξετε μαθητή και προφίλ."
-
-msgid "MUST_SELECT_PROFILE_TEXT"
-msgstr "Πρέπει να επιλέξετε προφίλ."
-
 msgid "STUDENT_NO_PROFILES_TEXT"
 msgstr "Ο μαθητής δεν έχει προφίλ."
 
@@ -76,3 +67,6 @@ msgstr "Αυτή η λέξη δεν περιλαμβάνεται στα βιβλ
 
 msgid "SEARCH_ANOTHER_WORD"
 msgstr ".\nΠαρακαλώ αναζητήστε μια διαφορετική λέξη."
+
+msgid "EMPTY_SEARCH_BAR_TEXT"
+msgstr "Παρακαλώ εισάγετε μια λέξη."

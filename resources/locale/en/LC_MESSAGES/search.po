@@ -21,10 +21,10 @@ msgid "CLEAR_SEARCH_TEXT"
 msgstr "Clear Search"
 
 msgid "UNINITIALIZED_STATE_TEXT"
-msgstr "You have to select a subject first."
+msgstr "You have to select a student, a profile and a subject(s)."
 
 msgid "PLEASE_ENTER_WORD_TEXT"
-msgstr "Please enter a word."
+msgstr "You can search for words here."
 
 msgid "EDIT_WORDS_BUTTON_TEXT"
 msgstr "Manage Vocabulary"
@@ -47,15 +47,6 @@ msgstr "Please select a student..."
 msgid "NO_STUDENTS_TEXT"
 msgstr "There are no students"
 
-msgid "MUST_SELECT_STUDENT_TEXT"
-msgstr "You have to select a student."
-
-msgid "MUST_SELECT_STUDENT_AND_PROFILE_TEXT"
-msgstr "You have to select a student and a profile."
-
-msgid "MUST_SELECT_PROFILE_TEXT"
-msgstr "You have to select a profile."
-
 msgid "STUDENT_NO_PROFILES_TEXT"
 msgstr "There are no profiles."
 
@@ -76,3 +67,6 @@ msgstr "This word is not included in the books of the profile "
 
 msgid "SEARCH_ANOTHER_WORD"
 msgstr ".\nPlease search for a different word."
+
+msgid "EMPTY_SEARCH_BAR_TEXT"
+msgstr "Please enter a word."

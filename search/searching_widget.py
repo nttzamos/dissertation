@@ -120,7 +120,7 @@ class SearchingWidget(QWidget):
 
     if (SearchingWidget.line_edit.text() == '' and
         SearchingWidget.current_error_message_text != _('UNINITIALIZED_STATE_TEXT')):
-      SearchingWidget.error_message.setText(_('PLEASE_ENTER_WORD_TEXT'))
+      SearchingWidget.error_message.setText(_('EMPTY_SEARCH_BAR_TEXT'))
     else:
       SearchingWidget.error_message.setText(SearchingWidget.current_error_message_text)
 

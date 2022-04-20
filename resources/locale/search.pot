@@ -47,15 +47,6 @@ msgstr ""
 msgid "NO_STUDENTS_TEXT"
 msgstr ""
 
-msgid "MUST_SELECT_STUDENT_TEXT"
-msgstr ""
-
-msgid "MUST_SELECT_STUDENT_AND_PROFILE_TEXT"
-msgstr ""
-
-msgid "MUST_SELECT_PROFILE_TEXT"
-msgstr ""
-
 msgid "STUDENT_NO_PROFILES_TEXT"
 msgstr ""
 
@@ -75,4 +66,7 @@ msgid "WORD_NOT_INCLUDED_IN_PROFILE"
 msgstr ""
 
 msgid "SEARCH_ANOTHER_WORD"
+msgstr ""
+
+msgid "EMPTY_SEARCH_BAR_TEXT"
 msgstr ""

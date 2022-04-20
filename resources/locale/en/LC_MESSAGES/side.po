@@ -21,7 +21,7 @@ msgid "NO_RECENT_SEARCHES_TEXT"
 msgstr "You do not have any recent searches."
 
 msgid "RECENT_SEARCHES_SHOWN_HERE"
-msgstr "Your recent searches for the corresponding subject(s) will appear here."
+msgstr "Your recent searches will appear here."
 
 msgid "STARRED_WORDS_TITLE"
 msgstr "Starred Words"
@@ -30,4 +30,4 @@ msgid "NO_STARRED_WORDS_TEXT"
 msgstr "You do not have any starred words."
 
 msgid "STARRED_WORDS_SHOWN_HERE"
-msgstr "Your starred words for the corresponding subject(s) will appear here."
+msgstr "Your starred words will appear here."
