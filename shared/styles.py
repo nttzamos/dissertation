@@ -57,12 +57,12 @@ class Styles():
   if theme == 'light':
     side_widgets_style = """
       QWidget { background-color: #DEDEDE }
-      QLabel { color: black }
+      QLabel { color: black; padding: 0px 10px }
       QScrollBar { background-color: none }"""
   else:
     side_widgets_style = """
       QWidget { background-color: #362222 }
-      QLabel { color: white }
+      QLabel { color: white; padding: 0px 10px }
       QScrollBar { background-color: none }"""
 
   if theme == 'light':

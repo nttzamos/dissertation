@@ -18,13 +18,16 @@ msgid "RECENT_SEARCHES_TITLE"
 msgstr "Πρόσφατες Αναζητήσεις"
 
 msgid "NO_RECENT_SEARCHES_TEXT"
-msgstr "Δεν έχετε πρόσφατες αναζητήσεις"
+msgstr "Δεν έχετε πρόσφατες αναζητήσεις."
+
+msgid "RECENT_SEARCHES_SHOWN_HERE"
+msgstr "Οι πρόσφατες αναζητήσεις σας για το επιλεγμένο μάθημα θα εμφανιστούν εδώ."
 
 msgid "STARRED_WORDS_TITLE"
 msgstr "Αγαπημένες Λέξεις"
 
 msgid "NO_STARRED_WORDS_TEXT"
-msgstr "Δεν έχετε αγαπημένες λέξεις"
+msgstr "Δεν έχετε αγαπημένες λέξεις."
 
-msgid "SELECT_A_SUBJECT_TEXT"
-msgstr "Επιλέξτε κάποιο μάθημα πρώτα."
+msgid "STARRED_WORDS_SHOWN_HERE"
+msgstr "Οι αγαπημένες λέξεις σας για το επιλεγμένο μάθημα θα εμφανιστούν εδώ."

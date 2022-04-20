@@ -20,11 +20,14 @@ msgstr ""
 msgid "NO_RECENT_SEARCHES_TEXT"
 msgstr ""
 
-msgid "SELECT_A_SUBJECT_TEXT"
+msgid "RECENT_SEARCHES_SHOWN_HERE"
 msgstr ""
 
 msgid "STARRED_WORDS_TITLE"
 msgstr ""
 
 msgid "NO_STARRED_WORDS_TEXT"
+msgstr ""
+
+msgid "STARRED_WORDS_SHOWN_HERE"
 msgstr ""

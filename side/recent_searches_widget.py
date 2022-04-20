@@ -142,7 +142,7 @@ class RecentSearchesWidget(QWidget):
 
   @staticmethod
   def show_placeholder(text=None):
-    if text == None: text = _('SELECT_A_SUBJECT_TEXT')
+    if text == None: text = _('RECENT_SEARCHES_SHOWN_HERE')
 
     RecentSearchesWidget.placeholder_label.setText(text)
 

@@ -136,7 +136,7 @@ class StarredWordsWidget(QWidget):
 
   @staticmethod
   def show_placeholder(text=None):
-    if text == None: text = _('SELECT_A_SUBJECT_TEXT')
+    if text == None: text = _('STARRED_WORDS_SHOWN_HERE')
 
     StarredWordsWidget.placeholder_label.setText(text)
 
