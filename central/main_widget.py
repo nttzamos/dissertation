@@ -6,12 +6,12 @@ from search.current_search import CurrentSearch
 from search.searching_widget import SearchingWidget
 
 class MainWidget(QWidget):
-  searching_widget = SearchingWidget()
-  current_search = CurrentSearch()
-  results_widget = ResultsWidget()
-
   def __init__(self):
     super().__init__()
+
+    MainWidget.searching_widget = SearchingWidget()
+    MainWidget.current_search = CurrentSearch()
+    MainWidget.results_widget = ResultsWidget()
 
     self.setMinimumWidth(Settings.get_setting('right_widget_width'))
 

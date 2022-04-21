@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import (QGridLayout, QLabel, QScrollArea, QVBoxLayout,
-                             QWidget, QMessageBox, QCheckBox, QPushButton)
+                             QWidget, QMessageBox, QCheckBox, QPushButton,
+                             QHBoxLayout)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 
@@ -32,6 +33,7 @@ class ResultsWidget(QWidget):
     ResultsWidget.placeholder_label = QLabel(_('RESULT_DISPLAY_TEXT'))
 
     font = QFont(Settings.FONT, 18)
+    title_font = QFont(Settings.FONT, 22)
 
     ResultsWidget.placeholder_label.setFont(font)
     ResultsWidget.grid_layout.addWidget(ResultsWidget.placeholder_label)
@@ -41,18 +43,30 @@ class ResultsWidget(QWidget):
     self.scroll_area.setWidgetResizable(True)
     self.scroll_area.setWidget(ResultsWidget.scroll_area_widget_contents)
 
+    ResultsWidget.title_label = QLabel('Αποτελέσματα Αναζήτησης')
+    ResultsWidget.title_label.setFont(title_font)
+
     ResultsWidget.legend_button = QPushButton()
     ResultsWidget.legend_button.setIcon(QIcon('resources/question.png'))
     ResultsWidget.legend_button.setToolTip(_('RESULT_EXPLANATION_TOOLTIP'))
     ResultsWidget.legend_button.pressed.connect(self.open_legend)
     ResultsWidget.legend_button.setFixedSize(30, 30)
+    size_policy = ResultsWidget.legend_button.sizePolicy()
+    size_policy.setRetainSizeWhenHidden(True)
+    ResultsWidget.legend_button.setSizePolicy(size_policy)
     ResultsWidget.legend_button.hide()
 
-    ResultsWidget.grid_layout.addWidget(
-      ResultsWidget.legend_button, 0, 10000,
-      Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop
+    ResultsWidget.first_row_widget = QWidget()
+    ResultsWidget.first_row_widget.layout = QHBoxLayout(ResultsWidget.first_row_widget)
+    ResultsWidget.first_row_widget.layout.setSpacing(0)
+    ResultsWidget.first_row_widget.layout.setContentsMargins(20, 10, 20, 20)
+
+    ResultsWidget.first_row_widget.layout.addWidget(ResultsWidget.title_label)
+    ResultsWidget.first_row_widget.layout.addWidget(
+      ResultsWidget.legend_button, Qt.AlignmentFlag.AlignRight
     )
 
+    self.layout.addWidget(ResultsWidget.first_row_widget)
     self.layout.addWidget(self.scroll_area)
 
     self.style()

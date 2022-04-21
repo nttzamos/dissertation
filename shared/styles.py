@@ -67,10 +67,10 @@ class Styles():
 
   if theme == 'light':
     side_widgets_title_label_style = """
-      QLabel { border : 1px solid black; border-bottom: 0px; padding: 10px 0px; background-color: #F9E4C8; color: #1C1C1C }"""
+      QLabel { border: 1px solid black; border-bottom: 0px; padding: 10px 0px; background-color: #F9E4C8; color: #1C1C1C }"""
   else:
     side_widgets_title_label_style = """
-      QLabel { border : 1px solid white; border-bottom: 0px; padding: 10px 0px; background-color: #423F3E; color: white }"""
+      QLabel { border: 1px solid white; border-bottom: 0px; padding: 10px 0px; background-color: #423F3E; color: white }"""
 
   if theme == 'light':
     item_widgets_style = """
@@ -210,12 +210,12 @@ class Styles():
 
   if theme == 'light':
     results_widget_style = """
-      QWidget { background-color: #DEDEDE }
+      QWidget { background-color: #DEDEDE; border:none }
       QLabel { color: black }
       QScrollBar { background-color: none }"""
   else:
     results_widget_style = """
-      QWidget { background-color: #362222 }
+      QWidget { background-color: #362222; border:none }
       QLabel { color: white }
       QScrollBar { background-color: none }"""
 
