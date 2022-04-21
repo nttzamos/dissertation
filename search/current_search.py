@@ -6,6 +6,7 @@ from PyQt6.QtGui import QFont
 from menu.settings import Settings
 from models.profile import get_profile_details
 from models.student import get_students, get_student_details
+from shared.spacer import Spacer
 
 import gettext
 
@@ -18,7 +19,6 @@ class CurrentSearch(QWidget):
   def __init__(self):
     super().__init__()
 
-    self.setFixedHeight(300)
     self.layout = QHBoxLayout(self)
     self.layout.setContentsMargins(50, 50, 50, 50)
 
@@ -28,23 +28,39 @@ class CurrentSearch(QWidget):
     searched_word_font = QFont(Settings.FONT, 20)
     combo_box_font = QFont(Settings.FONT, 14)
 
+    searched_word_label_container = QWidget()
+    searched_word_label_container.layout = QHBoxLayout(searched_word_label_container)
+    searched_word_label_container.layout.setContentsMargins(0, 0, 0, 0)
+    searched_word_label_container.layout.setSpacing(0)
+
     CurrentSearch.searched_word_label = QLabel(_('UNINITIALIZED_STATE_TEXT'))
     CurrentSearch.searched_word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    CurrentSearch.searched_word_label.setMaximumHeight(100)
+    CurrentSearch.searched_word_label.setWordWrap(True)
     CurrentSearch.searched_word_label.setFont(searched_word_font)
     CurrentSearch.searched_word_label.setTextInteractionFlags(
       Qt.TextInteractionFlag.TextSelectableByMouse
     )
+    CurrentSearch.searched_word_label.setSizePolicy(
+      QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
+    )
+
+    spacer1 = Spacer()
+    spacer1.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+    spacer2 = Spacer()
+    spacer2.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+
+    searched_word_label_container.layout.addWidget(spacer1)
+    searched_word_label_container.layout.addWidget(CurrentSearch.searched_word_label)
+    searched_word_label_container.layout.addWidget(spacer2)
 
     search_details = QWidget()
     search_details.layout = QVBoxLayout(search_details)
 
     open_data_editing_widget_button = QPushButton(_('EDIT_DATA_BUTTON_TEXT'))
     open_data_editing_widget_button.setToolTip(_('EDIT_DATA_TOOLTIP_TEXT'))
-
     open_data_editing_widget_button.setFont(combo_box_font)
     open_data_editing_widget_button.clicked.connect(self.open_data_editing_widget)
-    open_data_editing_widget_button.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+    open_data_editing_widget_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
 
     CurrentSearch.student_selector = QComboBox()
     CurrentSearch.student_selector.setFont(combo_box_font)
@@ -72,13 +88,10 @@ class CurrentSearch(QWidget):
     search_details.layout.addWidget(CurrentSearch.student_selector)
     search_details.layout.addWidget(CurrentSearch.profile_selector)
     search_details.layout.addWidget(CurrentSearch.subject_selector)
+    search_details.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
 
-    self.layout.addWidget(CurrentSearch.searched_word_label)
-    self.layout.addSpacing(100)
+    self.layout.addWidget(searched_word_label_container)
     self.layout.addWidget(search_details)
-
-    search_details.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-    CurrentSearch.searched_word_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
     CurrentSearch.student_selector.activated.connect(self.student_selector_activated_initial)
     CurrentSearch.profile_selector.activated.connect(CurrentSearch.profile_selector_activated_initial)

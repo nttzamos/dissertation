@@ -189,24 +189,24 @@ class Styles():
   if theme == 'light':
     current_search_style = """
       QWidget { background-color: none }
-      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 30px }
       QPushButton { color: black; border-bottom: 3px solid black; border-right: 3px solid black }
       QPushButton:hover { background-color: grey }
       QComboBox { color: black }"""
   else:
     current_search_style = """
       QWidget { background-color: none }
-      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 50px }
+      QPushButton { border: 1px solid black; border-radius: 10px; padding: 5px 30px }
       QPushButton { color: black }
       QPushButton:hover { background-color: grey }
       QComboBox { color: black }"""
 
   if theme == 'light':
     searched_word_style = """
-      QLabel { border: 1px solid black; border-radius: 50%; padding: 0px 50px; background-color: #F9E4C8; color: black }"""
+      QLabel { border: 1px solid black; padding: 10px 30px; background-color: #F9E4C8; color: black }"""
   else:
     searched_word_style = """
-      QLabel { border: 1px solid white; border-radius: 50%; padding: 0px 50px; background-color: #423F3E; color: white }"""
+      QLabel { border: 1px solid white; padding: 0px 30px; background-color: #423F3E; color: white }"""
 
   if theme == 'light':
     results_widget_style = """
