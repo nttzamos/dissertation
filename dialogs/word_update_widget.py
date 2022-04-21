@@ -8,6 +8,7 @@ from PyQt6.QtGui import QFont
 from menu.settings import Settings
 from models.word import get_word_subjects, word_exists, update_word, destroy_word
 from shared.database_handler import get_grades, get_grade_words, get_grade_subjects
+from shared.spacer import Spacer
 
 import gettext
 
@@ -109,13 +110,7 @@ class WordUpdateWidget(QWidget):
 
     self.check_boxes = []
 
-    vspacer = QLabel('f')
-    invisible_font = QFont(Settings.FONT, 1)
-    vspacer.setFont(invisible_font)
-    size_policy = vspacer.sizePolicy()
-    size_policy.setRetainSizeWhenHidden(True)
-    vspacer.setSizePolicy(size_policy)
-    self.subjects_selection_widget.layout.addWidget(vspacer, 1000, 0)
+    self.subjects_selection_widget.layout.addWidget(Spacer(), 1000, 0)
 
     subjects_widget.layout.addWidget(scroll_area)
 

@@ -5,6 +5,7 @@ from PyQt6.QtGui import QFont
 from item.starred_word import StarredWord
 from menu.settings import Settings
 from models.starred_word import get_starred_words
+from shared.spacer import Spacer
 
 import gettext
 
@@ -53,11 +54,7 @@ class StarredWordsWidget(QWidget):
     StarredWordsWidget.placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     StarredWordsWidget.show_placeholder_label = False
 
-    StarredWordsWidget.vspacer = QLabel('f')
-    StarredWordsWidget.vspacer.setFont(invisible_font)
-    size_policy = StarredWordsWidget.vspacer.sizePolicy()
-    size_policy.setRetainSizeWhenHidden(True)
-    StarredWordsWidget.vspacer.setSizePolicy(size_policy)
+    StarredWordsWidget.spacer = Spacer()
 
     self.layout.addWidget(title_label)
     self.layout.addWidget(scroll_area)
@@ -73,7 +70,7 @@ class StarredWordsWidget(QWidget):
   @staticmethod
   def initialize():
     StarredWordsWidget.grid_layout.addWidget(
-      StarredWordsWidget.vspacer, StarredWordsWidget.MAX_ROW + 1, 0, 1, -1
+      StarredWordsWidget.spacer, StarredWordsWidget.MAX_ROW + 1, 0, 1, -1
     )
 
     StarredWordsWidget.show_placeholder()
@@ -143,7 +140,7 @@ class StarredWordsWidget(QWidget):
     if not StarredWordsWidget.show_placeholder_label:
       StarredWordsWidget.show_placeholder_label = True
       StarredWordsWidget.grid_layout.addWidget(StarredWordsWidget.placeholder_label)
-      StarredWordsWidget.grid_layout.removeWidget(StarredWordsWidget.vspacer)
+      StarredWordsWidget.grid_layout.removeWidget(StarredWordsWidget.spacer)
       StarredWordsWidget.placeholder_label.show()
 
   @staticmethod
@@ -151,7 +148,7 @@ class StarredWordsWidget(QWidget):
     if StarredWordsWidget.show_placeholder_label:
       StarredWordsWidget.show_placeholder_label = False
       StarredWordsWidget.grid_layout.addWidget(
-        StarredWordsWidget.vspacer, StarredWordsWidget.MAX_ROW + 1, 0, 1, -1
+        StarredWordsWidget.spacer, StarredWordsWidget.MAX_ROW + 1, 0, 1, -1
       )
 
       StarredWordsWidget.placeholder_label.hide()

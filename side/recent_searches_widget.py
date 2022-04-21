@@ -6,6 +6,7 @@ from item.recent_search import RecentSearch
 from menu.settings import Settings
 from models.recent_search import get_recent_searches
 from models.starred_word import starred_word_exists, get_starred_words
+from shared.spacer import Spacer
 
 import gettext
 
@@ -54,11 +55,7 @@ class RecentSearchesWidget(QWidget):
     RecentSearchesWidget.placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     RecentSearchesWidget.show_placeholder_label = False
 
-    RecentSearchesWidget.vspacer = QLabel('f')
-    RecentSearchesWidget.vspacer.setFont(invisible_font)
-    size_policy = RecentSearchesWidget.vspacer.sizePolicy()
-    size_policy.setRetainSizeWhenHidden(True)
-    RecentSearchesWidget.vspacer.setSizePolicy(size_policy)
+    RecentSearchesWidget.spacer = Spacer()
 
     self.layout.addWidget(title_label)
     self.layout.addWidget(scroll_area)
@@ -74,7 +71,7 @@ class RecentSearchesWidget(QWidget):
   @staticmethod
   def initialize():
     RecentSearchesWidget.grid_layout.addWidget(
-      RecentSearchesWidget.vspacer, RecentSearchesWidget.MAX_ROW + 1, 0, 1, -1
+      RecentSearchesWidget.spacer, RecentSearchesWidget.MAX_ROW + 1, 0, 1, -1
     )
 
     RecentSearchesWidget.show_placeholder()
@@ -149,7 +146,7 @@ class RecentSearchesWidget(QWidget):
     if not RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.show_placeholder_label = True
       RecentSearchesWidget.grid_layout.addWidget(RecentSearchesWidget.placeholder_label)
-      RecentSearchesWidget.grid_layout.removeWidget(RecentSearchesWidget.vspacer)
+      RecentSearchesWidget.grid_layout.removeWidget(RecentSearchesWidget.spacer)
       RecentSearchesWidget.placeholder_label.show()
 
   @staticmethod
@@ -157,7 +154,7 @@ class RecentSearchesWidget(QWidget):
     if RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.show_placeholder_label = False
       RecentSearchesWidget.grid_layout.addWidget(
-        RecentSearchesWidget.vspacer, RecentSearchesWidget.MAX_ROW + 1, 0, 1, -1
+        RecentSearchesWidget.spacer, RecentSearchesWidget.MAX_ROW + 1, 0, 1, -1
       )
 
       RecentSearchesWidget.placeholder_label.hide()

@@ -7,6 +7,7 @@ from PyQt6.QtGui import QFont
 from menu.settings import Settings
 from models.profile import get_profiles
 from models.student import create_student, student_name_exists
+from shared.spacer import Spacer
 
 import gettext
 
@@ -90,13 +91,7 @@ class StudentAdditionWidget(QWidget):
       StudentAdditionWidget.profiles_selection_widget.layout.addWidget(check_box, i, 0)
       StudentAdditionWidget.last_index_used = i
 
-    vspacer = QLabel('f')
-    invisible_font = QFont(Settings.FONT, 1)
-    vspacer.setFont(invisible_font)
-    size_policy = vspacer.sizePolicy()
-    size_policy.setRetainSizeWhenHidden(True)
-    vspacer.setSizePolicy(size_policy)
-    StudentAdditionWidget.profiles_selection_widget.layout.addWidget(vspacer, 1000, 0)
+    StudentAdditionWidget.profiles_selection_widget.layout.addWidget(Spacer(), 1000, 0)
 
     profiles_widget.layout.addWidget(scroll_area)
 
