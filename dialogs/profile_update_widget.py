@@ -290,17 +290,22 @@ class ProfileUpdateWidget(QWidget):
     self.update_save_button_state()
 
   def update_save_button_state(self):
-    if self.profile_selector.currentText() in get_grades():
+    if self.save_button_is_active():
+      self.save_button.setEnabled(True)
+    else:
       self.save_button.setDisabled(True)
-      return
+
+  def save_button_is_active(self):
+    if self.profile_selector.currentText() in get_grades():
+      return False
 
     fields_non_empty = len(self.name_line_edit.text()) > 0 and self.selected_check_box_exists()
 
     if fields_non_empty and (len(self.check_boxes_modified) or
        self.name_line_edit.text() != self.profile_selector.currentText()):
-      self.save_button.setEnabled(True)
-    else:
-      self.save_button.setDisabled(True)
+      return True
+
+    return False
 
   def selected_check_box_exists(self):
     for check_box in self.check_boxes:

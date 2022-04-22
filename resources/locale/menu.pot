@@ -97,3 +97,6 @@ msgstr ""
 
 msgid "RESTORE_DATABASE_TEXT"
 msgstr ""
+
+msgid "UNSAVED_CHANGES_MESSAGE_VISIBILITY"
+msgstr ""

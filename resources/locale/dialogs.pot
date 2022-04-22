@@ -277,3 +277,12 @@ msgstr ""
 
 msgid "DELETE_WORD_PERMISSION"
 msgstr ""
+
+msgid "UNSAVED_CHANGES_TITLE"
+msgstr ""
+
+msgid "UNSAVED_CHANGES_TEXT"
+msgstr ""
+
+msgid "UNSAVED_CHANGES_MESSAGE_VISIBILITY"
+msgstr ""

@@ -66,10 +66,15 @@ class SettingsWidget(QDialog):
     self.show_tutorial_on_startup.clicked.connect(lambda: self.toggle_setting('show_tutorial_on_startup'))
     self.show_tutorial_on_startup.setChecked(Settings.get_boolean_setting('show_tutorial_on_startup'))
 
+    self.show_unsaved_changes_message = QCheckBox(_('UNSAVED_CHANGES_MESSAGE_VISIBILITY'), objectName='show_unsaved_changes_message')
+    self.show_unsaved_changes_message.clicked.connect(lambda: self.toggle_setting('show_unsaved_changes_message'))
+    self.show_unsaved_changes_message.setChecked(Settings.get_boolean_setting('show_unsaved_changes_message'))
+
     # general_settings_widget.layout.addWidget(self.remember_last_student_picked)
     general_settings_widget.layout.addWidget(self.show_edit_dict_words_button)
     # general_settings_widget.layout.addWidget(self.only_show_words_with_family)
     general_settings_widget.layout.addWidget(self.show_tutorial_on_startup)
+    general_settings_widget.layout.addWidget(self.show_unsaved_changes_message)
 
     theme_selection_widget = QGroupBox(_('THEME_SELECTION_TEXT'))
     theme_selection_widget.setFont(section_label_font)

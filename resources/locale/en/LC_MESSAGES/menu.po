@@ -97,3 +97,8 @@ msgstr "The application language will be updated once the application is restart
 
 msgid "RESTORE_DATABASE_TEXT"
 msgstr "Are you sure that you wish to restore the database to its default state? All of your application data will be erased."
+
+msgid "UNSAVED_CHANGES_MESSAGE_VISIBILITY"
+msgstr ""
+"Show warning when I have edited a word, a\nstudent or a profile but I have not "
+"saved my changes."

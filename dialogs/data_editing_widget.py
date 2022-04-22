@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QTabWidget, QDialog
+from PyQt6.QtWidgets import QVBoxLayout, QTabWidget, QDialog, QMessageBox, QCheckBox
 from PyQt6.QtGui import QIcon
 
 from dialogs.profile_addition_widget import ProfileAdditionWIdget
@@ -16,9 +16,9 @@ class DataEditingWidget(QDialog):
     language_code = Settings.get_setting('language')
     language = gettext.translation('dialogs', localedir='resources/locale', languages=[language_code])
     language.install()
-    _ = language.gettext
+    self._ = language.gettext
 
-    self.setWindowTitle(_('EDIT_DATA_TEXT'))
+    self.setWindowTitle(self._('EDIT_DATA_TEXT'))
     self.setWindowIcon(QIcon('resources/window_icon.png'))
     self.setFixedWidth(Settings.get_setting('screen_width') / 2)
 
@@ -29,15 +29,64 @@ class DataEditingWidget(QDialog):
     add_student_widget = StudentAdditionWidget()
     DataEditingWidget.edit_student_widget = StudentUpdateWidget()
     add_profile_widget = ProfileAdditionWIdget()
-    edit_profiles_widget = ProfileUpdateWidget()
+    self.edit_profiles_widget = ProfileUpdateWidget()
 
     tab_widget = QTabWidget()
-    tab_widget.addTab(add_student_widget, _('ADD_STUDENT_TEXT'))
-    tab_widget.addTab(DataEditingWidget.edit_student_widget, _('EDIT_STUDENT_TEXT'))
-    tab_widget.addTab(add_profile_widget, _('ADD_PROFILE_TEXT'))
-    tab_widget.addTab(edit_profiles_widget, _('EDIT_PROFILE_TEXT'))
+    tab_widget.addTab(add_student_widget, self._('ADD_STUDENT_TEXT'))
+    tab_widget.addTab(DataEditingWidget.edit_student_widget, self._('EDIT_STUDENT_TEXT'))
+    tab_widget.addTab(add_profile_widget, self._('ADD_PROFILE_TEXT'))
+    tab_widget.addTab(self.edit_profiles_widget, self._('EDIT_PROFILE_TEXT'))
 
     self.layout.addWidget(tab_widget)
+
+  def reject(self):
+    if (DataEditingWidget.edit_student_widget.save_button_is_active() or
+        self.edit_profiles_widget.save_button_is_active()):
+      close_widget = self.show_unsaved_changes_message()
+
+      if not close_widget:
+        return
+
+    self.done(1)
+
+  def closeEvent(self, event):
+    if (DataEditingWidget.edit_student_widget.save_button_is_active() or
+        self.edit_profiles_widget.save_button_is_active()):
+      close_widget = self.show_unsaved_changes_message()
+
+      if not close_widget:
+        event.ignore()
+
+  def show_unsaved_changes_message(self):
+    if not Settings.get_boolean_setting('show_unsaved_changes_message'): return True
+
+    title = self._('UNSAVED_CHANGES_TITLE')
+    question = self._('UNSAVED_CHANGES_TEXT')
+
+    answer = QMessageBox(self)
+    answer.setIcon(QMessageBox.Icon.Critical)
+    answer.setText(question)
+    answer.setWindowTitle(title)
+
+    yes_button = answer.addButton(self._('YES'), QMessageBox.ButtonRole.YesRole)
+    cancel_button = answer.addButton(self._('CANCEL'), QMessageBox.ButtonRole.RejectRole)
+
+    answer.setDefaultButton(cancel_button)
+
+    check_box = QCheckBox(self._('UNSAVED_CHANGES_MESSAGE_VISIBILITY'))
+    check_box.clicked.connect(self.toggle_unsaved_changes_setting)
+    check_box.setChecked(True)
+
+    answer.setCheckBox(check_box)
+    answer.exec()
+
+    if answer.clickedButton() == yes_button:
+      return True
+
+    return False
+
+  def toggle_unsaved_changes_setting(self, value):
+    Settings.set_boolean_setting('show_unsaved_changes_message', value)
 
   @staticmethod
   def update_student_update_widget():

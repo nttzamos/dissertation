@@ -213,7 +213,6 @@ class StudentUpdateWidget(QWidget):
         return
 
     self.save_button.setDisabled(True)
-    self.delete_button.setDisabled(True)
 
     destroy_student(self.student_id)
     for check_box in StudentUpdateWidget.check_boxes:
@@ -229,6 +228,7 @@ class StudentUpdateWidget(QWidget):
     if StudentUpdateWidget.student_selector.count() == 0:
       self.initialize_scroll_area()
       self.name_widget.hide()
+      self.delete_button.setDisabled(True)
 
       StudentUpdateWidget.student_selector.addItem(_('NO_STUDENTS_TEXT'))
       StudentUpdateWidget.student_selector.setDisabled(True)
@@ -248,13 +248,19 @@ class StudentUpdateWidget(QWidget):
     self.update_save_button_state()
 
   def update_save_button_state(self):
+    if self.save_button_is_active():
+      self.save_button.setEnabled(True)
+    else:
+      self.save_button.setDisabled(True)
+
+  def save_button_is_active(self):
     fields_non_empty = len(self.name_line_edit.text()) > 0 and self.selected_check_box_exists()
 
     if fields_non_empty and (len(self.check_boxes_modified) or
        self.name_line_edit.text() != self.student_selector.currentText()):
-      self.save_button.setEnabled(True)
-    else:
-      self.save_button.setDisabled(True)
+      return True
+
+    return False
 
   def selected_check_box_exists(self):
     for check_box in StudentUpdateWidget.check_boxes:

@@ -323,3 +323,14 @@ msgstr "Are you sure that you wish to delete the selected student? All of her da
 
 msgid "DELETE_WORD_PERMISSION"
 msgstr "Are you sure that you wish to delete the selected word? All of its data for the selected grade will be erased."
+
+msgid "UNSAVED_CHANGES_TITLE"
+msgstr "Unsaved Changes"
+
+msgid "UNSAVED_CHANGES_TEXT"
+msgstr "You have unsaved changes. Are you sure you wish to continue?"
+
+msgid "UNSAVED_CHANGES_MESSAGE_VISIBILITY"
+msgstr ""
+"Show warning when I have edited a word, a student\nor a profile but I have not "
+"saved my changes."
