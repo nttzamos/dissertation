@@ -21,7 +21,9 @@ class MainWindow(QWidget):
     super().__init__()
 
     self.setWindowIcon(QIcon('resources/window_icon.png'))
-    self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+    self.setWindowFlags(
+      Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowMinMaxButtonsHint
+    )
 
     self.layout = QVBoxLayout(self)
     self.layout.setSpacing(0)
