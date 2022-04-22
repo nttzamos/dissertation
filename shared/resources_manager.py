@@ -13,11 +13,10 @@ _ = language.gettext
 
 class ResourcesManager(QWidget):
   resources_files = [
-    'minimize_window.png', 'plus.png', 'book.png', 'window_icon.png',
-    'settings.png', 'database.db', 'question.png', 'clear_search.png',
-    'starred.svg', 'search.png', 'reload.svg', 'database_backup.db',
-    'window_icon.ico', 'delete.svg', 'close_window.png', 'unstarred.svg',
-    'edit.svg' # 'settings.json'
+    'book.png', 'clear_search.png', 'close_window.png', 'database_backup.db',
+    'database.db', 'delete.svg', 'edit.svg', 'minimize_window.png',
+    'plus.png', 'question.png', 'search.png', 'settings.png', 'starred.svg',
+    'undo.png', 'unstarred.svg', 'window_icon.ico', 'window_icon.png' # 'settings.json'
   ]
 
   def __init__(self):

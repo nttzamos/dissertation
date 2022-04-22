@@ -50,3 +50,6 @@ msgstr "Ναι"
 
 msgid "CANCEL"
 msgstr "Ακύρωση"
+
+msgid "UNDO_ACTION"
+msgstr "Αναίρεση προσθήκης στα επιλεγμένα μαθήματα"

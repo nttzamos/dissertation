@@ -46,3 +46,6 @@ msgstr ""
 
 msgid "CANCEL"
 msgstr ""
+
+msgid "UNDO_ACTION"
+msgstr ""

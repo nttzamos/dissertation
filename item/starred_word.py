@@ -35,7 +35,7 @@ class StarredWord(QWidget):
     self.word.setFont(font)
 
     reload_button = QPushButton()
-    reload_button.setIcon(QIcon('resources/reload.svg'))
+    reload_button.setIcon(QIcon('resources/search.png'))
     reload_button.setToolTip(_('RELOAD_TEXT'))
     reload_button.clicked.connect(self.reload_word)
     reload_button.setFixedWidth(30)

@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 
 from models.family import update_word_family
-from models.word import create_word
+from models.word import create_word, destroy_word
 from shared.database_handler import get_grade_subjects
 from shared.styles import Styles
 
@@ -57,6 +57,12 @@ class Result(QWidget):
     self.remove_from_family_button.clicked.connect(self.remove_word_from_family)
     self.remove_from_family_button.setFixedWidth(30)
 
+    self.remove_from_subjects_button = QPushButton()
+    self.remove_from_subjects_button.setToolTip(Result._('UNDO_ACTION'))
+    self.remove_from_subjects_button.setIcon(QIcon('resources/undo.png'))
+    self.remove_from_subjects_button.clicked.connect(self.undo_word_addition)
+    self.remove_from_subjects_button.setFixedWidth(30)
+
     if self.saved:
       self.buttons_widget.layout.addWidget(self.remove_from_family_button)
     else:
@@ -83,15 +89,7 @@ class Result(QWidget):
 
     word = self.word_label.text()
 
-    x, y, z, current_subject_name = CurrentSearch.get_current_selection_details()
-    subject_names = [current_subject_name]
-
-    language = gettext.translation('search', localedir='resources/locale', languages=[self.language_code])
-    language.install()
-    if subject_names[0] == language.gettext('ALL_SUBJECTS_TEXT'):
-      subject_names = get_grade_subjects(CurrentSearch.grade_id)
-
-    create_word(word, CurrentSearch.grade_id, subject_names)
+    create_word(word, CurrentSearch.grade_id, self.get_current_subjects())
 
     from search.searching_widget import SearchingWidget
     SearchingWidget.add_or_remove_dictionary_words([word], [])
@@ -105,12 +103,11 @@ class Result(QWidget):
         return
 
     from search.current_search import CurrentSearch
-    word = self.word_label.text()
     self.hide()
 
     update_word_family(
       CurrentSearch.grade_id,
-      CurrentSearch.searched_word_label.text(), [], [word]
+      CurrentSearch.searched_word_label.text(), [], [self.word_label.text()]
     )
 
     from central.results_widget import ResultsWidget
@@ -126,11 +123,40 @@ class Result(QWidget):
     self.saved = True
     self.setStyleSheet(Styles.offline_result_style)
     self.add_to_family_button.hide()
-    self.add_to_family_button.deleteLater()
+    self.remove_from_family_button.show()
+    self.remove_from_subjects_button.show()
     self.buttons_widget.layout.addWidget(self.remove_from_family_button)
+    self.buttons_widget.layout.addWidget(self.remove_from_subjects_button)
 
   def update_word(self, new_word):
     self.word_label.setText(new_word)
+
+  def undo_word_addition(self):
+    from search.current_search import CurrentSearch
+    destroy_word(self.word_label.text(), [CurrentSearch.grade_id])
+
+    from search.searching_widget import SearchingWidget
+    SearchingWidget.add_or_remove_dictionary_words([], [self.word_label.text()])
+
+    self.saved = False
+    self.setStyleSheet(Styles.online_result_style)
+    self.remove_from_family_button.hide()
+    self.remove_from_subjects_button.hide()
+    self.add_to_family_button.show()
+    self.buttons_widget.layout.addWidget(self.add_to_family_button)
+
+  def get_current_subjects(self):
+    from search.current_search import CurrentSearch
+
+    x, y, z, current_subject_name = CurrentSearch.get_current_selection_details()
+    subject_names = [current_subject_name]
+
+    language = gettext.translation('search', localedir='resources/locale', languages=[self.language_code])
+    language.install()
+    if subject_names[0] == language.gettext('ALL_SUBJECTS_TEXT'):
+      subject_names = get_grade_subjects(CurrentSearch.grade_id)
+
+    return subject_names
 
   def get_permission_to_remove(self):
     title = Result._('REMOVE_BUTTON_TEXT')

@@ -50,3 +50,6 @@ msgstr "Yes"
 
 msgid "CANCEL"
 msgstr "Cancel"
+
+msgid "UNDO_ACTION"
+msgstr "Undo addition to the selected subjects"
