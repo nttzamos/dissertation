@@ -45,6 +45,7 @@ class ResultsWidget(QWidget):
 
     ResultsWidget.title_label = QLabel('Αποτελέσματα Αναζήτησης')
     ResultsWidget.title_label.setFont(title_font)
+    ResultsWidget.title_label.hide()
 
     ResultsWidget.legend_button = QPushButton()
     ResultsWidget.legend_button.setIcon(QIcon('resources/question.png'))
@@ -183,6 +184,7 @@ class ResultsWidget(QWidget):
 
     ResultsWidget.placeholder_label.setText(text)
     ResultsWidget.clear_previous_results()
+    ResultsWidget.title_label.hide()
     ResultsWidget.legend_button.hide()
 
     if not ResultsWidget.show_placeholder_label:
@@ -195,6 +197,7 @@ class ResultsWidget(QWidget):
     if ResultsWidget.show_placeholder_label:
       ResultsWidget.show_placeholder_label = False
       ResultsWidget.placeholder_label.hide()
+      ResultsWidget.title_label.show()
       ResultsWidget.legend_button.show()
 
   @staticmethod
