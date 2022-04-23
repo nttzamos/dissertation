@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import (QGridLayout, QLabel, QScrollArea, QVBoxLayout,
+from PyQt6.QtWidgets import (QLabel, QScrollArea, QVBoxLayout, QHBoxLayout,
                              QWidget, QMessageBox, QCheckBox, QPushButton,
-                             QHBoxLayout)
+                             QFrame)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
 
@@ -9,6 +9,7 @@ from menu.settings import Settings
 from models.family import (get_family_id, get_family_words, update_word_family,
                            non_related_word_exists)
 from models.word import get_word_id, word_exists
+from shared.flow_layout import FlowLayout
 from shared.wiktionary_parser import fetch_word_details
 
 import gettext
@@ -26,20 +27,33 @@ class ResultsWidget(QWidget):
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    ResultsWidget.scroll_area_widget_contents = QWidget()
-    ResultsWidget.grid_layout = QGridLayout(ResultsWidget.scroll_area_widget_contents)
-    ResultsWidget.widget_list = []
-    ResultsWidget.show_placeholder_label = True
-    ResultsWidget.placeholder_label = QLabel(_('RESULT_DISPLAY_TEXT'))
-
-    font = QFont(Settings.FONT, 18)
+    placeholder_text_font = QFont(Settings.FONT, 18)
     title_font = QFont(Settings.FONT, 22)
 
-    ResultsWidget.placeholder_label.setFont(font)
-    ResultsWidget.grid_layout.addWidget(ResultsWidget.placeholder_label)
-    ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    ResultsWidget.scroll_area_widget_contents = QWidget()
+    ResultsWidget.container_widget = QWidget()
+    ResultsWidget.container_widget.layout = QHBoxLayout(ResultsWidget.container_widget)
+    ResultsWidget.container_widget.layout.setSpacing(0)
+    ResultsWidget.container_widget.layout.setContentsMargins(20, 0, 0, 0)
+
+    ResultsWidget.flow_layout = FlowLayout()
+    ResultsWidget.flow_layout.setContentsMargins(0, 0, 0, 0)
+    ResultsWidget.scroll_area_widget_contents.setLayout(ResultsWidget.container_widget.layout)
+    ResultsWidget.widget_list = []
+    ResultsWidget.show_placeholder_label = True
+
+    flow_layout_widget = QWidget()
+    flow_layout_widget.setLayout(ResultsWidget.flow_layout)
+
+    ResultsWidget.placeholder_label = QLabel(_('RESULT_DISPLAY_TEXT'))
+    ResultsWidget.placeholder_label.setFont(placeholder_text_font)
+
+    ResultsWidget.container_widget.layout.addWidget(flow_layout_widget)
+    ResultsWidget.container_widget.layout.addWidget(ResultsWidget.placeholder_label)
+    ResultsWidget.container_widget.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     self.scroll_area = QScrollArea()
+    self.scroll_area.setFrameShape(QFrame.Shape.NoFrame)
     self.scroll_area.setWidgetResizable(True)
     self.scroll_area.setWidget(ResultsWidget.scroll_area_widget_contents)
 
@@ -86,44 +100,33 @@ class ResultsWidget(QWidget):
   def show_results(word):
     ResultsWidget.hide_placeholder()
     ResultsWidget.clear_previous_results()
-    ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+    ResultsWidget.container_widget.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
     offline_result_words, online_result_words, show_error = ResultsWidget.get_results(word)
+    remaining_results = Settings.get_setting('maximum_results')
 
-    maximum_results = Settings.get_setting('maximum_results')
-
-    longest_word_offline = len(max(offline_result_words, default='', key=len))
-    longest_word_online = len(max(online_result_words, default='', key=len))
-
-    str = ''
-    for i in range(max(longest_word_offline, longest_word_online)):
-      str = str + 'ω'
-    single_result_width = Result(str).sizeHint().width()
-    grid_columns = Settings.get_results_widget_columns(single_result_width)
-
-    i = 0
     for word in offline_result_words:
-      if i == maximum_results: break
-      row = i // grid_columns
-      column = i % grid_columns
-      result = Result(word, widget_width=single_result_width, saved=True)
+      if remaining_results == 0: break
+      result = Result(word, True)
+
       ResultsWidget.widget_list.append(result)
-      ResultsWidget.grid_layout.addWidget(result, row, column)
-      i += 1
+      ResultsWidget.flow_layout.addWidget(result)
+
+      remaining_results -= 1
 
     for word in online_result_words:
-      if i == maximum_results: break
-      row = i // grid_columns
-      column = i % grid_columns
-      result = Result(word, widget_width=single_result_width, saved=False)
+      if remaining_results == 0: break
+      result = Result(word, False)
+
       ResultsWidget.widget_list.append(result)
-      ResultsWidget.grid_layout.addWidget(result, row, column)
-      i += 1
+      ResultsWidget.flow_layout.addWidget(result)
+
+      remaining_results -= 1
 
     if show_error and not Settings.get_boolean_setting('hide_no_internet_message'):
       ResultsWidget.show_no_internet_message()
 
-    if i == 0:
+    if len(offline_result_words) == 0 and len(online_result_words) == 0:
       ResultsWidget.show_placeholder(_('NO_RESULTS_TEXT'))
 
   @staticmethod
@@ -189,7 +192,7 @@ class ResultsWidget(QWidget):
 
     if not ResultsWidget.show_placeholder_label:
       ResultsWidget.show_placeholder_label = True
-      ResultsWidget.grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+      ResultsWidget.container_widget.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
       ResultsWidget.placeholder_label.show()
 
   @staticmethod

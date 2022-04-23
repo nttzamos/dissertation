@@ -64,21 +64,7 @@ class Settings():
       left_widget_width = long_recent_search.sizeHint().width()
       settings_database.set('left_widget_width', left_widget_width)
 
-      right_widget_width = screen_width - left_widget_width - 2
-      settings_database.set('right_widget_width', right_widget_width)
-
-      from item.result import Result
-      long_result = Result('ωωωωωωωωωωωωωωωωωωωω') # 20
-      single_result_width = long_result.sizeHint().width()
-      settings_database.set('single_result_width', single_result_width)
-
       settings_database.dump()
-
-  @staticmethod
-  def get_results_widget_columns(widget_width):
-    results_widget_columns = (Settings.get_setting('right_widget_width') - 60) // (widget_width + 10)
-
-    return results_widget_columns
 
   @staticmethod
   def set_boolean_setting(setting_name, setting_value):

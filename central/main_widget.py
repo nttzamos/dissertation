@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 
 from central.results_widget import ResultsWidget
-from menu.settings import Settings
 from search.current_search import CurrentSearch
 from search.searching_widget import SearchingWidget
 
@@ -12,8 +11,6 @@ class MainWidget(QWidget):
     MainWidget.searching_widget = SearchingWidget()
     MainWidget.current_search = CurrentSearch()
     MainWidget.results_widget = ResultsWidget()
-
-    self.setMinimumWidth(Settings.get_setting('right_widget_width'))
 
     self.layout = QVBoxLayout(self)
     self.layout.setSpacing(0)

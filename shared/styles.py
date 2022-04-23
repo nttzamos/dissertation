@@ -210,12 +210,12 @@ class Styles():
 
   if theme == 'light':
     results_widget_style = """
-      QWidget { background-color: #DEDEDE; border:none }
+      QWidget { background-color: #DEDEDE }
       QLabel { color: black }
       QScrollBar { background-color: none }"""
   else:
     results_widget_style = """
-      QWidget { background-color: #362222; border:none }
+      QWidget { background-color: #362222 }
       QLabel { color: white }
       QScrollBar { background-color: none }"""
 
@@ -228,7 +228,7 @@ class Styles():
       QPushButton { border: 1px solid black }
       QPushButton { padding-bottom: 5px }
       QPushButton { padding-top: 5px }
-      QLabel { color: black; border-radius: none; border: none; background-color: none }"""
+      QLabel { color: black; border-radius: none; border: none; background-color: none; padding: 0px 20px }"""
   else:
     offline_result_style = """
       QWidget { background-color: black; border-radius: 10px}
@@ -249,7 +249,7 @@ class Styles():
       QPushButton { border: 1px solid black }
       QPushButton { padding-bottom: 5px }
       QPushButton { padding-top: 5px }
-      QLabel { color: black; border-radius: none; border: none; background-color: none }"""
+      QLabel { color: black; border-radius: none; border: none; background-color: none; padding: 0px 20px }"""
   else:
     online_result_style = """
       QWidget { background-color: white; border-radius: 10px; border: 2px solid blue }

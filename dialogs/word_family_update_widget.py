@@ -264,7 +264,7 @@ class WordFamilyUpdateWidget(QWidget):
     self.disable_save_button()
 
     from search.current_search import CurrentSearch
-    language = gettext.translation('dialogs', localedir='resources/locale', languages=[language_code])
+    language = gettext.translation('search', localedir='resources/locale', languages=[language_code])
     language.install()
     if (self.searched_word == CurrentSearch.searched_word_label.text() and
         grade_id == CurrentSearch.grade_id):

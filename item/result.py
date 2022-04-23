@@ -11,7 +11,7 @@ from shared.styles import Styles
 import gettext
 
 class Result(QWidget):
-  def __init__(self, word, widget_width=None, saved=True):
+  def __init__(self, word, saved):
     super().__init__()
 
     from menu.settings import Settings
@@ -21,15 +21,12 @@ class Result(QWidget):
     Result._ = language.gettext
 
     self.layout = QHBoxLayout(self)
-    self.layout.setContentsMargins(0, 0, 10, 10)
+    self.layout.setContentsMargins(0, 0, 20, 20)
     self.layout.setSpacing(0)
 
     font = QFont(Settings.FONT, 20)
 
     self.saved = saved
-
-    if widget_width != None:
-      self.setFixedWidth(widget_width)
 
     data_widget = QWidget()
     data_widget.layout = QVBoxLayout(data_widget)
@@ -43,7 +40,8 @@ class Result(QWidget):
 
     self.buttons_widget = QWidget()
     self.buttons_widget.layout = QHBoxLayout(self.buttons_widget)
-    self.buttons_widget.layout.setContentsMargins(0, 0, 0, 0)
+    self.buttons_widget.layout.setContentsMargins(10, 0, 10, 0)
+    self.buttons_widget.layout.setSpacing(0)
 
     self.add_to_family_button = QPushButton()
     self.add_to_family_button.setToolTip(Result._('ADD_BUTTON_TEXT'))
