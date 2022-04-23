@@ -33,7 +33,7 @@ class MainWindow(QWidget):
 
     vertical_splitter = QSplitter()
     vertical_splitter.setOrientation(Qt.Orientation.Vertical)
-    vertical_splitter.setChildrenCollapsible(False)
+    vertical_splitter.setChildrenCollapsible(True)
 
     MainWindow.recent_searches_widget = RecentSearchesWidget()
     MainWindow.starred_words_widget = StarredWordsWidget()
@@ -45,12 +45,19 @@ class MainWindow(QWidget):
     vertical_splitter.addWidget(MainWindow.starred_words_widget)
     MainWindow.starred_words_widget.initialize()
 
+    horizontal_splitter = QSplitter()
+    horizontal_splitter.setOrientation(Qt.Orientation.Horizontal)
+    horizontal_splitter.setChildrenCollapsible(True)
+
+    horizontal_splitter.addWidget(vertical_splitter)
+    horizontal_splitter.addWidget(MainWindow.main_widget)
+    horizontal_splitter.setCollapsible(1, False)
+
     self.main_window_widget = QWidget(self)
     self.main_window_widget.layout = QHBoxLayout(self.main_window_widget)
-    self.main_window_widget.layout.setSpacing(10)
+    self.main_window_widget.layout.setSpacing(0)
     self.main_window_widget.layout.setContentsMargins(0, 0, 0, 0)
-    self.main_window_widget.layout.addWidget(vertical_splitter)
-    self.main_window_widget.layout.addWidget(MainWindow.main_widget)
+    self.main_window_widget.layout.addWidget(horizontal_splitter)
 
     self.line = QFrame()
     self.line.setFrameShape(QFrame.Shape.HLine)
