@@ -108,6 +108,25 @@ class SettingsWidget(QDialog):
     language_selection_widget.layout.setContentsMargins(10, 0, 0, 0)
     language_selection_widget.layout.addWidget(self.language_selector)
 
+    self.available_font_sizes = {
+      'small': _('SMALL_FONT_NAME'),
+      'medium': _('MEDIUM_FONT_NAME'),
+      'large': _('LARGE_FONT_NAME')
+    }
+
+    font_size_selection_widget = QGroupBox(_('FONT_SIZE_SETTING_TITLE'))
+    font_size_selection_widget.setFont(section_label_font)
+    font_size_selection_widget.layout = QHBoxLayout(font_size_selection_widget)
+    self.font_size_selector = QComboBox()
+    self.font_size_selector.setFont(combo_box_font)
+    self.font_size_selector.addItems(list(self.available_font_sizes.values()))
+    self.font_size_selector.setCurrentIndex(
+      list(self.available_font_sizes.keys()).index(Settings.get_setting('selected_font'))
+    )
+    self.font_size_selector.currentIndexChanged.connect(self.font_size_selector_activated)
+    font_size_selection_widget.layout.setContentsMargins(10, 0, 0, 0)
+    font_size_selection_widget.layout.addWidget(self.font_size_selector)
+
     wiktionary_usage_widget = QGroupBox(_('WIKTIONARY_USAGE'))
     wiktionary_usage_widget.setFont(section_label_font)
     wiktionary_usage_widget.layout = QHBoxLayout(wiktionary_usage_widget)
@@ -140,6 +159,7 @@ class SettingsWidget(QDialog):
     self.layout.addWidget(general_settings_widget)
     # self.layout.addWidget(theme_selection_widget)
     if len(available_languages) > 1: self.layout.addWidget(language_selection_widget)
+    self.layout.addWidget(font_size_selection_widget)
     self.layout.addWidget(wiktionary_usage_widget)
     self.layout.addWidget(restore_database_widget)
 
@@ -207,6 +227,34 @@ class SettingsWidget(QDialog):
   def language_selector_activated(self, index):
     Settings.set_language(self.language_selector.currentText())
     self.show_language_change_effect_message()
+
+  def font_size_selector_activated(self, index):
+    selected_font = list(self.available_font_sizes.keys())[index]
+    Settings.set_setting('selected_font', selected_font)
+    from shared.font_settings import FontSettings
+    FontSettings.set_selected_font(selected_font)
+    self.show_font_size_change_effect_message()
+
+  def show_font_size_change_effect_message(self):
+    if Settings.get_boolean_setting('hide_font_size_change_effect_message'): return
+
+    title = _('FONT_SIZE_UPDATE_TITLE')
+    text = _('FONT_SIZE_UPDATE_TEXT')
+    answer = QMessageBox()
+    answer.setIcon(QMessageBox.Icon.Information)
+    answer.setText(text)
+    answer.setWindowTitle(title)
+    answer.setStandardButtons(QMessageBox.StandardButton.Ok)
+
+    check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
+    check_box.clicked.connect(self.toggle_font_size_message_setting)
+    check_box.setChecked(False)
+
+    answer.setCheckBox(check_box)
+    answer.exec()
+
+  def toggle_font_size_message_setting(value):
+    Settings.set_boolean_setting('hide_font_size_change_effect_message', value)
 
   def show_language_change_effect_message(self):
     if Settings.get_boolean_setting('hide_language_change_effect_message'): return

@@ -102,3 +102,21 @@ msgid "UNSAVED_CHANGES_MESSAGE_VISIBILITY"
 msgstr ""
 "Show warning when I have edited a word, a\nstudent or a profile but I have not "
 "saved my changes."
+
+msgid "FONT_SIZE_SETTING_TITLE"
+msgstr "Font Size"
+
+msgid "SMALL_FONT_NAME"
+msgstr "Small"
+
+msgid "MEDIUM_FONT_NAME"
+msgstr "Medium"
+
+msgid "LARGE_FONT_NAME"
+msgstr "Large"
+
+msgid "FONT_SIZE_UPDATE_TITLE"
+msgstr "Font Size Update"
+
+msgid "FONT_SIZE_UPDATE_TEXT"
+msgstr "The font size will be updated once the application is restarted"

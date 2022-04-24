@@ -18,7 +18,8 @@ class Settings():
       'maximum_results': 30,
       'last_student_picked': 1,
       'theme': 'light',
-      'updated_language': 'el'
+      'updated_language': 'el',
+      'selected_font': 'medium'
     }
 
     boolean_settings_default_values = {
@@ -35,7 +36,8 @@ class Settings():
       'hide_no_internet_message', 'hide_theme_change_effect_message',
       'hide_delete_profile_message', 'hide_delete_student_message',
       'hide_delete_word_message', 'hide_language_change_effect_message',
-      'hide_remove_word_from_family_message'
+      'hide_remove_word_from_family_message',
+      'hide_font_size_change_effect_message'
     ]
 
     for key, value in settings_default_values.items():
@@ -48,6 +50,9 @@ class Settings():
 
     for key in boolean_settings_about_hiding_messages:
       Settings.set_setting(key, 0)
+
+    from shared.font_settings import FontSettings
+    FontSettings.set_selected_font(Settings.get_setting('selected_font'))
 
     Settings.set_setting('language', Settings.get_setting('updated_language'))
 

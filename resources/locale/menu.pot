@@ -100,3 +100,21 @@ msgstr ""
 
 msgid "UNSAVED_CHANGES_MESSAGE_VISIBILITY"
 msgstr ""
+
+msgid "FONT_SIZE_SETTING_TITLE"
+msgstr ""
+
+msgid "SMALL_FONT_NAME"
+msgstr ""
+
+msgid "MEDIUM_FONT_NAME"
+msgstr ""
+
+msgid "LARGE_FONT_NAME"
+msgstr ""
+
+msgid "FONT_SIZE_UPDATE_TITLE"
+msgstr ""
+
+msgid "FONT_SIZE_UPDATE_TEXT"
+msgstr ""

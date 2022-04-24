@@ -102,3 +102,21 @@ msgid "UNSAVED_CHANGES_MESSAGE_VISIBILITY"
 msgstr ""
 "Εμφάνιση μηνύματος προειδοποίησης όταν έχω\nεπεξεργαστεί λέξη, μαθητή ή προφίλ "
 "αλλά δεν\nέχω αποθηκεύσει τις αλλαγές μου."
+
+msgid "FONT_SIZE_SETTING_TITLE"
+msgstr "Μέγεθος Γραμματοσειράς"
+
+msgid "SMALL_FONT_NAME"
+msgstr "Μικρή"
+
+msgid "MEDIUM_FONT_NAME"
+msgstr "Μεσαία"
+
+msgid "LARGE_FONT_NAME"
+msgstr "Μεγάλη"
+
+msgid "FONT_SIZE_UPDATE_TITLE"
+msgstr "Ανανέωση μεγέθους γραμματοσειράς"
+
+msgid "FONT_SIZE_UPDATE_TEXT"
+msgstr "Η αλλαγή του μεγέθους της γραμματοσειράς θα εφαρμοστεί όταν γίνει επανεκκίνηση της εφαρμογής"
