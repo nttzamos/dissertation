@@ -3,11 +3,11 @@ from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
                              QCheckBox, QPushButton, QComboBox, QSizePolicy,
                              QMessageBox)
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
 
 from menu.settings import Settings
 from models.profile import *
 from shared.database_handler import get_grades, get_grade_subjects
+from shared.font_settings import FontSettings
 from shared.spacer import Spacer
 
 import gettext
@@ -27,11 +27,11 @@ class ProfileUpdateWidget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    section_label_font = QFont(Settings.FONT, 16)
-    combo_box_font = QFont(Settings.FONT, 14)
-    label_font = QFont(Settings.FONT, 14)
-    line_edit_font = QFont(Settings.FONT, 14)
-    error_message_font = QFont(Settings.FONT, 10)
+    section_label_font = FontSettings.get_font('heading')
+    combo_box_font = FontSettings.get_font('text')
+    line_edit_font = FontSettings.get_font('text')
+    label_font = FontSettings.get_font('text')
+    error_message_font = FontSettings.get_font('error')
 
     self.check_boxes_modified = []
 
@@ -166,7 +166,7 @@ class ProfileUpdateWidget(QWidget):
     for check_box in self.check_boxes:
       self.subjects_selection_widget.layout.removeWidget(check_box)
 
-    check_box_font = QFont(Settings.FONT, 14)
+    check_box_font = FontSettings.get_font('text')
     self.check_boxes = []
     self.check_boxes_modified = []
     for i in range(len(grade_subjects)):

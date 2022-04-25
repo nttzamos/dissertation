@@ -2,9 +2,10 @@ from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QDialog, QCheckBox,
                              QRadioButton, QSpinBox, QLabel, QGroupBox,
                              QPushButton, QMessageBox, QComboBox)
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QIcon, QFont
+from PyQt6.QtGui import QIcon
 
 from menu.settings import Settings
+from shared.font_settings import FontSettings
 
 import os
 import shutil
@@ -26,9 +27,9 @@ class SettingsWidget(QDialog):
     self.layout.setContentsMargins(20, 20, 20, 20)
     self.layout.setSpacing(20)
 
-    section_label_font = QFont(Settings.FONT, 16)
-    spin_box_font = QFont(Settings.FONT, 12)
-    combo_box_font = QFont(Settings.FONT, 12)
+    section_label_font = FontSettings.get_font('heading')
+    spin_box_font = FontSettings.get_font('text')
+    combo_box_font = FontSettings.get_font('text')
 
     maximum_results_label = QLabel(_('MAXIMUM_RESULTS_TEXT'))
     self.maximum_results_spin_box = QSpinBox()
@@ -121,7 +122,7 @@ class SettingsWidget(QDialog):
     self.font_size_selector.setFont(combo_box_font)
     self.font_size_selector.addItems(list(self.available_font_sizes.values()))
     self.font_size_selector.setCurrentIndex(
-      list(self.available_font_sizes.keys()).index(Settings.get_setting('selected_font'))
+      list(self.available_font_sizes.keys()).index(Settings.get_setting('updated_selected_font'))
     )
     self.font_size_selector.currentIndexChanged.connect(self.font_size_selector_activated)
     font_size_selection_widget.layout.setContentsMargins(10, 0, 0, 0)
@@ -230,9 +231,7 @@ class SettingsWidget(QDialog):
 
   def font_size_selector_activated(self, index):
     selected_font = list(self.available_font_sizes.keys())[index]
-    Settings.set_setting('selected_font', selected_font)
-    from shared.font_settings import FontSettings
-    FontSettings.set_selected_font(selected_font)
+    Settings.set_setting('updated_selected_font', selected_font)
     self.show_font_size_change_effect_message()
 
   def show_font_size_change_effect_message(self):

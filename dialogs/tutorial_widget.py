@@ -1,9 +1,10 @@
 from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QWidget,
                              QCheckBox, QLabel, QGroupBox, QPushButton)
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QIcon, QFont
+from PyQt6.QtGui import QIcon
 
 from menu.settings import Settings
+from shared.font_settings import FontSettings
 
 import gettext
 
@@ -42,8 +43,8 @@ class TutorialWidget(QDialog):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    section_label_font = QFont(Settings.FONT, 20)
-    text_font = QFont(Settings.FONT, 16)
+    section_label_font = FontSettings.get_font('heading')
+    text_font = FontSettings.get_font('text')
 
     self.current_tutorial = 0
 

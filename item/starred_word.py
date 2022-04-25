@@ -1,9 +1,10 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QIcon
+from PyQt6.QtGui import QIcon
 
 from models.recent_search import create_recent_search
 from models.starred_word import destroy_starred_word
+from shared.font_settings import FontSettings
 
 import gettext
 
@@ -23,7 +24,7 @@ class StarredWord(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
-    font = QFont(Settings.FONT, 14)
+    font = FontSettings.get_font('single_word')
 
     data_widget = QWidget()
     data_widget.layout = QHBoxLayout(data_widget)

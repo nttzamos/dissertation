@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import (QComboBox, QHBoxLayout, QLabel, QSizePolicy,
                              QVBoxLayout, QWidget, QPushButton)
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
 
 from menu.settings import Settings
 from models.profile import get_profile_details
 from models.student import get_students, get_student_details
+from shared.font_settings import FontSettings
 from shared.spacer import Spacer
 
 import gettext
@@ -25,8 +25,9 @@ class CurrentSearch(QWidget):
     CurrentSearch.subject_selector_active = False
     CurrentSearch.grade_id = -1
 
-    searched_word_font = QFont(Settings.FONT, 20)
-    combo_box_font = QFont(Settings.FONT, 14)
+    searched_word_font = FontSettings.get_font('heading')
+    combo_box_font = FontSettings.get_font('text')
+    button_font = FontSettings.get_font('button')
 
     searched_word_label_container = QWidget()
     searched_word_label_container.layout = QHBoxLayout(searched_word_label_container)
@@ -58,7 +59,7 @@ class CurrentSearch(QWidget):
 
     open_data_editing_widget_button = QPushButton(_('EDIT_DATA_BUTTON_TEXT'))
     open_data_editing_widget_button.setToolTip(_('EDIT_DATA_TOOLTIP_TEXT'))
-    open_data_editing_widget_button.setFont(combo_box_font)
+    open_data_editing_widget_button.setFont(button_font)
     open_data_editing_widget_button.clicked.connect(self.open_data_editing_widget)
     open_data_editing_widget_button.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
 

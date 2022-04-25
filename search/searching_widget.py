@@ -1,12 +1,13 @@
 from PyQt6.QtWidgets import (QCompleter, QHBoxLayout, QLabel, QLineEdit,
                              QPushButton, QVBoxLayout, QWidget, QSizePolicy)
 from PyQt6.QtCore import QStringListModel, QTimer, Qt
-from PyQt6.QtGui import QFont, QIcon, QKeySequence, QShortcut
+from PyQt6.QtGui import QIcon, QKeySequence, QShortcut
 
 from menu.settings import Settings
 from models.family import get_words_with_family
 from models.recent_search import create_recent_search
 from shared.database_handler import get_words
+from shared.font_settings import FontSettings
 from shared.styles import Styles
 from side.recent_searches_widget import RecentSearchesWidget
 
@@ -21,9 +22,10 @@ class SearchingWidget(QWidget):
   def __init__(self):
     super().__init__()
 
-    line_edit_font = QFont(Settings.FONT, 14)
-    completer_font = QFont(Settings.FONT, 12)
-    error_message_font = completer_font
+    line_edit_font = FontSettings.get_font('text')
+    completer_font = FontSettings.get_font('text')
+    edit_words_button_font = FontSettings.get_font('button')
+    error_message_font = FontSettings.get_font('error')
 
     self.layout = QVBoxLayout(self)
     self.layout.setContentsMargins(20, 10, 20, 0)
@@ -77,7 +79,6 @@ class SearchingWidget(QWidget):
     SearchingWidget.error_message.setSizePolicy(size_policy)
     SearchingWidget.error_message.hide()
 
-    edit_words_button_font = QFont(Settings.FONT, 14)
     SearchingWidget.edit_words_button = QPushButton(_('EDIT_WORDS_BUTTON_TEXT'))
     SearchingWidget.edit_words_button.setToolTip(_('EDIT_WORDS_TOOLTIP_TEXT'))
     SearchingWidget.edit_words_button.setFont(edit_words_button_font)

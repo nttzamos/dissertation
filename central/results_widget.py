@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import (QLabel, QScrollArea, QVBoxLayout, QHBoxLayout,
                              QWidget, QMessageBox, QCheckBox, QPushButton,
                              QFrame)
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QIcon
+from PyQt6.QtGui import QIcon
 
 from item.result import Result
 from menu.settings import Settings
@@ -10,6 +10,7 @@ from models.family import (get_family_id, get_family_words, update_word_family,
                            non_related_word_exists)
 from models.word import get_word_id, word_exists
 from shared.flow_layout import FlowLayout
+from shared.font_settings import FontSettings
 from shared.wiktionary_parser import fetch_word_details
 
 import gettext
@@ -27,8 +28,8 @@ class ResultsWidget(QWidget):
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    placeholder_text_font = QFont(Settings.FONT, 18)
-    title_font = QFont(Settings.FONT, 22)
+    placeholder_text_font = FontSettings.get_font('heading')
+    title_font = FontSettings.get_font('heading')
 
     ResultsWidget.scroll_area_widget_contents = QWidget()
     ResultsWidget.container_widget = QWidget()

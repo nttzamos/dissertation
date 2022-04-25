@@ -1,12 +1,9 @@
-from PyQt6.QtGui import QFont
-
 from item.recent_search import RecentSearch
 
 import pickledb
 
 class Settings():
   SETTINGS_DATABASE_FILE = 'resources/settings.json'
-  FONT = QFont().family()
   LANGUAGES = {
     'Ελληνικά': 'el',
     'English': 'en'
@@ -19,7 +16,7 @@ class Settings():
       'last_student_picked': 1,
       'theme': 'light',
       'updated_language': 'el',
-      'selected_font': 'medium'
+      'updated_selected_font': 'medium'
     }
 
     boolean_settings_default_values = {
@@ -51,10 +48,11 @@ class Settings():
     for key in boolean_settings_about_hiding_messages:
       Settings.set_setting(key, 0)
 
+    Settings.set_setting('language', Settings.get_setting('updated_language'))
+    Settings.set_setting('selected_font', Settings.get_setting('updated_selected_font'))
+
     from shared.font_settings import FontSettings
     FontSettings.set_selected_font(Settings.get_setting('selected_font'))
-
-    Settings.set_setting('language', Settings.get_setting('updated_language'))
 
     Settings.calculate_size_settings(screen_width, screen_height)
 

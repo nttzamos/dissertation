@@ -1,9 +1,10 @@
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QWidget
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QIcon
+from PyQt6.QtGui import QIcon
 
 from menu.settings import Settings
 from menu.settings_widget import SettingsWidget
+from shared.font_settings import FontSettings
 
 import gettext
 
@@ -28,7 +29,7 @@ class MenuBar(QWidget):
     self.application_icon.setFixedHeight(30)
     self.application_icon.setFixedWidth(30)
 
-    font = QFont(Settings.FONT, 14)
+    font = FontSettings.get_font('heading')
 
     self.title = QLabel('Wordinary')
     self.title.setFont(font)

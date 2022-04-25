@@ -2,11 +2,11 @@ from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
                              QLineEdit, QLabel, QGroupBox, QScrollArea,
                              QCheckBox, QPushButton, QSizePolicy)
 from PyQt6.QtCore import Qt, QTimer
-from PyQt6.QtGui import QFont
 
 from menu.settings import Settings
 from models.profile import get_profiles
 from models.student import create_student, student_name_exists
+from shared.font_settings import FontSettings
 from shared.spacer import Spacer
 
 import gettext
@@ -28,11 +28,11 @@ class StudentAdditionWidget(QWidget):
 
     StudentAdditionWidget.last_index_used = -1
 
-    section_label_font = QFont(Settings.FONT, 16)
-    check_box_font = QFont(Settings.FONT, 14)
-    line_edit_font = QFont(Settings.FONT, 14)
-    label_font = QFont(Settings.FONT, 12)
-    error_message_font = QFont(Settings.FONT, 10)
+    section_label_font = FontSettings.get_font('heading')
+    check_box_font = FontSettings.get_font('text')
+    line_edit_font = FontSettings.get_font('text')
+    label_font = FontSettings.get_font('text')
+    error_message_font = FontSettings.get_font('error')
 
     self.success_label = QLabel(_('SUCCESS_SAVING_STUDENT_TEXT'))
     self.success_label.setFont(label_font)
@@ -190,7 +190,7 @@ class StudentAdditionWidget(QWidget):
   @staticmethod
   def add_profile(profile_name):
     check_box = QCheckBox(profile_name)
-    check_box_font = QFont(Settings.FONT, 14)
+    check_box_font = FontSettings.get_font('text')
     check_box.clicked.connect(lambda ch, i=1: StudentAdditionWidget.check_box_modified(profile_name))
     check_box.setFont(check_box_font)
     StudentAdditionWidget.check_boxes.append(check_box)

@@ -2,11 +2,11 @@ from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QWidget, QLineEdit,
                              QLabel, QGroupBox, QListWidget, QPushButton,
                              QComboBox, QCompleter, QAbstractItemView)
 from PyQt6.QtCore import Qt, QTimer, QStringListModel
-from PyQt6.QtGui import QFont
 
 from menu.settings import Settings
 from models.family import get_word_id, get_family_id, get_family_words, update_word_family
 from shared.database_handler import get_grades, get_grade_words
+from shared.font_settings import FontSettings
 
 import gettext
 
@@ -23,11 +23,11 @@ class WordFamilyUpdateWidget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    section_label_font = QFont(Settings.FONT, 16)
-    combo_box_font = QFont(Settings.FONT, 14)
-    line_edit_font = QFont(Settings.FONT, 14)
-    completer_font = QFont(Settings.FONT, 12)
-    error_message_font = QFont(Settings.FONT, 10)
+    section_label_font = FontSettings.get_font('heading')
+    combo_box_font = FontSettings.get_font('text')
+    line_edit_font = FontSettings.get_font('text')
+    completer_font = FontSettings.get_font('text')
+    error_message_font = FontSettings.get_font('error')
 
     WordFamilyUpdateWidget.just_searched_with_enter = False
     WordFamilyUpdateWidget.just_searched_related_with_enter = False

@@ -1,11 +1,12 @@
 from PyQt6.QtWidgets import (QHBoxLayout, QLabel, QPushButton, QVBoxLayout,
                              QWidget, QMessageBox, QCheckBox)
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QIcon
+from PyQt6.QtGui import QIcon
 
 from models.family import update_word_family
 from models.word import create_word, destroy_word
 from shared.database_handler import get_grade_subjects
+from shared.font_settings import FontSettings
 from shared.styles import Styles
 
 import gettext
@@ -24,7 +25,7 @@ class Result(QWidget):
     self.layout.setContentsMargins(0, 0, 20, 20)
     self.layout.setSpacing(0)
 
-    font = QFont(Settings.FONT, 20)
+    font = FontSettings.get_font('result')
 
     self.saved = saved
 

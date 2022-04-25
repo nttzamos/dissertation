@@ -1,10 +1,10 @@
 from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
 
 from item.starred_word import StarredWord
 from menu.settings import Settings
 from models.starred_word import get_starred_words
+from shared.font_settings import FontSettings
 from shared.spacer import Spacer
 
 import gettext
@@ -38,8 +38,7 @@ class StarredWordsWidget(QWidget):
     StarredWordsWidget.counter = StarredWordsWidget.MAX_ROW
     StarredWordsWidget.widget_list = []
 
-    font = QFont(Settings.FONT, 18)
-    invisible_font = QFont(Settings.FONT, 1)
+    font = FontSettings.get_font('heading')
 
     title_label = QLabel(_('STARRED_WORDS_TITLE'))
     title_label.setFont(font)

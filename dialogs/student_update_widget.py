@@ -3,11 +3,11 @@ from PyQt6.QtWidgets import (QGridLayout, QVBoxLayout, QHBoxLayout, QWidget,
                              QPushButton, QComboBox, QLineEdit, QSizePolicy,
                              QMessageBox)
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
 
 from menu.settings import Settings
 from models.profile import get_profiles
 from models.student import *
+from shared.font_settings import FontSettings
 from shared.spacer import Spacer
 
 import gettext
@@ -27,10 +27,10 @@ class StudentUpdateWidget(QWidget):
     self.layout.setContentsMargins(20, 10, 20, 10)
     self.layout.setSpacing(0)
 
-    section_label_font = QFont(Settings.FONT, 16)
-    combo_box_font = QFont(Settings.FONT, 14)
-    line_edit_font = QFont(Settings.FONT, 14)
-    error_message_font = QFont(Settings.FONT, 10)
+    section_label_font = FontSettings.get_font('heading')
+    combo_box_font = FontSettings.get_font('text')
+    line_edit_font = FontSettings.get_font('text')
+    error_message_font = FontSettings.get_font('error')
 
     self.check_boxes_modified = []
 
@@ -154,7 +154,7 @@ class StudentUpdateWidget(QWidget):
     for check_box in StudentUpdateWidget.check_boxes:
       StudentUpdateWidget.profiles_selection_widget.layout.removeWidget(check_box)
 
-    check_box_font = QFont(Settings.FONT, 14)
+    check_box_font = FontSettings.get_font('text')
     StudentUpdateWidget.check_boxes = []
     self.check_boxes_modified = []
     for i in range(len(profiles)):
@@ -334,7 +334,7 @@ class StudentUpdateWidget(QWidget):
       return
 
     check_box = QCheckBox(profile_name)
-    check_box_font = QFont(Settings.FONT, 14)
+    check_box_font = FontSettings.get_font('text')
     check_box.setFont(check_box_font)
     StudentUpdateWidget.check_boxes.append(check_box)
     StudentUpdateWidget.last_index_used += 1

@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
 
 from item.recent_search import RecentSearch
 from menu.settings import Settings
 from models.recent_search import get_recent_searches
 from models.starred_word import starred_word_exists, get_starred_words
+from shared.font_settings import FontSettings
 from shared.spacer import Spacer
 
 import gettext
@@ -39,8 +39,7 @@ class RecentSearchesWidget(QWidget):
     RecentSearchesWidget.counter = RecentSearchesWidget.MAX_ROW
     RecentSearchesWidget.widget_list = []
 
-    font = QFont(Settings.FONT, 18)
-    invisible_font = QFont(Settings.FONT, 1)
+    font = FontSettings.get_font('heading')
 
     title_label = QLabel(_('RECENT_SEARCHES_TITLE'))
     title_label.setFont(font)

@@ -7,10 +7,12 @@ class FontSettings():
   ]
 
   DEFAULT_FONT_INDEXES = {
-    'heading': 10,
+    'heading': 9,
+    'result': 8,
     'single_word': 7,
-    'text': 6,
-    'button': 5
+    'text': 7,
+    'button': 7,
+    'error': 4
   }
 
   SELECTED_FONT_MAPPING = {
