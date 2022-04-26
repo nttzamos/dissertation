@@ -28,6 +28,7 @@ class ResultExplanationWidget(QDialog):
 
     section_label_font = FontSettings.get_font('heading')
     text_font = FontSettings.get_font('text')
+    button_font = FontSettings.get_font('button')
 
     group_box_widget = QGroupBox(_('RESULT_EXPLANATION_TITLE'))
     group_box_widget.setFont(section_label_font)
@@ -40,16 +41,18 @@ class ResultExplanationWidget(QDialog):
 
     group_box_widget.layout.addWidget(explanation, alignment=Qt.AlignmentFlag.AlignTop)
 
-    close_tutorial_button = QPushButton(_('CLOSE_BUTTON_TEXT'))
-    close_tutorial_button.adjustSize()
-    close_tutorial_button.pressed.connect(self.close)
-    close_tutorial_button.setAutoDefault(False)
+    self.close_tutorial_button = QPushButton(_('CLOSE_BUTTON_TEXT'))
+    self.close_tutorial_button.setFont(button_font)
+    self.close_tutorial_button.adjustSize()
+    self.close_tutorial_button.pressed.connect(self.close)
+    self.close_tutorial_button.setAutoDefault(False)
 
     self.layout.addWidget(group_box_widget)
-    self.layout.addWidget(close_tutorial_button, alignment=Qt.AlignmentFlag.AlignRight)
+    self.layout.addWidget(self.close_tutorial_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.style()
 
   def style(self):
     from shared.styles import Styles
     self.setStyleSheet(Styles.tutorial_widget_style)
+    self.close_tutorial_button.setStyleSheet(Styles.result_dialog_style)

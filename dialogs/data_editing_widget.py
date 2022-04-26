@@ -6,6 +6,7 @@ from dialogs.profile_update_widget import ProfileUpdateWidget
 from dialogs.student_addition_widget import StudentAdditionWidget
 from dialogs.student_update_widget import StudentUpdateWidget
 from menu.settings import Settings
+from shared.font_settings import FontSettings
 
 import gettext
 
@@ -32,6 +33,8 @@ class DataEditingWidget(QDialog):
     self.edit_profiles_widget = ProfileUpdateWidget()
 
     tab_widget = QTabWidget()
+    tab_widget.setFont(FontSettings.get_font('text'))
+
     tab_widget.addTab(add_student_widget, self._('ADD_STUDENT_TEXT'))
     tab_widget.addTab(DataEditingWidget.edit_student_widget, self._('EDIT_STUDENT_TEXT'))
     tab_widget.addTab(add_profile_widget, self._('ADD_PROFILE_TEXT'))

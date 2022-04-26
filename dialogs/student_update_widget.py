@@ -28,8 +28,8 @@ class StudentUpdateWidget(QWidget):
     self.layout.setSpacing(0)
 
     section_label_font = FontSettings.get_font('heading')
-    combo_box_font = FontSettings.get_font('text')
-    line_edit_font = FontSettings.get_font('text')
+    text_font = FontSettings.get_font('text')
+    button_font = FontSettings.get_font('button')
     error_message_font = FontSettings.get_font('error')
 
     self.check_boxes_modified = []
@@ -42,7 +42,7 @@ class StudentUpdateWidget(QWidget):
     students = get_students()
 
     StudentUpdateWidget.student_selector = QComboBox()
-    StudentUpdateWidget.student_selector.setFont(combo_box_font)
+    StudentUpdateWidget.student_selector.setFont(text_font)
 
     if len(students) == 0:
       StudentUpdateWidget.student_selector.addItem(_('NO_STUDENTS_TEXT'))
@@ -64,7 +64,7 @@ class StudentUpdateWidget(QWidget):
     self.name_widget.hide()
 
     self.name_line_edit = QLineEdit()
-    self.name_line_edit.setFont(line_edit_font)
+    self.name_line_edit.setFont(text_font)
     self.name_line_edit.textChanged.connect(self.update_save_button_state)
 
     self.error_message_label = QLabel(self)
@@ -89,11 +89,13 @@ class StudentUpdateWidget(QWidget):
     profiles_widget.layout.addWidget(self.scroll_area)
 
     self.save_button = QPushButton(_('UPDATE_STUDENT_BUTTON_TEXT'))
+    self.save_button.setFont(button_font)
     self.save_button.pressed.connect(self.update_student)
     self.save_button.setDisabled(True)
     self.save_button.setAutoDefault(False)
 
     self.delete_button = QPushButton(_('DELETE_STUDENT_BUTTON_TEXT'))
+    self.delete_button.setFont(button_font)
     self.delete_button.pressed.connect(self.delete_student)
     self.delete_button.setDisabled(True)
     self.delete_button.setAutoDefault(False)
@@ -110,11 +112,14 @@ class StudentUpdateWidget(QWidget):
     self.layout.addWidget(profiles_widget)
     self.layout.addSpacing(15)
     self.layout.addWidget(buttons_widget, alignment=Qt.AlignmentFlag.AlignRight)
+
     self.style()
 
   def style(self):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
+    self.save_button.setStyleSheet(Styles.result_dialog_style)
+    self.delete_button.setStyleSheet(Styles.result_dialog_style)
 
   def initialize_scroll_area(self):
     StudentUpdateWidget.profiles_selection_widget = QWidget()

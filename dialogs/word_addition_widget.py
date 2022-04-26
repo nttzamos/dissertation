@@ -31,14 +31,12 @@ class WordAdditionWIdget(QWidget):
     self.layout.setSpacing(0)
 
     section_label_font = FontSettings.get_font('heading')
-    combo_box_font = FontSettings.get_font('text')
-    check_box_font = FontSettings.get_font('text')
-    line_edit_font = FontSettings.get_font('text')
-    label_font = FontSettings.get_font('text')
+    text_font = FontSettings.get_font('text')
+    button_font = FontSettings.get_font('button')
     error_message_font = FontSettings.get_font('error')
 
     self.success_label = QLabel(_('SUCCESS_SAVING_WORD_TEXT'))
-    self.success_label.setFont(label_font)
+    self.success_label.setFont(text_font)
     size_policy = self.success_label.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
     self.success_label.setSizePolicy(size_policy)
@@ -51,7 +49,7 @@ class WordAdditionWIdget(QWidget):
     word_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.word_line_edit = QLineEdit()
-    self.word_line_edit.setFont(line_edit_font)
+    self.word_line_edit.setFont(text_font)
     self.word_line_edit.textChanged.connect(self.update_save_button_state)
 
     self.error_message_label = QLabel(self)
@@ -68,7 +66,7 @@ class WordAdditionWIdget(QWidget):
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.grade_selector = QComboBox()
-    self.grade_selector.setFont(combo_box_font)
+    self.grade_selector.setFont(text_font)
     self.grade_selector.addItems(get_grades())
     self.grade_selector.activated.connect(self.grade_selector_activated)
 
@@ -97,7 +95,7 @@ class WordAdditionWIdget(QWidget):
     for i in range(len(grade_subjects)):
       check_box = QCheckBox(grade_subjects[i])
       check_box.clicked.connect(lambda ch, i=i: self.check_box_modified(grade_subjects[i]))
-      check_box.setFont(check_box_font)
+      check_box.setFont(text_font)
       self.check_boxes.append(check_box)
       self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
 
@@ -106,17 +104,19 @@ class WordAdditionWIdget(QWidget):
     subjects_widget.layout.addWidget(scroll_area)
 
     self.save_button = QPushButton(_('SAVE_WORD_BUTTON_TEXT'))
+    self.save_button.setFont(button_font)
     self.save_button.pressed.connect(self.save_word)
     self.save_button.setAutoDefault(False)
     self.save_button.setDisabled(True)
 
-    select_all_button = QPushButton(_('SELECT_ALL_SUBJECTS_TEXT'))
-    select_all_button.pressed.connect(self.select_all)
-    select_all_button.setAutoDefault(False)
+    self.select_all_button = QPushButton(_('SELECT_ALL_SUBJECTS_TEXT'))
+    self.select_all_button.setFont(button_font)
+    self.select_all_button.pressed.connect(self.select_all)
+    self.select_all_button.setAutoDefault(False)
 
     buttons_widget = QWidget()
     buttons_widget.layout = QHBoxLayout(buttons_widget)
-    buttons_widget.layout.addWidget(select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
+    buttons_widget.layout.addWidget(self.select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
     buttons_widget.layout.addWidget(self.save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.layout.addWidget(self.success_label, alignment=Qt.AlignmentFlag.AlignRight)
@@ -125,11 +125,14 @@ class WordAdditionWIdget(QWidget):
     self.layout.addWidget(subjects_widget)
     self.layout.addSpacing(10)
     self.layout.addWidget(buttons_widget)
+
     self.style()
 
   def style(self):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
+    self.save_button.setStyleSheet(Styles.result_dialog_style)
+    self.select_all_button.setStyleSheet(Styles.result_dialog_style)
 
   def grade_selector_activated(self, index):
     for check_box in self.check_boxes:
@@ -139,13 +142,13 @@ class WordAdditionWIdget(QWidget):
 
     self.save_button.setDisabled(True)
 
-    check_box_font = FontSettings.get_font('text')
+    text_font = FontSettings.get_font('text')
     self.check_boxes = []
     self.check_boxes_selected = []
     for i in range(len(grade_subjects)):
       check_box = QCheckBox(grade_subjects[i])
       check_box.clicked.connect(lambda ch, i=i: self.check_box_modified(grade_subjects[i]))
-      check_box.setFont(check_box_font)
+      check_box.setFont(text_font)
       self.check_boxes.append(check_box)
       self.subjects_selection_widget.layout.addWidget(check_box, i, 0)
 

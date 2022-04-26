@@ -28,9 +28,8 @@ class ProfileUpdateWidget(QWidget):
     self.layout.setSpacing(0)
 
     section_label_font = FontSettings.get_font('heading')
-    combo_box_font = FontSettings.get_font('text')
-    line_edit_font = FontSettings.get_font('text')
-    label_font = FontSettings.get_font('text')
+    text_font = FontSettings.get_font('text')
+    button_font = FontSettings.get_font('button')
     error_message_font = FontSettings.get_font('error')
 
     self.check_boxes_modified = []
@@ -43,7 +42,7 @@ class ProfileUpdateWidget(QWidget):
     profiles = get_profiles()
 
     ProfileUpdateWidget.profile_selector = QComboBox()
-    ProfileUpdateWidget.profile_selector.setFont(combo_box_font)
+    ProfileUpdateWidget.profile_selector.setFont(text_font)
 
     if len(profiles) == 0:
       ProfileUpdateWidget.profile_selector.addItem(_('NO_PROFILES_TEXT'))
@@ -64,7 +63,7 @@ class ProfileUpdateWidget(QWidget):
     self.name_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.name_line_edit = QLineEdit()
-    self.name_line_edit.setFont(line_edit_font)
+    self.name_line_edit.setFont(text_font)
     self.name_line_edit.textChanged.connect(self.update_save_button_state)
 
     self.error_message_label = QLabel(self)
@@ -83,7 +82,7 @@ class ProfileUpdateWidget(QWidget):
     grade_label_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     ProfileUpdateWidget.grade_label = QLabel(_('MUST_SELECT_PROFILE_TEXT'))
-    ProfileUpdateWidget.grade_label.setFont(label_font)
+    ProfileUpdateWidget.grade_label.setFont(text_font)
 
     grade_label_widget.layout.addWidget(ProfileUpdateWidget.grade_label)
 
@@ -111,11 +110,13 @@ class ProfileUpdateWidget(QWidget):
     subjects_widget.layout.addWidget(scroll_area)
 
     self.save_button = QPushButton(_('UPDATE_PROFILE_BUTTON_TEXT'))
+    self.save_button.setFont(button_font)
     self.save_button.pressed.connect(self.update_profile)
     self.save_button.setDisabled(True)
     self.save_button.setAutoDefault(False)
 
     self.delete_button = QPushButton(_('DELETE_PROFILE_BUTTON_TEXT'))
+    self.delete_button.setFont(button_font)
     self.delete_button.pressed.connect(self.delete_profile)
     self.delete_button.setDisabled(True)
     self.delete_button.setAutoDefault(False)
@@ -133,11 +134,14 @@ class ProfileUpdateWidget(QWidget):
     self.layout.addWidget(subjects_widget)
     self.layout.addSpacing(15)
     self.layout.addWidget(buttons_widget, alignment=Qt.AlignmentFlag.AlignRight)
+
     self.style()
 
   def style(self):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
+    self.save_button.setStyleSheet(Styles.result_dialog_style)
+    self.delete_button.setStyleSheet(Styles.result_dialog_style)
 
   def profile_selector_activated_initial(self, index):
     if index != 0:

@@ -1,3 +1,4 @@
+from PyQt6.QtWidgets import QToolTip
 from PyQt6.QtGui import QFont
 
 class FontSettings():
@@ -12,6 +13,7 @@ class FontSettings():
     'single_word': 7,
     'text': 7,
     'button': 7,
+    'tooltip': 5,
     'error': 4
   }
 
@@ -28,5 +30,6 @@ class FontSettings():
     return QFont(FontSettings.FONT, FontSettings.FONT_SIZES_SCALE[font_index])
 
   @staticmethod
-  def set_selected_font(font):
-    FontSettings.SELECTED_FONT = font
+  def initialize_font_settings(selected_font):
+    FontSettings.SELECTED_FONT = selected_font
+    QToolTip.setFont(FontSettings.get_font('tooltip'))

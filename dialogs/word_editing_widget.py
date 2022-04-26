@@ -5,6 +5,7 @@ from dialogs.word_addition_widget import WordAdditionWIdget
 from dialogs.word_family_update_widget import WordFamilyUpdateWidget
 from dialogs.word_update_widget import WordUpdateWidget
 from menu.settings import Settings
+from shared.font_settings import FontSettings
 
 import gettext
 
@@ -30,6 +31,8 @@ class WordEditingWidget(QDialog):
     WordEditingWidget.edit_word_family_widget = WordFamilyUpdateWidget()
 
     self.tab_widget = QTabWidget()
+    self.tab_widget.setFont(FontSettings.get_font('text'))
+
     self.tab_widget.addTab(add_word_widget, self._('ADD_WORD_TEXT'))
     self.tab_widget.addTab(self.edit_word_widget, self._('EDIT_WORD_TEXT'))
     self.tab_widget.addTab(

@@ -37,6 +37,11 @@ class Settings():
       'hide_font_size_change_effect_message'
     ]
 
+    settings_to_update = {
+      'language': 'updated_language',
+      'selected_font': 'updated_selected_font'
+    }
+
     for key, value in settings_default_values.items():
       if not Settings.get_setting(key):
         Settings.set_setting(key, value)
@@ -48,11 +53,12 @@ class Settings():
     for key in boolean_settings_about_hiding_messages:
       Settings.set_setting(key, 0)
 
-    Settings.set_setting('language', Settings.get_setting('updated_language'))
-    Settings.set_setting('selected_font', Settings.get_setting('updated_selected_font'))
+
+    for key, value in settings_to_update.items():
+      Settings.set_setting(key, Settings.get_setting(value))
 
     from shared.font_settings import FontSettings
-    FontSettings.set_selected_font(Settings.get_setting('selected_font'))
+    FontSettings.initialize_font_settings(Settings.get_setting('selected_font'))
 
     Settings.calculate_size_settings(screen_width, screen_height)
 

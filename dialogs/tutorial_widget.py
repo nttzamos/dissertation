@@ -45,6 +45,7 @@ class TutorialWidget(QDialog):
 
     section_label_font = FontSettings.get_font('heading')
     text_font = FontSettings.get_font('text')
+    button_font = FontSettings.get_font('button')
 
     self.current_tutorial = 0
 
@@ -65,28 +66,32 @@ class TutorialWidget(QDialog):
     buttons_widget.layout.setSpacing(5)
 
     self.setting_check_box = QCheckBox(_('CHECK_BOX_TEXT'))
+    self.setting_check_box.setFont(text_font)
     self.setting_check_box.clicked.connect(self.toggle_tutorial_setting)
     if Settings.get_boolean_setting('show_tutorial_on_startup'):
       self.setting_check_box.setChecked(True)
 
     self.next_tutorial_button = QPushButton(_('NEXT_BUTTON_TEXT'))
+    self.next_tutorial_button.setFont(button_font)
     self.next_tutorial_button.adjustSize()
     self.next_tutorial_button.pressed.connect(self.next_tutorial)
     self.next_tutorial_button.setAutoDefault(False)
 
     self.previous_tutorial_button = QPushButton(_('PREVIOUS_BUTTON_TEXT'))
+    self.previous_tutorial_button.setFont(button_font)
     self.previous_tutorial_button.adjustSize()
     self.previous_tutorial_button.pressed.connect(self.previous_tutorial)
     self.previous_tutorial_button.setDisabled(True)
     self.previous_tutorial_button.setAutoDefault(False)
 
-    close_tutorial_button = QPushButton(_('CLOSE_BUTTON_TEXT'))
-    close_tutorial_button.adjustSize()
-    close_tutorial_button.pressed.connect(self.close)
-    close_tutorial_button.setAutoDefault(False)
+    self.close_tutorial_button = QPushButton(_('CLOSE_BUTTON_TEXT'))
+    self.close_tutorial_button.setFont(button_font)
+    self.close_tutorial_button.adjustSize()
+    self.close_tutorial_button.pressed.connect(self.close)
+    self.close_tutorial_button.setAutoDefault(False)
 
     buttons_widget.layout.addWidget(self.setting_check_box, alignment=Qt.AlignmentFlag.AlignLeft)
-    buttons_widget.layout.addWidget(close_tutorial_button, alignment=Qt.AlignmentFlag.AlignRight)
+    buttons_widget.layout.addWidget(self.close_tutorial_button, alignment=Qt.AlignmentFlag.AlignRight)
     buttons_widget.layout.addWidget(self.previous_tutorial_button)
     buttons_widget.layout.addWidget(self.next_tutorial_button)
 
@@ -100,6 +105,9 @@ class TutorialWidget(QDialog):
   def style(self):
     from shared.styles import Styles
     self.setStyleSheet(Styles.tutorial_widget_style)
+    self.next_tutorial_button.setStyleSheet(Styles.result_dialog_style)
+    self.previous_tutorial_button.setStyleSheet(Styles.result_dialog_style)
+    self.close_tutorial_button.setStyleSheet(Styles.result_dialog_style)
 
   def next_tutorial(self):
     if self.current_tutorial < len(self.TEXTS) - 1:

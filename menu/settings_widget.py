@@ -28,12 +28,12 @@ class SettingsWidget(QDialog):
     self.layout.setSpacing(20)
 
     section_label_font = FontSettings.get_font('heading')
-    spin_box_font = FontSettings.get_font('text')
-    combo_box_font = FontSettings.get_font('text')
+    text_font = FontSettings.get_font('text')
 
     maximum_results_label = QLabel(_('MAXIMUM_RESULTS_TEXT'))
+    maximum_results_label.setFont(text_font)
     self.maximum_results_spin_box = QSpinBox()
-    self.maximum_results_spin_box.setFont(spin_box_font)
+    self.maximum_results_spin_box.setFont(text_font)
     self.maximum_results_spin_box.valueChanged.connect(self.maximum_results_changed)
     self.maximum_results_spin_box.setValue(Settings.get_setting('maximum_results'))
     self.maximum_results_spin_box.setMinimum(1)
@@ -52,22 +52,27 @@ class SettingsWidget(QDialog):
     general_settings_widget.layout.setContentsMargins(10, 0, 0, 0)
 
     self.remember_last_student_picked = QCheckBox(_('REMEMBER_LAST_STUDENT_TEXT'), objectName='remember_last_student_picked')
+    self.remember_last_student_picked.setFont(text_font)
     self.remember_last_student_picked.clicked.connect(lambda: self.toggle_setting('remember_last_student_picked'))
     self.remember_last_student_picked.setChecked(Settings.get_boolean_setting('remember_last_student_picked'))
 
     self.show_edit_dict_words_button = QCheckBox(_('SHOW_EDIT_WORDS_BUTTON_TEXT'), objectName='show_edit_dict_words_button')
+    self.show_edit_dict_words_button.setFont(text_font)
     self.show_edit_dict_words_button.clicked.connect(lambda: self.toggle_setting('show_edit_dict_words_button'))
     self.show_edit_dict_words_button.setChecked(Settings.get_boolean_setting('show_edit_dict_words_button'))
 
     self.only_show_words_with_family = QCheckBox(_('ONLY_SHOW_WORDS_WITH_FAMILY_TEXT'), objectName='only_show_words_with_family')
+    self.only_show_words_with_family.setFont(text_font)
     self.only_show_words_with_family.clicked.connect(lambda: self.toggle_setting('only_show_words_with_family'))
     self.only_show_words_with_family.setChecked(Settings.get_boolean_setting('only_show_words_with_family'))
 
     self.show_tutorial_on_startup = QCheckBox(_('SHOW_TUTORIAL_TEXT'), objectName='show_tutorial_on_startup')
+    self.show_tutorial_on_startup.setFont(text_font)
     self.show_tutorial_on_startup.clicked.connect(lambda: self.toggle_setting('show_tutorial_on_startup'))
     self.show_tutorial_on_startup.setChecked(Settings.get_boolean_setting('show_tutorial_on_startup'))
 
     self.show_unsaved_changes_message = QCheckBox(_('UNSAVED_CHANGES_MESSAGE_VISIBILITY'), objectName='show_unsaved_changes_message')
+    self.show_unsaved_changes_message.setFont(text_font)
     self.show_unsaved_changes_message.clicked.connect(lambda: self.toggle_setting('show_unsaved_changes_message'))
     self.show_unsaved_changes_message.setChecked(Settings.get_boolean_setting('show_unsaved_changes_message'))
 
@@ -81,8 +86,10 @@ class SettingsWidget(QDialog):
     theme_selection_widget.setFont(section_label_font)
     theme_selection_widget.layout = QHBoxLayout(theme_selection_widget)
     self.light_theme_button = QRadioButton(_('LIGHT_THEME_TEXT'))
+    self.light_theme_button.setFont(text_font)
     self.light_theme_button.toggled.connect(self.light_theme_button_clicked)
     self.dark_theme_button = QRadioButton(_('DARK_THEME_TEXT'))
+    self.dark_theme_button.setFont(text_font)
     self.dark_theme_button.toggled.connect(self.dark_theme_button_clicked)
     self.initial_toggle = True
 
@@ -101,7 +108,7 @@ class SettingsWidget(QDialog):
     language_selection_widget.setFont(section_label_font)
     language_selection_widget.layout = QVBoxLayout(language_selection_widget)
     self.language_selector = QComboBox()
-    self.language_selector.setFont(combo_box_font)
+    self.language_selector.setFont(text_font)
     self.language_selector.addItems(available_languages)
     self.language_selector.setCurrentText(Settings.get_language())
     self.language_selector.currentTextChanged.connect(self.language_selector_activated)
@@ -119,7 +126,7 @@ class SettingsWidget(QDialog):
     font_size_selection_widget.setFont(section_label_font)
     font_size_selection_widget.layout = QHBoxLayout(font_size_selection_widget)
     self.font_size_selector = QComboBox()
-    self.font_size_selector.setFont(combo_box_font)
+    self.font_size_selector.setFont(text_font)
     self.font_size_selector.addItems(list(self.available_font_sizes.values()))
     self.font_size_selector.setCurrentIndex(
       list(self.available_font_sizes.keys()).index(Settings.get_setting('updated_selected_font'))
@@ -132,8 +139,10 @@ class SettingsWidget(QDialog):
     wiktionary_usage_widget.setFont(section_label_font)
     wiktionary_usage_widget.layout = QHBoxLayout(wiktionary_usage_widget)
     self.use_wiktionary_button = QRadioButton(_('YES'))
+    self.use_wiktionary_button.setFont(text_font)
     self.use_wiktionary_button.toggled.connect(self.use_wiktionary_button_clicked)
     self.dont_use_wiktionary_button = QRadioButton(_('NO'))
+    self.dont_use_wiktionary_button.setFont(text_font)
     self.dont_use_wiktionary_button.toggled.connect(self.dont_use_wiktionary_button_clicked)
 
     if Settings.get_boolean_setting('use_wiktionary'):
@@ -145,16 +154,16 @@ class SettingsWidget(QDialog):
     wiktionary_usage_widget.layout.addWidget(self.use_wiktionary_button, alignment=Qt.AlignmentFlag.AlignLeft)
     wiktionary_usage_widget.layout.addWidget(self.dont_use_wiktionary_button, alignment=Qt.AlignmentFlag.AlignLeft)
 
-
     restore_database_widget = QGroupBox(_('RESTORE_DATABASE_TITLE'))
     restore_database_widget.setFont(section_label_font)
     restore_database_widget.layout = QHBoxLayout(restore_database_widget)
-    restore_database_button = QPushButton(_('RESTORE_DATABASE_BUTTON'))
-    restore_database_button.pressed.connect(self.restore_database)
-    restore_database_button.setAutoDefault(False)
+    self.restore_database_button = QPushButton(_('RESTORE_DATABASE_BUTTON'))
+    self.restore_database_button.setFont(text_font)
+    self.restore_database_button.pressed.connect(self.restore_database)
+    self.restore_database_button.setAutoDefault(False)
 
     restore_database_widget.layout.setContentsMargins(50, 10, 50, 10)
-    restore_database_widget.layout.addWidget(restore_database_button)
+    restore_database_widget.layout.addWidget(self.restore_database_button)
 
     self.layout.addWidget(maximum_results_selection_widget)
     self.layout.addWidget(general_settings_widget)
@@ -169,6 +178,7 @@ class SettingsWidget(QDialog):
   def style(self):
     from shared.styles import Styles
     self.setStyleSheet(Styles.settings_widget_style)
+    self.restore_database_button.setStyleSheet(Styles.result_dialog_style)
 
   def maximum_results_changed(self):
     Settings.set_setting('maximum_results', self.maximum_results_spin_box.value())

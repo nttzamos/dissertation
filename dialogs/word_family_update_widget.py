@@ -24,9 +24,8 @@ class WordFamilyUpdateWidget(QWidget):
     self.layout.setSpacing(0)
 
     section_label_font = FontSettings.get_font('heading')
-    combo_box_font = FontSettings.get_font('text')
-    line_edit_font = FontSettings.get_font('text')
-    completer_font = FontSettings.get_font('text')
+    text_font = FontSettings.get_font('text')
+    button_font = FontSettings.get_font('button')
     error_message_font = FontSettings.get_font('error')
 
     WordFamilyUpdateWidget.just_searched_with_enter = False
@@ -42,7 +41,7 @@ class WordFamilyUpdateWidget(QWidget):
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     WordFamilyUpdateWidget.grade_selector = QComboBox()
-    WordFamilyUpdateWidget.grade_selector.setFont(combo_box_font)
+    WordFamilyUpdateWidget.grade_selector.setFont(text_font)
     WordFamilyUpdateWidget.grade_selector.addItems(get_grades())
     WordFamilyUpdateWidget.grade_selector.activated.connect(self.grade_selector_activated)
 
@@ -54,13 +53,13 @@ class WordFamilyUpdateWidget(QWidget):
     word_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.word_selection_line_edit = QLineEdit()
-    self.word_selection_line_edit.setFont(line_edit_font)
+    self.word_selection_line_edit.setFont(text_font)
     self.word_selection_line_edit.returnPressed.connect(self.search_with_enter)
     WordFamilyUpdateWidget.dictionary_words = get_grade_words(1)
     WordFamilyUpdateWidget.completer = QCompleter(WordFamilyUpdateWidget.dictionary_words)
     WordFamilyUpdateWidget.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
     WordFamilyUpdateWidget.completer.activated.connect(self.search_with_click)
-    WordFamilyUpdateWidget.completer.popup().setFont(completer_font)
+    WordFamilyUpdateWidget.completer.popup().setFont(text_font)
     self.word_selection_line_edit.setCompleter(WordFamilyUpdateWidget.completer)
     self.word_selection_line_edit.setPlaceholderText(_('PLEASE_ENTER_WORD_TEXT'))
     self.error_message_label = QLabel(_('PLEASE_ENTER_ANOTHER_WORD_TEXT'), self)
@@ -77,7 +76,7 @@ class WordFamilyUpdateWidget(QWidget):
     self.word_family_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.related_word_selection_line_edit = QLineEdit()
-    self.related_word_selection_line_edit.setFont(line_edit_font)
+    self.related_word_selection_line_edit.setFont(text_font)
     self.related_word_selection_line_edit.returnPressed.connect(
       self.search_related_with_enter
     )
@@ -93,7 +92,7 @@ class WordFamilyUpdateWidget(QWidget):
       self.search_related_with_click
     )
 
-    WordFamilyUpdateWidget.related_completer.popup().setFont(completer_font)
+    WordFamilyUpdateWidget.related_completer.popup().setFont(text_font)
     self.related_word_selection_line_edit.setCompleter(
       WordFamilyUpdateWidget.related_completer
     )
@@ -107,6 +106,7 @@ class WordFamilyUpdateWidget(QWidget):
     self.word_family_list.addItem(_('FAMILY_WORDS_APPEAR_HERE_TEXT'))
 
     self.remove_words_button = QPushButton(_('REMOVE_SELECTED_WORDS_TEXT'))
+    self.remove_words_button.setFont(button_font)
     self.remove_words_button.pressed.connect(self.remove_selected_words)
 
     self.word_family_selection_widget.layout.addWidget(self.related_word_selection_line_edit)
@@ -118,6 +118,7 @@ class WordFamilyUpdateWidget(QWidget):
     )
 
     self.save_button = QPushButton(_('SAVE_FAMILY_BUTTON_TEXT'))
+    self.save_button.setFont(button_font)
     self.save_button.pressed.connect(self.update_family)
     self.save_button.setDisabled(True)
 
@@ -133,6 +134,8 @@ class WordFamilyUpdateWidget(QWidget):
   def style(self):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
+    self.save_button.setStyleSheet(Styles.result_dialog_style)
+    self.remove_words_button.setStyleSheet(Styles.result_dialog_style)
 
   def disable_save_button(self):
     self.save_button.setDisabled(True)

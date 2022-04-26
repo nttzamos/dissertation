@@ -32,9 +32,8 @@ class WordUpdateWidget(QWidget):
     self.layout.setSpacing(0)
 
     section_label_font = FontSettings.get_font('heading')
-    combo_box_font = FontSettings.get_font('text')
-    line_edit_font = FontSettings.get_font('text')
-    completer_font = FontSettings.get_font('text')
+    text_font = FontSettings.get_font('text')
+    button_font = FontSettings.get_font('button')
     error_message_font = FontSettings.get_font('error')
 
     self.check_boxes_modified = []
@@ -47,7 +46,7 @@ class WordUpdateWidget(QWidget):
     grade_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     WordUpdateWidget.grade_selector = QComboBox()
-    WordUpdateWidget.grade_selector.setFont(combo_box_font)
+    WordUpdateWidget.grade_selector.setFont(text_font)
     WordUpdateWidget.grade_selector.addItems(get_grades())
     WordUpdateWidget.grade_selector.activated.connect(self.grade_selector_activated)
 
@@ -59,13 +58,13 @@ class WordUpdateWidget(QWidget):
     word_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.word_selection_line_edit = QLineEdit()
-    self.word_selection_line_edit.setFont(line_edit_font)
+    self.word_selection_line_edit.setFont(text_font)
     self.word_selection_line_edit.returnPressed.connect(self.search_with_enter)
     WordUpdateWidget.dictionary_words = get_grade_words(1)
     WordUpdateWidget.completer = QCompleter(WordUpdateWidget.dictionary_words)
     WordUpdateWidget.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
     WordUpdateWidget.completer.activated.connect(self.search_with_click)
-    WordUpdateWidget.completer.popup().setFont(completer_font)
+    WordUpdateWidget.completer.popup().setFont(text_font)
     self.word_selection_line_edit.setCompleter(WordUpdateWidget.completer)
     self.word_selection_line_edit.setPlaceholderText(_('PLEASE_ENTER_WORD_TEXT'))
     self.selection_error_message_label = QLabel(_('PLEASE_ENTER_ANOTHER_WORD_TEXT'), self)
@@ -82,7 +81,7 @@ class WordUpdateWidget(QWidget):
     self.word_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.word_line_edit = QLineEdit()
-    self.word_line_edit.setFont(line_edit_font)
+    self.word_line_edit.setFont(text_font)
     self.word_line_edit.textChanged.connect(self.update_save_button_state)
 
     self.error_message_label = QLabel(self)
@@ -115,11 +114,13 @@ class WordUpdateWidget(QWidget):
     subjects_widget.layout.addWidget(scroll_area)
 
     self.save_button = QPushButton(_('UPDATE_WORD_BUTTON_TEXT'))
+    self.save_button.setFont(button_font)
     self.save_button.pressed.connect(self.update_word)
     self.save_button.setDisabled(True)
     self.save_button.setAutoDefault(False)
 
     self.delete_button = QPushButton(_('DELETE_WORD_BUTTON_TEXT'))
+    self.delete_button.setFont(button_font)
     self.delete_button.pressed.connect(self.delete_word)
     self.delete_button.setDisabled(True)
     self.delete_button.setAutoDefault(False)
@@ -144,6 +145,8 @@ class WordUpdateWidget(QWidget):
     from shared.styles import Styles
     self.selection_error_message_label.setStyleSheet(Styles.error_message_label_style)
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
+    self.save_button.setStyleSheet(Styles.result_dialog_style)
+    self.delete_button.setStyleSheet(Styles.result_dialog_style)
 
   def set_word_to_update(self, word, grade_id):
     self.grade_selector.setCurrentIndex(grade_id - 1)

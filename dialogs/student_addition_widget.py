@@ -29,13 +29,12 @@ class StudentAdditionWidget(QWidget):
     StudentAdditionWidget.last_index_used = -1
 
     section_label_font = FontSettings.get_font('heading')
-    check_box_font = FontSettings.get_font('text')
-    line_edit_font = FontSettings.get_font('text')
-    label_font = FontSettings.get_font('text')
+    text_font = FontSettings.get_font('text')
+    button_font = FontSettings.get_font('button')
     error_message_font = FontSettings.get_font('error')
 
     self.success_label = QLabel(_('SUCCESS_SAVING_STUDENT_TEXT'))
-    self.success_label.setFont(label_font)
+    self.success_label.setFont(text_font)
     size_policy = self.success_label.sizePolicy()
     size_policy.setRetainSizeWhenHidden(True)
     self.success_label.setSizePolicy(size_policy)
@@ -48,7 +47,7 @@ class StudentAdditionWidget(QWidget):
     name_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     StudentAdditionWidget.name_line_edit = QLineEdit()
-    StudentAdditionWidget.name_line_edit.setFont(line_edit_font)
+    StudentAdditionWidget.name_line_edit.setFont(text_font)
     StudentAdditionWidget.name_line_edit.textChanged.connect(
       StudentAdditionWidget.update_save_button_state
     )
@@ -86,7 +85,7 @@ class StudentAdditionWidget(QWidget):
     for i in range(len(profiles)):
       check_box = QCheckBox(profiles[i])
       check_box.clicked.connect(lambda ch, i=i: StudentAdditionWidget.check_box_modified(profiles[i]))
-      check_box.setFont(check_box_font)
+      check_box.setFont(text_font)
       StudentAdditionWidget.check_boxes.append(check_box)
       StudentAdditionWidget.profiles_selection_widget.layout.addWidget(check_box, i, 0)
       StudentAdditionWidget.last_index_used = i
@@ -96,17 +95,19 @@ class StudentAdditionWidget(QWidget):
     profiles_widget.layout.addWidget(scroll_area)
 
     StudentAdditionWidget.save_button = QPushButton(_('SAVE_STUDENT_BUTTON_TEXT'))
+    StudentAdditionWidget.save_button.setFont(button_font)
     StudentAdditionWidget.save_button.pressed.connect(self.save_student)
     StudentAdditionWidget.save_button.setAutoDefault(False)
     StudentAdditionWidget.save_button.setDisabled(True)
 
-    select_all_button = QPushButton(_('SELECT_ALL_PROFILES_TEXT'))
-    select_all_button.pressed.connect(self.select_all)
-    select_all_button.setAutoDefault(False)
+    self.select_all_button = QPushButton(_('SELECT_ALL_PROFILES_TEXT'))
+    self.select_all_button.setFont(button_font)
+    self.select_all_button.pressed.connect(self.select_all)
+    self.select_all_button.setAutoDefault(False)
 
     buttons_widget = QWidget()
     buttons_widget.layout = QHBoxLayout(buttons_widget)
-    buttons_widget.layout.addWidget(select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
+    buttons_widget.layout.addWidget(self.select_all_button, alignment=Qt.AlignmentFlag.AlignLeft)
     buttons_widget.layout.addWidget(StudentAdditionWidget.save_button, alignment=Qt.AlignmentFlag.AlignRight)
 
     self.layout.addWidget(self.success_label, alignment=Qt.AlignmentFlag.AlignRight)
@@ -120,6 +121,8 @@ class StudentAdditionWidget(QWidget):
   def style(self):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
+    StudentAdditionWidget.save_button.setStyleSheet(Styles.result_dialog_style)
+    self.select_all_button.setStyleSheet(Styles.result_dialog_style)
 
   def save_student(self):
     is_invalid, text = self.student_is_invalid()
@@ -190,9 +193,9 @@ class StudentAdditionWidget(QWidget):
   @staticmethod
   def add_profile(profile_name):
     check_box = QCheckBox(profile_name)
-    check_box_font = FontSettings.get_font('text')
+    text_font = FontSettings.get_font('text')
     check_box.clicked.connect(lambda ch, i=1: StudentAdditionWidget.check_box_modified(profile_name))
-    check_box.setFont(check_box_font)
+    check_box.setFont(text_font)
     StudentAdditionWidget.check_boxes.append(check_box)
     StudentAdditionWidget.last_index_used += 1
     StudentAdditionWidget.profiles_selection_widget.layout.addWidget(
