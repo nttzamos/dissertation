@@ -1,15 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QMessageBox
 
-from menu.settings import Settings
-
 import os
-import gettext
-
-language_code = Settings.get_setting('language')
-if language_code == False: language_code = 'el'
-language = gettext.translation('shared', localedir='resources/locale', languages=[language_code])
-language.install()
-_ = language.gettext
 
 class ResourcesManager(QWidget):
   resources_files = [
@@ -21,30 +12,29 @@ class ResourcesManager(QWidget):
 
   def __init__(self):
     if not os.path.isdir('resources'):
-      self.show_no_resources_folder_message()
+      text = (
+        'The \"resources\" folder is missing from the folder where the '
+        'executable file is in. This folder is essential for the application '
+        'execution. The application will be terminated.'
+      )
+
+      self.show_message('Missing Folder', text)
       quit()
 
     current_resources_files = os.listdir('resources')
     missing_resources_files = list(set(ResourcesManager.resources_files) - set(current_resources_files))
 
     if len(missing_resources_files) > 0:
-      self.show_missing_resources_files_message(missing_resources_files)
+      text = (
+        'Files from the \"resources\" folder that are essential for the '
+        'application execution are missing. This may lead to serious problems '
+        'and the application may terminate unexpectedly, possibly destroying '
+        'your data. Files missing are:'
+      )
 
-  def show_no_resources_folder_message(self):
-    title = _('MISSING_FOLDER_TITLE')
-    text = _('MISSING_FOLDER_MESSAGE')
+      self.show_message('Missng Files', text + '\n\n' + str(missing_resources_files))
 
-    answer = QMessageBox()
-    answer.setIcon(QMessageBox.Icon.Critical)
-    answer.setText(text)
-    answer.setWindowTitle(title)
-    answer.setStandardButtons(QMessageBox.StandardButton.Ok)
-    answer.exec()
-
-  def show_missing_resources_files_message(self, files):
-    title = _('MISSING_FILES_TITLE')
-    text = _('MISSING_FILES_MESSAGE') + '\n\n' + str(files)
-
+  def show_message(self, title, text):
     answer = QMessageBox()
     answer.setIcon(QMessageBox.Icon.Critical)
     answer.setText(text)
