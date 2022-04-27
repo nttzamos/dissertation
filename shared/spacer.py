@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QFont
 
-
 class Spacer(QLabel):
   def __init__(self):
     super().__init__('f')

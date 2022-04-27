@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 
 from central.results_widget import ResultsWidget
+from menu.menu_bar import MenuBar
 from search.current_search import CurrentSearch
 from search.searching_widget import SearchingWidget
 
@@ -10,6 +11,7 @@ class MainWidget(QWidget):
 
     MainWidget.searching_widget = SearchingWidget()
     MainWidget.current_search = CurrentSearch()
+    MainWidget.menu_bar = MenuBar()
     MainWidget.results_widget = ResultsWidget()
 
     self.layout = QVBoxLayout(self)
@@ -18,6 +20,7 @@ class MainWidget(QWidget):
 
     self.layout.addWidget(MainWidget.searching_widget)
     self.layout.addWidget(MainWidget.current_search)
+    self.layout.addWidget(MainWidget.menu_bar)
     self.layout.addWidget(MainWidget.results_widget)
 
   @staticmethod

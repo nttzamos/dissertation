@@ -38,7 +38,7 @@ class Styles():
 
   if theme == 'light':
     main_window_style = """
-      QWidget { background-color: #F9CF93 }
+      QWidget { background-color: #FFFAFA }
       QPushButton { background-color: none }"""
   else:
     main_window_style = """

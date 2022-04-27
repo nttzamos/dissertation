@@ -7,7 +7,8 @@ class ResourcesManager(QWidget):
     'book.png', 'clear_search.png', 'close_window.png', 'database_backup.db',
     'database.db', 'delete.svg', 'edit.svg', 'minimize_window.png',
     'plus.png', 'question.png', 'search.png', 'settings.png', 'starred.svg',
-    'undo.png', 'unstarred.svg', 'window_icon.ico', 'window_icon.png' # 'settings.json'
+    'undo.png', 'unstarred.svg', 'window_icon.ico', 'window_icon.png', 'info.png'
+    # 'settings.json'
   ]
 
   def __init__(self):

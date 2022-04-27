@@ -1,9 +1,8 @@
-from PyQt6.QtWidgets import QFrame, QSplitter, QWidget, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QSplitter, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 
 from central.main_widget import MainWidget
-from menu.menu_bar import MenuBar
 from menu.settings import Settings
 from models.profile import get_profile_name
 from side.recent_searches_widget import RecentSearchesWidget
@@ -21,15 +20,11 @@ class MainWindow(QWidget):
     super().__init__()
 
     self.setWindowIcon(QIcon('resources/window_icon.png'))
-    self.setWindowFlags(
-      Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowMinMaxButtonsHint
-    )
+    self.setWindowTitle('Wordinary')
 
     self.layout = QVBoxLayout(self)
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
-
-    self.menu_bar = MenuBar(self)
 
     vertical_splitter = QSplitter()
     vertical_splitter.setOrientation(Qt.Orientation.Vertical)
@@ -55,24 +50,15 @@ class MainWindow(QWidget):
 
     self.main_window_widget = QWidget(self)
     self.main_window_widget.layout = QHBoxLayout(self.main_window_widget)
-    self.main_window_widget.layout.setSpacing(0)
     self.main_window_widget.layout.setContentsMargins(0, 0, 0, 0)
+    self.main_window_widget.layout.setSpacing(0)
     self.main_window_widget.layout.addWidget(horizontal_splitter)
 
-    self.line = QFrame()
-    self.line.setFrameShape(QFrame.Shape.HLine)
-    self.line.setFrameShadow(QFrame.Shadow.Plain)
-    self.line.setFixedHeight(2)
-
-    self.layout.addWidget(self.menu_bar)
-    self.layout.addWidget(self.line)
     self.layout.addWidget(self.main_window_widget)
 
     self.style()
 
   def style(self):
-    self.line.setStyleSheet('QWidget { background-color: none }')
-
     from shared.styles import Styles
     self.main_window_widget.setStyleSheet(Styles.main_window_background_style)
     self.setStyleSheet(Styles.main_window_style)
