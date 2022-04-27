@@ -66,17 +66,26 @@ class DataEditingWidget(QDialog):
     title = self._('UNSAVED_CHANGES_TITLE')
     question = self._('UNSAVED_CHANGES_TEXT')
 
-    answer = QMessageBox(self)
+    answer = QMessageBox()
+
+    answer.setFont(FontSettings.get_font('text'))
     answer.setIcon(QMessageBox.Icon.Critical)
     answer.setText(question)
     answer.setWindowTitle(title)
 
     yes_button = answer.addButton(self._('YES'), QMessageBox.ButtonRole.YesRole)
+    yes_button.setFont(FontSettings.get_font('text'))
     cancel_button = answer.addButton(self._('CANCEL'), QMessageBox.ButtonRole.RejectRole)
+    cancel_button.setFont(FontSettings.get_font('text'))
+
+    from shared.styles import Styles
+    yes_button.setStyleSheet(Styles.result_dialog_style)
+    cancel_button.setStyleSheet(Styles.result_dialog_default_button_style)
 
     answer.setDefaultButton(cancel_button)
 
     check_box = QCheckBox(self._('UNSAVED_CHANGES_MESSAGE_VISIBILITY'))
+    check_box.setFont(FontSettings.get_font('text'))
     check_box.clicked.connect(self.toggle_unsaved_changes_setting)
     check_box.setChecked(True)
 

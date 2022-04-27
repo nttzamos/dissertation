@@ -161,24 +161,30 @@ class Result(QWidget):
     title = Result._('REMOVE_BUTTON_TEXT')
     question = Result._('REMOVE_WORD_FROM_FAMILY_PERMISSION')
 
-    answer = QMessageBox(self)
+    answer = QMessageBox()
+
+    answer.setFont(FontSettings.get_font('text'))
     answer.setIcon(QMessageBox.Icon.Critical)
     answer.setText(question)
     answer.setWindowTitle(title)
 
     yes_button = answer.addButton(Result._('YES'), QMessageBox.ButtonRole.YesRole)
+    yes_button.setFont(FontSettings.get_font('text'))
     cancel_button = answer.addButton(Result._('CANCEL'), QMessageBox.ButtonRole.RejectRole)
+    cancel_button.setFont(FontSettings.get_font('text'))
+
+    from shared.styles import Styles
+    yes_button.setStyleSheet(Styles.result_dialog_style)
+    cancel_button.setStyleSheet(Styles.result_dialog_default_button_style)
 
     answer.setDefaultButton(cancel_button)
 
     check_box = QCheckBox(Result._('HIDE_MESSAGE_CHECKBOX'))
+    check_box.setFont(FontSettings.get_font('text'))
     check_box.clicked.connect(self.toggle_message_setting)
     check_box.setChecked(False)
 
     answer.setCheckBox(check_box)
-    yes_button.setStyleSheet(Styles.result_dialog_style)
-    cancel_button.setStyleSheet(Styles.result_dialog_default_button_style)
-    answer.setStyleSheet(Styles.result_dialog_style)
     answer.exec()
 
     if answer.clickedButton() == yes_button:

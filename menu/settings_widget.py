@@ -219,13 +219,20 @@ class SettingsWidget(QDialog):
 
     title = _('THEME_UPDATE_TITLE')
     text = _('THEME_UPDATE_TEXT')
+
     answer = QMessageBox()
+    answer.setFont(FontSettings.get_font('text'))
+
     answer.setIcon(QMessageBox.Icon.Information)
     answer.setText(text)
     answer.setWindowTitle(title)
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
 
+    from shared.styles import Styles
+    answer.setStyleSheet(Styles.result_dialog_style)
+
     check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
+    check_box.setFont(FontSettings.get_font('text'))
     check_box.clicked.connect(self.toggle_theme_message_setting)
     check_box.setChecked(False)
 
@@ -249,13 +256,20 @@ class SettingsWidget(QDialog):
 
     title = _('FONT_SIZE_UPDATE_TITLE')
     text = _('FONT_SIZE_UPDATE_TEXT')
+
     answer = QMessageBox()
+
+    answer.setFont(FontSettings.get_font('text'))
     answer.setIcon(QMessageBox.Icon.Information)
     answer.setText(text)
     answer.setWindowTitle(title)
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
 
+    from shared.styles import Styles
+    answer.setStyleSheet(Styles.result_dialog_style)
+
     check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
+    check_box.setFont(FontSettings.get_font('text'))
     check_box.clicked.connect(self.toggle_font_size_message_setting)
     check_box.setChecked(False)
 
@@ -275,13 +289,20 @@ class SettingsWidget(QDialog):
 
     title = _('LANGUAGE_UPDATE_TITLE')
     text = _('LANGUAGE_UPDATE_TEXT')
+
     answer = QMessageBox()
+    answer.setFont(FontSettings.get_font('text'))
+
     answer.setIcon(QMessageBox.Icon.Information)
     answer.setText(text)
     answer.setWindowTitle(title)
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
 
+    from shared.styles import Styles
+    answer.setStyleSheet(Styles.result_dialog_style)
+
     check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
+    check_box.setFont(FontSettings.get_font('text'))
     check_box.clicked.connect(self.toggle_language_message_setting)
     check_box.setChecked(False)
 
@@ -303,13 +324,21 @@ class SettingsWidget(QDialog):
     title = _('RESTORE_DATABASE_TITLE')
     question = _('RESTORE_DATABASE_TEXT')
 
-    answer = QMessageBox(self)
+    answer = QMessageBox()
+
+    answer.setFont(FontSettings.get_font('text'))
     answer.setIcon(QMessageBox.Icon.Question)
     answer.setText(question)
     answer.setWindowTitle(title)
 
     yes_button = answer.addButton(_('YES'), QMessageBox.ButtonRole.YesRole)
+    yes_button.setFont(FontSettings.get_font('text'))
     cancel_button = answer.addButton(_('CANCEL'), QMessageBox.ButtonRole.RejectRole)
+    cancel_button.setFont(FontSettings.get_font('text'))
+
+    from shared.styles import Styles
+    yes_button.setStyleSheet(Styles.result_dialog_style)
+    cancel_button.setStyleSheet(Styles.result_dialog_default_button_style)
 
     answer.setDefaultButton(cancel_button)
     answer.exec()

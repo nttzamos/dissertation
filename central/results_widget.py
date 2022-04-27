@@ -215,13 +215,22 @@ class ResultsWidget(QWidget):
   def show_no_internet_message():
     title = _('NO_INTERNET_CONNECTION_TITLE')
     text = _('NO_INTERNET_CONNECTION__TEXT')
+
     answer = QMessageBox()
+
+    answer.setFont(FontSettings.get_font('text'))
     answer.setIcon(QMessageBox.Icon.Critical)
     answer.setText(text)
     answer.setWindowTitle(title)
-    answer.setStandardButtons(QMessageBox.StandardButton.Ok)
+
+    ok_button = answer.addButton('OK', QMessageBox.ButtonRole.AcceptRole)
+    ok_button.setFont(FontSettings.get_font('text'))
+
+    from shared.styles import Styles
+    ok_button.setStyleSheet(Styles.result_dialog_style)
 
     check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
+    check_box.setFont(FontSettings.get_font('text'))
     check_box.clicked.connect(ResultsWidget.toggle_message_setting)
     check_box.setChecked(False)
 

@@ -372,17 +372,26 @@ class StudentUpdateWidget(QWidget):
     title = _('DELETE_STUDENT_BUTTON_TEXT')
     question = _('DELETE_STUDENT_PERMISSION')
 
-    answer = QMessageBox(self)
+    answer = QMessageBox()
+
+    answer.setFont(FontSettings.get_font('text'))
     answer.setIcon(QMessageBox.Icon.Critical)
     answer.setText(question)
     answer.setWindowTitle(title)
 
     yes_button = answer.addButton(_('YES'), QMessageBox.ButtonRole.YesRole)
+    yes_button.setFont(FontSettings.get_font('text'))
     cancel_button = answer.addButton(_('CANCEL'), QMessageBox.ButtonRole.RejectRole)
+    cancel_button.setFont(FontSettings.get_font('text'))
+
+    from shared.styles import Styles
+    yes_button.setStyleSheet(Styles.result_dialog_style)
+    cancel_button.setStyleSheet(Styles.result_dialog_default_button_style)
 
     answer.setDefaultButton(cancel_button)
 
     check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
+    check_box.setFont(FontSettings.get_font('text'))
     check_box.clicked.connect(self.toggle_message_setting)
     check_box.setChecked(False)
 
