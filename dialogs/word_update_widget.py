@@ -145,8 +145,8 @@ class WordUpdateWidget(QWidget):
     from shared.styles import Styles
     self.selection_error_message_label.setStyleSheet(Styles.error_message_label_style)
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
-    self.save_button.setStyleSheet(Styles.result_dialog_style)
-    self.delete_button.setStyleSheet(Styles.result_dialog_style)
+    self.save_button.setStyleSheet(Styles.dialog_button_style)
+    self.delete_button.setStyleSheet(Styles.dialog_button_style)
 
   def set_word_to_update(self, word, grade_id):
     self.grade_selector.setCurrentIndex(grade_id - 1)
@@ -409,8 +409,8 @@ class WordUpdateWidget(QWidget):
     cancel_button.setFont(FontSettings.get_font('text'))
 
     from shared.styles import Styles
-    yes_button.setStyleSheet(Styles.result_dialog_style)
-    cancel_button.setStyleSheet(Styles.result_dialog_default_button_style)
+    yes_button.setStyleSheet(Styles.dialog_button_style)
+    cancel_button.setStyleSheet(Styles.dialog_default_button_style)
 
     answer.setDefaultButton(cancel_button)
 

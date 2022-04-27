@@ -121,8 +121,8 @@ class StudentAdditionWidget(QWidget):
   def style(self):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
-    StudentAdditionWidget.save_button.setStyleSheet(Styles.result_dialog_style)
-    self.select_all_button.setStyleSheet(Styles.result_dialog_style)
+    StudentAdditionWidget.save_button.setStyleSheet(Styles.dialog_button_style)
+    self.select_all_button.setStyleSheet(Styles.dialog_button_style)
 
   def save_student(self):
     is_invalid, text = self.student_is_invalid()

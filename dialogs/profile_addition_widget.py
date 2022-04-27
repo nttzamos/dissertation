@@ -122,7 +122,7 @@ class ProfileAdditionWIdget(QWidget):
   def style(self):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
-    self.save_button.setStyleSheet(Styles.result_dialog_style)
+    self.save_button.setStyleSheet(Styles.dialog_button_style)
 
   def grade_selector_activated(self, index):
     for check_box in self.check_boxes:

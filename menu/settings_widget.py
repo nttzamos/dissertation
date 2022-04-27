@@ -178,7 +178,7 @@ class SettingsWidget(QDialog):
   def style(self):
     from shared.styles import Styles
     self.setStyleSheet(Styles.settings_widget_style)
-    self.restore_database_button.setStyleSheet(Styles.result_dialog_style)
+    self.restore_database_button.setStyleSheet(Styles.dialog_button_style)
 
   def maximum_results_changed(self):
     Settings.set_setting('maximum_results', self.maximum_results_spin_box.value())
@@ -229,7 +229,7 @@ class SettingsWidget(QDialog):
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
 
     from shared.styles import Styles
-    answer.setStyleSheet(Styles.result_dialog_style)
+    answer.setStyleSheet(Styles.dialog_button_style)
 
     check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
     check_box.setFont(FontSettings.get_font('text'))
@@ -266,7 +266,7 @@ class SettingsWidget(QDialog):
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
 
     from shared.styles import Styles
-    answer.setStyleSheet(Styles.result_dialog_style)
+    answer.setStyleSheet(Styles.dialog_button_style)
 
     check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
     check_box.setFont(FontSettings.get_font('text'))
@@ -299,7 +299,7 @@ class SettingsWidget(QDialog):
     answer.setStandardButtons(QMessageBox.StandardButton.Ok)
 
     from shared.styles import Styles
-    answer.setStyleSheet(Styles.result_dialog_style)
+    answer.setStyleSheet(Styles.dialog_button_style)
 
     check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
     check_box.setFont(FontSettings.get_font('text'))
@@ -337,8 +337,8 @@ class SettingsWidget(QDialog):
     cancel_button.setFont(FontSettings.get_font('text'))
 
     from shared.styles import Styles
-    yes_button.setStyleSheet(Styles.result_dialog_style)
-    cancel_button.setStyleSheet(Styles.result_dialog_default_button_style)
+    yes_button.setStyleSheet(Styles.dialog_button_style)
+    cancel_button.setStyleSheet(Styles.dialog_default_button_style)
 
     answer.setDefaultButton(cancel_button)
     answer.exec()

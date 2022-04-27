@@ -227,7 +227,7 @@ class ResultsWidget(QWidget):
     ok_button.setFont(FontSettings.get_font('text'))
 
     from shared.styles import Styles
-    ok_button.setStyleSheet(Styles.result_dialog_style)
+    ok_button.setStyleSheet(Styles.dialog_button_style)
 
     check_box = QCheckBox(_('HIDE_MESSAGE_CHECKBOX'))
     check_box.setFont(FontSettings.get_font('text'))

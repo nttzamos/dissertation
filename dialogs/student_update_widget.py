@@ -118,8 +118,8 @@ class StudentUpdateWidget(QWidget):
   def style(self):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
-    self.save_button.setStyleSheet(Styles.result_dialog_style)
-    self.delete_button.setStyleSheet(Styles.result_dialog_style)
+    self.save_button.setStyleSheet(Styles.dialog_button_style)
+    self.delete_button.setStyleSheet(Styles.dialog_button_style)
 
   def initialize_scroll_area(self):
     StudentUpdateWidget.profiles_selection_widget = QWidget()
@@ -385,8 +385,8 @@ class StudentUpdateWidget(QWidget):
     cancel_button.setFont(FontSettings.get_font('text'))
 
     from shared.styles import Styles
-    yes_button.setStyleSheet(Styles.result_dialog_style)
-    cancel_button.setStyleSheet(Styles.result_dialog_default_button_style)
+    yes_button.setStyleSheet(Styles.dialog_button_style)
+    cancel_button.setStyleSheet(Styles.dialog_default_button_style)
 
     answer.setDefaultButton(cancel_button)
 

@@ -299,23 +299,23 @@ class Styles():
       QLabel { padding-top: 5px }"""
 
   if theme == 'light':
-    result_dialog_style = """
+    dialog_button_style = """
       QWidget { border: none; background-color: none; border-radius: 10px }
       QPushButton { padding: 3px 5px; background-color: white }
       QPushButton:hover { background-color: white }"""
   else:
-    result_dialog_style = """
+    dialog_button_style = """
       QWidget { border: none; background-color: none; border-radius: 10px }
       QPushButton { padding: 3px 5px; background-color: white }
       QPushButton:hover { background-color: white }"""
 
   if theme == 'light':
-    result_dialog_default_button_style = """
+    dialog_default_button_style = """
       QWidget { border: none; background-color: none; border-radius: 10px }
       QPushButton { padding: 3px 5px; background-color: #007AFF; color: white }
       QPushButton:hover { background-color: #007AFF }"""
   else:
-    result_dialog_default_button_style = """
+    dialog_default_button_style = """
       QWidget { border: none; background-color: none; border-radius: 10px }
       QPushButton { padding: 3px 5px; background-color: #007AFF; color: white }
       QPushButton:hover { background-color: #007AFF }"""

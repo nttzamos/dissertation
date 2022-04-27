@@ -105,9 +105,9 @@ class TutorialWidget(QDialog):
   def style(self):
     from shared.styles import Styles
     self.setStyleSheet(Styles.tutorial_widget_style)
-    self.next_tutorial_button.setStyleSheet(Styles.result_dialog_style)
-    self.previous_tutorial_button.setStyleSheet(Styles.result_dialog_style)
-    self.close_tutorial_button.setStyleSheet(Styles.result_dialog_style)
+    self.next_tutorial_button.setStyleSheet(Styles.dialog_button_style)
+    self.previous_tutorial_button.setStyleSheet(Styles.dialog_button_style)
+    self.close_tutorial_button.setStyleSheet(Styles.dialog_button_style)
 
   def next_tutorial(self):
     if self.current_tutorial < len(self.TEXTS) - 1:

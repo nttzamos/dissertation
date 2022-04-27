@@ -134,8 +134,8 @@ class WordFamilyUpdateWidget(QWidget):
   def style(self):
     from shared.styles import Styles
     self.error_message_label.setStyleSheet(Styles.error_message_label_style)
-    self.save_button.setStyleSheet(Styles.result_dialog_style)
-    self.remove_words_button.setStyleSheet(Styles.result_dialog_style)
+    self.save_button.setStyleSheet(Styles.dialog_button_style)
+    self.remove_words_button.setStyleSheet(Styles.dialog_button_style)
 
   def disable_save_button(self):
     self.save_button.setDisabled(True)
