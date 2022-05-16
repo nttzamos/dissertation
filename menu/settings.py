@@ -9,52 +9,53 @@ class Settings():
     'English': 'en'
   } # If you wish to add more languages, modify this dictionary accordingly
 
+  SETTINGS_DEFAULT_VALUES = {
+    'maximum_results': 30,
+    'last_student_picked': 1,
+    'theme': 'light',
+    'updated_language': 'el',
+    'updated_selected_font': 'medium'
+  }
+
+  BOOLEAN_SETTINGS_DEFAULT_VALUES = {
+    'remember_last_student_picked': 0,
+    'ask_before_actions': 1,
+    'show_edit_dict_words_button': 1,
+    'only_show_words_with_family': 0,
+    'show_tutorial_on_startup': 1,
+    'use_wiktionary': 1,
+    'show_unsaved_changes_message': 1
+  }
+
+  BOOLEAN_SETTINGS_ABOUT_HIDING_MESSAGES = [
+    'hide_no_internet_message', 'hide_theme_change_effect_message',
+    'hide_delete_profile_message', 'hide_delete_student_message',
+    'hide_delete_word_message', 'hide_language_change_effect_message',
+    'hide_remove_word_from_family_message',
+    'hide_font_size_change_effect_message'
+  ]
+
+  SETTINGS_TO_UPDATE = {
+    'language': 'updated_language',
+    'selected_font': 'updated_selected_font'
+  }
+
   @staticmethod
   def initialize_settings_database(screen_width, screen_height):
-    settings_default_values = {
-      'maximum_results': 30,
-      'last_student_picked': 1,
-      'theme': 'light',
-      'updated_language': 'el',
-      'updated_selected_font': 'medium'
-    }
 
-    boolean_settings_default_values = {
-      'remember_last_student_picked': 0,
-      'ask_before_actions': 1,
-      'show_edit_dict_words_button': 1,
-      'only_show_words_with_family': 0,
-      'show_tutorial_on_startup': 1,
-      'use_wiktionary': 1,
-      'show_unsaved_changes_message': 1
-    }
-
-    boolean_settings_about_hiding_messages = [
-      'hide_no_internet_message', 'hide_theme_change_effect_message',
-      'hide_delete_profile_message', 'hide_delete_student_message',
-      'hide_delete_word_message', 'hide_language_change_effect_message',
-      'hide_remove_word_from_family_message',
-      'hide_font_size_change_effect_message'
-    ]
-
-    settings_to_update = {
-      'language': 'updated_language',
-      'selected_font': 'updated_selected_font'
-    }
-
-    for key, value in settings_default_values.items():
+    for key, value in Settings.SETTINGS_DEFAULT_VALUES.items():
       if not Settings.get_setting(key):
         Settings.set_setting(key, value)
 
-    for key, value in boolean_settings_default_values.items():
+    for key, value in Settings.BOOLEAN_SETTINGS_DEFAULT_VALUES.items():
       if isinstance(Settings.get_setting(key), bool):
         Settings.set_setting(key, value)
 
-    for key in boolean_settings_about_hiding_messages:
+    for key in Settings.BOOLEAN_SETTINGS_ABOUT_HIDING_MESSAGES:
       Settings.set_setting(key, 0)
 
 
-    for key, value in settings_to_update.items():
+    for key, value in Settings.SETTINGS_TO_UPDATE.items():
       Settings.set_setting(key, Settings.get_setting(value))
 
     from shared.font_settings import FontSettings
