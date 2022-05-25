@@ -24,6 +24,6 @@ class MainWidget(QWidget):
     self.layout.addWidget(MainWidget.results_widget)
 
   @staticmethod
-  def add_word(word):
+  def search_word(word):
     CurrentSearch.searched_word_label.setText(word)
     ResultsWidget.show_results(word)

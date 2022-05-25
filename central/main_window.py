@@ -31,18 +31,18 @@ class MainWindow(QWidget):
     vertical_splitter.setChildrenCollapsible(True)
 
     MainWindow.recent_searches_widget = RecentSearchesWidget()
+    MainWindow.recent_searches_widget.initialize()
     MainWindow.starred_words_widget = StarredWordsWidget()
-    MainWindow.main_widget = MainWidget()
+    MainWindow.starred_words_widget.initialize()
 
     vertical_splitter.addWidget(MainWindow.recent_searches_widget)
-    MainWindow.recent_searches_widget.initialize()
-
     vertical_splitter.addWidget(MainWindow.starred_words_widget)
-    MainWindow.starred_words_widget.initialize()
 
     horizontal_splitter = QSplitter()
     horizontal_splitter.setOrientation(Qt.Orientation.Horizontal)
     horizontal_splitter.setChildrenCollapsible(True)
+
+    MainWindow.main_widget = MainWidget()
 
     horizontal_splitter.addWidget(vertical_splitter)
     horizontal_splitter.addWidget(MainWindow.main_widget)

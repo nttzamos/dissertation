@@ -87,7 +87,7 @@ class StarredWord(QWidget):
 
     from central.main_widget import MainWidget
     from side.recent_searches_widget import RecentSearchesWidget
-    MainWidget.add_word(word)
+    MainWidget.search_word(word)
 
     recent_search_exists = create_recent_search(word)
     if recent_search_exists:

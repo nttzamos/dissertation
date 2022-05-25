@@ -226,7 +226,7 @@ class SearchingWidget(QWidget):
 
   def add_recent_search(self, word):
     from central.main_widget import MainWidget
-    MainWidget.add_word(word)
+    MainWidget.search_word(word)
 
     recent_search_exists = create_recent_search(word)
     if recent_search_exists:

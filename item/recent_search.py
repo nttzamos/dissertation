@@ -101,7 +101,7 @@ class RecentSearch(QWidget):
 
     from central.main_widget import MainWidget
     from side.recent_searches_widget import RecentSearchesWidget
-    MainWidget.add_word(word)
+    MainWidget.search_word(word)
     RecentSearchesWidget.remove_and_add_recent_search(word)
 
     from models.recent_search import create_recent_search
