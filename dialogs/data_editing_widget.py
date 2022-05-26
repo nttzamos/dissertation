@@ -32,6 +32,11 @@ class DataEditingWidget(QDialog):
     add_profile_widget = ProfileAdditionWIdget()
     self.edit_profiles_widget = ProfileUpdateWidget()
 
+    add_student_widget.setAutoFillBackground(True)
+    DataEditingWidget.edit_student_widget.setAutoFillBackground(True)
+    add_profile_widget.setAutoFillBackground(True)
+    self.edit_profiles_widget.setAutoFillBackground(True)
+
     tab_widget = QTabWidget()
     tab_widget.setFont(FontSettings.get_font('text'))
 

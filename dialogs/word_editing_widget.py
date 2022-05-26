@@ -30,6 +30,10 @@ class WordEditingWidget(QDialog):
     self.edit_word_widget = WordUpdateWidget()
     WordEditingWidget.edit_word_family_widget = WordFamilyUpdateWidget()
 
+    add_word_widget.setAutoFillBackground(True)
+    self.edit_word_widget.setAutoFillBackground(True)
+    WordEditingWidget.edit_word_family_widget.setAutoFillBackground(True)
+
     self.tab_widget = QTabWidget()
     self.tab_widget.setFont(FontSettings.get_font('text'))
 
