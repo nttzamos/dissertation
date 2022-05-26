@@ -117,9 +117,11 @@ class SettingsWidget(QDialog):
     language_selection_widget.layout.addWidget(self.language_selector)
 
     self.available_font_sizes = {
+      'very_small': _('VERY_SMALL_FONT_NAME'),
       'small': _('SMALL_FONT_NAME'),
       'medium': _('MEDIUM_FONT_NAME'),
-      'large': _('LARGE_FONT_NAME')
+      'big': _('BIG_FONT_NAME'),
+      'very_big': _('VERY_BIG_FONT_NAME')
     }
 
     font_size_selection_widget = QGroupBox(_('FONT_SIZE_SETTING_TITLE'))

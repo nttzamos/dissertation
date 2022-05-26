@@ -106,14 +106,20 @@ msgstr ""
 msgid "FONT_SIZE_SETTING_TITLE"
 msgstr "Μέγεθος Γραμματοσειράς"
 
+msgid "VERY_SMALL_FONT_NAME"
+msgstr "Πολύ μικρή"
+
 msgid "SMALL_FONT_NAME"
 msgstr "Μικρή"
 
 msgid "MEDIUM_FONT_NAME"
 msgstr "Μεσαία"
 
-msgid "LARGE_FONT_NAME"
+msgid "BIG_FONT_NAME"
 msgstr "Μεγάλη"
+
+msgid "VERY_BIG_FONT_NAME"
+msgstr "Πολύ μεγάλη"
 
 msgid "FONT_SIZE_UPDATE_TITLE"
 msgstr "Ανανέωση μεγέθους γραμματοσειράς"

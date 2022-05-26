@@ -18,9 +18,11 @@ class FontSettings():
   }
 
   SELECTED_FONT_MAPPING = {
+    'very_small': -2,
     'small': -1,
     'medium': 0,
-    'large': 1
+    'big': 1,
+    'very_big': 2
   }
 
   @staticmethod

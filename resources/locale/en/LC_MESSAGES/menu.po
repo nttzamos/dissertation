@@ -106,14 +106,20 @@ msgstr ""
 msgid "FONT_SIZE_SETTING_TITLE"
 msgstr "Font Size"
 
+msgid "VERY_SMALL_FONT_NAME"
+msgstr "Very small"
+
 msgid "SMALL_FONT_NAME"
 msgstr "Small"
 
 msgid "MEDIUM_FONT_NAME"
 msgstr "Medium"
 
-msgid "LARGE_FONT_NAME"
-msgstr "Large"
+msgid "BIG_FONT_NAME"
+msgstr "Big"
+
+msgid "VERY_BIG_FONT_NAME"
+msgstr "Very big"
 
 msgid "FONT_SIZE_UPDATE_TITLE"
 msgstr "Font Size Update"
