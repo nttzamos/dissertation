@@ -6,8 +6,8 @@ from PyQt6.QtGui import QIcon
 
 from item.result import Result
 from menu.settings import Settings
-from models.family import (get_family_id, get_family_words, update_word_family,
-                           non_related_word_exists)
+from models.related_word import get_related_words, update_related_words
+from models.non_related_word import non_related_word_exists
 from models.word import get_word_id, word_exists
 from shared.flow_layout import FlowLayout
 from shared.font_settings import FontSettings
@@ -135,8 +135,7 @@ class ResultsWidget(QWidget):
     from search.current_search import CurrentSearch
     grade_id = CurrentSearch.grade_id
     word_id = get_word_id(grade_id, word)
-    family_id = get_family_id(grade_id, word_id)
-    offline_result_words = get_family_words(grade_id, family_id)
+    offline_result_words = get_related_words(grade_id, word_id)
 
     if word in offline_result_words:
       offline_result_words.remove(word)
@@ -158,7 +157,7 @@ class ResultsWidget(QWidget):
             non_related_online_family_words.append(online_word)
           else:
             offline_result_words.append(online_word)
-            update_word_family(
+            update_related_words(
               CurrentSearch.grade_id,
               CurrentSearch.searched_word_label.text(), [online_word], []
             )
@@ -251,7 +250,8 @@ class ResultsWidget(QWidget):
   def update_word(word, new_word):
     for result in ResultsWidget.widget_list:
       if word == result.word_label.text() or new_word == result.word_label.text():
-        ResultsWidget.show_placeholder()
+        from search.current_search import CurrentSearch
+        CurrentSearch.remove_searched_word()
         return
 
   @staticmethod

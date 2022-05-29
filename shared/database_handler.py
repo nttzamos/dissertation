@@ -13,18 +13,12 @@ language = gettext.translation('search', localedir='resources/locale', languages
 language.install()
 _ = language.gettext
 
-databases_directory_path = 'resources/'
-database_file = 'database.db'
+DATABASE_FILE_PATH = 'resources/database.db'
 
-def initialize_databases():
-  if path.isfile(databases_directory_path + database_file):
+def initialize_database(force_init=False):
+  if path.isfile(DATABASE_FILE_PATH) and not force_init:
     return
 
-  initialize_common_database()
-  for grade in range(1, 7):
-    initialize_grade_database(grade)
-
-def initialize_common_database():
   con, cur = connect_to_database()
   grade_names = [
     "Α' Δημοτικού", "Β' Δημοτικού", "Γ' Δημοτικού", "Δ' Δημοτικού",
@@ -42,10 +36,8 @@ def initialize_common_database():
               'student_id INTEGER, profile_id INTEGER)')
   cur.execute('CREATE TABLE profile_subject (id INTEGER PRIMARY KEY AUTOINCREMENT, '
               'profile_id INTEGER, subject_id INTEGER)')
-  cur.execute('CREATE TABLE candidate (id INTEGER PRIMARY KEY AUTOINCREMENT, '
-              'grade_id INTEGER, word_id INTEGER)')
   cur.execute('CREATE TABLE non_related_word (id INTEGER PRIMARY KEY AUTOINCREMENT, '
-              'word_id INTEGER, non_related_word_id INTEGER, grade_id INTEGER)')
+              'word_id_1 INTEGER, word_id_2 INTEGER)')
   cur.execute('CREATE TABLE recent_search (id INTEGER PRIMARY KEY AUTOINCREMENT, '
               'word_id INTEGER, profile_id INTEGER, student_id INTEGER, '
               'subject_id INTEGER, searched_at TIMESTAMP)')
@@ -172,6 +164,45 @@ def sort_words_alphabetically(words):
 
   return [word for _, word in sorted(zip(normalized_words, words))]
 
+def get_words_old(profile_id, grade_id, subject_name, migrating=False):
+  if subject_name == _('ALL_SUBJECTS_TEXT'):
+    from models.profile import get_profile_subject_ids
+    subject_ids = get_profile_subject_ids(profile_id)
+  else:
+    from models.subject import get_subject_id
+    subject_ids = [get_subject_id(grade_id, subject_name)]
+
+  con, cur = connect_to_database('resources/database_old.db')
+
+  words_set = set()
+  for subject_id in subject_ids:
+    if migrating:
+      query = ('SELECT ' + get_grade_table_name(grade_id) + '.id ' +
+        'FROM ' + get_grade_table_name(grade_id) + ' ' +
+        'INNER JOIN ' + get_subject_table_name(grade_id) + ' ' +
+        'ON ' + get_grade_table_name(grade_id) + '.id =' +
+        ' ' + get_subject_table_name(grade_id) + '.word_id '
+        'WHERE ' + get_subject_table_name(grade_id) + '.subject_id = ? ' +
+        'ORDER BY ' + get_grade_table_name(grade_id) + '.id')
+    else:
+      query = ('SELECT ' + get_grade_table_name(grade_id) + '.word ' +
+        'FROM ' + get_grade_table_name(grade_id) + ' ' +
+        'INNER JOIN ' + get_subject_table_name(grade_id) + ' ' +
+        'ON ' + get_grade_table_name(grade_id) + '.id =' +
+        ' ' + get_subject_table_name(grade_id) + '.word_id '
+        'WHERE ' + get_subject_table_name(grade_id) + '.subject_id = ? ' +
+        'ORDER BY ' + get_grade_table_name(grade_id) + '.id')
+
+    cur.execute(query, (subject_id,))
+    words = list(map(lambda word: word[0], cur.fetchall()))
+    words_set = words_set | set(words)
+
+  con.close()
+  words = list(words_set)
+  words.sort()
+
+  return words
+
 def get_words(profile_id, grade_id, subject_name):
   if subject_name == _('ALL_SUBJECTS_TEXT'):
     from models.profile import get_profile_subject_ids
@@ -184,16 +215,14 @@ def get_words(profile_id, grade_id, subject_name):
 
   words_set = set()
   for subject_id in subject_ids:
-    query = ('SELECT word '
-      'FROM ' + get_grade_table_name(grade_id) + ' ' +
-      'INNER JOIN ' + get_subject_table_name(grade_id) + ' ' +
-      'ON ' + get_grade_table_name(grade_id) + '.id =' +
-      ' ' + get_subject_table_name(grade_id) + '.word_id '
-      'WHERE ' + get_subject_table_name(grade_id) + '.subject_id = ?')
+    query = (
+      'SELECT word FROM word INNER JOIN subject_word ON word.id = subject_word.word_id ' +
+      'WHERE subject_word.subject_id = ? ORDER BY word.id'
+    )
 
     cur.execute(query, (subject_id,))
-    subject_words = list(map(lambda word: word[0], cur.fetchall()))
-    words_set = words_set | set(subject_words)
+    words = list(map(lambda word: word[0], cur.fetchall()))
+    words_set = words_set | set(words)
 
   con.close()
   words = list(words_set)
@@ -201,23 +230,34 @@ def get_words(profile_id, grade_id, subject_name):
 
   return words
 
-def get_grade_words(grade_id):
-  con, cur = connect_to_database()
-  cur.execute('SELECT word FROM ' + get_grade_table_name(grade_id) + ' ORDER BY word')
-  words = list(map(lambda word: word[0], cur.fetchall()))
+def get_grade_words_old(grade_id, migrating = False):
+  con, cur = connect_to_database('resources/database_old.db')
+
+  # cur.execute('SELECT word FROM ' + get_grade_table_name(grade_id) + ' ORDER BY word')
+  if migrating:
+    cur.execute('SELECT id, word FROM ' + get_grade_table_name(grade_id) + ' ORDER BY id')
+  else:
+    cur.execute('SELECT word FROM ' + get_grade_table_name(grade_id) + ' ORDER BY id')
+  # cur.execute('SELECT word FROM ' + get_grade_table_name(grade_id))
+
+  if migrating:
+    data = cur.fetchall()
+    ids = list(map(lambda word: word[0], data))
+    words = list(map(lambda word: word[1], data))
+  else:
+    words = list(map(lambda word: word[0], cur.fetchall()))
 
   con.close()
-  return words
 
-def get_candidate_words(grade_id):
+  if migrating:
+    return ids, words
+  else:
+    return words
+
+def get_grade_words(grade_id):
   con, cur = connect_to_database()
-  query = ('SELECT word '
-    'FROM ' + get_grade_table_name(grade_id) + ' ' +
-    'INNER JOIN candidate '
-    'ON ' + get_grade_table_name(grade_id) + '.id = candidate.word_id '
-    'WHERE candidate.grade_id = ?')
-
-  cur.execute(query, (grade_id,))
+  # cur.execute('SELECT word FROM word WHERE grade_id = ? ORDER BY word', (grade_id,))
+  cur.execute('SELECT word FROM word WHERE grade_id = ? ORDER BY id', (grade_id,))
   words = list(map(lambda word: word[0], cur.fetchall()))
 
   con.close()
@@ -239,7 +279,10 @@ def get_subject_table_name(grade):
 def get_family_table_name(grade):
   return 'family_' + str(grade) + '_word'
 
-def connect_to_database():
-  con = sqlite3.connect(databases_directory_path + database_file)
+def connect_to_database(database_file_path=None):
+  if database_file_path == None:
+    database_file_path = DATABASE_FILE_PATH
+
+  con = sqlite3.connect(database_file_path)
   cur = con.cursor()
   return con, cur

@@ -2,7 +2,7 @@ from menu.settings import Settings
 from models.profile import get_profile_subject_ids
 from models.subject import get_subject_id
 from models.word import get_word_id, word_exists_in_subject
-from shared.database_handler import connect_to_database, get_grade_table_name
+from shared.database_handler import connect_to_database
 
 import gettext
 
@@ -25,9 +25,9 @@ def create_starred_word(word):
   con, cur = connect_to_database()
 
   for subject_id in subject_ids:
-    if word_exists_in_subject(word_id, subject_id, grade_id):
-      values = (word_id, profile_id, student_id, subject_id, grade_id)
-      query = 'INSERT INTO starred_word VALUES (null, ?, ?, ?, ?, ?)'
+    if word_exists_in_subject(word_id, subject_id):
+      values = (word_id, profile_id, student_id, subject_id)
+      query = 'INSERT INTO starred_word VALUES (null, ?, ?, ?, ?)'
 
       cur.execute(query, values)
 
@@ -48,7 +48,7 @@ def starred_word_exists(word):
   word_id = get_word_id(grade_id, word)
 
   for subject_id in subject_ids:
-    if word_exists_in_subject(word_id, subject_id, grade_id):
+    if word_exists_in_subject(word_id, subject_id):
       query = ('SELECT COUNT(*) FROM starred_word WHERE word_id = ? '
                'AND profile_id = ? AND student_id = ? AND subject_id = ?')
 
@@ -75,7 +75,7 @@ def destroy_starred_word(word):
   word_id = get_word_id(grade_id, word)
   con, cur = connect_to_database()
   for subject_id in subject_ids:
-    if word_exists_in_subject(word_id, subject_id, grade_id):
+    if word_exists_in_subject(word_id, subject_id):
       query = ('DELETE FROM starred_word WHERE word_id = ? '
                'AND profile_id = ? AND student_id = ? AND subject_id = ?')
 
@@ -91,27 +91,18 @@ def get_starred_words():
 
   con, cur = connect_to_database()
 
-  grade_table_name = get_grade_table_name(grade_id)
-
   if subject_name == _('ALL_SUBJECTS_TEXT'):
     values = (profile_id, student_id)
-    query = ('SELECT DISTINCT word '
-             'FROM ' + grade_table_name + ' ' +
-             'INNER JOIN starred_word '
-             'ON ' + grade_table_name + '.id = starred_word.word_id '
-             'WHERE starred_word.profile_id = ? '
-             'AND starred_word.student_id = ? '
-             'ORDER BY ' + grade_table_name + '.id DESC')
+    query = ('SELECT DISTINCT word FROM word INNER JOIN starred_word '
+             'ON word.id = starred_word.word_id '
+             'WHERE starred_word.profile_id = ? AND starred_word.student_id = ? '
+             'ORDER BY word.id DESC')
   else:
     values = (get_subject_id(grade_id, subject_name), profile_id, student_id)
-    query = ('SELECT word '
-             'FROM ' + grade_table_name + ' ' +
-             'INNER JOIN starred_word '
-             'ON ' + grade_table_name + '.id = starred_word.word_id '
-             'WHERE starred_word.subject_id = ? '
-             'AND starred_word.profile_id = ? '
-             'AND starred_word.student_id = ? '
-             'ORDER BY ' + grade_table_name + '.id DESC')
+    query = ('SELECT word FROM word INNER JOIN starred_word '
+             'ON word.id = starred_word.word_id '
+             'WHERE starred_word.subject_id = ? AND starred_word.profile_id = ? '
+             'AND starred_word.student_id = ? ORDER BY word.id DESC')
 
   cur.execute(query, values)
   starred_words = list(map(lambda starredWord: starredWord[0], cur.fetchall()))

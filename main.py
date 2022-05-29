@@ -17,8 +17,8 @@ from shared.pdf_parser import PdfParser
 # for grade in range(1, 7):
 #   PdfParser.convert_books_to_text_files(grade)
 
-from shared.database_handler import initialize_databases
-# initialize_databases()
+from shared.database_handler import initialize_database
+# initialize_database()
 
 from central.main_window import MainWindow
 window = MainWindow()

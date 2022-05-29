@@ -3,8 +3,8 @@ from PyQt6.QtWidgets import (QHBoxLayout, QLabel, QPushButton, QVBoxLayout,
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 
-from models.family import update_word_family
 from models.word import create_word, destroy_word
+from models.related_word import update_related_words
 from shared.database_handler import get_grade_subjects
 from shared.font_settings import FontSettings
 from shared.styles import Styles
@@ -104,7 +104,7 @@ class Result(QWidget):
     from search.current_search import CurrentSearch
     self.hide()
 
-    update_word_family(
+    update_related_words(
       CurrentSearch.grade_id,
       CurrentSearch.searched_word_label.text(), [], [self.word_label.text()]
     )
@@ -114,7 +114,7 @@ class Result(QWidget):
 
   def add_word(self):
     from search.current_search import CurrentSearch
-    update_word_family(
+    update_related_words(
       CurrentSearch.grade_id,
       CurrentSearch.searched_word_label.text(), [self.word_label.text()], []
     )

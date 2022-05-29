@@ -4,7 +4,6 @@ from PyQt6.QtCore import QStringListModel, QTimer, Qt
 from PyQt6.QtGui import QIcon, QKeySequence, QShortcut
 
 from menu.settings import Settings
-from models.family import get_words_with_family
 from models.recent_search import create_recent_search
 from shared.database_handler import get_words
 from shared.font_settings import FontSettings
@@ -155,14 +154,9 @@ class SearchingWidget(QWidget):
     if CurrentSearch.subject_selector_active:
       subject_name = CurrentSearch.subject_selector.currentText()
 
-      if Settings.get_boolean_setting('only_show_words_with_family'):
-        SearchingWidget.dictionary_words = get_words_with_family(
-          CurrentSearch.profile_id, CurrentSearch.grade_id, subject_name
-        )
-      else:
-        SearchingWidget.dictionary_words = get_words(
-          CurrentSearch.profile_id, CurrentSearch.grade_id, subject_name
-        )
+      SearchingWidget.dictionary_words = get_words(
+        CurrentSearch.profile_id, CurrentSearch.grade_id, subject_name
+      )
 
       model = QStringListModel(SearchingWidget.dictionary_words, SearchingWidget.completer)
       SearchingWidget.completer.setModel(model)

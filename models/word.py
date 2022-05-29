@@ -1,6 +1,5 @@
 from models.subject import get_subject_id, get_subject_name
-from shared.database_handler import (connect_to_database, get_grade_table_name,
-                                     get_subject_table_name, get_family_table_name)
+from shared.database_handler import connect_to_database
 
 def create_word(word, grade_id, subject_names):
   if word_exists(grade_id, word): return
@@ -13,18 +12,18 @@ def create_word(word, grade_id, subject_names):
   for subject in subject_names:
     subject_ids.append(subject_dictionary[subject])
 
-  cur.execute('INSERT INTO ' + get_grade_table_name(grade_id) + ' VALUES (null, ?)', (word,))
-  word_subjects = list(zip(subject_ids, [cur.lastrowid] * len(subject_ids)))
+  cur.execute('INSERT INTO word VALUES (null, ?, ?)', (word, grade_id))
+  word_subjects = list(zip([cur.lastrowid] * len(subject_ids), subject_ids))
 
-  query = 'INSERT INTO ' + get_subject_table_name(grade_id) + ' VALUES (null, ?, ?)'
+  query = 'INSERT INTO subject_word VALUES (null, ?, ?)'
   cur.executemany(query, word_subjects)
 
   con.commit()
   con.close()
 
-def get_word_id(grade, word):
+def get_word_id(grade_id, word):
   con, cur = connect_to_database()
-  cur.execute('SELECT id FROM ' + get_grade_table_name(grade) + ' WHERE word = ?', (word,))
+  cur.execute('SELECT id FROM word WHERE word = ? AND grade_id = ?', (word, grade_id))
   result = cur.fetchone()
   con.close()
 
@@ -35,24 +34,22 @@ def update_word(old_word, new_word, grade_id, subjects_to_add, subjects_to_remov
 
   word_id = get_word_id(grade_id, old_word)
 
-  query = 'UPDATE ' + get_grade_table_name(grade_id) + ' SET word = ? WHERE word = ?'
+  query = 'UPDATE word SET word = ? WHERE word = ? AND grade_id = ?'
 
-  cur.execute(query, (new_word , old_word))
-  cur.execute('DELETE FROM candidate WHERE word_id = ?', (word_id,))
+  cur.execute(query, (new_word , old_word, grade_id))
 
   subjects_ids_to_add = []
   for subject in subjects_to_add:
     subjects_ids_to_add.append(get_subject_id(grade_id, subject))
 
-  word_subjects = list(zip(subjects_ids_to_add, [word_id] * len(subjects_ids_to_add)))
-  query = 'INSERT INTO ' + get_subject_table_name(grade_id) + ' VALUES (null, ?, ?)'
+  word_subjects = list(zip([word_id] * len(subjects_ids_to_add), subjects_ids_to_add))
+  query = 'INSERT INTO subject_word VALUES (null, ?, ?)'
   cur.executemany(query, word_subjects)
 
   for subject in subjects_to_remove:
     subject_id = get_subject_id(grade_id, subject)
 
-    query = ('DELETE FROM ' + get_subject_table_name(grade_id) + ' '
-             'WHERE word_id = ? AND subject_id = ?')
+    query = ('DELETE FROM subject_word WHERE word_id = ? AND subject_id = ?')
     cur.execute(query, (word_id, subject_id))
 
     query = 'DELETE FROM recent_search WHERE word_id = ? AND subject_id = ?'
@@ -64,36 +61,31 @@ def update_word(old_word, new_word, grade_id, subjects_to_add, subjects_to_remov
   con.commit()
   con.close()
 
-def destroy_word(word, grades):
-  for grade in grades:
+def destroy_word(word, grade_ids):
+  for grade_id in grade_ids:
     con, cur = connect_to_database()
 
-    if not word_exists(grade, word): continue
+    if not word_exists(grade_id, word): continue
 
-    word_id = get_word_id(grade, word)
+    word_id = get_word_id(grade_id, word)
 
-    query = 'DELETE FROM ' + get_grade_table_name(grade) + ' WHERE id = ?'
+    query = 'DELETE FROM word WHERE id = ?'
     cur.execute(query, (word_id,))
 
-    query = 'DELETE FROM ' + get_subject_table_name(grade) + ' WHERE word_id = ?'
+    query = 'DELETE FROM subject_word WHERE word_id = ?'
     cur.execute(query, (word_id,))
 
-    query = 'DELETE FROM ' + get_family_table_name(grade) + ' WHERE word_id = ?'
+    query = 'DELETE FROM related_word WHERE word_id_1 = ? OR word_id_2 = ?'
+    cur.execute(query, (word_id, word_id))
+
+    query = 'DELETE FROM recent_search WHERE word_id = ?'
     cur.execute(query, (word_id,))
 
-    cur.execute('DELETE FROM candidate WHERE word_id = ?', (word_id,))
+    query = 'DELETE FROM starred_word WHERE word_id = ?'
+    cur.execute(query, (word_id,))
 
-    query = 'DELETE FROM recent_search WHERE word_id = ? AND grade_id = ?'
-    cur.execute(query, (word_id, grade))
-
-    query = 'DELETE FROM starred_word WHERE word_id = ? AND grade_id = ?'
-    cur.execute(query, (word_id, grade))
-
-    query = 'DELETE FROM non_related_word WHERE word_id = ? AND grade_id = ?'
-    cur.execute(query, (word_id, grade))
-
-    query = 'DELETE FROM non_related_word WHERE non_related_word_id = ? AND grade_id = ?'
-    cur.execute(query, (word_id, grade))
+    query = 'DELETE FROM non_related_word WHERE word_id_1 = ? OR word_id_2 = ?'
+    cur.execute(query, (word_id, word_id))
 
     con.commit()
     con.close()
@@ -101,8 +93,8 @@ def destroy_word(word, grades):
 def word_exists(grade_id, word):
   con, cur = connect_to_database()
 
-  query = 'SELECT COUNT(*) FROM ' + get_grade_table_name(grade_id) + ' WHERE word = ?'
-  cur.execute(query, (word,))
+  query = 'SELECT COUNT(*) FROM word WHERE word = ? AND grade_id = ?'
+  cur.execute(query, (word, grade_id))
 
   word_exists = cur.fetchone()[0] > 0
   con.close()
@@ -113,13 +105,10 @@ def get_word_subjects(grade_id, word):
   word_id = get_word_id(grade_id, word)
   con, cur = connect_to_database()
 
-  subject_table_name = get_subject_table_name(grade_id)
-  grade_table_name = get_grade_table_name(grade_id)
-  query = ('SELECT subject_id '
-    'FROM ' + subject_table_name + ' '
-    'INNER JOIN ' + grade_table_name + ' '
-    'ON ' + subject_table_name + '.word_id = ' + grade_table_name + '.id '
-    'WHERE ' + grade_table_name + '.id = ?')
+  query = (
+    'SELECT subject_id FROM subject_word INNER JOIN word '
+    'ON subject_word.word_id = word.id WHERE word.id = ?'
+  )
 
   cur.execute(query, (word_id,))
   subject_ids = list(map(lambda subject_id: subject_id[0], cur.fetchall()))
@@ -130,11 +119,10 @@ def get_word_subjects(grade_id, word):
 
   return subject_names
 
-def word_exists_in_subject(word_id, subject_id, grade_id):
+def word_exists_in_subject(word_id, subject_id):
   con, cur = connect_to_database()
-  query = ('SELECT COUNT(*) FROM '
-    '' + get_subject_table_name(grade_id) + ' '
-    'WHERE word_id = ? AND subject_id = ?')
+  query = 'SELECT COUNT(*) FROM subject_word WHERE word_id = ? AND subject_id = ?'
+
   cur.execute(query, (word_id, subject_id))
   word_exists_in_subject = cur.fetchone()[0] > 0
   con.close()

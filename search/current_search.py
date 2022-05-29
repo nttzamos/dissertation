@@ -251,6 +251,12 @@ class CurrentSearch(QWidget):
       ResultsWidget.show_placeholder()
 
   @staticmethod
+  def remove_searched_word():
+    CurrentSearch.searched_word_label.setText(_('UNINITIALIZED_STATE_TEXT'))
+    from central.results_widget import ResultsWidget
+    ResultsWidget.show_placeholder()
+
+  @staticmethod
   def get_current_selection_details():
     return (
       CurrentSearch.student_id, CurrentSearch.profile_id,
