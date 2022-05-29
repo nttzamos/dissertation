@@ -14,7 +14,7 @@ language.install()
 _ = language.gettext
 
 def create_families(grade):
-  con, cur = connect_to_database()
+  con, cur = connect_to_database('resources/database_old.db')
   family_table_name = get_family_table_name(grade)
   words_list = get_grade_words(grade)
   family_counter = 0
@@ -51,7 +51,7 @@ def create_families(grade):
     con.commit()
 
 def create_family(grade_id, word_id):
-  con, cur = connect_to_database()
+  con, cur = connect_to_database('resources/database_old.db')
   query = 'INSERT INTO ' + get_family_table_name(grade_id) + ' VALUES (null, ?, ?)'
   new_family_id = get_last_family_id(grade_id) + 1
   cur.execute(query, (word_id, new_family_id))
@@ -62,7 +62,7 @@ def create_family(grade_id, word_id):
   return new_family_id
 
 def get_family_id(grade, word_id):
-  con, cur = connect_to_database()
+  con, cur = connect_to_database('resources/database_old.db')
   family_table_name = get_family_table_name(grade)
 
   query = 'SELECT family_id FROM ' + family_table_name + ' WHERE word_id = ?'
@@ -76,7 +76,7 @@ def get_family_id(grade, word_id):
     return object[0]
 
 def get_last_family_id(grade_id):
-  con, cur = connect_to_database()
+  con, cur = connect_to_database('resources/database_old.db')
   family_table_name = get_family_table_name(grade_id)
   cur.execute(('SELECT MAX(family_id) FROM ' + family_table_name))
   last_family_id = cur.fetchone()[0]
@@ -85,7 +85,7 @@ def get_last_family_id(grade_id):
   return last_family_id
 
 def get_family_words(grade, family_id):
-  con, cur = connect_to_database()
+  con, cur = connect_to_database('resources/database_old.db')
   grade_table_name = get_grade_table_name(grade)
   family_table_name = get_family_table_name(grade)
 
@@ -106,7 +106,7 @@ def get_words_with_family(profile_id, grade_id, subject_name):
   else:
     subject_ids = [get_subject_id(grade_id, subject_name)]
 
-  con, cur = connect_to_database()
+  con, cur = connect_to_database('resources/database_old.db')
 
   words_set = set()
   for subject_id in subject_ids:
@@ -131,7 +131,7 @@ def get_words_with_family(profile_id, grade_id, subject_name):
   return words
 
 def update_word_family(grade_id, word, words_to_add, words_to_remove):
-  con, cur = connect_to_database()
+  con, cur = connect_to_database('resources/database_old.db')
 
   word_id = get_word_id(grade_id, word)
   family_id = get_family_id(grade_id, word_id)
@@ -144,8 +144,8 @@ def update_word_family(grade_id, word, words_to_add, words_to_remove):
   for family_word in words_to_add:
     words_ids_to_add.append(get_word_id(grade_id, family_word))
 
-    if non_related_word_exists(word, family_word, grade_id):
-      destroy_non_related_word(word, family_word, grade_id)
+    # if non_related_word_exists(word, family_word, grade_id):
+    #   destroy_non_related_word(word, family_word, grade_id)
 
   family_words = list(zip(words_ids_to_add, [family_id] * len(words_ids_to_add)))
   query = 'INSERT INTO ' + get_family_table_name(grade_id) + ' VALUES (null, ?, ?)'
@@ -159,57 +159,28 @@ def update_word_family(grade_id, word, words_to_add, words_to_remove):
     cur.execute(query, (get_word_id(grade_id, family_word), family_id))
     con.commit()
 
-    create_non_related_word(word, family_word, grade_id)
+    # create_non_related_word(word, family_word, grade_id)
 
   con.close()
 
-def create_non_related_word(word, non_related_word, grade_id):
-  word_id = get_word_id(grade_id, word)
-  non_related_word_id = get_word_id(grade_id, non_related_word)
-  con, cur = connect_to_database()
-  query = 'INSERT INTO non_related_word VALUES (null, ?, ?, ?)'
-  cur.execute(query, (word_id, non_related_word_id, grade_id))
+def get_family_ids(grade_id):
+  con, cur = connect_to_database('resources/database_old.db')
+  family_table_name = get_family_table_name(grade_id)
 
-  con.commit()
+  cur.execute('SELECT DISTINCT family_id FROM ' + family_table_name)
+  family_ids = list(map(lambda id: id[0], cur.fetchall()))
+  family_ids.sort()
   con.close()
 
-def get_non_related_words(word, grade_id):
-  word_id = get_word_id(grade_id, word)
-  grade_table_name = get_grade_table_name(grade_id)
-  con, cur = connect_to_database()
-  query = ('SELECT word FROM ' + grade_table_name + ' '
-    'INNER JOIN non_related_word ON ' + grade_table_name + '.id = '
-    'non_related_word.word_id WHERE word_id = ? AND grade_id = ?')
-  cur.execute(query, (word_id, grade_id))
+  return family_ids
 
-  non_related_words = \
-    list(map(lambda non_related_word: non_related_word[0], cur.fetchall()))
+def get_family_word_ids(grade_id, family_id):
+  con, cur = connect_to_database('resources/database_old.db')
+  family_table_name = get_family_table_name(grade_id)
 
+  cur.execute('SELECT DISTINCT word_id FROM ' + family_table_name + ' WHERE family_id = ?', (family_id,))
+  family_ids = list(map(lambda id: id[0], cur.fetchall()))
+  family_ids.sort()
   con.close()
 
-  return non_related_words
-
-def non_related_word_exists(word, non_related_word, grade_id):
-  word_id = get_word_id(grade_id, word)
-  non_related_word_id = get_word_id(grade_id, non_related_word)
-  con, cur = connect_to_database()
-  query = ('SELECT COUNT(*) FROM non_related_word WHERE word_id = ?'
-           'AND non_related_word_id = ? AND grade_id = ?')
-
-  cur.execute(query, (word_id, non_related_word_id, grade_id))
-  non_related_word_exists = cur.fetchone()[0] > 0
-  con.close()
-
-  return non_related_word_exists
-
-def destroy_non_related_word(word, non_related_word, grade_id):
-  word_id = get_word_id(grade_id, word)
-  non_related_word_id = get_word_id(grade_id, non_related_word)
-  con, cur = connect_to_database()
-  query = ('DELETE FROM non_related_word WHERE word_id = ?'
-           'AND non_related_word_id = ? AND grade_id = ?')
-
-  cur.execute(query, (word_id, non_related_word_id, grade_id))
-
-  con.commit()
-  con.close()
+  return family_ids
