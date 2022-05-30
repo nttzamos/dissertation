@@ -21,7 +21,6 @@ class Settings():
     'remember_last_student_picked': 0,
     'ask_before_actions': 1,
     'show_edit_dict_words_button': 1,
-    'only_show_words_with_family': 0,
     'show_tutorial_on_startup': 1,
     'use_wiktionary': 1,
     'show_unsaved_changes_message': 1

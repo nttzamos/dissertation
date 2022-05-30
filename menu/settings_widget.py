@@ -61,11 +61,6 @@ class SettingsWidget(QDialog):
     self.show_edit_dict_words_button.clicked.connect(lambda: self.toggle_setting('show_edit_dict_words_button'))
     self.show_edit_dict_words_button.setChecked(Settings.get_boolean_setting('show_edit_dict_words_button'))
 
-    self.only_show_words_with_family = QCheckBox(_('ONLY_SHOW_WORDS_WITH_FAMILY_TEXT'), objectName='only_show_words_with_family')
-    self.only_show_words_with_family.setFont(text_font)
-    self.only_show_words_with_family.clicked.connect(lambda: self.toggle_setting('only_show_words_with_family'))
-    self.only_show_words_with_family.setChecked(Settings.get_boolean_setting('only_show_words_with_family'))
-
     self.show_tutorial_on_startup = QCheckBox(_('SHOW_TUTORIAL_TEXT'), objectName='show_tutorial_on_startup')
     self.show_tutorial_on_startup.setFont(text_font)
     self.show_tutorial_on_startup.clicked.connect(lambda: self.toggle_setting('show_tutorial_on_startup'))
@@ -78,7 +73,6 @@ class SettingsWidget(QDialog):
 
     # general_settings_widget.layout.addWidget(self.remember_last_student_picked)
     general_settings_widget.layout.addWidget(self.show_edit_dict_words_button)
-    # general_settings_widget.layout.addWidget(self.only_show_words_with_family)
     general_settings_widget.layout.addWidget(self.show_tutorial_on_startup)
     general_settings_widget.layout.addWidget(self.show_unsaved_changes_message)
 
@@ -193,10 +187,6 @@ class SettingsWidget(QDialog):
     if setting_name == 'show_edit_dict_words_button':
       from search.searching_widget import SearchingWidget
       SearchingWidget.toggle_edit_words_button_visibility(new_value)
-
-    if setting_name == 'only_show_words_with_family':
-      from search.searching_widget import SearchingWidget
-      SearchingWidget.update_selected_dictionary()
 
   def light_theme_button_clicked(self):
     if self.initial_toggle:
