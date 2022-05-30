@@ -251,7 +251,7 @@ class CurrentSearch(QWidget):
       ResultsWidget.show_placeholder()
 
   @staticmethod
-  def remove_searched_word():
+  def force_remove_searched_word():
     CurrentSearch.searched_word_label.setText(_('UNINITIALIZED_STATE_TEXT'))
     from central.results_widget import ResultsWidget
     ResultsWidget.show_placeholder()
@@ -290,6 +290,10 @@ class CurrentSearch(QWidget):
     if (CurrentSearch.student_selector.count() == 0 or
         (CurrentSearch.student_selector.count() == 1 and
          CurrentSearch.student_selector.currentText() == _('SELECT_STUDENT_TEXT'))):
+
+      from central.main_window import MainWindow
+      MainWindow.clear_previous_subject_details()
+      CurrentSearch.searched_word_label.setText(_('UNINITIALIZED_STATE_TEXT'))
 
       CurrentSearch.student_selector.clear()
       CurrentSearch.student_selector.addItem(_('NO_STUDENTS_TEXT'))
@@ -338,6 +342,10 @@ class CurrentSearch(QWidget):
     if (CurrentSearch.profile_selector.count() == 0 or
         (CurrentSearch.profile_selector.count() == 1 and
          CurrentSearch.profile_selector.currentText() == _('SELECT_PROFILE_TEXT'))):
+
+      from central.main_window import MainWindow
+      MainWindow.clear_previous_subject_details()
+      CurrentSearch.searched_word_label.setText(_('UNINITIALIZED_STATE_TEXT'))
 
       CurrentSearch.profile_selector.clear()
       CurrentSearch.profile_selector.addItem(_('STUDENT_NO_PROFILES_TEXT'))

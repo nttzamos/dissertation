@@ -251,7 +251,7 @@ class ResultsWidget(QWidget):
     for result in ResultsWidget.widget_list:
       if word == result.word_label.text() or new_word == result.word_label.text():
         from search.current_search import CurrentSearch
-        CurrentSearch.remove_searched_word()
+        CurrentSearch.force_remove_searched_word()
         return
 
   @staticmethod
