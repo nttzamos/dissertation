@@ -80,7 +80,7 @@ def destroy_recent_search(word):
 
 def get_recent_searches():
   from search.current_search import CurrentSearch
-  student_id, profile_id, grade, subject_name = \
+  student_id, profile_id, grade_id, subject_name = \
     CurrentSearch.get_current_selection_details()
 
   if subject_name == _('ALL_SUBJECTS_TEXT'):
@@ -92,7 +92,7 @@ def get_recent_searches():
              'AND recent_search.student_id = ? '
              'ORDER BY recent_search.searched_at')
   else:
-    values = (get_subject_id(grade, subject_name), profile_id, student_id)
+    values = (get_subject_id(grade_id, subject_name), profile_id, student_id)
     query = ('SELECT word '
              'FROM word INNER JOIN recent_search '
              'ON word.id = recent_search.word_id '
@@ -108,3 +108,28 @@ def get_recent_searches():
   con.close()
 
   return recent_searches
+
+def recent_search_exists(word):
+  from search.current_search import CurrentSearch
+  student_id, profile_id, grade_id, subject_name = \
+    CurrentSearch.get_current_selection_details()
+
+  if subject_name == _('ALL_SUBJECTS_TEXT'):
+    subject_ids = get_profile_subject_ids(profile_id)
+  else:
+    subject_ids = [get_subject_id(grade_id, subject_name)]
+
+  word_id = get_word_id(grade_id, word)
+  con, cur = connect_to_database()
+
+  for subject_id in subject_ids:
+    query = ('SELECT COUNT(*) FROM recent_search WHERE word_id = ? '
+              'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+
+    cur.execute(query, (word_id, profile_id, student_id, subject_id))
+    if cur.fetchone()[0] > 0:
+      con.close()
+      return True
+
+  con.close()
+  return False

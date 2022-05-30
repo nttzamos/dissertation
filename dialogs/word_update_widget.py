@@ -6,6 +6,8 @@ from PyQt6.QtCore import Qt, QStringListModel, QTimer
 
 from menu.settings import Settings
 from models.word import get_word_subjects, word_exists, update_word, destroy_word
+from models.recent_search import recent_search_exists
+from models.starred_word import starred_word_exists
 from shared.database_handler import get_grades, get_grade_words, get_grade_subjects
 from shared.font_settings import FontSettings
 from shared.spacer import Spacer
@@ -259,22 +261,28 @@ class WordUpdateWidget(QWidget):
 
     from search.current_search import CurrentSearch
 
-    if (len(subjects_to_remove) > 0 and
-        grade_id == CurrentSearch.grade_id and
-        CurrentSearch.last_subject_picked in subjects_to_remove):
-
-      CurrentSearch.remove_searched_word(self.searched_word)
-
-      from side.recent_searches_widget import RecentSearchesWidget
-      RecentSearchesWidget.delete_word(self.searched_word)
-
-      from side.starred_words_widget import StarredWordsWidget
-      StarredWordsWidget.delete_word(self.searched_word)
-
-      from central.results_widget import ResultsWidget
-      ResultsWidget.delete_word(self.searched_word)
-
     update_word(self.searched_word, new_word, grade_id, subjects_to_add, subjects_to_remove)
+
+    if len(subjects_to_remove) > 0 and grade_id == CurrentSearch.grade_id:
+      if CurrentSearch.last_subject_picked in subjects_to_remove:
+        CurrentSearch.remove_searched_word(self.searched_word)
+
+        from side.recent_searches_widget import RecentSearchesWidget
+        RecentSearchesWidget.delete_word(self.searched_word)
+
+        from side.starred_words_widget import StarredWordsWidget
+        StarredWordsWidget.delete_word(self.searched_word)
+
+        from central.results_widget import ResultsWidget
+        ResultsWidget.delete_word(self.searched_word)
+      else:
+        if not recent_search_exists(self.searched_word):
+          from side.recent_searches_widget import RecentSearchesWidget
+          RecentSearchesWidget.delete_word(self.searched_word)
+
+        if not starred_word_exists(self.searched_word):
+          from side.starred_words_widget import StarredWordsWidget
+          StarredWordsWidget.delete_word(self.searched_word)
 
     if self.searched_word != new_word:
       if grade_id == CurrentSearch.grade_id:

@@ -109,3 +109,28 @@ def get_starred_words():
   con.close()
 
   return starred_words
+
+def starred_word_exists(word):
+  from search.current_search import CurrentSearch
+  student_id, profile_id, grade_id, subject_name = \
+    CurrentSearch.get_current_selection_details()
+
+  if subject_name == _('ALL_SUBJECTS_TEXT'):
+    subject_ids = get_profile_subject_ids(profile_id)
+  else:
+    subject_ids = [get_subject_id(grade_id, subject_name)]
+
+  word_id = get_word_id(grade_id, word)
+  con, cur = connect_to_database()
+
+  for subject_id in subject_ids:
+    query = ('SELECT COUNT(*) FROM starred_word WHERE word_id = ? '
+              'AND profile_id = ? AND student_id = ? AND subject_id = ?')
+
+    cur.execute(query, (word_id, profile_id, student_id, subject_id))
+    if cur.fetchone()[0] > 0:
+      con.close()
+      return True
+
+  con.close()
+  return False
