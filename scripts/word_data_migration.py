@@ -1,5 +1,3 @@
-import sqlite3
-
 from shared.database_handler import get_grade_words_old, get_words_old, connect_to_database
 from models.subject import get_subject_name
 from models.family import get_family_ids, get_family_word_ids

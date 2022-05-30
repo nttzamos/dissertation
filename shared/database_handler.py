@@ -43,6 +43,9 @@ def initialize_database(force_init=False):
               'subject_id INTEGER, searched_at TIMESTAMP)')
   cur.execute('CREATE TABLE starred_word (id INTEGER PRIMARY KEY AUTOINCREMENT, '
               'word_id INTEGER, profile_id INTEGER, student_id INTEGER, subject_id INTEGER)')
+  cur.execute('CREATE TABLE word (id INTEGER PRIMARY KEY, word TEXT, grade_id INTEGER)')
+  cur.execute('CREATE TABLE subject_word (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, subject_id INTEGER)')
+  cur.execute('CREATE TABLE related_word (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id_1 INTEGER, word_id_2 INTEGER)')
 
   for grade in range(1, 7):
     query = 'INSERT INTO grade VALUES (?, ?) ON CONFLICT(id) DO NOTHING'
@@ -68,25 +71,9 @@ def get_grades():
   con.close()
   return grades
 
+# TODO: Modify according to new db schema
 def initialize_grade_database(grade):
-  grade_table_name = get_grade_table_name(grade)
-  subject_table_name = get_subject_table_name(grade)
-  family_table_name = get_family_table_name(grade)
-
   con, cur = connect_to_database()
-
-  query = ('CREATE TABLE ' + grade_table_name + ' '
-      '(id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT)')
-  cur.execute(query)
-
-  query = ('CREATE TABLE ' + subject_table_name + ' '
-      '(id INTEGER PRIMARY KEY AUTOINCREMENT, subject_id INTEGER, word_id INTEGER)')
-  cur.execute(query)
-
-  query = ('CREATE TABLE ' + family_table_name + ' '
-      '(id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, family_id INTEGER)')
-  cur.execute(query)
-  con.commit()
 
   subject_names = PdfParser.get_grade_subjects_names(grade)
 
@@ -121,7 +108,7 @@ def initialize_grade_database(grade):
 
   words_list = sort_words_alphabetically(list(words_set))
   words = list(zip(list(range(1, len(words_list) + 1)), words_list))
-  cur.executemany('INSERT INTO ' + grade_table_name + ' VALUES (?, ?)', words)
+  cur.executemany('INSERT INTO word VALUES (?, ?)', words)
   con.commit()
   print('Grade words for grade ' + str(grade) + ' were created.')
 
@@ -139,8 +126,7 @@ def initialize_grade_database(grade):
     subject_id = get_subject_id(grade, subject_names[i])
     subjects_words = list(zip([subject_id] * n, words_list_indeces))
 
-    query = ('INSERT INTO ' + subject_table_name + ' VALUES (null, ?, ?) '
-             'ON CONFLICT(id) DO NOTHING')
+    query = ('INSERT INTO subject_word VALUES (null, ?, ?) ON CONFLICT(id) DO NOTHING')
 
     cur.executemany(query, subjects_words)
     con.commit()
@@ -163,45 +149,6 @@ def sort_words_alphabetically(words):
   normalized_words = list(map(lambda word: word.translate(translation_table), words))
 
   return [word for _, word in sorted(zip(normalized_words, words))]
-
-def get_words_old(profile_id, grade_id, subject_name, migrating=False):
-  if subject_name == _('ALL_SUBJECTS_TEXT'):
-    from models.profile import get_profile_subject_ids
-    subject_ids = get_profile_subject_ids(profile_id)
-  else:
-    from models.subject import get_subject_id
-    subject_ids = [get_subject_id(grade_id, subject_name)]
-
-  con, cur = connect_to_database('resources/database_old.db')
-
-  words_set = set()
-  for subject_id in subject_ids:
-    if migrating:
-      query = ('SELECT ' + get_grade_table_name(grade_id) + '.id ' +
-        'FROM ' + get_grade_table_name(grade_id) + ' ' +
-        'INNER JOIN ' + get_subject_table_name(grade_id) + ' ' +
-        'ON ' + get_grade_table_name(grade_id) + '.id =' +
-        ' ' + get_subject_table_name(grade_id) + '.word_id '
-        'WHERE ' + get_subject_table_name(grade_id) + '.subject_id = ? ' +
-        'ORDER BY ' + get_grade_table_name(grade_id) + '.id')
-    else:
-      query = ('SELECT ' + get_grade_table_name(grade_id) + '.word ' +
-        'FROM ' + get_grade_table_name(grade_id) + ' ' +
-        'INNER JOIN ' + get_subject_table_name(grade_id) + ' ' +
-        'ON ' + get_grade_table_name(grade_id) + '.id =' +
-        ' ' + get_subject_table_name(grade_id) + '.word_id '
-        'WHERE ' + get_subject_table_name(grade_id) + '.subject_id = ? ' +
-        'ORDER BY ' + get_grade_table_name(grade_id) + '.id')
-
-    cur.execute(query, (subject_id,))
-    words = list(map(lambda word: word[0], cur.fetchall()))
-    words_set = words_set | set(words)
-
-  con.close()
-  words = list(words_set)
-  words.sort()
-
-  return words
 
 def get_words(profile_id, grade_id, subject_name):
   if subject_name == _('ALL_SUBJECTS_TEXT'):
@@ -230,34 +177,9 @@ def get_words(profile_id, grade_id, subject_name):
 
   return words
 
-def get_grade_words_old(grade_id, migrating = False):
-  con, cur = connect_to_database('resources/database_old.db')
-
-  # cur.execute('SELECT word FROM ' + get_grade_table_name(grade_id) + ' ORDER BY word')
-  if migrating:
-    cur.execute('SELECT id, word FROM ' + get_grade_table_name(grade_id) + ' ORDER BY id')
-  else:
-    cur.execute('SELECT word FROM ' + get_grade_table_name(grade_id) + ' ORDER BY id')
-  # cur.execute('SELECT word FROM ' + get_grade_table_name(grade_id))
-
-  if migrating:
-    data = cur.fetchall()
-    ids = list(map(lambda word: word[0], data))
-    words = list(map(lambda word: word[1], data))
-  else:
-    words = list(map(lambda word: word[0], cur.fetchall()))
-
-  con.close()
-
-  if migrating:
-    return ids, words
-  else:
-    return words
-
 def get_grade_words(grade_id):
   con, cur = connect_to_database()
-  # cur.execute('SELECT word FROM word WHERE grade_id = ? ORDER BY word', (grade_id,))
-  cur.execute('SELECT word FROM word WHERE grade_id = ? ORDER BY id', (grade_id,))
+  cur.execute('SELECT word FROM word WHERE grade_id = ? ORDER BY word', (grade_id,))
   words = list(map(lambda word: word[0], cur.fetchall()))
 
   con.close()
@@ -269,15 +191,6 @@ def get_grade_subjects(grade):
   subjects = list(map(lambda subject: subject[0], cur.fetchall()))
   con.close()
   return subjects
-
-def get_grade_table_name(grade):
-  return 'grade_' + str(grade) + '_word'
-
-def get_subject_table_name(grade):
-  return 'subject_' + str(grade) + '_word'
-
-def get_family_table_name(grade):
-  return 'family_' + str(grade) + '_word'
 
 def connect_to_database(database_file_path=None):
   if database_file_path == None:
