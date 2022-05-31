@@ -47,6 +47,7 @@ class StudentAdditionWidget(QWidget):
     name_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     StudentAdditionWidget.name_line_edit = QLineEdit()
+    StudentAdditionWidget.name_line_edit.setMaxLength(100)
     StudentAdditionWidget.name_line_edit.setFont(text_font)
     StudentAdditionWidget.name_line_edit.textChanged.connect(
       StudentAdditionWidget.update_save_button_state

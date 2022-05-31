@@ -63,6 +63,7 @@ class ProfileUpdateWidget(QWidget):
     self.name_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.name_line_edit = QLineEdit()
+    self.name_line_edit.setMaxLength(100)
     self.name_line_edit.setFont(text_font)
     self.name_line_edit.textChanged.connect(self.update_save_button_state)
 

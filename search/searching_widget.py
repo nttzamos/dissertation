@@ -33,6 +33,7 @@ class SearchingWidget(QWidget):
     SearchingWidget.just_searched_with_enter = False
 
     SearchingWidget.line_edit = QLineEdit()
+    SearchingWidget.line_edit.setMaxLength(100)
     SearchingWidget.line_edit.setFont(line_edit_font)
     SearchingWidget.line_edit.setContentsMargins(0, 1, 0, 1)
     SearchingWidget.line_edit.returnPressed.connect(self.search_with_enter)

@@ -54,6 +54,7 @@ class WordFamilyUpdateWidget(QWidget):
     word_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.word_selection_line_edit = QLineEdit()
+    self.word_selection_line_edit.setMaxLength(100)
     self.word_selection_line_edit.setFont(text_font)
     self.word_selection_line_edit.returnPressed.connect(self.search_with_enter)
     WordFamilyUpdateWidget.dictionary_words = get_grade_words(1)
@@ -77,6 +78,7 @@ class WordFamilyUpdateWidget(QWidget):
     self.word_family_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.related_word_selection_line_edit = QLineEdit()
+    self.related_word_selection_line_edit.setMaxLength(100)
     self.related_word_selection_line_edit.setFont(text_font)
     self.related_word_selection_line_edit.returnPressed.connect(
       self.search_related_with_enter

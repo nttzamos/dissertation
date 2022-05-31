@@ -64,6 +64,7 @@ class StudentUpdateWidget(QWidget):
     self.name_widget.hide()
 
     self.name_line_edit = QLineEdit()
+    self.name_line_edit.setMaxLength(100)
     self.name_line_edit.setFont(text_font)
     self.name_line_edit.textChanged.connect(self.update_save_button_state)
 

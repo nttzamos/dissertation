@@ -60,6 +60,7 @@ class WordUpdateWidget(QWidget):
     word_selection_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.word_selection_line_edit = QLineEdit()
+    self.word_selection_line_edit.setMaxLength(100)
     self.word_selection_line_edit.setFont(text_font)
     self.word_selection_line_edit.returnPressed.connect(self.search_with_enter)
     WordUpdateWidget.dictionary_words = get_grade_words(1)
@@ -83,6 +84,7 @@ class WordUpdateWidget(QWidget):
     self.word_widget.layout.setContentsMargins(10, 5, 10, 10)
 
     self.word_line_edit = QLineEdit()
+    self.word_line_edit.setMaxLength(100)
     self.word_line_edit.setFont(text_font)
     self.word_line_edit.textChanged.connect(self.update_save_button_state)
 
