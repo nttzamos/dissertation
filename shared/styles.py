@@ -109,23 +109,6 @@ class Styles():
       QPushButton { padding-top: 8px }"""
 
   if theme == 'light':
-    searching_widget_unfocused_style = """
-      QWidget { background-color: white; border-radius: 10px; border: none }
-      QLineEdit { border: none }
-      QPushButton { background-color: none }
-      QPushButton { border: none }
-      QPushButton { padding-bottom: 8px }
-      QPushButton { padding-top: 8px }"""
-  else:
-    searching_widget_unfocused_style = """
-      QWidget { background-color: white; border-radius: 10px; border: none }
-      QLineEdit { border: none }
-      QPushButton { background-color: none }
-      QPushButton { border: none }
-      QPushButton { padding-bottom: 8px }
-      QPushButton { padding-top: 8px }"""
-
-  if theme == 'light':
     searching_widget_error_style = """
       QWidget { background-color: white; border-radius: 10px; border: 1px solid red }
       QLineEdit { border: none }

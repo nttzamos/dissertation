@@ -113,9 +113,6 @@ class SearchingWidget(QWidget):
   def set_focused_styleSheet(self):
     self.search_bar_widget.setStyleSheet(Styles.searching_widget_focused_style)
 
-  def setUnfocusedStyleSheet(self):
-    self.search_bar_widget.setStyleSheet(Styles.searching_widget_unfocused_style)
-
   def set_error_style_sheet(self):
     self.search_bar_widget.setStyleSheet(Styles.searching_widget_error_style)
 
