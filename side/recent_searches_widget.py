@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QGridLayout, QLabel, QScrollArea, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QLabel, QScrollArea, QVBoxLayout, QWidget
 from PyQt6.QtCore import Qt
 
 from item.recent_search import RecentSearch
@@ -16,8 +16,6 @@ language.install()
 _ = language.gettext
 
 class RecentSearchesWidget(QWidget):
-  MAX_ROW = 1000000
-
   def __init__(self):
     super().__init__()
 
@@ -27,7 +25,7 @@ class RecentSearchesWidget(QWidget):
 
     scroll_area_widget_contents = QWidget()
 
-    RecentSearchesWidget.grid_layout = QGridLayout(scroll_area_widget_contents)
+    RecentSearchesWidget.grid_layout = QVBoxLayout(scroll_area_widget_contents)
     RecentSearchesWidget.grid_layout.setSpacing(0)
     RecentSearchesWidget.grid_layout.setContentsMargins(0, 0, 0, 0)
 
@@ -36,7 +34,6 @@ class RecentSearchesWidget(QWidget):
     scroll_area.setWidget(scroll_area_widget_contents)
     scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
 
-    RecentSearchesWidget.counter = RecentSearchesWidget.MAX_ROW
     RecentSearchesWidget.widget_list = []
 
     font = FontSettings.get_font('heading')
@@ -69,10 +66,7 @@ class RecentSearchesWidget(QWidget):
 
   @staticmethod
   def initialize():
-    RecentSearchesWidget.grid_layout.addWidget(
-      RecentSearchesWidget.spacer, RecentSearchesWidget.MAX_ROW + 1, 0, 1, -1
-    )
-
+    RecentSearchesWidget.grid_layout.insertWidget(0, RecentSearchesWidget.spacer)
     RecentSearchesWidget.show_placeholder()
 
   @staticmethod
@@ -89,10 +83,9 @@ class RecentSearchesWidget(QWidget):
       RecentSearchesWidget.hide_placeholder()
 
     for word in recent_searches:
-      widget = RecentSearch(word, word in starred_words)
-      RecentSearchesWidget.widget_list.append(widget)
-      RecentSearchesWidget.grid_layout.addWidget(widget, RecentSearchesWidget.counter, 0)
-      RecentSearchesWidget.counter -= 1
+      recent_search = RecentSearch(word, word in starred_words)
+      RecentSearchesWidget.widget_list.append(recent_search)
+      RecentSearchesWidget.grid_layout.insertWidget(0, recent_search)
 
   @staticmethod
   def add_recent_search(word):
@@ -101,16 +94,14 @@ class RecentSearchesWidget(QWidget):
 
     recent_search = RecentSearch(word, starred_word_exists(word))
     RecentSearchesWidget.widget_list.append(recent_search)
-    RecentSearchesWidget.grid_layout.addWidget(recent_search, RecentSearchesWidget.counter, 0)
-    RecentSearchesWidget.counter -= 1
+    RecentSearchesWidget.grid_layout.insertWidget(0, recent_search)
 
   @staticmethod
   def remove_and_add_recent_search(word):
     for recent_search in RecentSearchesWidget.widget_list:
       if recent_search.word.text()==word:
         RecentSearchesWidget.grid_layout.removeWidget(recent_search)
-        RecentSearchesWidget.grid_layout.addWidget(recent_search, RecentSearchesWidget.counter, 0)
-        RecentSearchesWidget.counter -=1
+        RecentSearchesWidget.grid_layout.insertWidget(0, recent_search)
         return
 
   @staticmethod
@@ -133,7 +124,6 @@ class RecentSearchesWidget(QWidget):
       recentSearch.deleteLater()
 
     RecentSearchesWidget.widget_list = []
-    RecentSearchesWidget.counter = RecentSearchesWidget.MAX_ROW
     RecentSearchesWidget.show_placeholder()
 
   @staticmethod
@@ -144,7 +134,7 @@ class RecentSearchesWidget(QWidget):
 
     if not RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.show_placeholder_label = True
-      RecentSearchesWidget.grid_layout.addWidget(RecentSearchesWidget.placeholder_label)
+      RecentSearchesWidget.grid_layout.insertWidget(0, RecentSearchesWidget.placeholder_label)
       RecentSearchesWidget.grid_layout.removeWidget(RecentSearchesWidget.spacer)
       RecentSearchesWidget.placeholder_label.show()
 
@@ -152,10 +142,7 @@ class RecentSearchesWidget(QWidget):
   def hide_placeholder():
     if RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.show_placeholder_label = False
-      RecentSearchesWidget.grid_layout.addWidget(
-        RecentSearchesWidget.spacer, RecentSearchesWidget.MAX_ROW + 1, 0, 1, -1
-      )
-
+      RecentSearchesWidget.grid_layout.insertWidget(0, RecentSearchesWidget.spacer)
       RecentSearchesWidget.placeholder_label.hide()
 
   @staticmethod
