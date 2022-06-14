@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 
 import requests
 
-def fetch_word_details(word):
+def fetch_online_results(word):
   if not active_internet_connection_exists(): raise RuntimeError
 
   url = 'https://el.wiktionary.org/wiki/{}'
@@ -17,11 +17,11 @@ def fetch_word_details(word):
   if response.status_code != 200:
     if response.status_code != 404:
       print('Wrong Status')
-    return [], True
+    return []
 
   soup = BeautifulSoup(response.text.replace('>\n<', '><'), 'html.parser')
 
-  family_words = set()
+  online_results = set()
 
   compound_words_header = soup.find(id='Σύνθετα')
   if compound_words_header != None:
@@ -30,18 +30,18 @@ def fetch_word_details(word):
       if item_is_valid(item):
         word_to_be_added = clean_word(item.text.lower())
         if len(word_to_be_added) > 0:
-          family_words.add(word_to_be_added)
+          online_results.add(word_to_be_added)
 
-  relative_words_header = soup.find(id='Συγγενικές_λέξεις')
-  if relative_words_header != None:
-    relative_words_list = relative_words_header.find_next('ul')
-    for item in relative_words_list.find_all():
+  related_words_header = soup.find(id='Συγγενικές_λέξεις')
+  if related_words_header != None:
+    related_words_list = related_words_header.find_next('ul')
+    for item in related_words_list.find_all():
       if item_is_valid(item):
         word_to_be_added = clean_word(item.text.lower())
         if len(word_to_be_added) > 0:
-          family_words.add(word_to_be_added)
+          online_results.add(word_to_be_added)
 
-  return list(family_words), False
+  return list(online_results)
 
 def active_internet_connection_exists():
   try:

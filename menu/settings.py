@@ -10,28 +10,21 @@ class Settings():
   } # If you wish to add more languages, modify this dictionary accordingly
 
   SETTINGS_DEFAULT_VALUES = {
-    'maximum_results': 30,
-    'last_student_picked': 1,
-    'theme': 'light',
-    'updated_language': 'el',
-    'updated_selected_font': 'medium'
+    'maximum_results': 30, 'last_student_picked': 1, 'theme': 'light',
+    'updated_language': 'el', 'updated_selected_font': 'medium'
   }
 
   BOOLEAN_SETTINGS_DEFAULT_VALUES = {
-    'remember_last_student_picked': 0,
-    'ask_before_actions': 1,
-    'show_edit_dict_words_button': 1,
-    'show_tutorial_on_startup': 1,
-    'use_wiktionary': 1,
-    'show_unsaved_changes_message': 1
+    'remember_last_student_picked': 0, 'ask_before_actions': 1,
+    'show_edit_dict_words_button': 1, 'show_tutorial_on_startup': 1,
+    'use_wiktionary': 1, 'show_unsaved_changes_message': 1
   }
 
   BOOLEAN_SETTINGS_ABOUT_HIDING_MESSAGES = [
     'hide_no_internet_message', 'hide_theme_change_effect_message',
     'hide_delete_profile_message', 'hide_delete_student_message',
     'hide_delete_word_message', 'hide_language_change_effect_message',
-    'hide_remove_word_from_family_message',
-    'hide_font_size_change_effect_message'
+    'hide_remove_word_from_family_message', 'hide_font_size_change_effect_message'
   ]
 
   SETTINGS_TO_UPDATE = {

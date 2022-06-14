@@ -11,7 +11,7 @@ from models.non_related_word import non_related_word_exists
 from models.word import get_word_id, word_exists
 from shared.flow_layout import FlowLayout
 from shared.font_settings import FontSettings
-from shared.wiktionary_parser import fetch_word_details
+from shared.wiktionary_parser import fetch_online_results
 
 import gettext
 
@@ -103,10 +103,10 @@ class ResultsWidget(QWidget):
     ResultsWidget.clear_previous_results()
     ResultsWidget.container_widget.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-    offline_result_words, online_result_words, show_error = ResultsWidget.get_results(word)
+    offline_results, online_results, show_error = ResultsWidget.get_results(word)
     remaining_results = Settings.get_setting('maximum_results')
 
-    for word in offline_result_words:
+    for word in offline_results:
       if remaining_results == 0: break
       result = Result(word, True)
 
@@ -115,7 +115,7 @@ class ResultsWidget(QWidget):
 
       remaining_results -= 1
 
-    for word in online_result_words:
+    for word in online_results:
       if remaining_results == 0: break
       result = Result(word, False)
 
@@ -127,7 +127,7 @@ class ResultsWidget(QWidget):
     if show_error and not Settings.get_boolean_setting('hide_no_internet_message'):
       ResultsWidget.show_no_internet_message()
 
-    if len(offline_result_words) == 0 and len(online_result_words) == 0:
+    if len(offline_results) == 0 and len(online_results) == 0:
       ResultsWidget.show_placeholder(_('NO_RESULTS_TEXT'))
 
   @staticmethod
@@ -135,20 +135,20 @@ class ResultsWidget(QWidget):
     from search.current_search import CurrentSearch
     grade_id = CurrentSearch.grade_id
     word_id = get_word_id(grade_id, word)
-    offline_result_words = get_related_words(grade_id, word_id)
+    offline_results = get_related_words(grade_id, word_id)
 
-    if word in offline_result_words:
-      offline_result_words.remove(word)
+    if word in offline_results:
+      offline_results.remove(word)
 
-    offline_result_words.sort()
+    offline_results.sort()
 
     if Settings.get_boolean_setting('use_wiktionary'):
       try:
-        online_family_words, unused = fetch_word_details(word)
+        online_family_words = fetch_online_results(word)
       except RuntimeError:
-        return offline_result_words, [], True
+        return offline_results, [], True
 
-      online_family_words = list(set(online_family_words) - set(offline_result_words))
+      online_family_words = list(set(online_family_words) - set(offline_results))
       non_related_online_family_words = []
 
       for online_word in online_family_words:
@@ -156,22 +156,22 @@ class ResultsWidget(QWidget):
           if non_related_word_exists(word, online_word, grade_id):
             non_related_online_family_words.append(online_word)
           else:
-            offline_result_words.append(online_word)
+            offline_results.append(online_word)
             update_related_words(
               CurrentSearch.grade_id,
               CurrentSearch.searched_word_label.text(), [online_word], []
             )
 
       online_family_words = list(
-        set(online_family_words) - set(offline_result_words) - set(non_related_online_family_words)
+        set(online_family_words) - set(offline_results) - set(non_related_online_family_words)
       )
 
       online_family_words.sort()
-      offline_result_words.sort()
+      offline_results.sort()
 
-      return offline_result_words, online_family_words, False
+      return offline_results, online_family_words, False
     else:
-      return offline_result_words, [], False
+      return offline_results, [], False
 
   @staticmethod
   def clear_previous_results():

@@ -37,7 +37,7 @@ class SearchingWidget(QWidget):
     SearchingWidget.line_edit.setFont(line_edit_font)
     SearchingWidget.line_edit.setContentsMargins(0, 1, 0, 1)
     SearchingWidget.line_edit.returnPressed.connect(self.search_with_enter)
-    SearchingWidget.line_edit.textChanged.connect(self.search_text_changed)
+    SearchingWidget.line_edit.textChanged.connect(self.search_bar_text_changed)
     self.show_error_message = False
 
     SearchingWidget.dictionary_words = []
@@ -171,7 +171,7 @@ class SearchingWidget(QWidget):
     model = QStringListModel(SearchingWidget.dictionary_words, SearchingWidget.completer)
     SearchingWidget.completer.setModel(model)
 
-  def search_text_changed(self):
+  def search_bar_text_changed(self):
     if not self.hide_clear_search_button and not SearchingWidget.line_edit.text():
       self.clear_search_button.hide()
       self.hide_clear_search_button = True

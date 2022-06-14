@@ -151,7 +151,7 @@ class CurrentSearch(QWidget):
 
     if not CurrentSearch.initialize_selected_student:
       from central.main_window import MainWindow
-      MainWindow.clear_previous_subject_details()
+      MainWindow.clear_previous_filters_details()
       CurrentSearch.searched_word_label.setText(_('UNINITIALIZED_STATE_TEXT'))
 
     CurrentSearch.initialize_selected_student = False
@@ -197,7 +197,7 @@ class CurrentSearch(QWidget):
     CurrentSearch.last_profile_picked = CurrentSearch.profile_selector.currentText()
 
     from central.main_window import MainWindow
-    MainWindow.clear_previous_subject_details()
+    MainWindow.clear_previous_filters_details()
     CurrentSearch.searched_word_label.setText(_('UNINITIALIZED_STATE_TEXT'))
     CurrentSearch.profile_id, CurrentSearch.grade_id, grade_name, profile_subjects = (
       get_profile_details(CurrentSearch.profile_selector.currentText())
@@ -292,7 +292,7 @@ class CurrentSearch(QWidget):
          CurrentSearch.student_selector.currentText() == _('SELECT_STUDENT_TEXT'))):
 
       from central.main_window import MainWindow
-      MainWindow.clear_previous_subject_details()
+      MainWindow.clear_previous_filters_details()
       CurrentSearch.searched_word_label.setText(_('UNINITIALIZED_STATE_TEXT'))
 
       CurrentSearch.student_selector.clear()
@@ -344,7 +344,7 @@ class CurrentSearch(QWidget):
          CurrentSearch.profile_selector.currentText() == _('SELECT_PROFILE_TEXT'))):
 
       from central.main_window import MainWindow
-      MainWindow.clear_previous_subject_details()
+      MainWindow.clear_previous_filters_details()
       CurrentSearch.searched_word_label.setText(_('UNINITIALIZED_STATE_TEXT'))
 
       CurrentSearch.profile_selector.clear()

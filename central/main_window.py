@@ -31,8 +31,9 @@ class MainWindow(QWidget):
     vertical_splitter.setChildrenCollapsible(True)
 
     MainWindow.recent_searches_widget = RecentSearchesWidget()
-    MainWindow.recent_searches_widget.initialize()
     MainWindow.starred_words_widget = StarredWordsWidget()
+
+    MainWindow.recent_searches_widget.initialize()
     MainWindow.starred_words_widget.initialize()
 
     vertical_splitter.addWidget(MainWindow.recent_searches_widget)
@@ -80,7 +81,7 @@ class MainWindow(QWidget):
     MainWidget.current_search.searched_word_label.setText(_('ENTER_WORD_TEXT'))
 
   @staticmethod
-  def clear_previous_subject_details():
+  def clear_previous_filters_details():
     from search.current_search import CurrentSearch
     if not CurrentSearch.subject_selector_active: return
 

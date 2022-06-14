@@ -340,7 +340,7 @@ class SettingsWidget(QDialog):
       shutil.copyfile('resources/database_backup.db', 'resources/database.db')
 
       from central.main_window import MainWindow
-      MainWindow.clear_previous_subject_details()
+      MainWindow.clear_previous_filters_details()
 
       from search.current_search import CurrentSearch
       CurrentSearch.clear_current_search_details()
