@@ -69,19 +69,35 @@ class MainWindow(QWidget):
     from search.searching_widget import SearchingWidget
     from central.results_widget import ResultsWidget
 
+    # Ορισμός του μηνύματος σφάλματος της μπάρας ανάλογα με το αν έχει
+    # επιλεχτεί ένα συγκεκριμένο μάθημα ή όλα τα μαθήματα ενός προφίλ.
     if subject_name == _('ALL_SUBJECTS_TEXT'):
       SearchingWidget.modify_error_message(get_profile_name(profile_id), False)
     else:
       SearchingWidget.modify_error_message(subject_name, True)
 
+    # Ανανέωση του συνόλου των λέξεων από τις οποίες ο χρήστης μπορεί να
+    # επιλέξει κάποια για να αναζητήσει την οικογένεια της.
     SearchingWidget.update_selected_dictionary()
+
+    # Εμφάνιση του λεκτικού του πάνελ των αποτελεσμάτων που ενημερώνει για
+    # για την λειτουργικότητα του.
     ResultsWidget.show_placeholder()
+
+    # Αρχικοποίηση των λιστών των πρόσφατων αναζητήσεων και των αγαπημένων
+    # λέξεων με βάση τα επιλεγμένα φίλτρα.
     RecentSearchesWidget.populate()
     StarredWordsWidget.populate()
+
+    # Ανανέωση του λεκτικού του πλαισίου της τωρινής αναζήτησης.
     MainWidget.current_search.searched_word_label.setText(_('ENTER_WORD_TEXT'))
 
   @staticmethod
   def clear_previous_filters_details():
+    # Τερματισμός της μεθόδοου στην περίπτωση που προηγουμένως δεν ήταν
+    # επιλεγμένο κάποιο μάθημα καθώς αυτό σημαίνει πως τα εκάστοτε widgets
+    # δεν περιείχαν κάποια πληροφορία μιας και δεν είχαν επιλεχτεί τιμές για
+    # όλα τα φίλτρα αναζήτησης (αφού η τιμή του μαθήματος επιλέγεται τελευταία).
     from search.current_search import CurrentSearch
     if not CurrentSearch.subject_selector_active: return
 
@@ -89,9 +105,19 @@ class MainWindow(QWidget):
     from central.results_widget import ResultsWidget
 
     CurrentSearch.subject_selector_active = False
+
+    # Καθαρισμός του συνόλου των λέξεων που μπορούν να αναζητηθούν στην μπάρα.
     SearchingWidget.dictionary_words = []
     SearchingWidget.completer.setModel(None)
+
+    # Αρχικοποίηση του μηνύματος σφάλματος της μπάρας αναζήτησης.
     SearchingWidget.set_initial_error_message()
+
+    # Εμφάνιση του λεκτικού του πάνελ των αποτελεσμάτων που ενημερώνει για
+    # για την λειτουργικότητα του.
     ResultsWidget.show_placeholder()
+
+    # Καθαρισμός των δεδομένων των λιστών των πρόσφατων αναζητήσεων και των
+    # αγαπημένων λέξεων.
     RecentSearchesWidget.clear_previous_recent_searches()
     StarredWordsWidget.clear_previous_starred_words()

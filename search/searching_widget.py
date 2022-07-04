@@ -179,6 +179,9 @@ class SearchingWidget(QWidget):
       self.clear_search_button.show()
       self.hide_clear_search_button = False
 
+    # Αν η μεταβλητή self.show_error_message είναι αληθής αυτό σημαίνει πως
+    # προηγούμενος ένα μήνυμα σφάλματος ήταν ορατό το οποίο πλέον μετά την
+    # μεταβολή της συμοβλοσειράς της μπάρας πρέπει να εξαφανιστεί.
     if self.show_error_message:
       self.show_error_message = False
       self.set_focused_styleSheet()

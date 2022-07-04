@@ -62,6 +62,8 @@ class Settings():
       settings_database.set('screen_width', screen_width)
       settings_database.set('screen_height', screen_height)
 
+      # Χρήση μιας λέξης μεγάλου (αλλά όχι μέγιστου) μήκους για καθορισμό
+      # του πλάτους του πλαϊνού πάνελ
       long_recent_search = RecentSearch('ωωωωωωωωωωωωωωω', True) # 15
       left_widget_width = long_recent_search.sizeHint().width()
       settings_database.set('left_widget_width', left_widget_width)

@@ -39,6 +39,8 @@ class PdfParser():
 
     for i in range(len(subject_names)):
       text = PdfParser.read_subject_words(grade, subject_files[i], raw_text=True)
+
+      # Διαγραφή κρυφών χαρακτήρων
       text = text.replace(' ', '')
       text = text.replace(' ', '')
       text = text.replace('­', ' ')
