@@ -102,7 +102,7 @@ msgid "SELECT_ALL_PROFILES_TEXT"
 msgstr "Select all profiles"
 
 msgid "STUDENT_NAME_LENGTH_EXCEEDS_LIMIT_TEXT"
-msgstr "The student can not be saved because its name length exceeds the upper limit of 20 characters"
+msgstr "The student can not be saved because its name length exceeds the upper limit of 50 characters"
 
 msgid "STUDENT_NAME_EXISTS_TEXT"
 msgstr "The student can not be saved because another student with the same name already exists"

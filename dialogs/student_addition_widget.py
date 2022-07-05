@@ -17,7 +17,7 @@ language.install()
 _ = language.gettext
 
 class StudentAdditionWidget(QWidget):
-  MAXIMUM_NAME_LENGTH = 20
+  MAXIMUM_NAME_LENGTH = 50
 
   def __init__(self):
     super().__init__()
