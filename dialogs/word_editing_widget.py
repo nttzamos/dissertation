@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QTabWidget, QDialog, QMessageBox, QCheckBox
 from PyQt6.QtGui import QIcon
 
-from dialogs.word_addition_widget import WordAdditionWIdget
+from dialogs.word_addition_widget import WordAdditionWidget
 from dialogs.word_family_update_widget import WordFamilyUpdateWidget
 from dialogs.word_update_widget import WordUpdateWidget
 from menu.settings import Settings
@@ -26,7 +26,7 @@ class WordEditingWidget(QDialog):
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
-    add_word_widget = WordAdditionWIdget()
+    add_word_widget = WordAdditionWidget()
     self.edit_word_widget = WordUpdateWidget()
     WordEditingWidget.edit_word_family_widget = WordFamilyUpdateWidget()
 

@@ -16,7 +16,7 @@ language = gettext.translation('dialogs', localedir='resources/locale', language
 language.install()
 _ = language.gettext
 
-class WordAdditionWIdget(QWidget):
+class WordAdditionWidget(QWidget):
   MAXIMUM_NAME_LENGTH = 20
   GREEK_CHARACTERS = [
     'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο',
@@ -212,14 +212,14 @@ class WordAdditionWIdget(QWidget):
   def word_is_invalid(self):
     word = self.word_line_edit.text().strip()
 
-    if len(word) > WordAdditionWIdget.MAXIMUM_NAME_LENGTH:
+    if len(word) > WordAdditionWidget.MAXIMUM_NAME_LENGTH:
       return True, _('WORD_LENGTH_EXCEEDS_LIMIT_TEXT')
 
     if word_exists(self.grade_selector.currentIndex() + 1, word):
       return True, _('WORD_EXISTS_TEXT')
 
     for character in word:
-      if not character in WordAdditionWIdget.GREEK_CHARACTERS:
+      if not character in WordAdditionWidget.GREEK_CHARACTERS:
         return True, _('ONLY_GREEK_CHARACTERS_ALLOWED_TEXT')
 
     return False, ''

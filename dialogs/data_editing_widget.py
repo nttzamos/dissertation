@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QTabWidget, QDialog, QMessageBox, QCheckBox
 from PyQt6.QtGui import QIcon
 
-from dialogs.profile_addition_widget import ProfileAdditionWIdget
+from dialogs.profile_addition_widget import ProfileAdditionWidget
 from dialogs.profile_update_widget import ProfileUpdateWidget
 from dialogs.student_addition_widget import StudentAdditionWidget
 from dialogs.student_update_widget import StudentUpdateWidget
@@ -29,7 +29,7 @@ class DataEditingWidget(QDialog):
 
     add_student_widget = StudentAdditionWidget()
     DataEditingWidget.edit_student_widget = StudentUpdateWidget()
-    add_profile_widget = ProfileAdditionWIdget()
+    add_profile_widget = ProfileAdditionWidget()
     self.edit_profiles_widget = ProfileUpdateWidget()
 
     add_student_widget.setAutoFillBackground(True)

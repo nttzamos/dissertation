@@ -17,7 +17,7 @@ language = gettext.translation('dialogs', localedir='resources/locale', language
 language.install()
 _ = language.gettext
 
-class ProfileAdditionWIdget(QWidget):
+class ProfileAdditionWidget(QWidget):
   MAXIMUM_NAME_LENGTH = 20
 
   def __init__(self):
@@ -200,7 +200,7 @@ class ProfileAdditionWIdget(QWidget):
   def profile_is_invalid(self):
     profile_name = self.name_line_edit.text()
 
-    if len(profile_name) > ProfileAdditionWIdget.MAXIMUM_NAME_LENGTH:
+    if len(profile_name) > ProfileAdditionWidget.MAXIMUM_NAME_LENGTH:
       return True, _('PROFILE_NAME_LENGTH_EXCEEDS_LIMIT_TEXT')
 
     if profile_name_exists(profile_name):
