@@ -63,7 +63,7 @@ def item_is_valid(item):
   return True
 
 def clean_word(word):
-  forbidden_characters = [',', '(', ' και', '/']
+  forbidden_characters = [',', '(', ' και', '/', '&']
   for character in forbidden_characters:
     new_word = word.split(character)[0]
     if character == '(' and not new_word:
@@ -73,5 +73,9 @@ def clean_word(word):
         print(word)
 
     word = new_word
+
+  # If after all of the processing the string still consists of multiple words
+  # then we return an empty string so that the word is not added to the results.
+  if len(word.split()) > 1: return ''
 
   return word.strip()
