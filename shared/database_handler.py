@@ -47,6 +47,13 @@ def initialize_database(force_init=False):
   cur.execute('CREATE TABLE subject_word (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id INTEGER, subject_id INTEGER)')
   cur.execute('CREATE TABLE related_word (id INTEGER PRIMARY KEY AUTOINCREMENT, word_id_1 INTEGER, word_id_2 INTEGER)')
 
+  cur.execute('CREATE INDEX profile_id_index ON profile (id)')
+  cur.execute('CREATE INDEX profile_name_index ON profile (name)')
+  cur.execute('CREATE INDEX non_related_word_index ON non_related_word (word_id_1, word_id_2)')
+  cur.execute('CREATE INDEX word_grade_id_index ON word (grade_id)')
+  cur.execute('CREATE INDEX word_grade_id_word_index ON word (word, grade_id)')
+  cur.execute('CREATE INDEX subject_word_index ON subject_word (word_id, subject_id)')
+
   for grade in range(1, 7):
     query = 'INSERT INTO grade VALUES (?, ?) ON CONFLICT(id) DO NOTHING'
     cur.execute(query, (grade, grade_names[grade - 1]))
