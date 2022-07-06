@@ -54,6 +54,8 @@ def initialize_database(force_init=False):
   cur.execute('CREATE INDEX word_grade_id_word_index ON word (word, grade_id)')
   cur.execute('CREATE INDEX subject_word_index ON subject_word (word_id, subject_id)')
 
+  con.commit()
+
   for grade in range(1, 7):
     query = 'INSERT INTO grade VALUES (?, ?) ON CONFLICT(id) DO NOTHING'
     cur.execute(query, (grade, grade_names[grade - 1]))
@@ -65,6 +67,8 @@ def initialize_database(force_init=False):
     cur.executemany(query, subjects)
 
     con.commit()
+
+    initialize_grade_database(grade)
 
   from models.profile import create_default_grade_profiles
   create_default_grade_profiles()
@@ -78,13 +82,12 @@ def get_grades():
   con.close()
   return grades
 
-# TODO: Modify according to new db schema
-def initialize_grade_database(grade):
+def initialize_grade_database(grade_id):
   con, cur = connect_to_database()
 
-  subject_names = PdfParser.get_grade_subjects_names(grade)
+  subject_names = PdfParser.get_grade_subjects_names(grade_id)
 
-  grade_directory_path = 'processed/subjects' + str(grade) + '/'
+  grade_directory_path = 'processed/subjects' + str(grade_id) + '/'
   files_list = listdir(grade_directory_path)
   files_list.sort()
   words_set = set()
@@ -114,10 +117,16 @@ def initialize_grade_database(grade):
           current_subject_words = set()
 
   words_list = sort_words_alphabetically(list(words_set))
-  words = list(zip(list(range(1, len(words_list) + 1)), words_list))
-  cur.executemany('INSERT INTO word VALUES (?, ?)', words)
+
+  existing_words_count = cur.execute('SELECT COUNT(*) FROM word').fetchone()[0]
+  starting_index = 1 + existing_words_count
+  ending_index = starting_index + len(words_list)
+
+  words = list(zip(list(range(starting_index, ending_index)), words_list, [grade_id] * len(words_list)))
+  cur.executemany('INSERT INTO word VALUES (?, ?, ?)', words)
   con.commit()
-  print('Grade words for grade ' + str(grade) + ' were created.')
+
+  print('Grade words for grade ' + str(grade_id) + ' were created.')
 
   for i in range(len(subject_names)):
     if not subject_names[i] in words_per_subject:
@@ -130,8 +139,8 @@ def initialize_grade_database(grade):
       words_list_indeces.append(words_list.index(words_per_subject[subject_names[i]][j]))
 
     from models.subject import get_subject_id
-    subject_id = get_subject_id(grade, subject_names[i])
-    subjects_words = list(zip([subject_id] * n, words_list_indeces))
+    subject_id = get_subject_id(grade_id, subject_names[i])
+    subjects_words = list(zip(words_list_indeces, [subject_id] * n))
 
     query = ('INSERT INTO subject_word VALUES (null, ?, ?) ON CONFLICT(id) DO NOTHING')
 
@@ -139,12 +148,12 @@ def initialize_grade_database(grade):
     con.commit()
 
   con.close()
-  print('Subject words for grade ' + str(grade) + ' were created.')
+  print('Subject words for grade ' + str(grade_id) + ' were created.')
 
   try:
-    from models.family import create_families
-    create_families(grade)
-    print('Families for grade ' + str(grade) + ' were created.')
+    from models.related_word import calculate_related_words
+    calculate_related_words(grade_id)
+    print('Related words for grade ' + str(grade_id) + ' were calculated.')
   except Exception as e:
     print('Some exception occurred.')
 

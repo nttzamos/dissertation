@@ -1,7 +1,10 @@
-from shared.database_handler import connect_to_database
+from shared.database_handler import connect_to_database, get_grade_words
+from shared.wiktionary_parser import fetch_online_results
 from models.word import get_word_id
 from models.non_related_word import (non_related_word_exists, destroy_non_related_word,
                                      create_non_related_word)
+
+import timeit
 
 def get_related_words(grade_id, word_id):
   con, cur = connect_to_database()
@@ -55,3 +58,31 @@ def update_related_words(grade_id, word, words_to_add, words_to_remove):
     create_non_related_word(word, non_related_word, grade_id)
 
   con.close()
+
+def calculate_related_words(grade_id):
+  con, cur = connect_to_database()
+  words_list = get_grade_words(grade_id)
+
+  grade_start = timeit.default_timer()
+  for i in range(len(words_list)):
+    if i % 100 == 0 and i > 0:
+      print(timeit.default_timer() - grade_start)
+
+    related_words = fetch_online_results(words_list[i])
+    current_word_id = get_word_id(grade_id, words_list[i])
+
+    related_words_ids = []
+    for word in related_words:
+      word_id = get_word_id(grade_id, word)
+
+      if word_id != -1:
+        related_words_ids.append(word_id)
+
+    if len(related_words_ids) == 0: continue
+
+    for word_id in related_words_ids:
+      query = 'INSERT INTO related_word VALUES (null, ?, ?)'
+      if current_word_id != word_id:
+        cur.execute(query, (current_word_id, word_id))
+
+    con.commit()
