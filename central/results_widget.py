@@ -31,7 +31,6 @@ class ResultsWidget(QWidget):
     placeholder_text_font = FontSettings.get_font('heading')
     title_font = FontSettings.get_font('heading')
 
-    ResultsWidget.scroll_area_widget_contents = QWidget()
     ResultsWidget.container_widget = QWidget()
     ResultsWidget.container_widget.layout = QHBoxLayout(ResultsWidget.container_widget)
     ResultsWidget.container_widget.layout.setSpacing(0)
@@ -39,7 +38,6 @@ class ResultsWidget(QWidget):
 
     ResultsWidget.flow_layout = FlowLayout()
     ResultsWidget.flow_layout.setContentsMargins(0, 0, 0, 0)
-    ResultsWidget.scroll_area_widget_contents.setLayout(ResultsWidget.container_widget.layout)
     ResultsWidget.widget_list = []
     ResultsWidget.show_placeholder_label = True
 
@@ -56,7 +54,7 @@ class ResultsWidget(QWidget):
     self.scroll_area = QScrollArea()
     self.scroll_area.setFrameShape(QFrame.Shape.NoFrame)
     self.scroll_area.setWidgetResizable(True)
-    self.scroll_area.setWidget(ResultsWidget.scroll_area_widget_contents)
+    self.scroll_area.setWidget(ResultsWidget.container_widget)
 
     ResultsWidget.title_label = QLabel('Αποτελέσματα Αναζήτησης')
     ResultsWidget.title_label.setFont(title_font)

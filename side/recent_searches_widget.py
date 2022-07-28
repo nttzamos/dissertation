@@ -23,15 +23,14 @@ class RecentSearchesWidget(QWidget):
     self.layout.setSpacing(0)
     self.layout.setContentsMargins(0, 0, 0, 0)
 
-    scroll_area_widget_contents = QWidget()
-
-    RecentSearchesWidget.grid_layout = QVBoxLayout(scroll_area_widget_contents)
-    RecentSearchesWidget.grid_layout.setSpacing(0)
-    RecentSearchesWidget.grid_layout.setContentsMargins(0, 0, 0, 0)
+    RecentSearchesWidget.recent_searches_list = QWidget()
+    RecentSearchesWidget.recent_searches_list.layout = QVBoxLayout(RecentSearchesWidget.recent_searches_list)
+    RecentSearchesWidget.recent_searches_list.layout.setSpacing(0)
+    RecentSearchesWidget.recent_searches_list.layout.setContentsMargins(0, 0, 0, 0)
 
     scroll_area = QScrollArea()
     scroll_area.setWidgetResizable(True)
-    scroll_area.setWidget(scroll_area_widget_contents)
+    scroll_area.setWidget(RecentSearchesWidget.recent_searches_list)
     scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
 
     RecentSearchesWidget.widget_list = []
@@ -66,7 +65,7 @@ class RecentSearchesWidget(QWidget):
 
   @staticmethod
   def initialize():
-    RecentSearchesWidget.grid_layout.insertWidget(0, RecentSearchesWidget.spacer)
+    RecentSearchesWidget.recent_searches_list.layout.insertWidget(0, RecentSearchesWidget.spacer)
     RecentSearchesWidget.show_placeholder()
 
   @staticmethod
@@ -85,7 +84,7 @@ class RecentSearchesWidget(QWidget):
     for word in recent_searches:
       recent_search = RecentSearch(word, word in starred_words)
       RecentSearchesWidget.widget_list.append(recent_search)
-      RecentSearchesWidget.grid_layout.insertWidget(0, recent_search)
+      RecentSearchesWidget.recent_searches_list.layout.insertWidget(0, recent_search)
 
   @staticmethod
   def add_recent_search(word):
@@ -94,14 +93,14 @@ class RecentSearchesWidget(QWidget):
 
     recent_search = RecentSearch(word, starred_word_exists(word))
     RecentSearchesWidget.widget_list.append(recent_search)
-    RecentSearchesWidget.grid_layout.insertWidget(0, recent_search)
+    RecentSearchesWidget.recent_searches_list.layout.insertWidget(0, recent_search)
 
   @staticmethod
   def remove_and_add_recent_search(word):
     for recent_search in RecentSearchesWidget.widget_list:
       if recent_search.word.text()==word:
-        RecentSearchesWidget.grid_layout.removeWidget(recent_search)
-        RecentSearchesWidget.grid_layout.insertWidget(0, recent_search)
+        RecentSearchesWidget.recent_searches_list.layout.removeWidget(recent_search)
+        RecentSearchesWidget.recent_searches_list.layout.insertWidget(0, recent_search)
         return
 
   @staticmethod
@@ -134,15 +133,15 @@ class RecentSearchesWidget(QWidget):
 
     if not RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.show_placeholder_label = True
-      RecentSearchesWidget.grid_layout.insertWidget(0, RecentSearchesWidget.placeholder_label)
-      RecentSearchesWidget.grid_layout.removeWidget(RecentSearchesWidget.spacer)
+      RecentSearchesWidget.recent_searches_list.layout.insertWidget(0, RecentSearchesWidget.placeholder_label)
+      RecentSearchesWidget.recent_searches_list.layout.removeWidget(RecentSearchesWidget.spacer)
       RecentSearchesWidget.placeholder_label.show()
 
   @staticmethod
   def hide_placeholder():
     if RecentSearchesWidget.show_placeholder_label:
       RecentSearchesWidget.show_placeholder_label = False
-      RecentSearchesWidget.grid_layout.insertWidget(0, RecentSearchesWidget.spacer)
+      RecentSearchesWidget.recent_searches_list.layout.insertWidget(0, RecentSearchesWidget.spacer)
       RecentSearchesWidget.placeholder_label.hide()
 
   @staticmethod

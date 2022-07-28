@@ -22,15 +22,14 @@ class StarredWordsWidget(QWidget):
     self.layout.setContentsMargins(0, 0, 0, 0)
     self.layout.setSpacing(0)
 
-    scroll_area_widget_contents = QWidget()
-
-    StarredWordsWidget.grid_layout = QVBoxLayout(scroll_area_widget_contents)
-    StarredWordsWidget.grid_layout.setSpacing(0)
-    StarredWordsWidget.grid_layout.setContentsMargins(0, 0, 0, 0)
+    StarredWordsWidget.starred_words_list = QWidget()
+    StarredWordsWidget.starred_words_list.layout = QVBoxLayout(StarredWordsWidget.starred_words_list)
+    StarredWordsWidget.starred_words_list.layout.setSpacing(0)
+    StarredWordsWidget.starred_words_list.layout.setContentsMargins(0, 0, 0, 0)
 
     scroll_area = QScrollArea()
     scroll_area.setWidgetResizable(True)
-    scroll_area.setWidget(scroll_area_widget_contents)
+    scroll_area.setWidget(StarredWordsWidget.starred_words_list)
     scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
 
     StarredWordsWidget.widget_list = []
@@ -65,7 +64,7 @@ class StarredWordsWidget(QWidget):
 
   @staticmethod
   def initialize():
-    StarredWordsWidget.grid_layout.insertWidget(0, StarredWordsWidget.spacer)
+    StarredWordsWidget.starred_words_list.layout.insertWidget(0, StarredWordsWidget.spacer)
     StarredWordsWidget.show_placeholder()
 
   @staticmethod
@@ -83,7 +82,7 @@ class StarredWordsWidget(QWidget):
     for word in starred_words:
       starred_word = StarredWord(word)
       StarredWordsWidget.widget_list.append(starred_word)
-      StarredWordsWidget.grid_layout.insertWidget(0, starred_word)
+      StarredWordsWidget.starred_words_list.layout.insertWidget(0, starred_word)
 
   @staticmethod
   def add_starred_word(word):
@@ -94,7 +93,7 @@ class StarredWordsWidget(QWidget):
     StarredWordsWidget.widget_list.append(starred_word)
     length = len(StarredWordsWidget.widget_list)
 
-    StarredWordsWidget.grid_layout.insertWidget(0, StarredWordsWidget.widget_list[length-1])
+    StarredWordsWidget.starred_words_list.layout.insertWidget(0, StarredWordsWidget.widget_list[length-1])
 
   @staticmethod
   def remove_starred_word(starred_word):
@@ -126,15 +125,15 @@ class StarredWordsWidget(QWidget):
 
     if not StarredWordsWidget.show_placeholder_label:
       StarredWordsWidget.show_placeholder_label = True
-      StarredWordsWidget.grid_layout.insertWidget(0, StarredWordsWidget.placeholder_label)
-      StarredWordsWidget.grid_layout.removeWidget(StarredWordsWidget.spacer)
+      StarredWordsWidget.starred_words_list.layout.insertWidget(0, StarredWordsWidget.placeholder_label)
+      StarredWordsWidget.starred_words_list.layout.removeWidget(StarredWordsWidget.spacer)
       StarredWordsWidget.placeholder_label.show()
 
   @staticmethod
   def hide_placeholder():
     if StarredWordsWidget.show_placeholder_label:
       StarredWordsWidget.show_placeholder_label = False
-      StarredWordsWidget.grid_layout.insertWidget(0, StarredWordsWidget.spacer)
+      StarredWordsWidget.starred_words_list.layout.insertWidget(0, StarredWordsWidget.spacer)
       StarredWordsWidget.placeholder_label.hide()
 
   @staticmethod
