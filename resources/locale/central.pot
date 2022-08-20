@@ -31,3 +31,6 @@ msgstr ""
 
 msgid "RESULT_EXPLANATION_TOOLTIP"
 msgstr ""
+
+msgid "SEARCH_RESULTS"
+msgstr ""

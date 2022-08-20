@@ -31,3 +31,6 @@ msgstr "Να μην εμφανιστεί ξανά, μέχρι να κλείσε�
 
 msgid "RESULT_EXPLANATION_TOOLTIP"
 msgstr "Επεξήγηση Αποτελεσμάτων"
+
+msgid "SEARCH_RESULTS"
+msgstr "Αποτελέσματα Αναζήτησης"

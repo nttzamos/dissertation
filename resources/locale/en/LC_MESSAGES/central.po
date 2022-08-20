@@ -31,3 +31,6 @@ msgstr "Do not show again until the application closes"
 
 msgid "RESULT_EXPLANATION_TOOLTIP"
 msgstr "Results Explanation"
+
+msgid "SEARCH_RESULTS"
+msgstr "Search Results"

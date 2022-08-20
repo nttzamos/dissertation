@@ -56,7 +56,7 @@ class ResultsWidget(QWidget):
     self.scroll_area.setWidgetResizable(True)
     self.scroll_area.setWidget(ResultsWidget.container_widget)
 
-    ResultsWidget.title_label = QLabel('Αποτελέσματα Αναζήτησης')
+    ResultsWidget.title_label = QLabel(_('SEARCH_RESULTS'))
     ResultsWidget.title_label.setFont(title_font)
     ResultsWidget.title_label.hide()
 
