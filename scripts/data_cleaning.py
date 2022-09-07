@@ -42,7 +42,7 @@ def destroy_long_words(minimum_length):
       if len(word) > minimum_length and not word in valid_words:
         destroy_word(word, [grade])
 
-def fix_conjoined_words(show_details=False):
+def fix_conjoint_words(show_details=False):
   for grade in range(1, 7):
     saved_words = get_words(grade, grade, 'Όλα τα μαθήματα')
 
@@ -90,7 +90,7 @@ def fix_conjoined_words(show_details=False):
       # print('------------------------------------------------------\n')
 
 show_statistics(15, show_details=False)
-fix_conjoined_words(show_details=False)
+fix_conjoint_words(show_details=False)
 destroy_long_words(17)
 print('------------------------------------------------------\n')
 show_statistics(15, show_details=False)

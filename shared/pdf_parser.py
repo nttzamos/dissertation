@@ -38,7 +38,11 @@ class PdfParser():
   def convert_books_to_text_files(grade):
     subject_names = PdfParser.get_grade_subjects_names(grade)
     subject_files = PdfParser.get_grade_subjects_files(grade)
+
+    # In order for this to work, the folders of the books of each grade should
+    # be numbered from 1 to 6.
     file_name = './unprocessed/subjects' + str(grade) + '.txt'
+
     f = open(file_name, 'w')
 
     for i in range(len(subject_names)):

@@ -87,6 +87,8 @@ def initialize_grade_database(grade_id):
 
   subject_names = PdfParser.get_grade_subjects_names(grade_id)
 
+  # Processed files should be inside the "processed" folder and split to folders
+  # with names such as "subjects1", "subjects2" and so on.
   grade_directory_path = 'processed/subjects' + str(grade_id) + '/'
   files_list = listdir(grade_directory_path)
   files_list.sort()
