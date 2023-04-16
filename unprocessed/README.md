@@ -1,0 +1,5 @@
+This folder contains 6 text files, each corresponding to a grade of primary school education. Each file consists of all text contained in the books of the corresponding grade which has been extracted from their corresponding PDF files. Other than that, 6 ZIP files exist which are the zipped versions of these text files.
+
+As observed in the information flow of the project (check the `README.md` file in the root directory of the project for more information) these zipped files were fed into the **ILSP Lemmatizer**, a tool responsible for lemmatizing words contained in chunks of Greek text. After processing them, the lemmatizer produced a large number of text files containing parts of the lemmatized text which were saved in a corresponding `processed` folder. However, due to its large size, this folder has not been uploaded to the project's repository.
+
+These text files were then parsed using the `shared/database_handler.py#initialize_grade_database` method to create the `word` DB table, consisting of all words contained in the various subject books of each grade.
