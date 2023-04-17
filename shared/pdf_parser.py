@@ -4,7 +4,9 @@ import tika, tika.parser as parser
 import re
 
 class PdfParser():
-  grades_subjects_directory_path = 'resources/Grades/'
+  # In order for this to work, the schoolbooks must be contained inside the
+  # 'resources/books/' folder
+  grades_subjects_directory_path = 'resources/books/'
 
   valid_characters = [
     912, 940, 941, 944, 945, 946, 947, 948, 949, 950, 951, 952, 953, 954, 955,
