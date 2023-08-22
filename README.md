@@ -23,11 +23,11 @@ Multipe profiles for different students can be created, as the application is su
 
 ![Information Flow](https://user-images.githubusercontent.com/36950737/205171165-e9abc14e-4275-4f21-beec-96a083c1df1d.png)
 
-## Installation
+## Executable creation
 
 ### Windows
 
-_Must fill in_
+`pyinstaller --icon=resources/window_icon.ico --add-data "resources;resources" --onefile -w -n Wordinary main.py`
 
 ### macOS
 

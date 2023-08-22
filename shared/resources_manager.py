@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QMessageBox
 
-import os
+import os, sys
 
 class ResourcesManager(QWidget):
   resources_files = [
@@ -20,7 +20,7 @@ class ResourcesManager(QWidget):
       )
 
       self.show_message('Missing Folder', text)
-      quit()
+      sys.exit()
 
     current_resources_files = os.listdir('resources')
     missing_resources_files = list(set(ResourcesManager.resources_files) - set(current_resources_files))
